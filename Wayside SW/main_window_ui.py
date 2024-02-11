@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:/Users/tsmit/AppData/Local/Temp/Wayside_UI_RoughhSVfEH.ui'
+# Form implementation generated from reading ui file 'C:/Users/tsmit/AppData/Local/Temp/Wayside_UI_RoughjcGcZf.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -89,9 +89,9 @@ class Ui_MainWindow(object):
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
         self.horizontalLayout_7.addWidget(self.label_5)
-        self.plainTextEdit = QtWidgets.QPlainTextEdit(self.layoutWidget1)
-        self.plainTextEdit.setObjectName("plainTextEdit")
-        self.horizontalLayout_7.addWidget(self.plainTextEdit)
+        self.lineEdit = QtWidgets.QLineEdit(self.layoutWidget1)
+        self.lineEdit.setObjectName("lineEdit")
+        self.horizontalLayout_7.addWidget(self.lineEdit)
         self.verticalLayout_4.addLayout(self.horizontalLayout_7)
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")

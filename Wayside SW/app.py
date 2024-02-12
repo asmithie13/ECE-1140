@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from main_window_ui import Ui_MainWindow
+from PyQt5.QtGui import QPixmap
 
 class MyApp(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -11,7 +12,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.pushButton.clicked.connect(self.on_file_button_clicked)
         self.pushButton_2.clicked.connect(self.on_save_button_clicked)
         self.pushButton_3.clicked.connect(self.on_file_button_3_clicked)
-
+        
+        pixmap = QPixmap('BlueLine.png')
+        self.label_17.setPixmap(pixmap)
+    
     def on_file_button_clicked(self):
         # Open a file dialog to select a PLC file
         file_dialog = QFileDialog()

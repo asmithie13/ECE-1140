@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:/Users/tsmit/AppData/Local/Temp/Wayside_UI_RoughkSbMoA.ui'
+# Form implementation generated from reading ui file 'C:/Users/tsmit/AppData/Local/Temp/Wayside_UI_RoughQcRyeU.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 625)
+        MainWindow.resize(738, 625)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -133,9 +133,21 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.label_7)
         self.verticalLayout_4.addLayout(self.verticalLayout_3)
         self.horizontalLayout_8.addLayout(self.verticalLayout_4)
-        self.graphicsView = QtWidgets.QGraphicsView(self.layoutWidget1)
-        self.graphicsView.setObjectName("graphicsView")
-        self.horizontalLayout_8.addWidget(self.graphicsView)
+        self.label_15 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_15.setText("")
+        self.label_15.setObjectName("label_15")
+        self.horizontalLayout_8.addWidget(self.label_15)
+        self.label_17 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_17.setObjectName("label_17")
+        self.horizontalLayout_8.addWidget(self.label_17)
+        self.label_14 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_14.setText("")
+        self.label_14.setObjectName("label_14")
+        self.horizontalLayout_8.addWidget(self.label_14)
+        self.label_13 = QtWidgets.QLabel(self.layoutWidget1)
+        self.label_13.setText("")
+        self.label_13.setObjectName("label_13")
+        self.horizontalLayout_8.addWidget(self.label_13)
         self.layoutWidget2 = QtWidgets.QWidget(self.splitter)
         self.layoutWidget2.setObjectName("layoutWidget2")
         self.horizontalLayout_13 = QtWidgets.QHBoxLayout(self.layoutWidget2)
@@ -218,7 +230,7 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 738, 22))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.toolBar = QtWidgets.QToolBar(MainWindow)
@@ -242,6 +254,7 @@ class Ui_MainWindow(object):
         self.toolButton.setText(_translate("MainWindow", "..."))
         self.label_6.setText(_translate("MainWindow", "Mode:"))
         self.label_7.setText(_translate("MainWindow", "MANUAL"))
+        self.label_17.setText(_translate("MainWindow", "TextLabel"))
         self.label_8.setText(_translate("MainWindow", "Light"))
         self.label_9.setText(_translate("MainWindow", "Crossing"))
         self.label_10.setText(_translate("MainWindow", "Switch Direction:"))

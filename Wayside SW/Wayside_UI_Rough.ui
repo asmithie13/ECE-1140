@@ -212,6 +212,13 @@
              </widget>
             </item>
             <item>
+             <widget class="QPushButton" name="pushButton_4">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QLabel" name="label_7">
               <property name="font">
                <font>

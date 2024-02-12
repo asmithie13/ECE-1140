@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:/Users/tsmit/AppData/Local/Temp/Wayside_UI_RoughARKWRj.ui'
+# Form implementation generated from reading ui file 'C:/Users/tsmit/AppData/Local/Temp/Wayside_UI_RoughCOFVea.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -142,6 +142,9 @@ class Ui_MainWindow(object):
         self.label_6.setFont(font)
         self.label_6.setObjectName("label_6")
         self.verticalLayout_3.addWidget(self.label_6)
+        self.pushButton_4 = QtWidgets.QPushButton(self.layoutWidget1)
+        self.pushButton_4.setObjectName("pushButton_4")
+        self.verticalLayout_3.addWidget(self.pushButton_4)
         self.label_7 = QtWidgets.QLabel(self.layoutWidget1)
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -288,6 +291,7 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "Select Wayside:"))
         self.toolButton.setText(_translate("MainWindow", "..."))
         self.label_6.setText(_translate("MainWindow", "Mode:"))
+        self.pushButton_4.setText(_translate("MainWindow", "PushButton"))
         self.label_7.setText(_translate("MainWindow", "MANUAL"))
         self.label_17.setText(_translate("MainWindow", "TextLabel"))
         self.label_8.setText(_translate("MainWindow", "Light"))

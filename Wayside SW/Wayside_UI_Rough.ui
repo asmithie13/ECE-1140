@@ -404,7 +404,7 @@
                </font>
               </property>
               <property name="text">
-               <string>File</string>
+               <string>Up/Down</string>
               </property>
              </widget>
             </item>

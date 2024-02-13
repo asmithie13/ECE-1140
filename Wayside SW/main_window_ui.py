@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:/Users/tsmit/AppData/Local/Temp/Wayside_UI_RoughCOFVea.ui'
+# Form implementation generated from reading ui file 'C:/Users/tsmit/AppData/Local/Temp/Wayside_UI_RoughvEfxHO.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -299,5 +299,5 @@ class Ui_MainWindow(object):
         self.label_10.setText(_translate("MainWindow", "Switch Direction:"))
         self.label_11.setText(_translate("MainWindow", "B1"))
         self.label_12.setText(_translate("MainWindow", "Switch"))
-        self.pushButton_3.setText(_translate("MainWindow", "File"))
+        self.pushButton_3.setText(_translate("MainWindow", "Up/Down"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))

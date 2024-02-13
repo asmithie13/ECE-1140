@@ -1,10 +1,9 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
-from main_window_ui import Ui_MainWindow
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 
-class MyApp(QMainWindow, Ui_MainWindow):
+class MyApp(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)

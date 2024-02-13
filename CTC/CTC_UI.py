@@ -21,6 +21,25 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("CTC")
 
+        columns_layout = QHBoxLayout()
+        c1_layout = QVBoxLayout()
+        c2_layout = QVBoxLayout()
+
+        c1_layout.addWidget(Color('red'))
+        c1_layout.addWidget(Color('yellow'))
+
+        columns_layout.addWidget(c1_layout)
+
+        c2_layout.addWidget('red')
+        c2_layout.addWidget('orange')
+        c2_layout.addWidget('yellow')
+        c2_layout.addWidget('green')
+        c2_layout.addWidget('blue')
+
+        columns_layout.addWidget(c2_layout)
+
+
+        """
         label = QLabel("Train Name")
 
         self.setCentralWidget(label)
@@ -28,31 +47,35 @@ class MainWindow(QMainWindow):
         font.setPointSize(30)
         label.setFont(font)
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        """
 
-        #self.button = QPushButton("Press Me!")
-        #self.button_is_checked = True
+        """
+        self.tabWidget = QtWidgets.QTabWidget()
+        self.tabWidget.setObjectName("tabWidget")
+        self.CTC_tab = QtWidgets.QWidget()
+        self.CTC_tab.setObjectName("CTC_tab")
+        self.tabWidget.addTab(self.CTC_tab, "")
+        self.Testbench_tab = QtWidgets.QWidget()
+        self.Testbench_tab.setObjectName("Testbench_tab")
+        self.tabWidget.addTab(self.Testbench_tab, "")
+        """
 
-        
-        #self.button.clicked.connect(self.the_button_was_clicked)
-        #self.button.clicked.connect(self.the_button_was_toggled)
-
-        #self.setFixedSize(QSize(400, 300))
-
-        # Set the central widget of the Window.
-        #self.setCentralWidget(self.button)
     """
-    def the_button_was_clicked(self):
-        self.button.setText("You already clicked me.")
-        self.button.setEnabled(False)
-
-        # Also change the window title.
-        self.setWindowTitle("My Oneshot App")
-    
-    def the_button_was_toggled(self, checked):
-        self.button_is_checked = checked
-        
-        print(self.button_is_checked)
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.CTC_tab), _translate("MainWindow", "CTC"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Testbench_tab), _translate("MainWindow", "Testbench"))\
     """
+
+class Color(QWidget):
+
+    def __init__(self, color):
+        super(Color, self).__init__()
+        self.setAutoFillBackground(True)
+
+        palette = self.palette()
+        palette.setColor(QPalette.Window, QColor(color))
+        self.setPalette(palette)
 
 #QApplication instance
 app = QApplication(sys.argv)

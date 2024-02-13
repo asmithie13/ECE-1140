@@ -2,11 +2,12 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from main_window_ui import Ui_MainWindow
 from PyQt5.QtGui import QPixmap
+from PyQt5 import QtCore, QtWidgets, uic, QtGui
 
 class MyApp(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        self.setupUi(self)
+        uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
 
         # Connect your signals and slots here if needed
         self.pushButton.clicked.connect(self.on_file_button_clicked)

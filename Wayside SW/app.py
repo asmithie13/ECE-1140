@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QPixmap
+from PyQt5 import QtCore, QtWidgets, uic, QtGui
 
 class MyApp(QMainWindow):
     def __init__(self):

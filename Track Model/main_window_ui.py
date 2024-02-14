@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import os  # Add import statement for os module
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -28,7 +28,10 @@ class Ui_MainWindow(object):
         self.pushButton.setStyleSheet("background-color: rgb(32, 129, 255)\n"
 "")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("974868-200.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # Dynamically construct the path to the picture file relative to the script directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        picture_path = os.path.join(script_dir, "974868-200.png")
+        icon.addPixmap(QtGui.QPixmap(picture_path), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton.setIcon(icon)
         self.pushButton.setObjectName("pushButton")
         self.BlockData = QtWidgets.QTableView(self.centralwidget)

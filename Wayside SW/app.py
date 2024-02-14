@@ -31,6 +31,17 @@ class MyApp(QMainWindow):
         #Dropdown menu
         self.blockMenu.addItems(['B3','B5','B6','B11'])
         self.waysideMenu.addItems(['W1'])
+
+        #Input Initial Conditions
+        self.waysideMenu.setDisabled(True)
+        self.blockMenu.setDisabled(True)
+        self.modeButton.setDisabled(True)
+        self.greenButton.setDisabled(True)
+        self.redButton.setDisabled(True)
+        self.upCrossingButton.setDisabled(True)
+        self.downCrossingButton.setDisabled(True)
+        self.upCrossingButton.setDisabled(True)
+        self.switchButton.setDisabled(True)
         
     
     def on_file_button_clicked(self):

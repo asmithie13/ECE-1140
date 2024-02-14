@@ -1,8 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QPixmap
-from PyQt5 import QtCore, QtWidgets, uic, QtGui
-from Block import Block
 
 class MyApp(QMainWindow):
     def __init__(self):
@@ -15,14 +13,20 @@ class MyApp(QMainWindow):
         SWITCH = [False,False,True,True]
 
         #Defining important blocks
-        B3 = Block(*CROSSING)    
-        B5 = Block(*SWITCH)
-        B6 = Block(*LIGHT)
-        B11 = Block(*LIGHT)
+        B3 = CROSSING    
+        B5 = SWITCH
+        B6 = LIGHT
+        B11 = LIGHT
+
+        #Defines an array of these blocks
+
+        self.BlockArray = [B3,B5,B6,B11]
 
         # Buttons
         self.fileButton.clicked.connect(self.on_file_button_clicked)
         self.modeButton.clicked.connect(self.changeMode)
+        self.selectLine.stateChanged.connect(self.checkLine)
+        self.blockMenu.currentIndexChanged.connect(self.blockActions)
 
         #Original Map Image
         pixmap = QPixmap('Blue Line Images\BlueLine.png')
@@ -59,6 +63,25 @@ class MyApp(QMainWindow):
             self.label_7.setText("AUTOMATIC")
         elif current_text == "AUTOMATIC":
             self.label_7.setText("MANUAL")
+
+    def checkLine(self):
+        checkStatus = self.selectLine.isChecked()
+        if checkStatus:
+            self.waysideMenu.setEnabled(True)
+            self.blockMenu.setEnabled(True)
+            self.modeButton.setEnabled(True)
+        else:
+            self.waysideMenu.setEnabled(False)
+            self.blockMenu.setEnabled(False)
+            self.modeButton.setEnabled(False)
+
+    def blockActions(self):
+        selectedIndex = self.blockMenu.currentIndex()
+        selectedBlock = self.BlockArray[selectedIndex]
+
+        if selectedBlock[0]:
+            self.greenButton.setEnabled(True)
+            self.redButton.setEnabled(True)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -9,16 +9,16 @@ class MyApp(QMainWindow):
         uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
 
         # Buttons
-        self.pushButton.clicked.connect(self.on_file_button_clicked)
-        self.pushButton_4.clicked.connect(self.changeMode)
+        self.fileButton.clicked.connect(self.on_file_button_clicked)
+        self.modeButton.clicked.connect(self.changeMode)
 
         #Original Map Image
         pixmap = QPixmap('Blue Line Images\BlueLine.png')
         self.label_17.setPixmap(pixmap)
 
         #Dropdown menu
-        self.comboBox.addItems(['B3','B5','B6','B11'])
-        self.comboBox_2.addItems(['W1'])
+        self.blockMenu.addItems(['B3','B5','B6','B11'])
+        self.waysideMenu.addItems(['W1'])
         
     
     def on_file_button_clicked(self):

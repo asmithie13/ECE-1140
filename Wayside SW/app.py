@@ -2,11 +2,23 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
+from Block import Block
 
 class MyApp(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
+
+        #Define special blocks constants
+        LIGHT = [True,False,False,True]
+        CROSSING = [False,True,False,True]
+        SWITCH = [False,False,True,True]
+
+        #Defining important blocks
+        B3 = Block(*CROSSING)    
+        B5 = Block(*SWITCH)
+        B6 = Block(*LIGHT)
+        B11 = Block(*LIGHT)
 
         # Buttons
         self.fileButton.clicked.connect(self.on_file_button_clicked)
@@ -29,14 +41,6 @@ class MyApp(QMainWindow):
         if file_path:
             # Implement your logic with the selected file path
             print(f"Selected PLC File: {file_path}")
-
-    def on_save_button_clicked(self):
-        # Implement your save button logic here
-        print("Save Button Clicked")
-
-    def on_file_button_3_clicked(self):
-        # Implement your file button 3 logic here
-        print("File Button 3 Clicked")
 
     def changeMode(self):
         current_text = self.label_7.text()

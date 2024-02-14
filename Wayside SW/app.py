@@ -12,9 +12,15 @@ class MyApp(QMainWindow):
         self.pushButton.clicked.connect(self.on_file_button_clicked)
         self.pushButton_2.clicked.connect(self.on_save_button_clicked)
         self.pushButton_3.clicked.connect(self.on_file_button_3_clicked)
-        
+
+        #Map Image
         pixmap = QPixmap('BlueLine.png')
         self.label_17.setPixmap(pixmap)
+
+        #Dropdown menu
+        self.comboBox.addItems(['B3','B5','B6','B11'])
+        self.comboBox_2.addItems(['W1'])
+        
     
     def on_file_button_clicked(self):
         # Open a file dialog to select a PLC file

@@ -8,13 +8,12 @@ class MyApp(QMainWindow):
         super().__init__()
         uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
 
-        # Connect your signals and slots here if needed
+        # Buttons
         self.pushButton.clicked.connect(self.on_file_button_clicked)
-        self.pushButton_2.clicked.connect(self.on_save_button_clicked)
-        self.pushButton_3.clicked.connect(self.on_file_button_3_clicked)
+        self.pushButton_4.clicked.connect(self.changeMode)
 
-        #Map Image
-        pixmap = QPixmap('BlueLine.png')
+        #Original Map Image
+        pixmap = QPixmap('Blue Line Images\BlueLine.png')
         self.label_17.setPixmap(pixmap)
 
         #Dropdown menu
@@ -38,6 +37,13 @@ class MyApp(QMainWindow):
     def on_file_button_3_clicked(self):
         # Implement your file button 3 logic here
         print("File Button 3 Clicked")
+
+    def changeMode(self):
+        current_text = self.label_7.text()
+        if current_text == "MANUAL":
+            self.label_7.setText("AUTOMATIC")
+        elif current_text == "AUTOMATIC":
+            self.label_7.setText("MANUAL")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

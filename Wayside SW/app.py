@@ -209,6 +209,26 @@ class TestBench(QMainWindow):
         super().__init__()
         uic.loadUi("Wayside SW/Wayside_Testbench.ui", self)
 
+        # Buttons
+        self.speedInput.returnPressed.connect(self.sendSpeed)
+        self.authorityInput.returnPressed.connect(self.sendAuthority)
+        self.modeInput.clicked.connect(self.sendMode)
+
+    def sendSpeed(self):
+        speed = self.speedInput.text()
+        self.comSpeed.setText(speed)
+
+    def sendAuthority(self):
+        authority = self.authorityInput.text()
+        self.authOut.setText(authority)
+
+    def sendMode(self):
+        current_text = self.label_16.text()
+        if current_text == "MANUAL":
+            self.label_16.setText("AUTOMATIC")
+        elif current_text == "AUTOMATIC":
+            self.label_16.setText("MANUAL")
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MyApp()

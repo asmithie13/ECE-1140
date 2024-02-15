@@ -67,7 +67,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Authrority (ft):</string>
+           <string>Authority (ft):</string>
           </property>
          </widget>
         </item>
@@ -313,7 +313,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Authrority (ft):</string>
+             <string>Authority (ft):</string>
             </property>
            </widget>
           </item>

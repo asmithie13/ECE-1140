@@ -83,6 +83,21 @@ class MyApp(QMainWindow):
         if selectedBlock[0]:
             self.greenButton.setEnabled(True)
             self.redButton.setEnabled(True)
+            self.upCrossingButton.setEnabled(False)
+            self.downCrossingButton.setEnabled(False)
+            self.switchButton.setEnabled(False)
+        elif selectedBlock[1]:
+            self.greenButton.setEnabled(False)
+            self.redButton.setEnabled(False)
+            self.upCrossingButton.setEnabled(True)
+            self.downCrossingButton.setEnabled(True)
+            self.switchButton.setEnabled(False)
+        elif selectedBlock[2]:
+            self.greenButton.setEnabled(False)
+            self.redButton.setEnabled(False)
+            self.upCrossingButton.setEnabled(False)
+            self.downCrossingButton.setEnabled(False)
+            self.switchButton.setEnabled(True)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

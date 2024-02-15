@@ -209,6 +209,11 @@
             </item>
             <item>
              <widget class="QPushButton" name="modeButton">
+              <property name="font">
+               <font>
+                <family>Times New Roman</family>
+               </font>
+              </property>
               <property name="text">
                <string>CHANGE</string>
               </property>

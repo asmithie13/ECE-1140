@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 from Block import Block
+from PyQt5.QtCore import QTimer
 
 class MyApp(QMainWindow):
     def __init__(self):
@@ -25,17 +26,17 @@ class MyApp(QMainWindow):
         self.B5_Switch_Positions = ["B6","B11"]
 
         #Defining important blocks
-        B1 = Block(*NORMAL_CONST)
-        B2 = Block(*NORMAL_CONST)
-        B3 = Block(*CROSSING_CONST)
-        B4 = Block(*NORMAL_CONST) 
-        B5 = Block(*SWITCH_CONST) 
-        B6 = Block(*LIGHT_CONST)
-        B7 = Block(*NORMAL_CONST)
-        B8 = Block(*NORMAL_CONST)
-        B9 = Block(*NORMAL_CONST)
-        B10 = Block(*NORMAL_CONST)
-        B11 = Block(*LIGHT_CONST)
+        B1 = Block(*NORMAL_CONST,"B1")
+        B2 = Block(*NORMAL_CONST,"B2")
+        B3 = Block(*CROSSING_CONST,"B3")
+        B4 = Block(*NORMAL_CONST,"B4") 
+        B5 = Block(*SWITCH_CONST,"B5") 
+        B6 = Block(*LIGHT_CONST,"B6")
+        B7 = Block(*NORMAL_CONST,"B7")
+        B8 = Block(*NORMAL_CONST,"B8")
+        B9 = Block(*NORMAL_CONST,"B9")
+        B10 = Block(*NORMAL_CONST,"B10")
+        B11 = Block(*LIGHT_CONST,"B11")
 
         #Defines an array of these blocks
 
@@ -71,6 +72,11 @@ class MyApp(QMainWindow):
         self.downCrossingButton.setDisabled(True)
         self.upCrossingButton.setDisabled(True)
         self.switchButton.setDisabled(True)
+
+        # Timer for updating block occupancy every 5 seconds
+        #self.timer = QTimer(self)
+        #self.timer.timeout.connect(self.updateBlockOccupancy)
+        #self.timer.start(5000)  # 5000 milliseconds (5 seconds)
         
     
     def on_file_button_clicked(self):
@@ -110,12 +116,34 @@ class MyApp(QMainWindow):
             self.upCrossingButton.setEnabled(False)
             self.downCrossingButton.setEnabled(False)
             self.switchButton.setEnabled(False)
-        elif selectedBlock.CROSSING:
+
+            self.upCrossingButton.setStyleSheet("")
+            self.downCrossingButton.setStyleSheet("")
+            
+            if selectedBlock.state:
+                self.greenButton.setStyleSheet("background-color: green")
+                self.redButton.setStyleSheet("")
+            elif not selectedBlock.state:
+                self.greenButton.setStyleSheet("")
+                self.redButton.setStyleSheet("background-color: red")
+
+        elif selectedBlock.CROSSING and self.selectLine.isChecked():
             self.greenButton.setEnabled(False)
             self.redButton.setEnabled(False)
             self.upCrossingButton.setEnabled(not selectedBlock.state)
             self.downCrossingButton.setEnabled(selectedBlock.state)
             self.switchButton.setEnabled(False)
+
+            self.greenButton.setStyleSheet("")
+            self.redButton.setStyleSheet("")
+
+            if selectedBlock.state:
+                self.upCrossingButton.setStyleSheet("background-color: yellow")
+                self.downCrossingButton.setStyleSheet("")
+            elif not selectedBlock.state:
+                self.upCrossingButton.setStyleSheet("")
+                self.downCrossingButton.setStyleSheet("background-color: yellow")
+
         elif selectedBlock.SWITCH:
             self.greenButton.setEnabled(False)
             self.redButton.setEnabled(False)
@@ -123,29 +151,42 @@ class MyApp(QMainWindow):
             self.downCrossingButton.setEnabled(False)
             self.switchButton.setEnabled(True)
 
+            self.greenButton.setStyleSheet("")
+            self.redButton.setStyleSheet("")
+            self.upCrossingButton.setStyleSheet("")
+            self.downCrossingButton.setStyleSheet("")
+
     def greenButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
         self.BlockArray[selectedIndex].state = True
         self.greenButton.setEnabled(False)
         self.redButton.setEnabled(True)
+        self.greenButton.setStyleSheet("background-color: green")
+        self.redButton.setStyleSheet("")
 
     def redButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
         self.BlockArray[selectedIndex].state = False
         self.greenButton.setEnabled(True)
         self.redButton.setEnabled(False)
+        self.greenButton.setStyleSheet("")
+        self.redButton.setStyleSheet("background-color: red")
 
     def upButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
         self.BlockArray[selectedIndex].state = True
         self.upCrossingButton.setEnabled(False)
         self.downCrossingButton.setEnabled(True)
+        self.upCrossingButton.setStyleSheet("background-color: yellow")
+        self.downCrossingButton.setStyleSheet("")
 
     def downButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
         self.BlockArray[selectedIndex].state = False
         self.upCrossingButton.setEnabled(True)
         self.downCrossingButton.setEnabled(False)
+        self.upCrossingButton.setStyleSheet("")
+        self.downCrossingButton.setStyleSheet("background-color: yellow")
 
     def switchButtonPushed(self):
         current_text = self.label_11.text()
@@ -154,10 +195,24 @@ class MyApp(QMainWindow):
         elif current_text == self.B5_Switch_Positions[1]:
             self.label_11.setText(self.B5_Switch_Positions[0])
 
+    #def updateBlockOccupancy(self):
+        # Your logic to update the last index (index 4) of each block in self.AllBlocks
+        #for block in self.AllBlocks:
+         #   block[4] = not block[4]
+        #print("Block occupancy updated.")
 
+    
+    #def onOccupancyChanged(self):
+
+class TestBench(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi("Wayside SW/Wayside_Testbench.ui", self)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MyApp()
     window.show()
+    window2 = TestBench()
+    window2.show()
     sys.exit(app.exec_())

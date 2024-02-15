@@ -15,6 +15,37 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="2" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_14">
+      <item>
+       <widget class="QLabel" name="label_18">
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>18</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Block Occupancies:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="BlockOcc">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
@@ -442,6 +473,13 @@
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="Line" name="line_8">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
      </widget>
     </item>
    </layout>

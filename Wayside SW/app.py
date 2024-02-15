@@ -1,20 +1,77 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
-from main_window_ui import Ui_MainWindow
 from PyQt5.QtGui import QPixmap
+from PyQt5 import QtCore, QtWidgets, uic, QtGui
+from Block import Block
 
-class MyApp(QMainWindow, Ui_MainWindow):
+class MyApp(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setupUi(self)
+        uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
 
-        # Connect your signals and slots here if needed
-        self.pushButton.clicked.connect(self.on_file_button_clicked)
-        self.pushButton_2.clicked.connect(self.on_save_button_clicked)
-        self.pushButton_3.clicked.connect(self.on_file_button_3_clicked)
-        
-        pixmap = QPixmap('BlueLine.png')
+        # Global constants for LIGHT, CROSSING, and SWITCH
+        LIGHT_CONST = [True, False, False, True,False]
+        CROSSING_CONST = [False, True, False, True,False]
+        SWITCH_CONST = [False, False, True, True,False]
+        NORMAL_CONST = [False, False, False, False, False]
+
+        #Index [0] of each Block => True if Light
+        #Index [1] of each Block => True if Crossing
+        #Index [2] of each Block => True if Switch
+        #Index [3] of each Block => True if Default
+        #Index [4] of each Block => True if Occupied
+
+        #Switch Directions
+        self.B5_Switch_Positions = ["B6","B11"]
+
+        #Defining important blocks
+        B1 = Block(*NORMAL_CONST)
+        B2 = Block(*NORMAL_CONST)
+        B3 = Block(*CROSSING_CONST)
+        B4 = Block(*NORMAL_CONST) 
+        B5 = Block(*SWITCH_CONST) 
+        B6 = Block(*LIGHT_CONST)
+        B7 = Block(*NORMAL_CONST)
+        B8 = Block(*NORMAL_CONST)
+        B9 = Block(*NORMAL_CONST)
+        B10 = Block(*NORMAL_CONST)
+        B11 = Block(*LIGHT_CONST)
+
+        #Defines an array of these blocks
+
+        self.BlockArray = [B3,B5,B6,B11]    #Special Blocks
+        self.AllBlocks = [B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11] #All Blocks
+
+        # Buttons
+        self.fileButton.clicked.connect(self.on_file_button_clicked)
+        self.modeButton.clicked.connect(self.changeMode)
+        self.selectLine.stateChanged.connect(self.checkLine)
+        self.blockMenu.currentIndexChanged.connect(self.blockActions)
+        self.greenButton.clicked.connect(self.greenButtonPushed)
+        self.redButton.clicked.connect(self.redButtonPushed)
+        self.upCrossingButton.clicked.connect(self.upButtonPushed)
+        self.downCrossingButton.clicked.connect(self.downButtonPushed)
+        self.switchButton.clicked.connect(self.switchButtonPushed)
+
+        #Original Map Image
+        pixmap = QPixmap('Blue Line Images\BlueLine.png')
         self.label_17.setPixmap(pixmap)
+
+        #Dropdown menu
+        self.blockMenu.addItems(['B3','B5','B6','B11'])
+        self.waysideMenu.addItems(['W1'])
+
+        #Input Initial Conditions
+        self.waysideMenu.setDisabled(True)
+        self.blockMenu.setDisabled(True)
+        self.modeButton.setDisabled(True)
+        self.greenButton.setDisabled(True)
+        self.redButton.setDisabled(True)
+        self.upCrossingButton.setDisabled(True)
+        self.downCrossingButton.setDisabled(True)
+        self.upCrossingButton.setDisabled(True)
+        self.switchButton.setDisabled(True)
+        
     
     def on_file_button_clicked(self):
         # Open a file dialog to select a PLC file
@@ -25,13 +82,79 @@ class MyApp(QMainWindow, Ui_MainWindow):
             # Implement your logic with the selected file path
             print(f"Selected PLC File: {file_path}")
 
-    def on_save_button_clicked(self):
-        # Implement your save button logic here
-        print("Save Button Clicked")
+    def changeMode(self):
+        current_text = self.label_7.text()
+        if current_text == "MANUAL":
+            self.label_7.setText("AUTOMATIC")
+        elif current_text == "AUTOMATIC":
+            self.label_7.setText("MANUAL")
 
-    def on_file_button_3_clicked(self):
-        # Implement your file button 3 logic here
-        print("File Button 3 Clicked")
+    def checkLine(self):
+        checkStatus = self.selectLine.isChecked()
+        if checkStatus:
+            self.waysideMenu.setEnabled(True)
+            self.blockMenu.setEnabled(True)
+            self.modeButton.setEnabled(True)
+        else:
+            self.waysideMenu.setEnabled(False)
+            self.blockMenu.setEnabled(False)
+            self.modeButton.setEnabled(False)
+
+    def blockActions(self):
+        selectedIndex = self.blockMenu.currentIndex()
+        selectedBlock = self.BlockArray[selectedIndex]
+
+        if selectedBlock.LIGHT:
+            self.greenButton.setEnabled(not selectedBlock.state)
+            self.redButton.setEnabled(selectedBlock.state)
+            self.upCrossingButton.setEnabled(False)
+            self.downCrossingButton.setEnabled(False)
+            self.switchButton.setEnabled(False)
+        elif selectedBlock.CROSSING:
+            self.greenButton.setEnabled(False)
+            self.redButton.setEnabled(False)
+            self.upCrossingButton.setEnabled(not selectedBlock.state)
+            self.downCrossingButton.setEnabled(selectedBlock.state)
+            self.switchButton.setEnabled(False)
+        elif selectedBlock.SWITCH:
+            self.greenButton.setEnabled(False)
+            self.redButton.setEnabled(False)
+            self.upCrossingButton.setEnabled(False)
+            self.downCrossingButton.setEnabled(False)
+            self.switchButton.setEnabled(True)
+
+    def greenButtonPushed(self):
+        selectedIndex = self.blockMenu.currentIndex()
+        self.BlockArray[selectedIndex].state = True
+        self.greenButton.setEnabled(False)
+        self.redButton.setEnabled(True)
+
+    def redButtonPushed(self):
+        selectedIndex = self.blockMenu.currentIndex()
+        self.BlockArray[selectedIndex].state = False
+        self.greenButton.setEnabled(True)
+        self.redButton.setEnabled(False)
+
+    def upButtonPushed(self):
+        selectedIndex = self.blockMenu.currentIndex()
+        self.BlockArray[selectedIndex].state = True
+        self.upCrossingButton.setEnabled(False)
+        self.downCrossingButton.setEnabled(True)
+
+    def downButtonPushed(self):
+        selectedIndex = self.blockMenu.currentIndex()
+        self.BlockArray[selectedIndex].state = False
+        self.upCrossingButton.setEnabled(True)
+        self.downCrossingButton.setEnabled(False)
+
+    def switchButtonPushed(self):
+        current_text = self.label_11.text()
+        if current_text == self.B5_Switch_Positions[0]:
+            self.label_11.setText(self.B5_Switch_Positions[1])
+        elif current_text == self.B5_Switch_Positions[1]:
+            self.label_11.setText(self.B5_Switch_Positions[0])
+
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

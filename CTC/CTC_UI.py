@@ -1,3 +1,5 @@
+#Table Documentation
+
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import *
@@ -13,6 +15,13 @@ class UI(QtWidgets.QMainWindow):
 
         #Connect Buttons
         self.UploadButton.clicked.connect(self.open_files)
+        self.ManualModeButton.clicked.connect(self.selectManualMode_button)
+
+        #Change Button Colors
+        self.AddTrainButton.setStyleSheet("background-color : #26cf04")
+        self.UploadButton.setStyleSheet("background-color : #26cf04")
+
+        
 
 
     #Define functionality for Upload File Button
@@ -21,10 +30,27 @@ class UI(QtWidgets.QMainWindow):
         file_dialog = QFileDialog()
         file_path, _ = file_dialog.getOpenFileName(self, "Select Schedule File", "", "Excel Workbook (*.xlsx);;All Files (*)")
 
+        """
+        #TO DO LATER
         if file_path:
             # Implement your logic with the selected file path
             print(f"Selected PLC File: {file_path}")
-        
+        """
+    
+
+    #Define mutually exclisive auto/manual mode
+    def selectManualMode_button(self):
+        #When Manual Mode button is pressed
+
+        #Disable AutoMode Button
+        self.AutoModeButton.setEnabled(False)
+        #And File Upload Button
+        self.UploadButton.setEnabled(False)
+        self.UploadButton.setStyleSheet("background-color : #ebfae8")
+
+        #Disable Manual Mode button (because it's one use)
+        self.ManualModeButton.setEnabled(False)
+        self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
 
 
 test = QtWidgets.QApplication(sys.argv)

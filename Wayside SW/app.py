@@ -10,19 +10,37 @@ class MyApp(QMainWindow):
         uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
 
         # Global constants for LIGHT, CROSSING, and SWITCH
-        LIGHT_CONST = [True, False, False, True]
-        CROSSING_CONST = [False, True, False, True]
-        SWITCH_CONST = [False, False, True, True]
+        LIGHT_CONST = [True, False, False, True,False]
+        CROSSING_CONST = [False, True, False, True,False]
+        SWITCH_CONST = [False, False, True, True,False]
+        NORMAL_CONST = [False, False, False, False, False]
+
+        #Index [0] of each Block => True if Light
+        #Index [1] of each Block => True if Crossing
+        #Index [2] of each Block => True if Switch
+        #Index [3] of each Block => True if Default
+        #Index [4] of each Block => True if Occupied
+
+        #Switch Directions
+        self.B5_Switch_Positions = ["B6","B11"]
 
         #Defining important blocks
-        B3 = Block(*CROSSING_CONST) 
+        B1 = Block(*NORMAL_CONST)
+        B2 = Block(*NORMAL_CONST)
+        B3 = Block(*CROSSING_CONST)
+        B4 = Block(*NORMAL_CONST) 
         B5 = Block(*SWITCH_CONST) 
         B6 = Block(*LIGHT_CONST)
+        B7 = Block(*NORMAL_CONST)
+        B8 = Block(*NORMAL_CONST)
+        B9 = Block(*NORMAL_CONST)
+        B10 = Block(*NORMAL_CONST)
         B11 = Block(*LIGHT_CONST)
 
         #Defines an array of these blocks
 
-        self.BlockArray = [B3,B5,B6,B11]
+        self.BlockArray = [B3,B5,B6,B11]    #Special Blocks
+        self.AllBlocks = [B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11] #All Blocks
 
         # Buttons
         self.fileButton.clicked.connect(self.on_file_button_clicked)
@@ -33,6 +51,7 @@ class MyApp(QMainWindow):
         self.redButton.clicked.connect(self.redButtonPushed)
         self.upCrossingButton.clicked.connect(self.upButtonPushed)
         self.downCrossingButton.clicked.connect(self.downButtonPushed)
+        self.switchButton.clicked.connect(self.switchButtonPushed)
 
         #Original Map Image
         pixmap = QPixmap('Blue Line Images\BlueLine.png')
@@ -127,6 +146,14 @@ class MyApp(QMainWindow):
         self.BlockArray[selectedIndex].state = False
         self.upCrossingButton.setEnabled(True)
         self.downCrossingButton.setEnabled(False)
+
+    def switchButtonPushed(self):
+        current_text = self.label_11.text()
+        if current_text == self.B5_Switch_Positions[0]:
+            self.label_11.setText(self.B5_Switch_Positions[1])
+        elif current_text == self.B5_Switch_Positions[1]:
+            self.label_11.setText(self.B5_Switch_Positions[0])
+
 
 
 if __name__ == "__main__":

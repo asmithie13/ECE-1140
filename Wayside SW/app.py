@@ -11,7 +11,7 @@ class MyApp(QMainWindow):
         uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
 
         # Global constants for LIGHT, CROSSING, and SWITCH
-        LIGHT_CONST = [True, False, False, True,False]
+        LIGHT_CONST = [True, False, False, False,False]
         CROSSING_CONST = [False, True, False, True,False]
         SWITCH_CONST = [False, False, True, True,False]
         NORMAL_CONST = [False, False, False, False, False]
@@ -19,7 +19,7 @@ class MyApp(QMainWindow):
         #Index [0] of each Block => True if Light
         #Index [1] of each Block => True if Crossing
         #Index [2] of each Block => True if Switch
-        #Index [3] of each Block => True if Default
+        #Index [3] of each Block => Default
         #Index [4] of each Block => True if Occupied
 
         #Switch Directions

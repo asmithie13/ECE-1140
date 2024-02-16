@@ -44,11 +44,15 @@ class MyApp(QMainWindow):
         B9 = Block(*NORMAL_CONST,"B9")
         B10 = Block(*NORMAL_CONST,"B10")
         B11 = Block(*LIGHT_CONST,"B11")
+        B12 = Block(*LIGHT_CONST,"B12")
+        B13 = Block(*LIGHT_CONST,"B13")
+        B14 = Block(*LIGHT_CONST,"B14")
+        B15 = Block(*LIGHT_CONST,"B15")
 
         #Defines an array of these blocks
 
         self.BlockArray = [B3,B5,B6,B11]    #Special Blocks
-        self.AllBlocks = [B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11] #All Blocks
+        self.AllBlocks = [B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13,B14,B15] #All Blocks
 
         # Buttons
         self.fileButton.clicked.connect(self.on_file_button_clicked)

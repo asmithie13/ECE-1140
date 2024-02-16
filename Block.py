@@ -43,7 +43,7 @@ class Block:
                 print("Crossing has been switched to UP")
             
 
-blockOne = Block("Blue", "A", 1, [True, True])
+'''blockOne = Block("Blue", "A", 1, [True, True])
 blockOne.checkCrossingState()
 blockOne.changeCrossingState()
-blockOne.checkCrossingState()
+blockOne.checkCrossingState()'''

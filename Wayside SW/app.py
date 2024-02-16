@@ -198,16 +198,21 @@ class MyApp(QMainWindow):
         elif current_text == self.B5_Switch_Positions[1]:
             self.label_11.setText(self.B5_Switch_Positions[0])
 
-    #def updateBlockOccupancy(self):
-        # Your logic to update the last index (index 4) of each block in self.AllBlocks
-        #for block in self.AllBlocks:
-         #   block[4] = not block[4]
-        #print("Block occupancy updated.")
+    def updateBlocks(self,new_data):
+        sentBlocks = new_data
+        for block_id in sentBlocks:
+            for block in self.AllBlocks:
+                if block_id == block.ID:
+                    block.occupied = True
 
-    
-    #def onOccupancyChanged(self):
+        self.BlockOcc.setText(" ".join(sentBlocks))
+        
 
 class TestBench(QMainWindow):
+
+    #signals
+    OccBlocksChanged = pyqtSignal(list)
+
     def __init__(self):
         super().__init__()
         uic.loadUi("Wayside SW/Wayside_Testbench.ui", self)
@@ -219,10 +224,8 @@ class TestBench(QMainWindow):
         self.addBlock.returnPressed.connect(self.addBlockOcc)
         self.removeBlock.returnPressed.connect(self.remBlockOcc)
 
-        #signals
-
         #Backend vars
-        self.OccupiedBlocks = []
+        self.OccupiedBlocks = []    #Is sent to the UI
 
     def sendSpeed(self):
         speed = self.speedInput.text()
@@ -244,6 +247,7 @@ class TestBench(QMainWindow):
         self.OccupiedBlocks.append(current_text)
         self.OccupiedBlocks = sorted(self.OccupiedBlocks, key=sort_by_number)
         self.label_18.setText(" ".join(self.OccupiedBlocks))
+        self.OccBlocksChanged.emit(self.OccupiedBlocks)
 
     
     def remBlockOcc(self):
@@ -251,18 +255,17 @@ class TestBench(QMainWindow):
         self.OccupiedBlocks.remove(current_text)
         self.OccupiedBlocks = sorted(self.OccupiedBlocks, key=sort_by_number)
         self.label_18.setText(" ".join(self.OccupiedBlocks))
-
-
-    #Functions to send info to UI
-            
-    #def sendBlockOccupancy(self):
-
+        self.OccBlocksChanged.emit(self.OccupiedBlocks)
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MyApp()
-    window.show()
     window2 = TestBench()
+
+    #Signals
+    window2.OccBlocksChanged.connect(window.updateBlocks)
+
+    window.show()
     window2.show()
     sys.exit(app.exec_())

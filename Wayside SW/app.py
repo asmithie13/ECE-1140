@@ -3,7 +3,10 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 from Block import Block
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer,pyqtSignal
+
+def sort_by_number(block):
+    return int(block[1:])  # Convert the string to an integer, excluding the 'B' prefix
 
 class MyApp(QMainWindow):
     def __init__(self):
@@ -213,6 +216,13 @@ class TestBench(QMainWindow):
         self.speedInput.returnPressed.connect(self.sendSpeed)
         self.authorityInput.returnPressed.connect(self.sendAuthority)
         self.modeInput.clicked.connect(self.sendMode)
+        self.addBlock.returnPressed.connect(self.addBlockOcc)
+        self.removeBlock.returnPressed.connect(self.remBlockOcc)
+
+        #signals
+
+        #Backend vars
+        self.OccupiedBlocks = []
 
     def sendSpeed(self):
         speed = self.speedInput.text()
@@ -228,6 +238,26 @@ class TestBench(QMainWindow):
             self.label_16.setText("AUTOMATIC")
         elif current_text == "AUTOMATIC":
             self.label_16.setText("MANUAL")
+
+    def addBlockOcc(self):
+        current_text = self.addBlock.text()
+        self.OccupiedBlocks.append(current_text)
+        self.OccupiedBlocks = sorted(self.OccupiedBlocks, key=sort_by_number)
+        self.label_18.setText(" ".join(self.OccupiedBlocks))
+
+    
+    def remBlockOcc(self):
+        current_text = self.removeBlock.text()
+        self.OccupiedBlocks.remove(current_text)
+        self.OccupiedBlocks = sorted(self.OccupiedBlocks, key=sort_by_number)
+        self.label_18.setText(" ".join(self.OccupiedBlocks))
+
+
+    #Functions to send info to UI
+            
+    #def sendBlockOccupancy(self):
+
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

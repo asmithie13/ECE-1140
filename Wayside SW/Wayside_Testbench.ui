@@ -211,8 +211,13 @@
           </item>
           <item>
            <widget class="QLabel" name="label_19">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -237,8 +242,13 @@
           </item>
           <item>
            <widget class="QLabel" name="label_22">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -263,8 +273,13 @@
           </item>
           <item>
            <widget class="QLabel" name="label_24">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string/>
             </property>
            </widget>
           </item>

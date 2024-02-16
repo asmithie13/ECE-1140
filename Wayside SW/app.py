@@ -9,6 +9,10 @@ def sort_by_number(block):
     return int(block[1:])  # Convert the string to an integer, excluding the 'B' prefix
 
 class MyApp(QMainWindow):
+
+    #Signals
+    sendSpecialBlocks = pyqtSignal(list)    #Send special blocks to testbench
+
     def __init__(self):
         super().__init__()
         uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
@@ -56,6 +60,9 @@ class MyApp(QMainWindow):
         self.upCrossingButton.clicked.connect(self.upButtonPushed)
         self.downCrossingButton.clicked.connect(self.downButtonPushed)
         self.switchButton.clicked.connect(self.switchButtonPushed)
+
+        #initial signals
+        self.sendSpecialBlocks.emit(self.BlockArray)
 
         #Original Map Image
         pixmap = QPixmap('Blue Line Images\BlueLine.png')
@@ -108,6 +115,8 @@ class MyApp(QMainWindow):
             self.waysideMenu.setEnabled(False)
             self.blockMenu.setEnabled(False)
             self.modeButton.setEnabled(False)
+
+        self.sendSpecialBlocks.emit(self.BlockArray)
 
     def blockActions(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -166,6 +175,7 @@ class MyApp(QMainWindow):
         self.redButton.setEnabled(True)
         self.greenButton.setStyleSheet("background-color: green")
         self.redButton.setStyleSheet("")
+        self.sendSpecialBlocks.emit(self.BlockArray)
 
     def redButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -174,6 +184,7 @@ class MyApp(QMainWindow):
         self.redButton.setEnabled(False)
         self.greenButton.setStyleSheet("")
         self.redButton.setStyleSheet("background-color: red")
+        self.sendSpecialBlocks.emit(self.BlockArray)
 
     def upButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -182,6 +193,7 @@ class MyApp(QMainWindow):
         self.downCrossingButton.setEnabled(True)
         self.upCrossingButton.setStyleSheet("background-color: yellow")
         self.downCrossingButton.setStyleSheet("")
+        self.sendSpecialBlocks.emit(self.BlockArray)
 
     def downButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -190,13 +202,18 @@ class MyApp(QMainWindow):
         self.downCrossingButton.setEnabled(False)
         self.upCrossingButton.setStyleSheet("")
         self.downCrossingButton.setStyleSheet("background-color: yellow")
+        self.sendSpecialBlocks.emit(self.BlockArray)
 
     def switchButtonPushed(self):
+        selectedIndex = self.blockMenu.currentIndex()
+        self.BlockArray[selectedIndex].state = not self.BlockArray[selectedIndex].state
+
         current_text = self.label_11.text()
         if current_text == self.B5_Switch_Positions[0]:
             self.label_11.setText(self.B5_Switch_Positions[1])
         elif current_text == self.B5_Switch_Positions[1]:
             self.label_11.setText(self.B5_Switch_Positions[0])
+        self.sendSpecialBlocks.emit(self.BlockArray)
 
     def updateBlocks(self,new_data):
         sentBlocks = new_data
@@ -206,12 +223,14 @@ class MyApp(QMainWindow):
                     block.occupied = True
 
         self.BlockOcc.setText(" ".join(sentBlocks))
+        self.sendSpecialBlocks.emit(self.BlockArray)
         
 
 class TestBench(QMainWindow):
 
     #signals
-    OccBlocksChanged = pyqtSignal(list)
+    OccBlocksChanged = pyqtSignal(list) #Sending block occupancies to UI
+    tbChangeMode = pyqtSignal() #Fliping mode
 
     def __init__(self):
         super().__init__()
@@ -223,9 +242,14 @@ class TestBench(QMainWindow):
         self.modeInput.clicked.connect(self.sendMode)
         self.addBlock.returnPressed.connect(self.addBlockOcc)
         self.removeBlock.returnPressed.connect(self.remBlockOcc)
+        self.tbBlockMenu.currentIndexChanged.connect(self.updateBlockStates)
+
+        #Menu
+        self.tbBlockMenu.addItems(['B3','B5','B6','B11'])
 
         #Backend vars
         self.OccupiedBlocks = []    #Is sent to the UI
+        self.specialBlocks = []     #Is sent from the UI
 
     def sendSpeed(self):
         speed = self.speedInput.text()
@@ -242,6 +266,8 @@ class TestBench(QMainWindow):
         elif current_text == "AUTOMATIC":
             self.label_16.setText("MANUAL")
 
+        self.tbChangeMode.emit()
+
     def addBlockOcc(self):
         current_text = self.addBlock.text()
         self.OccupiedBlocks.append(current_text)
@@ -257,14 +283,57 @@ class TestBench(QMainWindow):
         self.label_18.setText(" ".join(self.OccupiedBlocks))
         self.OccBlocksChanged.emit(self.OccupiedBlocks)
 
+    def updateBlockStates(self, arr):
+
+        if not hasattr(self, 'specialBlocks'): return   #specialBlock check for initialization
+
+        if isinstance(arr, list):
+            self.specialBlocks = arr
+            index = self.tbBlockMenu.currentIndex()
+            selectedBlock = self.specialBlocks[index]
+
+        else:  
+            if arr > len(self.specialBlocks) - 1: return 
+            selectedBlock = self.specialBlocks[arr]
+            
+        if selectedBlock.LIGHT:
+            if selectedBlock.state:
+                self.label_19.setText("Green")
+                self.label_22.setText("")
+            else:
+                self.label_19.setText("Red")
+                self.label_22.setText("")
+        elif selectedBlock.CROSSING:
+            if selectedBlock.state:
+                self.label_19.setText("")
+                self.label_22.setText("Up")
+            else:
+                self.label_19.setText("")
+                self.label_22.setText("Down")
+        elif selectedBlock.SWITCH:
+            if selectedBlock.state:
+                self.label_19.setText("")
+                self.label_22.setText("")
+                self.label_24.setText("B6")
+            else:
+                self.label_19.setText("")
+                self.label_22.setText("")
+                self.label_24.setText("B11")
+
+
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MyApp()
     window2 = TestBench()
 
-    #Signals
+    #Signal: Window
+    window.sendSpecialBlocks.connect(window2.updateBlockStates)
+
+    #Signal: Window 2
     window2.OccBlocksChanged.connect(window.updateBlocks)
+    window2.tbChangeMode.connect(window.changeMode)
 
     window.show()
     window2.show()

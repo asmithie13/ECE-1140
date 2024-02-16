@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 import sys
+from Block import Block
 
 #Function to confirm whether or not the selected PLC file valid
 def PLCvalid(fileName):
@@ -73,3 +74,4 @@ if __name__ == "__main__":
     window = MyApp()
     window.show()
     sys.exit(app.exec_())
+

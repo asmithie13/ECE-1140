@@ -101,6 +101,28 @@ class TrackController_TestBench(QMainWindow):
         super(TrackController_TestBench, self).__init__()
         uic.loadUi("TrackControllerHW_TestBench.ui", self)
 
+        #Receive the text from the type inputs:
+        self.lineEditSpeedInput.returnPressed.connect(self.sendSpeed)
+        self.lineEditAuthorityInput.returnPressed.connect(self.sendAuthority)
+        self.lineEditOccupiedInput.returnPressed.connect(self.sendOccupied)
+        self.lineEditFailedInput.returnPressed.connect(self.sendFailed)
+    
+    def sendSpeed(self):
+        inputSpeed = self.lineEditSpeedInput.text()
+        print(inputSpeed)
+    
+    def sendAuthority(self):
+        inputAuthority = self.lineEditAuthorityInput.text()
+        print(inputAuthority)
+    
+    def sendOccupied(self):
+        inputBlock = self.lineEditOccupiedInput.text()
+        print(inputBlock)
+    
+    def sendFailed(self):
+        inputBlock = self.lineEditFailedInput.text()
+        print(inputBlock)
+
 #Intialize Wayside object
 class Wayside():
     def __init__(self):

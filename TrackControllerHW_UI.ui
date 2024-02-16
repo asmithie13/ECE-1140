@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
+    <width>1500</width>
     <height>600</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1200</width>
+    <width>1500</width>
     <height>600</height>
    </size>
   </property>
@@ -124,6 +124,7 @@
          <font>
           <family>Times New Roman</family>
           <pointsize>14</pointsize>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -310,7 +311,8 @@
           <property name="font">
            <font>
             <family>Times New Roman</family>
-            <pointsize>20</pointsize>
+            <pointsize>22</pointsize>
+            <bold>true</bold>
            </font>
           </property>
           <property name="text">

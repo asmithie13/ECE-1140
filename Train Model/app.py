@@ -1,44 +1,23 @@
 import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
+from TrainModel_UI import Ui_MainWindow  # Import the generated UI class
+from PyQt5.QtGui import QPixmap
+from PyQt5 import QtCore, QtWidgets, uic, QtGui
 
-from PyQt5.QtWidgets import (
-    QApplication, QDialog, QMainWindow, QMessageBox
-)
-from PyQt5.uic import loadUi
+class MyMainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi("Train Model/TrainModel_UI.ui", self)
 
-from test_ui import Ui_MainWindow
+class MyMainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
 
-class Window(QMainWindow, Ui_MainWindow):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setupUi(self)
-        self.connectSignalsSlots()
-
-    def connectSignalsSlots(self):
-        self.action_Exit.triggered.connect(self.close)
-        self.action_Find_Replace.triggered.connect(self.findAndReplace)
-        self.action_About.triggered.connect(self.about)
-
-    def findAndReplace(self):
-        dialog = FindReplaceDialog(self)
-        dialog.exec()
-
-    def about(self):
-        QMessageBox.about(
-            self,
-            "About Sample Editor",
-            "<p>A sample text editor app built with:</p>"
-            "<p>- PyQt</p>"
-            "<p>- Qt Designer</p>"
-            "<p>- Python</p>",
-        )
-
-class FindReplaceDialog(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        loadUi("ui/find_replace.ui", self)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    win = Window()
-    win.show()
-    sys.exit(app.exec())3
+    window = MyMainWindow()
+    window.show()
+    sys.exit(app.exec_())

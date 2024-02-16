@@ -44,10 +44,10 @@
    <widget class="QTableWidget" name="Data_table">
     <property name="geometry">
      <rect>
-      <x>195</x>
+      <x>305</x>
       <y>0</y>
-      <width>271</width>
-      <height>191</height>
+      <width>161</width>
+      <height>181</height>
      </rect>
     </property>
     <property name="showGrid">

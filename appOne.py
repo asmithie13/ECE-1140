@@ -3,7 +3,7 @@ from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 import sys
 
-#Function to confirm whether or not the selected PLC file is a valid file
+#Function to confirm whether or not the selected PLC file valid
 def PLCvalid(fileName):
         fileOpen = open(fileName, 'r')
         headLine = fileOpen.readline()

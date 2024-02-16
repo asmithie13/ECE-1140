@@ -1,0 +1,7 @@
+LIGHT ID    #Block is Green
+LIGHT !ID   #Block is Red
+
+CROSSING ID #Block is Up
+CROSSING !ID    #Block is Down
+
+SWITCH ID1 ID2  #Block SWITCH points to ID2 now

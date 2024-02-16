@@ -1,8 +1,14 @@
 import sys
+import os
+
+# Using Block Class as a seperate file
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_root)
+
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
-from Block import Block
+from Track_Resources.Block import Block
 from PyQt5.QtCore import QTimer,pyqtSignal
 
 def sort_by_number(block):

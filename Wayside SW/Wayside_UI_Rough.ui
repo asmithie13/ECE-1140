@@ -32,8 +32,14 @@
       </item>
       <item>
        <widget class="QLabel" name="BlockOcc">
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>18</pointsize>
+         </font>
+        </property>
         <property name="text">
-         <string>TextLabel</string>
+         <string/>
         </property>
        </widget>
       </item>

@@ -120,7 +120,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEdit"/>
+         <widget class="QLineEdit" name="addBlock"/>
         </item>
         <item>
          <widget class="QLabel" name="label_5">
@@ -138,7 +138,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEdit_2"/>
+         <widget class="QLineEdit" name="removeBlock"/>
         </item>
        </layout>
       </item>
@@ -188,7 +188,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox"/>
+           <widget class="QComboBox" name="tbBlockMenu"/>
           </item>
          </layout>
         </item>

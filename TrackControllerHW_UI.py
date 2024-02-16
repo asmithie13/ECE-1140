@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'TrackControllerHW_UIdUZXTY.ui'
+## Form generated from reading UI file 'TrackControllerHW_UIusxDtF.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.6.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
-
+from PyQt5 import QtWidgets
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
@@ -18,7 +18,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
     QHBoxLayout, QLabel, QLineEdit, QMainWindow,
     QPushButton, QSizePolicy, QVBoxLayout, QWidget)
-
+import sys
+    
 class Ui_TrackControllerUI(object):
     def setupUi(self, TrackControllerUI):
         if not TrackControllerUI.objectName():
@@ -98,7 +99,7 @@ class Ui_TrackControllerUI(object):
         self.labelPhoto = QLabel(self.centralwidget)
         self.labelPhoto.setObjectName(u"labelPhoto")
         self.labelPhoto.setMaximumSize(QSize(440, 250))
-        self.labelPhoto.setPixmap(QPixmap(u"../../../../../../Documents/TrackController/blueline.png"))
+        self.labelPhoto.setPixmap(QPixmap(u"blueline.png"))
         self.labelPhoto.setScaledContents(True)
 
         self.verticalLayout_3.addWidget(self.labelPhoto)
@@ -342,4 +343,3 @@ class Ui_TrackControllerUI(object):
         self.labelOcuppiedBlocks.setText(QCoreApplication.translate("TrackControllerUI", u"Occupied Blocks:", None))
         self.labelClosedBlocks.setText(QCoreApplication.translate("TrackControllerUI", u"Closed Blocks:", None))
     # retranslateUi
-

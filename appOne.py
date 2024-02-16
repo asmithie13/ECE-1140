@@ -13,10 +13,10 @@ def PLCvalid(fileName):
         return True
 
 #Initialization of UI
-class MyApp(QMainWindow):
+class TrackController_UI(QMainWindow):
     def __init__(self):
-        super(MyApp, self).__init__()
-        uic.loadUi("TrackControllerHW_UI.ui",self)
+        super(TrackController_UI, self).__init__()
+        uic.loadUi("TrackControllerHW_UI.ui", self)
 
         #Signals for PLC upload menu:
         self.buttonBrowse.clicked.connect(self.uploadPLCFile)
@@ -39,6 +39,8 @@ class MyApp(QMainWindow):
         if(PLCvalid(fileName) == True):
             self.lineEditBrowse.setText(fileName)
             self.labelUploadValid.setText("File Uploaded Successfully")
+            self.checkAuto.setChecked(True)
+            self.automaticMode()
         else:
             self.lineEditBrowse.setText("")
             self.labelUploadValid.setText("Invalid File")
@@ -67,11 +69,27 @@ class MyApp(QMainWindow):
         print("Mode: Manual")
         self.checkAuto.setChecked(False)
         self.checkAuto.setEnabled(False) #Unable to move back to automatic operation if currently in manual
-        
+        self.buttonBrowse.setEnabled(False)
+        self.lineEditBrowse.setText("")
+        self.labelUploadValid.setText("")
+
+#Initialization of test bench:
+class TrackController_TestBench(QMainWindow):
+    def __init__(self):
+        super(TrackController_TestBench, self).__init__()
+        uic.loadUi("TrackControllerHW_TestBench.ui", self)
+
 #Create instance of window:
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = MyApp()
-    window.show()
+    windowOne = TrackController_UI()
+    windowOne.show()
+
+    windowTwo = TrackController_TestBench()
+    windowTwo.show()
+
     sys.exit(app.exec_())
+
+
+
 

@@ -51,10 +51,10 @@ class MyApp(QMainWindow):
         B9 = Block(*NORMAL_CONST,"B9")
         B10 = Block(*NORMAL_CONST,"B10")
         B11 = Block(*LIGHT_CONST,"B11")
-        B12 = Block(*LIGHT_CONST,"B12")
-        B13 = Block(*LIGHT_CONST,"B13")
-        B14 = Block(*LIGHT_CONST,"B14")
-        B15 = Block(*LIGHT_CONST,"B15")
+        B12 = Block(*NORMAL_CONST,"B12")
+        B13 = Block(*NORMAL_CONST,"B13")
+        B14 = Block(*NORMAL_CONST,"B14")
+        B15 = Block(*NORMAL_CONST,"B15")
 
         #Defines an array of these blocks
 

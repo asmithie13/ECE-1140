@@ -68,7 +68,7 @@
       <x>20</x>
       <y>310</y>
       <width>381</width>
-      <height>181</height>
+      <height>161</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -81,20 +81,19 @@
      <string>Failure Modes on Selected Block</string>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="1">
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="text">
-        <string>PushButton</string>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_4">
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-        <string>Power Failure</string>
+        <string>Track Circuit Failure</string>
        </property>
       </widget>
      </item>
@@ -108,27 +107,34 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
-      <widget class="QPushButton" name="pushButton_4">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_3">
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_4">
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-        <string>Track Circuit Failure</string>
+        <string>Power Failure</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="offButton_3">
+       <property name="text">
+        <string>OFF</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="offButton_2">
+       <property name="text">
+        <string>OFF</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="offButton_1">
+       <property name="text">
+        <string>OFF</string>
        </property>
       </widget>
      </item>
@@ -161,6 +167,12 @@
       <width>251</width>
       <height>291</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QGroupBox {
+    background-color: white;
+}
+</string>
     </property>
     <property name="title">
      <string>Block Data</string>
@@ -249,6 +261,12 @@
       <width>251</width>
       <height>131</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QGroupBox {
+    background-color: white;
+}
+</string>
     </property>
     <property name="title">
      <string>Station Data</string>

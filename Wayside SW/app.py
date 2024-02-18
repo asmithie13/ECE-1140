@@ -114,22 +114,31 @@ class MyApp(QMainWindow):
             file = open(file_path,"r")
             self.FileParser.inputPLC = file.read()
             file.close
+            self.modeButton.setEnabled(True) #Can't Change to automatic until PLC is inserted
 
-        self.FileParser.parsePLC()
+        #self.FileParser.parsePLC() do NOT call until automatic mode is active
 
     def changeMode(self):
         current_text = self.label_7.text()
-        if current_text == "MANUAL":
+        if current_text == "MANUAL":   
             self.label_7.setText("AUTOMATIC")
+            self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
+            self.blockActions()
+    
+            #Finish code for switch
+
+
         elif current_text == "AUTOMATIC":
             self.label_7.setText("MANUAL")
+            self.blockActions()
 
     def checkLine(self):
         checkStatus = self.selectLine.isChecked()
         if checkStatus:
             self.waysideMenu.setEnabled(True)
             self.blockMenu.setEnabled(True)
-            self.modeButton.setEnabled(True)
+            self.modeButton.setEnabled(self.FileParser.inputPLC != None) #Can't Change to automatic until PLC is inserted
+            self.blockActions()
         else:
             self.waysideMenu.setEnabled(False)
             self.blockMenu.setEnabled(False)
@@ -142,8 +151,8 @@ class MyApp(QMainWindow):
         selectedBlock = self.BlockArray[selectedIndex]
 
         if selectedBlock.LIGHT and self.label_7.text():
-            self.greenButton.setEnabled(not selectedBlock.state)
-            self.redButton.setEnabled(selectedBlock.state)
+            self.greenButton.setEnabled(not selectedBlock.state and self.label_7.text() == "MANUAL")
+            self.redButton.setEnabled(selectedBlock.state and self.label_7.text() == "MANUAL")
             self.upCrossingButton.setEnabled(False)
             self.downCrossingButton.setEnabled(False)
             self.switchButton.setEnabled(False)
@@ -161,8 +170,8 @@ class MyApp(QMainWindow):
         elif selectedBlock.CROSSING and self.selectLine.isChecked():
             self.greenButton.setEnabled(False)
             self.redButton.setEnabled(False)
-            self.upCrossingButton.setEnabled(not selectedBlock.state)
-            self.downCrossingButton.setEnabled(selectedBlock.state)
+            self.upCrossingButton.setEnabled(not selectedBlock.state and self.label_7.text() == "MANUAL")
+            self.downCrossingButton.setEnabled(selectedBlock.state and self.label_7.text() == "MANUAL")
             self.switchButton.setEnabled(False)
 
             self.greenButton.setStyleSheet("")
@@ -180,7 +189,7 @@ class MyApp(QMainWindow):
             self.redButton.setEnabled(False)
             self.upCrossingButton.setEnabled(False)
             self.downCrossingButton.setEnabled(False)
-            self.switchButton.setEnabled(True)
+            self.switchButton.setEnabled(True and self.label_7.text() == "MANUAL")
 
             self.greenButton.setStyleSheet("")
             self.redButton.setStyleSheet("")

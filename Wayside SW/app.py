@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 from Track_Resources.Block import Block
+from PLC_Files.Parser import Parser
 from PyQt5.QtCore import QTimer,pyqtSignal
 
 def sort_by_number(block):
@@ -50,15 +51,18 @@ class MyApp(QMainWindow):
         B9 = Block(*NORMAL_CONST,"B9")
         B10 = Block(*NORMAL_CONST,"B10")
         B11 = Block(*LIGHT_CONST,"B11")
-        B12 = Block(*LIGHT_CONST,"B12")
-        B13 = Block(*LIGHT_CONST,"B13")
-        B14 = Block(*LIGHT_CONST,"B14")
-        B15 = Block(*LIGHT_CONST,"B15")
+        B12 = Block(*NORMAL_CONST,"B12")
+        B13 = Block(*NORMAL_CONST,"B13")
+        B14 = Block(*NORMAL_CONST,"B14")
+        B15 = Block(*NORMAL_CONST,"B15")
 
         #Defines an array of these blocks
 
         self.BlockArray = [B3,B5,B6,B11]    #Special Blocks
         self.AllBlocks = [B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13,B14,B15] #All Blocks
+
+        #Create Parser Object
+        self.FileParser = Parser(None,self.BlockArray)  #Currently empty onject
 
         # Buttons
         self.fileButton.clicked.connect(self.on_file_button_clicked)
@@ -102,11 +106,16 @@ class MyApp(QMainWindow):
     def on_file_button_clicked(self):
         # Open a file dialog to select a PLC file
         file_dialog = QFileDialog()
-        file_path, _ = file_dialog.getOpenFileName(self, "Select PLC File", "", "PLC Files (*.plc);;All Files (*)")
+        file_path, _ = file_dialog.getOpenFileName(self, "Select PLC File", "", "Text Files (*.txt);;All Files (*)")
 
         if file_path:
             # Implement your logic with the selected file path
             print(f"Selected PLC File: {file_path}")
+            file = open(file_path,"r")
+            self.FileParser.inputPLC = file.read()
+            file.close
+
+        self.FileParser.parsePLC()
 
     def changeMode(self):
         current_text = self.label_7.text()
@@ -132,7 +141,7 @@ class MyApp(QMainWindow):
         selectedIndex = self.blockMenu.currentIndex()
         selectedBlock = self.BlockArray[selectedIndex]
 
-        if selectedBlock.LIGHT:
+        if selectedBlock.LIGHT and self.label_7.text():
             self.greenButton.setEnabled(not selectedBlock.state)
             self.redButton.setEnabled(selectedBlock.state)
             self.upCrossingButton.setEnabled(False)

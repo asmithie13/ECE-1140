@@ -60,6 +60,7 @@ class MyApp(QMainWindow):
 
         self.BlockArray = [B3,B5,B6,B11]    #Special Blocks
         self.AllBlocks = [B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13,B14,B15] #All Blocks
+        self.SwitchBlocks = ["B5","B6","B11"]
 
         #Create Parser Object
         self.FileParser = Parser(None,self.BlockArray)  #Currently empty onject
@@ -124,9 +125,6 @@ class MyApp(QMainWindow):
             self.label_7.setText("AUTOMATIC")
             self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
             self.blockActions()
-    
-            #Finish code for switch
-
 
         elif current_text == "AUTOMATIC":
             self.label_7.setText("MANUAL")
@@ -159,6 +157,7 @@ class MyApp(QMainWindow):
 
             self.upCrossingButton.setStyleSheet("")
             self.downCrossingButton.setStyleSheet("")
+            self.label_11.setText("")
             
             if selectedBlock.state:
                 self.greenButton.setStyleSheet("background-color: green")
@@ -176,6 +175,7 @@ class MyApp(QMainWindow):
 
             self.greenButton.setStyleSheet("")
             self.redButton.setStyleSheet("")
+            self.label_11.setText("")
 
             if selectedBlock.state:
                 self.upCrossingButton.setStyleSheet("background-color: yellow")
@@ -190,6 +190,12 @@ class MyApp(QMainWindow):
             self.upCrossingButton.setEnabled(False)
             self.downCrossingButton.setEnabled(False)
             self.switchButton.setEnabled(True and self.label_7.text() == "MANUAL")
+
+            if selectedBlock.state == True:
+                self.label_11.setText(self.SwitchBlocks[1])
+
+            else:
+                self.label_11.setText(self.SwitchBlocks[2])
 
             self.greenButton.setStyleSheet("")
             self.redButton.setStyleSheet("")

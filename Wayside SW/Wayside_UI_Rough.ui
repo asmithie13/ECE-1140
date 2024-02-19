@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>738</width>
+    <width>766</width>
     <height>625</height>
    </rect>
   </property>
@@ -15,6 +15,43 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="2" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_14">
+      <item>
+       <widget class="QLabel" name="label_18">
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>18</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Block Occupancies:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="BlockOcc">
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>18</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
@@ -46,7 +83,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton">
+             <widget class="QPushButton" name="fileButton">
               <property name="font">
                <font>
                 <family>Times New Roman</family>
@@ -74,7 +111,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="saveButton">
             <property name="font">
              <font>
               <family>Times New Roman</family>
@@ -117,7 +154,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox">
+             <widget class="QCheckBox" name="selectLine">
               <property name="font">
                <font>
                 <family>Times New Roman</family>
@@ -139,33 +176,6 @@
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <item>
-             <widget class="QLabel" name="label_5">
-              <property name="font">
-               <font>
-                <family>Times New Roman</family>
-                <pointsize>18</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Type Block ID</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="lineEdit"/>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="Line" name="line_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
              <widget class="QLabel" name="label_4">
@@ -181,11 +191,34 @@
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="toolButton">
+             <widget class="QComboBox" name="waysideMenu"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="font">
+               <font>
+                <family>Times New Roman</family>
+                <pointsize>18</pointsize>
+               </font>
+              </property>
               <property name="text">
-               <string>...</string>
+               <string>Select Block ID</string>
               </property>
              </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="blockMenu"/>
             </item>
            </layout>
           </item>
@@ -212,9 +245,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_4">
+             <widget class="QPushButton" name="modeButton">
+              <property name="font">
+               <font>
+                <family>Times New Roman</family>
+               </font>
+              </property>
               <property name="text">
-               <string>PushButton</string>
+               <string>CHANGE</string>
               </property>
              </widget>
             </item>
@@ -292,14 +330,26 @@
            </widget>
           </item>
           <item>
-           <widget class="QDialogButtonBox" name="buttonBox">
+           <widget class="QPushButton" name="greenButton">
             <property name="font">
              <font>
               <family>Times New Roman</family>
              </font>
             </property>
-            <property name="standardButtons">
-             <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+            <property name="text">
+             <string>GREEN</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="redButton">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
+            <property name="text">
+             <string>RED</string>
             </property>
            </widget>
           </item>
@@ -328,16 +378,32 @@
            </widget>
           </item>
           <item>
-           <widget class="QDialogButtonBox" name="buttonBox_2">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-             </font>
-            </property>
-            <property name="standardButtons">
-             <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QPushButton" name="upCrossingButton">
+              <property name="font">
+               <font>
+                <family>Times New Roman</family>
+               </font>
+              </property>
+              <property name="text">
+               <string>UP</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="downCrossingButton">
+              <property name="font">
+               <font>
+                <family>Times New Roman</family>
+               </font>
+              </property>
+              <property name="text">
+               <string>DOWN</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
@@ -374,7 +440,7 @@
                </font>
               </property>
               <property name="text">
-               <string>B1</string>
+               <string/>
               </property>
              </widget>
             </item>
@@ -396,15 +462,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_3">
+             <widget class="QPushButton" name="switchButton">
               <property name="font">
                <font>
                 <family>Times New Roman</family>
-                <pointsize>16</pointsize>
                </font>
               </property>
               <property name="text">
-               <string>File</string>
+               <string>CHANGE</string>
               </property>
              </widget>
             </item>
@@ -416,19 +481,16 @@
       </widget>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="Line" name="line_8">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>738</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>toolBar</string>

@@ -434,7 +434,7 @@ class Ui_MainWindow(object):
         self.lcdBrk.display(value)
         value = (6*81000)*(value/100)
         self.brakePower = value
-        print(f"Slider value changed to: {value}")
+        #print(f"Slider value changed to: {value}")
 
 
 

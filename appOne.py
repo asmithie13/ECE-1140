@@ -6,15 +6,15 @@ from Block import Block
 import csv
 from PyQt5.QtCore import (Qt, pyqtSignal)
 
-#Function to confirm whether or not the selected PLC file valid:
-def PLCvalid(fileName): #Reads based-on heading - Different text can be specified
+#Function to confirm whether or not the selected PLC file is valid:
+def PLCvalid(fileName): #Reads based-on heading - Include heading in PLC files
         fileOpen = open(fileName, 'r')
         headLine = fileOpen.readline()
-        if(headLine != "PLC File"):
+        if(headLine != "PLC File"): #Here, heading is set to "PLC File"
             return False
         return True
 
-#Function that reads all blocks from a *.csv file:
+#Function that reads all blocks from a *.csv file and assigns block attributes:
 def readTrackFile(fileName):
     totalBlocks = []
     with open(fileName, "r") as fileObject:
@@ -36,19 +36,22 @@ def readTrackFile(fileName):
 
 #Initialization of UI:
 class TrackController_UI(QMainWindow):
+
     #Signals:
-    commandedAuth = pyqtSignal(str) #Signal to send commanded authority to testbench
+    commandedAuth = pyqtSignal(str) #Signal to output the commanded authority to the testbench
 
     def __init__(self):
         #Load-in UI from the TrackControllerHW_UI file:
         super(TrackController_UI, self).__init__()
         uic.loadUi("TrackControllerHW_UI.ui", self)
-        self.lineEditCommandedAuth.returnPressed.connect(self.sendCommandedAuth)
 
         #Read all blocks and their attributes (Crossings, switches, etc.)
         self.allBlueBlocks = readTrackFile("blueLine.csv")
         self.allRedBlocks = readTrackFile("redLine.csv")
         self.allGreenBlocks = readTrackFile("greenLine.csv")
+
+        #Block that is selected at any one time:
+        self.selectedBlock = Block("", "", 0, False, False)
 
         #Disable the "Browse" button until a line is selected:
         self.buttonBrowse.setEnabled(False) #Leave disabled until automatic mode is fully implemented
@@ -68,6 +71,13 @@ class TrackController_UI(QMainWindow):
         self.comboBoxWayside.setEnabled(False)
         self.comboBoxBlock.setEnabled(False)
 
+        self.buttonSwitchLeft.setEnabled(False)
+        self.buttonSwitchRight.setEnabled(False)
+        self.buttonLightRed.setEnabled(False)
+        self.buttonLightGreen.setEnabled(False)
+        self.buttonCrossingUp.setEnabled(False)
+        self.buttonCrossingDown.setEnabled(False)
+
         #Signals for PLC upload menu:
         self.buttonBrowse.clicked.connect(self.uploadPLCFile)
 
@@ -85,8 +95,12 @@ class TrackController_UI(QMainWindow):
 
         #Block selection signal:
         self.comboBoxBlock.activated.connect(self.blockSelect)
+        self.comboBoxBlock.activated.connect(self.setSelectedBlock)
+
+        #Commanded authority signal:
+        self.lineEditCommandedAuth.returnPressed.connect(self.sendCommandedAuth)
     
-    #Function to upload the PLC file and display the file location:
+    #Function to upload the PLC file and display the file path:
     def uploadPLCFile(self):
         fileName = QFileDialog.getOpenFileName(self, "Select PLC File", "C:")
         fileName = fileName[0]
@@ -109,37 +123,30 @@ class TrackController_UI(QMainWindow):
         self.comboBoxWayside.clear()
         self.comboBoxWayside.addItem("Blue") #Number of waysides will be hard-coded
 
-        print("Selected: Blue Line") #Remove later after adding actual functionality
-
     #Occurs if the red line is selected:
     def redLineButton(self):
         self.comboBoxWayside.setEnabled(True)
         self.comboBoxWayside.clear()
         self.comboBoxWayside.addItem("1")
-        self.comboBoxWayside.addItem("2")
-
-        print("Selected: Red Line")
+        self.comboBoxWayside.addItem("2") #Number of waysides will be hard-coded
 
     #Occurs if the green line is selected:
     def greenLineButton(self):
         self.comboBoxWayside.setEnabled(True)
         self.comboBoxWayside.clear()
-        self.comboBoxWayside.addItem("3")
+        self.comboBoxWayside.addItem("3") #Number of waysides will be hard-coded
         self.comboBoxWayside.addItem("4")
-
-        print("Selected: Green Line")
 
     #Occurs if the system is in automatic operation:
     def automaticMode(self):
         self.modeFlag = 1
+        self.comboBoxBlock.clear() #Specific blocks are not controlled in automatic operation
         self.comboBoxWayside.setEnabled(False)
-        self.comboBoxBlock.clear()
         self.comboBoxBlock.setEnabled(False)
-        print("Mode: Automatic")
     
     #Occcurs if the user selects manual operation:
     def manualMode(self):
-        if(self.modeFlag == 1):
+        if(self.modeFlag == 1): #Indicates that this is not initial manual mode, but manual-from-automatic
             self.buttonBrowse.setEnabled(False) #Unable to move back to automatic operation if currently in manual
             self.checkAuto.setChecked(False)
             self.checkAuto.setEnabled(False) 
@@ -147,7 +154,6 @@ class TrackController_UI(QMainWindow):
 
         self.comboBoxWayside.setEnabled(True)
         self.comboBoxBlock.setEnabled(True)
-        print("Mode: Manual")
     
     def waysideSelect(self):
         #self.buttonBrowse.setEnabled(True) #Automatic not yet implemented, so function is commented-out
@@ -158,7 +164,7 @@ class TrackController_UI(QMainWindow):
             for blockNum in self.allBlueBlocks:
                 self.comboBoxBlock.addItem(blockNum.returnBlockID())
     
-    #Function to handle selected block:
+    #Function to find a specific block given the block ID, and assign the block to the specifi
     def blockSelect(self):
         selectedBlockText = self.comboBoxBlock.currentText()
         for block in self.allBlueBlocks:
@@ -166,6 +172,7 @@ class TrackController_UI(QMainWindow):
                 self.selectedBlock = block
                 break
     
+    #Function to receive and display block occupancies:
     def displayOccupancies(self, occBlock):
         tempStr = ""
         for block in occBlock:
@@ -173,6 +180,7 @@ class TrackController_UI(QMainWindow):
         
         self.lineEditOccupiedBlocks.setText(tempStr)
     
+    #Function to receive and display block failures:
     def displayFailures(self, failBlock):
         tempStr = ""
         for block in failBlock:
@@ -180,12 +188,40 @@ class TrackController_UI(QMainWindow):
     
         self.lineEditClosedBlocks.setText(tempStr)
     
+    #Function to display the received suggested authority (from CTC):
     def displaySuggestedAuth(self, tempStr):
         self.lineEditReceivedAuth.setText(tempStr)
     
+    #Function to send the commanded authority to the testbench:
     def sendCommandedAuth(self):
         commandedAuth = self.lineEditCommandedAuth.text()
         self.commandedAuth.emit(commandedAuth)
+
+    #Function to set a selected block - Enables programmer to edit block states:
+    def setSelectedBlock(self):
+        currentBlock = self.comboBoxBlock.currentText()
+        for block in self.allBlueBlocks:
+            if(block.returnBlockID() == currentBlock):
+                self.selectedBlock = block
+                break
+        
+        if(self.selectedBlock.hasSwitch == True):
+            self.buttonSwitchLeft.setEnabled(True)
+            self.buttonSwitchRight.setEnabled(True)
+            self.buttonLightRed.setEnabled(True)
+            self.buttonLightGreen.setEnabled(True)
+        elif(self.selectedBlock.hasSwitch == False):
+            self.buttonSwitchLeft.setEnabled(False)
+            self.buttonSwitchRight.setEnabled(False)
+            self.buttonLightRed.setEnabled(False)
+            self.buttonLightGreen.setEnabled(False)
+
+        if(self.selectedBlock.hasCrossing == True):
+            self.buttonCrossingUp.setEnabled(True)
+            self.buttonCrossingDown.setEnabled(True)
+        elif(self.selectedBlock.hasCrossing == False):
+            self.buttonCrossingUp.setEnabled(False)
+            self.buttonCrossingDown.setEnabled(False)
 
     #NEXT:
         #Write functions that allow the Arduino to serially change the switch state,

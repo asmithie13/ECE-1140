@@ -9,13 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-<<<<<<< HEAD
     <width>1009</width>
     <height>669</height>
-=======
-    <width>1541</width>
-    <height>471</height>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
    </rect>
   </property>
   <property name="cursor">
@@ -33,15 +28,9 @@ background-color: rgb(255, 220, 149);</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-<<<<<<< HEAD
       <y>550</y>
       <width>1051</width>
       <height>81</height>
-=======
-      <y>350</y>
-      <width>711</width>
-      <height>41</height>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
      </rect>
     </property>
     <property name="font">
@@ -70,11 +59,7 @@ background-color: rgb(255, 220, 149);</string>
         <string notr="true">background-color: rgb(195, 16, 40);</string>
        </property>
        <property name="text">
-<<<<<<< HEAD
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt; color:#141414;&quot;&gt;EMERGENCY STOP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-=======
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; color:#141414;&quot;&gt;EMERGENCY STOP&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -88,7 +73,7 @@ background-color: rgb(255, 220, 149);</string>
      <rect>
       <x>400</x>
       <y>0</y>
-      <width>311</width>
+      <width>431</width>
       <height>41</height>
      </rect>
     </property>
@@ -122,10 +107,10 @@ background-color: rgb(255, 220, 149);</string>
    <widget class="QWidget" name="verticalLayoutWidget_3">
     <property name="geometry">
      <rect>
-      <x>560</x>
+      <x>620</x>
       <y>40</y>
-      <width>151</width>
-      <height>191</height>
+      <width>211</width>
+      <height>201</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -133,13 +118,13 @@ background-color: rgb(255, 220, 149);</string>
       <widget class="QLCDNumber" name="Lengthofvehicle_lcd"/>
      </item>
      <item>
-      <widget class="QLCDNumber" name="Height_lcd"/>
-     </item>
-     <item>
       <widget class="QLCDNumber" name="Width_lcd"/>
      </item>
      <item>
       <widget class="QLCDNumber" name="lcdNumber_6"/>
+     </item>
+     <item>
+      <widget class="QLCDNumber" name="Height_lcd"/>
      </item>
      <item>
       <widget class="QLCDNumber" name="lcdNumber_7"/>
@@ -151,221 +136,6 @@ background-color: rgb(255, 220, 149);</string>
       <widget class="QLCDNumber" name="lcdNumber"/>
      </item>
     </layout>
-   </widget>
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>40</y>
-      <width>161</width>
-      <height>191</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string>background-color: rgb(197, 197, 197);</string>
-    </property>
-    <property name="title">
-     <string/>
-    </property>
-    <widget class="QWidget" name="verticalLayoutWidget_4">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>161</width>
-       <height>191</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string>background-color: rgb(197, 197, 197);</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_4">
-      <item>
-       <widget class="QLabel" name="LengthVehicle_label">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>8</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(197, 197, 197);</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Length of Vehicle (feet)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="LengthVehicle_label_2">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>8</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(197, 197, 197);</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Height (feet)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_5">
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>8</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(197, 197, 197);</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Width (feet)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_6">
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>8</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(197, 197, 197);</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Grade (%)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_7">
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>8</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(197, 197, 197);</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Car Weight Loaded (lbs)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_9">
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>8</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(197, 197, 197);</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Passenger Count&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_8">
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>8</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(197, 197, 197);</string>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Crew Count&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
    </widget>
    <widget class="QComboBox" name="comboBox">
     <property name="geometry">
@@ -411,8 +181,8 @@ background-color: rgb(255, 220, 149);</string>
      <rect>
       <x>0</x>
       <y>50</y>
-      <width>271</width>
-      <height>181</height>
+      <width>281</width>
+      <height>191</height>
      </rect>
     </property>
     <property name="font">
@@ -489,11 +259,7 @@ background-color: rgb(255, 220, 149);</string>
         <enum>QFrame::Panel</enum>
        </property>
        <property name="text">
-<<<<<<< HEAD
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Actu2al Velocity (mph)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-=======
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Actual Velocity (mph)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
        </property>
       </widget>
      </item>
@@ -502,10 +268,10 @@ background-color: rgb(255, 220, 149);</string>
    <widget class="QWidget" name="verticalLayoutWidget_5">
     <property name="geometry">
      <rect>
-      <x>270</x>
+      <x>280</x>
       <y>50</y>
       <width>121</width>
-      <height>181</height>
+      <height>191</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -520,7 +286,6 @@ background-color: rgb(255, 220, 149);</string>
      </item>
     </layout>
    </widget>
-<<<<<<< HEAD
    <widget class="QWidget" name="verticalLayoutWidget_6">
     <property name="geometry">
      <rect>
@@ -528,149 +293,12 @@ background-color: rgb(255, 220, 149);</string>
       <y>340</y>
       <width>121</width>
       <height>201</height>
-=======
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>230</y>
-      <width>711</width>
-      <height>56</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="label_11">
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>10</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(195, 16, 40);
-</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Brake Failure&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::No|QDialogButtonBox::Yes</set>
-       </property>
-       <property name="centerButtons">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="Line" name="line_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_12">
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>10</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(195, 16, 40);
-</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Signal Pickup &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:8pt; color:#c11028;&quot;&gt;abc&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Failure&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox_4">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::No|QDialogButtonBox::Yes</set>
-       </property>
-       <property name="centerButtons">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="Line" name="line_3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_13">
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>10</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(195, 16, 40);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Engine Failure&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox_2">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::No|QDialogButtonBox::Yes</set>
-       </property>
-       <property name="centerButtons">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget_6">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>290</y>
-      <width>91</width>
-      <height>51</height>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
      </rect>
     </property>
     <property name="font">
      <font>
       <family>Times New Roman</family>
-<<<<<<< HEAD
       <pointsize>12</pointsize>
-=======
-      <pointsize>9</pointsize>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -681,11 +309,7 @@ background-color: rgb(255, 220, 149);</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-<<<<<<< HEAD
          <pointsize>12</pointsize>
-=======
-         <pointsize>9</pointsize>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -694,11 +318,7 @@ background-color: rgb(255, 220, 149);</string>
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-<<<<<<< HEAD
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Interior &lt;/p&gt;&lt;p align=&quot;center&quot;&gt;Lights&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-=======
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:6pt;&quot;&gt;Interior Lights&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
        </property>
       </widget>
      </item>
@@ -707,11 +327,7 @@ background-color: rgb(255, 220, 149);</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-<<<<<<< HEAD
          <pointsize>12</pointsize>
-=======
-         <pointsize>9</pointsize>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -720,11 +336,7 @@ background-color: rgb(255, 220, 149);</string>
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-<<<<<<< HEAD
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Exterior&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;Lights&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-=======
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:6pt;&quot;&gt;Exterior Lights&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
        </property>
       </widget>
      </item>
@@ -733,17 +345,10 @@ background-color: rgb(255, 220, 149);</string>
    <widget class="QWidget" name="verticalLayoutWidget_7">
     <property name="geometry">
      <rect>
-<<<<<<< HEAD
       <x>140</x>
       <y>340</y>
       <width>111</width>
       <height>201</height>
-=======
-      <x>110</x>
-      <y>290</y>
-      <width>91</width>
-      <height>51</height>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
      </rect>
     </property>
     <property name="font">
@@ -772,11 +377,7 @@ background-color: rgb(255, 220, 149);</string>
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-<<<<<<< HEAD
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#464646;&quot;&gt;ON&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-=======
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#464646;&quot;&gt;ON&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
        </property>
       </widget>
      </item>
@@ -797,188 +398,7 @@ background-color: rgb(255, 220, 149);</string>
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-<<<<<<< HEAD
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#464646;&quot;&gt;ON&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-=======
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#464646;&quot;&gt;ON&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget_8">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>290</y>
-      <width>91</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Times New Roman</family>
-      <pointsize>9</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_9">
-     <item>
-      <widget class="QLabel" name="label_21">
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Right Door&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_20">
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Left Door&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget_9">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>290</y>
-      <width>91</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Times New Roman</family>
-      <pointsize>9</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_10">
-     <item>
-      <widget class="QLabel" name="label_19">
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(192, 192, 192);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#3f3f3f;&quot;&gt;CLOSE&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_22">
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(192, 192, 192);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#464646;&quot;&gt;CLOSE&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>290</y>
-      <width>221</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Times New Roman</family>
-      <pointsize>9</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="label_25">
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>Cabin Temperature</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_24">
-       <property name="font">
-        <font>
-         <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(197, 197, 197);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;68 F&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
        </property>
       </widget>
      </item>
@@ -987,17 +407,10 @@ background-color: rgb(255, 220, 149);</string>
    <widget class="Line" name="line_4">
     <property name="geometry">
      <rect>
-<<<<<<< HEAD
       <x>250</x>
       <y>340</y>
       <width>21</width>
       <height>211</height>
-=======
-      <x>212</x>
-      <y>290</y>
-      <width>21</width>
-      <height>51</height>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
      </rect>
     </property>
     <property name="font">
@@ -1015,17 +428,10 @@ background-color: rgb(255, 220, 149);</string>
    <widget class="Line" name="line_5">
     <property name="geometry">
      <rect>
-<<<<<<< HEAD
       <x>525</x>
       <y>340</y>
       <width>21</width>
       <height>211</height>
-=======
-      <x>480</x>
-      <y>290</y>
-      <width>3</width>
-      <height>54</height>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
      </rect>
     </property>
     <property name="font">
@@ -1053,11 +459,7 @@ background-color: rgb(255, 220, 149);</string>
      <item>
       <widget class="QLabel" name="label_17">
        <property name="text">
-<<<<<<< HEAD
         <string>blah blah blah blah blah blah blah blah blah blah2</string>
-=======
-        <string>blah blah blah blah blah blah blah blah blah blah</string>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
        </property>
       </widget>
      </item>
@@ -1085,7 +487,6 @@ background-color: rgb(255, 220, 149);</string>
    <widget class="QWidget" name="verticalLayoutWidget_10">
     <property name="geometry">
      <rect>
-<<<<<<< HEAD
       <x>270</x>
       <y>340</y>
       <width>121</width>
@@ -1134,31 +535,11 @@ background-color: rgb(255, 220, 149);</string>
        </property>
        <property name="text">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Left&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;Doors&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-=======
-      <x>719</x>
-      <y>-1</y>
-      <width>181</width>
-      <height>391</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_11">
-     <item>
-      <widget class="QLabel" name="label_16">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(162, 162, 162);</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap>bk_ad.png</pixmap>
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
        </property>
       </widget>
      </item>
     </layout>
    </widget>
-<<<<<<< HEAD
    <widget class="QWidget" name="verticalLayoutWidget_11">
     <property name="geometry">
      <rect>
@@ -1280,40 +661,6 @@ background-color: rgb(255, 220, 149);</string>
      </item>
     </layout>
    </widget>
-   <widget class="QLabel" name="label_19">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>240</y>
-      <width>57</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="font">
-     <font>
-      <family>Times New Roman</family>
-      <pointsize>10</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(195, 16, 40);
-</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::Box</enum>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Signal Pickup &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:8pt; color:#c11028;&quot;&gt;abc&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Failure&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_20">
     <property name="geometry">
      <rect>
@@ -1341,6 +688,254 @@ background-color: rgb(255, 220, 149);</string>
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;BRAKE&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;FAILURE&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_21">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>240</y>
+      <width>119</width>
+      <height>98</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(195, 16, 40);</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;BRAKE&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;FAILURE&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_22">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>240</y>
+      <width>119</width>
+      <height>98</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(195, 16, 40);</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;BRAKE&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;FAILURE&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>40</y>
+      <width>221</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string>background-color: rgb(197, 197, 197);</string>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QLabel" name="LengthVehicle_label">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(197, 197, 197);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Length of Vehicle (feet)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="LengthVehicle_label_2">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(197, 197, 197);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Height (feet)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(197, 197, 197);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Width (feet)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(197, 197, 197);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Grade (%)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(197, 197, 197);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Car Weight Loaded (lbs)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_9">
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(197, 197, 197);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Passenger Count&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_8">
+       <property name="font">
+        <font>
+         <family>Times New Roman</family>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(197, 197, 197);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Crew Count&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
    <widget class="QLabel" name="label_16">
     <property name="geometry">
      <rect>
@@ -1363,8 +958,8 @@ background-color: rgb(255, 220, 149);</string>
    <widget class="QDialogButtonBox" name="buttonBox_4">
     <property name="geometry">
      <rect>
-      <x>416</x>
-      <y>230</y>
+      <x>400</x>
+      <y>280</y>
       <width>116</width>
       <height>17</height>
      </rect>
@@ -1411,9 +1006,9 @@ background-color: rgb(255, 220, 149);</string>
     <property name="geometry">
      <rect>
       <x>250</x>
-      <y>230</y>
+      <y>250</y>
       <width>21</width>
-      <height>111</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -1426,47 +1021,13 @@ background-color: rgb(255, 220, 149);</string>
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
-   <widget class="QLabel" name="label_12">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>220</y>
-      <width>121</width>
-      <height>111</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="font">
-     <font>
-      <family>Times New Roman</family>
-      <pointsize>10</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(195, 16, 40);
-</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::Box</enum>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Signal Pickup &lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:8pt; color:#c11028;&quot;&gt;abc&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Failure&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
    <widget class="Line" name="line_3">
     <property name="geometry">
      <rect>
       <x>520</x>
-      <y>230</y>
+      <y>240</y>
       <width>31</width>
-      <height>111</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -1482,8 +1043,8 @@ background-color: rgb(255, 220, 149);</string>
    <widget class="QDialogButtonBox" name="buttonBox_2">
     <property name="geometry">
      <rect>
-      <x>694</x>
-      <y>230</y>
+      <x>690</x>
+      <y>270</y>
       <width>116</width>
       <height>17</height>
      </rect>
@@ -1501,8 +1062,6 @@ background-color: rgb(255, 220, 149);</string>
      <bool>true</bool>
     </property>
    </widget>
-=======
->>>>>>> 6d3c8967ddeae9a7be728b46960467f5160e1b15
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

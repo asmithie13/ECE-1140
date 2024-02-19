@@ -6,12 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>414</height>
+    <width>1100</width>
+    <height>700</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>1100</width>
+    <height>700</height>
+   </size>
+  </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Track Controller (HW) - TestBench</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_13">
@@ -23,6 +29,7 @@
          <font>
           <family>Times New Roman</family>
           <pointsize>22</pointsize>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -46,7 +53,13 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEditSpeedInput"/>
+         <widget class="QLineEdit" name="lineEditSpeedInput">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -61,12 +74,18 @@
            </font>
           </property>
           <property name="text">
-           <string>Authority (ft):</string>
+           <string>Received Authority (ft):</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEditAuthorityInput"/>
+         <widget class="QLineEdit" name="lineEditAuthorityInput">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -81,12 +100,18 @@
            </font>
           </property>
           <property name="text">
-           <string>Occupied Blocks:</string>
+           <string>Occupied Block (ID):</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEditOccupiedInput"/>
+         <widget class="QComboBox" name="comboBoxOccIn">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -101,176 +126,18 @@
            </font>
           </property>
           <property name="text">
-           <string>Failed Blocks:</string>
+           <string>Failed Block (ID):</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEditFailedInput"/>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QLabel" name="labelManualInputs">
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>14</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Manual Mode Inputs (Later to be Hardware Implemented):</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QLabel" name="labelSwitchInput">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-              <pointsize>16</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Switch:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="radioSwitchLeft">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Left</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup</string>
-            </attribute>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="radioButton_2">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Right</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup</string>
-            </attribute>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="QLabel" name="labelLightInput">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-              <pointsize>16</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Light:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="radioLightGreen">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Green</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_2</string>
-            </attribute>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="radioLightRed">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Red</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_2</string>
-            </attribute>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="QLabel" name="labelCrossingInput">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-              <pointsize>16</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Crossing:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="radioCrossingUp">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Up</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_3</string>
-            </attribute>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="radioCrossingDown">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Down</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">buttonGroup_3</string>
-            </attribute>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QComboBox" name="comboBoxFailedIn">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -291,6 +158,7 @@
          <font>
           <family>Times New Roman</family>
           <pointsize>22</pointsize>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -315,6 +183,11 @@
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditSpeedOut">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -333,12 +206,17 @@
            </font>
           </property>
           <property name="text">
-           <string>Authority (ft):</string>
+           <string>Commanded Authority (ft):</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditAuthOut">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -363,8 +241,25 @@
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditOccupiedOut">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonClearOcc">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>Clear</string>
           </property>
          </widget>
         </item>
@@ -387,8 +282,58 @@
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditFailedOut">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonClearFailed">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>Clear</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QLabel" name="labelCheckBlock">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Check Block States:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="comboBoxCheckBlock">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
           </property>
          </widget>
         </item>
@@ -411,6 +356,11 @@
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditSwitchOut">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -435,6 +385,11 @@
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditLightOut">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -459,6 +414,11 @@
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditCrossingOut">
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -473,9 +433,4 @@
  </widget>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup_3"/>
- </buttongroups>
 </ui>

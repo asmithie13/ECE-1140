@@ -129,6 +129,7 @@ class MyApp(QMainWindow):
         elif current_text == "AUTOMATIC":
             self.label_7.setText("MANUAL")
             self.blockActions()
+            
 
     def checkLine(self):
         checkStatus = self.selectLine.isChecked()

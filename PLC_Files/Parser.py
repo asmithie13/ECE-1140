@@ -30,5 +30,7 @@ class Parser():
 
             elif command == "SWITCH":
                 match = [block for block in self.outPuttedBlocks if block.ID == parameters[0]]
-                match[0].state = not match[0].state
+                if int(parameters[1][1:]) - 1 == int(parameters[0][1:]): match[0].state = True
+                else : match[0].state = False
+
 

@@ -129,6 +129,7 @@ class MyApp(QMainWindow):
         elif current_text == "AUTOMATIC":
             self.label_7.setText("MANUAL")
             self.blockActions()
+            self.sendSpecialBlocks.emit(self.BlockArray)
             
 
     def checkLine(self):

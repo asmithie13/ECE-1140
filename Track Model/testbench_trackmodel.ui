@@ -6,19 +6,252 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
-    <height>377</height>
+    <width>773</width>
+    <height>467</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>10</y>
+      <width>301</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Test Outputs:</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>441</width>
+      <height>411</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>431</width>
+       <height>401</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0" colspan="2">
+       <widget class="QLabel" name="label_7">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>Tw Cen MT Condensed Extra Bold</family>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Test Inputs:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Commanded Speed: </string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="QLineEdit" name="lineEdit_2"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Authority:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" colspan="2">
+       <widget class="QLineEdit" name="lineEdit_3"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Railway Crossings: </string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="comboBox">
+        <item>
+         <property name="text">
+          <string>B3</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLineEdit" name="lineEdit"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Lights:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QComboBox" name="comboBox_2">
+        <item>
+         <property name="text">
+          <string>B6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B11</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QLineEdit" name="lineEdit_7"/>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Failures</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QComboBox" name="comboBox_5">
+        <item>
+         <property name="text">
+          <string>B1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B10</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B12</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B14</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B15</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QLineEdit" name="lineEdit_8"/>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Switch Positions:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QComboBox" name="comboBox_4">
+        <item>
+         <property name="text">
+          <string>B6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B11</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QLineEdit" name="lineEdit_9"/>
+      </item>
+     </layout>
+    </widget>
+   </widget>
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>0</y>
+      <x>450</x>
+      <y>10</y>
       <width>20</width>
       <height>341</height>
      </rect>
@@ -27,117 +260,13 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox_3">
-    <property name="geometry">
-     <rect>
-      <x>280</x>
-      <y>10</y>
-      <width>181</width>
-      <height>311</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>GroupBox</string>
-    </property>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>231</width>
-      <height>311</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Test Inputs</string>
-    </property>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>121</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Commanded Speed: </string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>121</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Authority:</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_3">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>250</y>
-       <width>121</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Switch Positions:</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_4">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>140</y>
-       <width>121</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Lights:</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_5">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>190</y>
-       <width>121</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Failures</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_6">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>90</y>
-       <width>121</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Railway Crossings: </string>
-     </property>
-    </widget>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>478</width>
+     <width>773</width>
      <height>22</height>
     </rect>
    </property>

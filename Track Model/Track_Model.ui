@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>720</width>
-    <height>537</height>
+    <width>932</width>
+    <height>657</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,10 +23,10 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>430</x>
+      <x>580</x>
       <y>10</y>
-      <width>251</width>
-      <height>44</height>
+      <width>311</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -66,9 +66,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>310</y>
-      <width>381</width>
-      <height>181</height>
+      <y>370</y>
+      <width>501</width>
+      <height>221</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -144,9 +144,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>60</y>
-      <width>381</width>
-      <height>221</height>
+      <y>70</y>
+      <width>501</width>
+      <height>281</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -165,10 +165,10 @@
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>60</y>
-      <width>251</width>
-      <height>291</height>
+      <x>580</x>
+      <y>70</y>
+      <width>311</width>
+      <height>351</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -184,9 +184,9 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>30</y>
-       <width>151</width>
-       <height>251</height>
+       <y>20</y>
+       <width>161</width>
+       <height>321</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -259,10 +259,10 @@
    <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>360</y>
-      <width>251</width>
-      <height>131</height>
+      <x>580</x>
+      <y>450</y>
+      <width>311</width>
+      <height>141</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -298,6 +298,107 @@
      </item>
     </layout>
    </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>501</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QComboBox" name="comboBox">
+       <item>
+        <property name="text">
+         <string>B1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B5</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B6</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B7</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B8</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B9</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B11</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B12</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B13</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B14</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B15</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="comboBox_2">
+       <item>
+        <property name="text">
+         <string>Blue Line</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <zorder>layoutWidget</zorder>
    <zorder>pushButton</zorder>
    <zorder>label</zorder>
    <zorder>groupBox</zorder>
@@ -310,7 +411,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>720</width>
+     <width>932</width>
      <height>22</height>
     </rect>
    </property>

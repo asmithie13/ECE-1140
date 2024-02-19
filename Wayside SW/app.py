@@ -60,6 +60,7 @@ class MyApp(QMainWindow):
 
         self.BlockArray = [B3,B5,B6,B11]    #Special Blocks
         self.AllBlocks = [B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13,B14,B15] #All Blocks
+        self.SwitchBlocks = ["B5","B6","B11"]
 
         #Create Parser Object
         self.FileParser = Parser(None,self.BlockArray)  #Currently empty onject
@@ -114,22 +115,29 @@ class MyApp(QMainWindow):
             file = open(file_path,"r")
             self.FileParser.inputPLC = file.read()
             file.close
+            self.modeButton.setEnabled(True) #Can't Change to automatic until PLC is inserted
 
-        self.FileParser.parsePLC()
+        #self.FileParser.parsePLC() do NOT call until automatic mode is active
 
     def changeMode(self):
         current_text = self.label_7.text()
-        if current_text == "MANUAL":
+        if current_text == "MANUAL":   
             self.label_7.setText("AUTOMATIC")
+            self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
+            self.blockActions()
+
         elif current_text == "AUTOMATIC":
             self.label_7.setText("MANUAL")
+            self.blockActions()
+            
 
     def checkLine(self):
         checkStatus = self.selectLine.isChecked()
         if checkStatus:
             self.waysideMenu.setEnabled(True)
             self.blockMenu.setEnabled(True)
-            self.modeButton.setEnabled(True)
+            self.modeButton.setEnabled(self.FileParser.inputPLC != None) #Can't Change to automatic until PLC is inserted
+            self.blockActions()
         else:
             self.waysideMenu.setEnabled(False)
             self.blockMenu.setEnabled(False)
@@ -142,14 +150,15 @@ class MyApp(QMainWindow):
         selectedBlock = self.BlockArray[selectedIndex]
 
         if selectedBlock.LIGHT and self.label_7.text():
-            self.greenButton.setEnabled(not selectedBlock.state)
-            self.redButton.setEnabled(selectedBlock.state)
+            self.greenButton.setEnabled(not selectedBlock.state and self.label_7.text() == "MANUAL")
+            self.redButton.setEnabled(selectedBlock.state and self.label_7.text() == "MANUAL")
             self.upCrossingButton.setEnabled(False)
             self.downCrossingButton.setEnabled(False)
             self.switchButton.setEnabled(False)
 
             self.upCrossingButton.setStyleSheet("")
             self.downCrossingButton.setStyleSheet("")
+            self.label_11.setText("")
             
             if selectedBlock.state:
                 self.greenButton.setStyleSheet("background-color: green")
@@ -161,12 +170,13 @@ class MyApp(QMainWindow):
         elif selectedBlock.CROSSING and self.selectLine.isChecked():
             self.greenButton.setEnabled(False)
             self.redButton.setEnabled(False)
-            self.upCrossingButton.setEnabled(not selectedBlock.state)
-            self.downCrossingButton.setEnabled(selectedBlock.state)
+            self.upCrossingButton.setEnabled(not selectedBlock.state and self.label_7.text() == "MANUAL")
+            self.downCrossingButton.setEnabled(selectedBlock.state and self.label_7.text() == "MANUAL")
             self.switchButton.setEnabled(False)
 
             self.greenButton.setStyleSheet("")
             self.redButton.setStyleSheet("")
+            self.label_11.setText("")
 
             if selectedBlock.state:
                 self.upCrossingButton.setStyleSheet("background-color: yellow")
@@ -180,7 +190,13 @@ class MyApp(QMainWindow):
             self.redButton.setEnabled(False)
             self.upCrossingButton.setEnabled(False)
             self.downCrossingButton.setEnabled(False)
-            self.switchButton.setEnabled(True)
+            self.switchButton.setEnabled(True and self.label_7.text() == "MANUAL")
+
+            if selectedBlock.state == True:
+                self.label_11.setText(self.SwitchBlocks[1])
+
+            else:
+                self.label_11.setText(self.SwitchBlocks[2])
 
             self.greenButton.setStyleSheet("")
             self.redButton.setStyleSheet("")

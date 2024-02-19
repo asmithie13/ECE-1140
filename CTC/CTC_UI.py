@@ -2,26 +2,37 @@
 #Abby Magistro
 
 import sys
-from PyQt5 import QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
+from Schedule import *
 #from UI_temp import MainWindow
+
+
 
 class UI(QtWidgets.QMainWindow):
     def __init__(self):
         super(UI, self).__init__()
+        #Loading base UI layout from .ui file
         uic.loadUi("CTC/CTC_UI.ui", self)
 
-        #Connect Buttons
+
+        #Connect Buttons to signals defining behavior
         self.UploadButton.clicked.connect(self.open_files)
         self.ManualModeButton.clicked.connect(self.selectManualMode_button)
         self.AddTrainButton.clicked.connect(self.addTrain_button)
 
-        #Change Button Colors
+        #Changing Button Colors
         self.AddTrainButton.setStyleSheet("background-color : #26cf04")
         self.UploadButton.setStyleSheet("background-color : #26cf04")
+        #Changing Background colors to section off UI
+        self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255);")
+
+        #Initializing Schedule
+        trainSchedule = Schedule()
+        self.ScheduleTable.setModel(TableModel(trainSchedule.data))
 
         
 
@@ -59,7 +70,8 @@ class UI(QtWidgets.QMainWindow):
         #Time edit tutorial
         #https://www.pythontutorial.net/pyqt/pyqt-qtimeedit/
         ArrivalTime = self.ArrivalTimeEdit.time()
-        print(ArrivalTime.toString())
+        print(ArrivalTime.toString("hh:mm"))
+
 
 
 

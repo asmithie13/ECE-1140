@@ -1,4 +1,5 @@
-#Table Documentation
+#File to run the UI for the CTC Module
+#Abby Magistro
 
 import sys
 from PyQt5 import QtWidgets
@@ -16,6 +17,7 @@ class UI(QtWidgets.QMainWindow):
         #Connect Buttons
         self.UploadButton.clicked.connect(self.open_files)
         self.ManualModeButton.clicked.connect(self.selectManualMode_button)
+        self.AddTrainButton.clicked.connect(self.addTrain_button)
 
         #Change Button Colors
         self.AddTrainButton.setStyleSheet("background-color : #26cf04")
@@ -51,6 +53,14 @@ class UI(QtWidgets.QMainWindow):
         #Disable Manual Mode button (because it's one use)
         self.ManualModeButton.setEnabled(False)
         self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
+    
+    #defing manual mode add train button functionality
+    def addTrain_button(self):
+        #Time edit tutorial
+        #https://www.pythontutorial.net/pyqt/pyqt-qtimeedit/
+        ArrivalTime = self.ArrivalTimeEdit.time()
+        print(ArrivalTime.toString())
+
 
 
 test = QtWidgets.QApplication(sys.argv)

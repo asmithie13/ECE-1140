@@ -10,6 +10,7 @@ class Block:
         self.hasCrossing = hasCrossing
 
         self.isOccupied = False
+        self.isFailed = False
         self.switchState = False
         self.lightState = False
         self.crossingState = False
@@ -31,6 +32,14 @@ class Block:
     def getOccupancy(self):
        return self.isOccupied
     
+    #Function to set the failure status of a block:
+    def setFailed(self, failState):
+       self.isFailed = failState
+    
+    #Function to return the failure status of a block
+    def getFailed(self):
+       return self.isFailed
+    
     #Function to set the state of a switch:
     def changeSwitch(self, switchState):
        if(self.hasSwitch == True):
@@ -38,16 +47,28 @@ class Block:
       
     #Function to get the state of a switch:
     def getSwitchState(self):
+       if(self.hasSwitch == False):
+          return "No switch at this block."
+       else:
+          if(self.switchState == False):
+             return "Left"
+          else:
+             return "Right"
        return self.switchState
     
     #Function to set the state of a light:
     def changeLight(self, lightState):
-       if(self.hasSwitch == True):
-         self.lightState = lightState
+       self.lightState = lightState
       
     #Function to get the state of a light:
     def getLightState(self):
-       return self.lightState
+       if(self.hasSwitch == False):
+          return "No light at this block."
+       else:
+          if(self.lightState == False):
+             return "Red"
+          else:
+             return "Green"
     
     #Function to set the state of a crossing:
     def changeCrossing(self, crossingState):
@@ -56,4 +77,10 @@ class Block:
       
     #Function to get the state of a crossing:
     def getCrossingState(self):
-       return self.crossingState
+       if(self.hasCrossing == False):
+          return "No crossing at this block."
+       else:
+          if(self.crossingState == False):
+             return "Up"
+          else:
+             return "Down"

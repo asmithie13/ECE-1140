@@ -66,9 +66,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>370</y>
+      <y>420</y>
       <width>501</width>
-      <height>221</height>
+      <height>171</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -398,6 +398,45 @@
      </item>
     </layout>
    </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>360</y>
+      <width>501</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Status</string>
+    </property>
+    <widget class="QLabel" name="label_14">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>47</width>
+       <height>14</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Lights: </string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_15">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>20</y>
+       <width>47</width>
+       <height>14</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Switch: </string>
+     </property>
+    </widget>
+   </widget>
    <zorder>layoutWidget</zorder>
    <zorder>pushButton</zorder>
    <zorder>label</zorder>
@@ -405,6 +444,7 @@
    <zorder>groupBox_2</zorder>
    <zorder>groupBox_3</zorder>
    <zorder>label_5</zorder>
+   <zorder>groupBox_4</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>773</width>
-    <height>467</height>
+    <width>871</width>
+    <height>464</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,15 +17,162 @@
    <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>480</x>
       <y>10</y>
-      <width>301</width>
-      <height>421</height>
+      <width>381</width>
+      <height>411</height>
      </rect>
     </property>
     <property name="title">
-     <string>Test Outputs:</string>
+     <string/>
     </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>Tw Cen MT Condensed Extra Bold</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Test Outputs:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_11">
+       <property name="text">
+        <string>Line:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_26">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Commanded Speed: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_27">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>Authority:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_28">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_13">
+       <property name="text">
+        <string>Beacon:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLabel" name="label_29">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_12">
+       <property name="text">
+        <string>Presence on block:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QLabel" name="label_30">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_20">
+       <property name="text">
+        <string>Grade:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QLabel" name="label_31">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_21">
+       <property name="text">
+        <string>Broken Rail Failure: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <widget class="QLabel" name="label_32">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_24">
+       <property name="text">
+        <string>Track Circuit Failure: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="2">
+      <widget class="QLabel" name="label_33">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_25">
+       <property name="text">
+        <string>Power Failure:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="2">
+      <widget class="QLabel" name="label_34">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
@@ -43,13 +190,13 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>10</y>
-       <width>431</width>
-       <height>401</height>
+       <y>7</y>
+       <width>421</width>
+       <height>391</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0" colspan="2">
+      <item row="0" column="0">
        <widget class="QLabel" name="label_7">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -66,6 +213,15 @@
         <property name="text">
          <string>Test Inputs:</string>
         </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="QComboBox" name="comboBox_3">
+        <item>
+         <property name="text">
+          <string>Blue Line</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item row="1" column="0">
@@ -131,14 +287,64 @@
       <item row="4" column="2">
        <widget class="QLineEdit" name="lineEdit_7"/>
       </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Failures</string>
+      <item row="5" column="0" colspan="3">
+       <widget class="Line" name="line_2">
+        <property name="windowModality">
+         <enum>Qt::WindowModal</enum>
+        </property>
+        <property name="font">
+         <font>
+          <family>MS Reference Specialty</family>
+          <strikeout>false</strikeout>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::DefaultContextMenu</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="lineWidth">
+         <number>1</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Switch Positions:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QComboBox" name="comboBox_4">
+        <item>
+         <property name="text">
+          <string>B6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B11</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QLineEdit" name="lineEdit_9"/>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Brake Failure:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
        <widget class="QComboBox" name="comboBox_5">
         <item>
          <property name="text">
@@ -217,18 +423,43 @@
         </item>
        </widget>
       </item>
-      <item row="5" column="2">
+      <item row="7" column="2">
        <widget class="QLineEdit" name="lineEdit_8"/>
       </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="label_3">
+      <item row="8" column="0">
+       <widget class="QLabel" name="label_22">
         <property name="text">
-         <string>Switch Positions:</string>
+         <string>Track Circuit Failure: </string>
         </property>
        </widget>
       </item>
-      <item row="6" column="1">
-       <widget class="QComboBox" name="comboBox_4">
+      <item row="8" column="1">
+       <widget class="QComboBox" name="comboBox_6">
+        <item>
+         <property name="text">
+          <string>B1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B5</string>
+         </property>
+        </item>
         <item>
          <property name="text">
           <string>B6</string>
@@ -236,13 +467,142 @@
         </item>
         <item>
          <property name="text">
+          <string>B7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B10</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>B11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B12</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B14</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B15</string>
          </property>
         </item>
        </widget>
       </item>
-      <item row="6" column="2">
-       <widget class="QLineEdit" name="lineEdit_9"/>
+      <item row="8" column="2">
+       <widget class="QLineEdit" name="lineEdit_10"/>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="label_23">
+        <property name="text">
+         <string>Power Failure:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <widget class="QComboBox" name="comboBox_7">
+        <item>
+         <property name="text">
+          <string>B1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B9</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B10</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B11</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B12</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B14</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>B15</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="9" column="2">
+       <widget class="QLineEdit" name="lineEdit_11"/>
       </item>
      </layout>
     </widget>
@@ -253,7 +613,7 @@
       <x>450</x>
       <y>10</y>
       <width>20</width>
-      <height>341</height>
+      <height>431</height>
      </rect>
     </property>
     <property name="orientation">
@@ -266,7 +626,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>773</width>
+     <width>871</width>
      <height>22</height>
     </rect>
    </property>

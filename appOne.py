@@ -4,6 +4,7 @@ from PyQt5 import QtCore, QtWidgets, uic, QtGui
 import sys
 from Block import Block
 import csv
+from PyQt5.QtCore import (Qt, pyqtSignal)
 
 #Function to confirm whether or not the selected PLC file valid:
 def PLCvalid(fileName): #Reads based-on heading - Different text can be specified
@@ -35,13 +36,14 @@ def readTrackFile(fileName):
 
 #Initialization of UI:
 class TrackController_UI(QMainWindow):
+    #Signals:
+    commandedAuth = pyqtSignal(str) #Signal to send commanded authority to testbench
+
     def __init__(self):
         #Load-in UI from the TrackControllerHW_UI file:
         super(TrackController_UI, self).__init__()
         uic.loadUi("TrackControllerHW_UI.ui", self)
-
-        #Block that is being acted upon at any one time
-        self.selectedBlock = Block("Blue", "A", 1, False, False)
+        self.lineEditCommandedAuth.returnPressed.connect(self.sendCommandedAuth)
 
         #Read all blocks and their attributes (Crossings, switches, etc.)
         self.allBlueBlocks = readTrackFile("blueLine.csv")
@@ -163,6 +165,27 @@ class TrackController_UI(QMainWindow):
             if(block.returnBlockID() == selectedBlockText):
                 self.selectedBlock = block
                 break
+    
+    def displayOccupancies(self, occBlock):
+        tempStr = ""
+        for block in occBlock:
+            tempStr = tempStr + block + " "
+        
+        self.lineEditOccupiedBlocks.setText(tempStr)
+    
+    def displayFailures(self, failBlock):
+        tempStr = ""
+        for block in failBlock:
+            tempStr = tempStr + block + " "
+    
+        self.lineEditClosedBlocks.setText(tempStr)
+    
+    def displaySuggestedAuth(self, tempStr):
+        self.lineEditReceivedAuth.setText(tempStr)
+    
+    def sendCommandedAuth(self):
+        commandedAuth = self.lineEditCommandedAuth.text()
+        self.commandedAuth.emit(commandedAuth)
 
     #NEXT:
         #Write functions that allow the Arduino to serially change the switch state,
@@ -173,13 +196,23 @@ class TrackController_UI(QMainWindow):
 
 #Initialization of test bench:
 class TrackController_TestBench(QMainWindow):
+
+    #Signals:
+    occBlocksChanged = pyqtSignal(list) #Sending block occupancies to UI
+    failedBlocksChanged = pyqtSignal(list) #Sending failed blocks to UI
+    authoritySent = pyqtSignal(str) #Sending suggested authority to UI
+
     def __init__(self):
         super(TrackController_TestBench, self).__init__()
         uic.loadUi("TrackControllerHW_TestBench.ui", self)
 
+        #List to hold occupied and failed blocks:
+        self.occupiedBlocks = []
+        self.failedBlocks = []
+
         #Receive the text from the type inputs:
         self.lineEditSpeedInput.returnPressed.connect(self.sendSpeed)
-        self.lineEditAuthorityInput.returnPressed.connect(self.sendAuthority)
+        self.lineEditAuthorityInput.returnPressed.connect(self.sendSuggestedAuth)
 
         #Receive blocks from combo box:
         self.comboBoxOccIn.activated.connect(self.sendOccupied)
@@ -201,38 +234,64 @@ class TrackController_TestBench(QMainWindow):
         self.lineEditSpeedOut.setText(inputSpeed)
     
     #Handle authority input:
-    def sendAuthority(self):
+    def sendSuggestedAuth(self):
         inputAuthority = self.lineEditAuthorityInput.text()
+        self.authoritySent.emit(inputAuthority)
+
         #Send the input authority to the UI to be displayed, and receive the
         #user-entered commanded authority from the UI to display on the testbench
+    
+    #Display received commanded authority:
+    def displayCommandedAuth(self, commandedAuth):
+        self.lineEditAuthOut.setText(commandedAuth)
     
     #Handle occupancy input:
     def sendOccupied(self):
         selectedBlock = self.comboBoxOccIn.currentText()
         currentText = self.lineEditOccupiedOut.text()
-        tempStr = currentText + " " + selectedBlock
+        if selectedBlock in self.occupiedBlocks:
+            pass
+        else:
+            self.occupiedBlocks.append(selectedBlock)
+            self.occupiedBlocks.sort()
+        
+        tempStr = ""
+        for block in self.occupiedBlocks:
+            tempStr = tempStr + block + " "
         self.lineEditOccupiedOut.setText(tempStr)
+
+        self.occBlocksChanged.emit(self.occupiedBlocks)
         #Send this string to the UI to be displayed
     
     #Handle failure input:
     def sendFailed(self):
         selectedBlock = self.comboBoxFailedIn.currentText()
         currentText = self.lineEditFailedOut.text()
-        tempStr = currentText + " " + selectedBlock
+        if selectedBlock in self.failedBlocks:
+            pass
+        else:
+            self.failedBlocks.append(selectedBlock)
+            self.failedBlocks.sort()
+        
+        tempStr = ""
+        for block in self.failedBlocks:
+            tempStr = tempStr + block + " "
         self.lineEditFailedOut.setText(tempStr)
+
+        self.failedBlocksChanged.emit(self.failedBlocks)
         #Send this string to the UI to be displayed
     
     #Handle clear buttons:
     def clearOccupied(self):
+        self.occupiedBlocks = []
+        self.occBlocksChanged.emit(self.occupiedBlocks)
         self.lineEditOccupiedOut.clear()
     
     def clearFailed(self):
+        self.failedBlocks = []
+        self.failedBlocksChanged.emit(self.failedBlocks)
         self.lineEditFailedOut.clear()
 
-    #Function to check block states:
-    def checkBlockStates(self):
-        selectedBlock = self.comboBoxCheckBlock.currentText()
-        #Find the block object with the corresponding ID from the UI, and display the states here
 
 #Intialize Wayside object
 class Wayside():
@@ -240,13 +299,17 @@ class Wayside():
         #Create instance of window:
         app = QApplication(sys.argv)
         windowOne = TrackController_UI()
-        windowOne.show()
-
         windowTwo = TrackController_TestBench()
-        windowTwo.show()
 
-        if __name__ == "__main__":
-            sys.exit(app.exec_())
+        windowOne.commandedAuth.connect(windowTwo.displayCommandedAuth)
+
+        windowTwo.occBlocksChanged.connect(windowOne.displayOccupancies)
+        windowTwo.failedBlocksChanged.connect(windowOne.displayFailures)
+        windowTwo.authoritySent.connect(windowOne.displaySuggestedAuth)
+
+        windowOne.show()
+        windowTwo.show()
+        sys.exit(app.exec_())
 
 waysideOne = Wayside()
 

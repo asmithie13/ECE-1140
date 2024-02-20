@@ -135,6 +135,7 @@ class MyApp(QMainWindow):
             self.label_7.setText("AUTOMATIC")
             self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
             self.blockActions()
+            self.sendSpecialBlocks.emit(self.BlockArray)
             self.changeModeSend.emit(False)
 
         elif current_text == "AUTOMATIC":
@@ -345,6 +346,9 @@ class TestBench(QMainWindow):
             selectedBlock = self.specialBlocks[arr]
             
         if selectedBlock.LIGHT:
+
+            self.label_24.setText("")
+
             if selectedBlock.state:
                 self.label_19.setText("Green")
                 self.label_22.setText("")
@@ -352,6 +356,9 @@ class TestBench(QMainWindow):
                 self.label_19.setText("Red")
                 self.label_22.setText("")
         elif selectedBlock.CROSSING:
+            
+            self.label_24.setText("")
+
             if selectedBlock.state:
                 self.label_19.setText("")
                 self.label_22.setText("Up")

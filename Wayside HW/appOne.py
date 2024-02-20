@@ -5,6 +5,12 @@ import sys
 from Block import Block
 import csv
 from PyQt5.QtCore import (Qt, pyqtSignal)
+import serial
+import time
+
+#Set-up serial communication
+ser = serial.Serial('COM5', 9600, timeout=0)
+time.sleep(2)
 
 #Function to confirm whether or not the selected PLC file is valid:
 def PLCvalid(fileName): #Reads based-on heading - Include heading in PLC files
@@ -46,6 +52,10 @@ class TrackController_UI(QMainWindow):
         super(TrackController_UI, self).__init__()
         uic.loadUi("TrackControllerHW_UI.ui", self)
 
+        #Initialize LEDs as OFF
+        ser.write(b'B')
+        ser.write(b'D')
+        
         #Read all blocks and their attributes (Crossings, switches, etc.)
         self.allBlueBlocks = readTrackFile("blueLine.csv")
         self.allRedBlocks = readTrackFile("redLine.csv")
@@ -243,6 +253,7 @@ class TrackController_UI(QMainWindow):
         for block in self.allBlueBlocks:
             if(block.returnBlockID() == self.comboBoxBlock.currentText()):
                 if(block.hasSwitch == True):
+                    ser.write(b'C')
                     self.buttonSwitch.setEnabled(True)
                     self.buttonLight.setEnabled(True)
 
@@ -262,6 +273,7 @@ class TrackController_UI(QMainWindow):
                         self.buttonLight.setText("RED")
                     
                 elif(block.hasSwitch == False):
+                    ser.write(b'D')
                     self.buttonSwitch.setEnabled(False)
                     self.buttonLight.setEnabled(False)
 
@@ -269,6 +281,7 @@ class TrackController_UI(QMainWindow):
                     self.lineEditLightState.setText("-")
 
                 if(block.hasCrossing == True):
+                    ser.write(b'A')
                     self.buttonCrossing.setEnabled(True)
                     
                     if(block.crossingState ==  False):
@@ -278,6 +291,7 @@ class TrackController_UI(QMainWindow):
                         self.lineEditCrossingState.setText("DOWN")
                         self.buttonCrossing.setText("UP")
                 elif(block.hasCrossing == False):
+                    ser.write(b'B')
                     self.buttonCrossing.setEnabled(False)
                     self.lineEditCrossingState.setText("-")
         self.blockStates.emit(self.allBlueBlocks)

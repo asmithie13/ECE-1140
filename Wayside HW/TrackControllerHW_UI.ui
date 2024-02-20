@@ -583,7 +583,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Change Switch States (Later to be Hardware-Implemented):</string>
+       <string>Change Block States:</string>
       </property>
      </widget>
     </item>

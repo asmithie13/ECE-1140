@@ -13,6 +13,19 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
     
+    def __init__(self):
+        self.lastSliderMoved = None
+        self.Ki = 0
+        self.Kp = 0
+        self.integral_error = 0
+        
+        self.power = 0
+        self.v_cmd = 10
+        self.v_current = 8
+        self.v_error = 0
+        self.dt = 0.1
+        self.control_output = 0
+  
     
 
     def setupUi(self, MainWindow):        
@@ -416,25 +429,63 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.buttonMan.clicked['bool'].connect(self.buttonAuto.toggle) # type: ignore
         self.buttonAuto.clicked['bool'].connect(self.buttonMan.toggle) # type: ignore
-        self.inputKi.valueChanged['double'].connect(self.lcdKi.display) # type: ignore
-        self.inputKp.valueChanged['double'].connect(self.lcdKp.display) # type: ignore
+        #self.inputKi.valueChanged['double'].connect(self.lcdKi.display) # type: ignore
+        #self.inputKp.valueChanged['double'].connect(self.lcdKp.display) # type: ignore
         self.buttonHDon.clicked['bool'].connect(self.buttonHDoff.toggle) # type: ignore
         self.buttonHDoff.clicked['bool'].connect(self.buttonHDon.toggle) # type: ignore
         self.lineEditAnn.textChanged['QString'].connect(self.SpkrOut.setText) # type: ignore
         self.CurStatOut.windowIconTextChanged['QString'].connect(self.SpkrOut.setText) # type: ignore
         #self.vertSliderBrk.valueChanged.connect(self.lcdBrk.display)
-        self.vertSliderBrk.valueChanged.connect(self.calBrakeOutout) # type: ignore
-        self.vertSliderPow.valueChanged.connect(self.lcdPow_2.display) # type: ignore
+        self.vertSliderBrk.valueChanged.connect(self.calBrakeOutput) # type: ignore
+        #self.vertSliderPow.valueChanged.connect(self.lcdPow_2.display) # type: ignore
+        self.vertSliderPow.valueChanged.connect(self.calPower) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-
-
-    def calBrakeOutout(self, value):
         
+        self.inputKi.valueChanged['double'].connect(self.onKiValueChanged)
+        self.inputKp.valueChanged['double'].connect(self.onKpValueChanged)
+
+
+    def calBrakeOutput(self, value):
+
         self.lcdBrk.display(value)
         value = (6*81000)*(value/100)
         self.brakePower = value
-        #print(f"Slider value changed to: {value}")
+        #print(f"brake value changed to: {value}")
+        if self.lastSliderMoved != 'brk' :
+                self.lcdPow_2.display(0)
+                self.vertSliderPow.setValue(0)
+                self.lastSliderMoved = 'brk'
+
+    def onKiValueChanged(self, value):
+        self.lcdKi.display(value)
+        self.Ki = value  
+        #print(f"Ki set to: {self.Ki}")
+
+    def onKpValueChanged(self, value):
+        self.lcdKp.display(value) 
+        self.Kp = value  
+        #print(f"Kp set to: {self.Kp}")
+
+    
+    def calPower(self, value):
+
+        if value != self.lcdPow_2.value():
+                # Update Power related displays and values
+                self.lcdPow_2.display(value)
+                self.power = (120000) * (value / 100)
+                #print(f"Power set to: {self.power}")
+        
+                if self.lastSliderMoved != 'pow' :  # Set the last moved slider
+                        self.lcdBrk.display(0)
+                        self.vertSliderBrk.setValue(0)
+                        self.lastSliderMoved = 'pow'
+        
+        self.v_error = self.v_cmd - self.v_current
+        self.integral_error += self.v_error * self.dt
+        self.control_output = self.Kp * self.v_error + self.Ki * self.integral_error
+        self.lcdPwrOut.display(self.control_output)
+        #print(f"Control output set to: {self.control_output}")
+
 
 
 
@@ -478,6 +529,7 @@ class Ui_MainWindow(object):
         self.groupBox_3.setTitle(_translate("MainWindow", "Power"))
         self.label_4.setText(_translate("MainWindow", "Kp"))
         self.label_3.setText(_translate("MainWindow", "Ki"))
+
 
 
 

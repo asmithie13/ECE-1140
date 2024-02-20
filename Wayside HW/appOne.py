@@ -59,8 +59,8 @@ class TrackController_UI(QMainWindow):
         
         #Read all blocks and their attributes (Crossings, switches, etc.)
         self.allBlueBlocks = readTrackFile("blueLine.csv")
-        #self.allRedBlocks = readTrackFile("Wayside HW/redLine.csv")
-        #self.allGreenBlocks = readTrackFile("Wayside HW/greenLine.csv")
+        self.allRedBlocks = readTrackFile("redLine.csv")
+        self.allGreenBlocks = readTrackFile("greenLine.csv")
 
         #Disable the "Browse" button until a line is selected:
         self.buttonBrowse.setEnabled(False) #Leave disabled until automatic mode is fully implemented

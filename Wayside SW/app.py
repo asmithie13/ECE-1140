@@ -76,6 +76,7 @@ class MyApp(QMainWindow):
         self.upCrossingButton.clicked.connect(self.upButtonPushed)
         self.downCrossingButton.clicked.connect(self.downButtonPushed)
         self.switchButton.clicked.connect(self.switchButtonPushed)
+        self.saveButton.clicked.connect(self.onSavePLCFile)
 
         #initial signals
         self.sendSpecialBlocks.emit(self.BlockArray)
@@ -99,6 +100,7 @@ class MyApp(QMainWindow):
         self.downCrossingButton.setDisabled(True)
         self.upCrossingButton.setDisabled(True)
         self.switchButton.setDisabled(True)
+        self.saveButton.setDisabled(True)
 
         # Timer for updating block occupancy every 5 seconds
         #self.timer = QTimer(self)
@@ -112,14 +114,20 @@ class MyApp(QMainWindow):
         file_path, _ = file_dialog.getOpenFileName(self, "Select PLC File", "", "Text Files (*.txt);;All Files (*)")
 
         if file_path:
-            # Implement your logic with the selected file path
-            print(f"Selected PLC File: {file_path}")
             file = open(file_path,"r")
             self.FileParser.inputPLC = file.read()
             file.close
             self.modeButton.setEnabled(True) #Can't Change to automatic until PLC is inserted
+            self.saveButton.setEnabled(True) #User can svae the PLC file after it is insertted
 
-        #self.FileParser.parsePLC() do NOT call until automatic mode is active
+    def onSavePLCFile(self):
+        if self.FileParser.inputPLC:
+            file_dialog = QFileDialog()
+            file_path, _ = file_dialog.getSaveFileName(self, "Save PLC File", "", "Text Files (*.txt);;All Files (*)")
+
+            if file_path:
+                with open(file_path, "w") as file:
+                    file.write(self.FileParser.inputPLC)
 
     def changeMode(self):
         current_text = self.label_7.text()

@@ -486,6 +486,9 @@ class Ui_MainWindow(object):
         self.lcdPwrOut.display(self.control_output)
         #print(f"Control output set to: {self.control_output}")
 
+    def speedControl(self, value):
+        
+
 
 
 

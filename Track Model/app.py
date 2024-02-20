@@ -1,8 +1,15 @@
 import sys
+import os 
+
+# Using Block Class as a seperate file
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_root)
+
+
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QVBoxLayout, QComboBox, QHBoxLayout, QWidget, QLabel, QPushButton, QSizePolicy
 from PyQt5 import uic
 from PyQt5.QtCore import Qt  
-#from Track_Resources.Block import Block
+from Track_Resources.Block import Block
 
 # Define the Block class
 class MyMainWindow(QMainWindow):
@@ -130,7 +137,6 @@ class TestBench(QMainWindow):
         power1 = text
         # Set the text to the output text
         self.power_block_out.setText(power1)
-
 
 class Data:
     def __init__(self):

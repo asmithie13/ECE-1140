@@ -19,6 +19,7 @@ class MyApp(QMainWindow):
 
     #Signals
     sendSpecialBlocks = pyqtSignal(list)    #Send special blocks to testbench
+    changeModeSend = pyqtSignal(bool)
 
     def __init__(self):
         super().__init__()
@@ -78,6 +79,7 @@ class MyApp(QMainWindow):
 
         #initial signals
         self.sendSpecialBlocks.emit(self.BlockArray)
+        self.changeModeSend.emit(True)
 
         #Original Map Image
         pixmap = QPixmap('Blue Line Images\BlueLine.png')
@@ -125,10 +127,13 @@ class MyApp(QMainWindow):
             self.label_7.setText("AUTOMATIC")
             self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
             self.blockActions()
+            self.changeModeSend.emit(False)
 
         elif current_text == "AUTOMATIC":
             self.label_7.setText("MANUAL")
             self.blockActions()
+            self.sendSpecialBlocks.emit(self.BlockArray)
+            self.changeModeSend.emit(True)
             
 
     def checkLine(self):
@@ -355,8 +360,12 @@ class TestBench(QMainWindow):
                 self.label_22.setText("")
                 self.label_24.setText("B11")
 
-
-
+    def receiveMode(self,mode):
+        if mode == True:
+            self.label_16.setText("MANUAL")
+        else:
+            self.label_16.setText("AUTOMATIC")
+        
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -365,6 +374,7 @@ if __name__ == "__main__":
 
     #Signal: Window
     window.sendSpecialBlocks.connect(window2.updateBlockStates)
+    window.changeModeSend.connect(window2.receiveMode)
 
     #Signal: Window 2
     window2.OccBlocksChanged.connect(window.updateBlocks)

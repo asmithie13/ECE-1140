@@ -12,8 +12,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
+    
+    
 
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow):        
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1146, 857)
         MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -409,6 +411,7 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        
 
         self.retranslateUi(MainWindow)
         self.buttonMan.clicked['bool'].connect(self.buttonAuto.toggle) # type: ignore
@@ -419,10 +422,19 @@ class Ui_MainWindow(object):
         self.buttonHDoff.clicked['bool'].connect(self.buttonHDon.toggle) # type: ignore
         self.lineEditAnn.textChanged['QString'].connect(self.SpkrOut.setText) # type: ignore
         self.CurStatOut.windowIconTextChanged['QString'].connect(self.SpkrOut.setText) # type: ignore
-        self.vertSliderBrk.valueChanged.connect(self.lcdBrk.display)
+        #self.vertSliderBrk.valueChanged.connect(self.lcdBrk.display)
+        self.vertSliderBrk.valueChanged.connect(self.calBrakeOutout) # type: ignore
         self.vertSliderPow.valueChanged.connect(self.lcdPow_2.display) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+
+
+    def calBrakeOutout(self, value):
+        
+        self.lcdBrk.display(value)
+        value = (6*81000)*(value/100)
+        self.brakePower = value
+        #print(f"Slider value changed to: {value}")
 
 
 
@@ -466,6 +478,8 @@ class Ui_MainWindow(object):
         self.groupBox_3.setTitle(_translate("MainWindow", "Power"))
         self.label_4.setText(_translate("MainWindow", "Kp"))
         self.label_3.setText(_translate("MainWindow", "Ki"))
+
+
 
 
 if __name__ == "__main__":

@@ -21,6 +21,8 @@ class MyMainWindow(QMainWindow):
         # Display the selected option information in the label
         self.train_sel_output_tb.setText(selected_text)
 
+    def 
+
 
 
 

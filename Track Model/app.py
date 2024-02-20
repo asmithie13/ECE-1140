@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QVBoxLayout, QComboBox, QHBoxLayout, QWidget, QLabel, QPushButton, QSizePolicy
 from PyQt5 import uic
 from PyQt5.QtCore import Qt  
+#from Track_Resources.Block import Block
 
 # Define the Block class
 class MyMainWindow(QMainWindow):
@@ -63,6 +64,73 @@ class TestBench(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("Track Model/testbench_trackmodel.ui", self)
+        self.test_input()
+
+        #Press enter should show output for test outputs
+        self.com_speed_in_1.returnPressed.connect(self.test_input)
+        self.authority_in.returnPressed.connect(self.test_input)
+        self.broken_in.returnPressed.connect(self.test_input)
+        self.track_in.returnPressed.connect(self.test_input)
+        self.power_in.returnPressed.connect(self.test_input)
+
+        #Enter text through QTCombo from dropdown and output that to testbench
+        self.line_in.activated[str].connect(self.test_combo_line)
+        self.broken_block.activated[str].connect(self.test_combo_broken)
+        self.track_block.activated[str].connect(self.test_combo_track)
+        self.power_block.activated[str].connect(self.test_combo_power)
+
+    #Function for inputs/outputs for textboxes
+    def test_input(self):
+        # Get text from the test inputs for commanded speed
+        com_speed = self.com_speed_in_1.text()
+        # Set the output text for commanded speed
+        self.com_speed_out_1.setText(com_speed)
+
+        # Get text from the test inputs for authority
+        authority = self.authority_in.text()
+        # Set the output text for authority
+        self.authority_out.setText(authority)
+
+        # Get text from the test inputs for broken rail
+        broken = self.broken_in.text()
+        # Set the output text for broken rail
+        self.broken_out.setText(broken)
+
+        # Get text from the test inputs for track circuit failure
+        track = self.track_in.text()
+        # Set the output text for track circuit failure
+        self.track_out.setText(track)
+
+        # Get text from the test inputs for power failure
+        power = self.power_in.text()
+        # Set the output text for power failure
+        self.power_out.setText(power)
+
+    #Function for inputs/outputs for dropdown menus
+    def test_combo_line(self, text):
+        # Get text from the test inputs
+        line_in1 = text
+        # Set the text to the output text
+        self.line_out.setText(line_in1)
+
+    def test_combo_broken(self, text):
+        # Get text from the test inputs for broken rail block
+        broken1 = text
+        # Set the text to the output text
+        self.broken_block_out.setText(broken1)
+
+    def test_combo_track(self, text):
+        # Get text from the test inputs for track circuit failure block
+        track1 = text
+        # Set the text to the output text
+        self.track_block_out.setText(track1)
+
+    def test_combo_power(self, text):
+        # Get text from the test inputs for power faulure block
+        power1 = text
+        # Set the text to the output text
+        self.power_block_out.setText(power1)
+
 
 class Data:
     def __init__(self):
@@ -84,7 +152,6 @@ class Data:
         #start it bro
         pass
         
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MyMainWindow()

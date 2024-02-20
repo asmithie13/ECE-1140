@@ -103,7 +103,7 @@
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-        <string>Brake Rail</string>
+        <string>Broken Rail</string>
        </property>
       </widget>
      </item>

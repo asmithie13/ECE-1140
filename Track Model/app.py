@@ -1,6 +1,8 @@
 import sys
+import tkinter as tk
 import os #read other .py file
 import pandas as pd #read excel/csv files
+import random # Generate random num of ticket sales for CTC
 
 # Using Block Class as a seperate file
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -18,6 +20,12 @@ class MyMainWindow(QMainWindow):
         super().__init__()
         uic.loadUi("Track Model/Track_Model.ui", self)
         self.pushButton.clicked.connect(self.upload_track_layout)  # Connect the button's clicked signal to upload_file method
+        
+        # Generate a random number between 1 and 74
+        random_number = random.randint(1, 74)
+
+        # Set the text of the label to the random number
+        self.ticket_out.setText(str(random_number))
 
         # Connect button to method
         #If clicked, then connect to UI
@@ -92,8 +100,6 @@ class MyMainWindow(QMainWindow):
         self.length_in.setText(str(length1))
         self.block_num_in.setText(str(block_num))
         self.section_in.setText(str(section))
-
-
 
 
 class TestBench(QMainWindow):

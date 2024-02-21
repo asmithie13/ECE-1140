@@ -12,14 +12,18 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QVBoxLayout,
 from PyQt5 import uic
 from PyQt5.QtCore import Qt  
 from Track_Resources.Block import Block
+from PyQt5 import QtCore as qtc
+from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5 import QtGui as qtg
 
 
-#My main UI
 class MyMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("Track Model/Track_Model.ui", self)
-        self.pushButton.clicked.connect(self.upload_track_layout)  # Connect the button's clicked signal to upload_file method
+
+        # Connect the button's clicked signal to upload_file method
+        self.pushButton.clicked.connect(self.upload_track_layout)  
         
         # Generate a random number between 1 and 74
         random_number = random.randint(1, 74)
@@ -33,7 +37,7 @@ class MyMainWindow(QMainWindow):
         self.offButton_2.clicked.connect(self.toggle_button_state_2)
         self.offButton_3.clicked.connect(self.toggle_button_state_3)
 
-        # Set default state for toggle button (default color should be red and "OFF") on all 3 buttons
+        #Set default state for toggle button (default color should be red and "OFF") on all 3 buttons
         self.offButton_1.setText("OFF")
         self.offButton_1.setStyleSheet("background-color: red;")
 
@@ -44,8 +48,17 @@ class MyMainWindow(QMainWindow):
         self.offButton_3.setStyleSheet("background-color: red;")
 
     def toggle_button_state(self):
-        # Toggle button state and color button broken rail
+        #Toggle button state and color button broken rail
         if self.offButton_1.text() == "OFF":
+            self.offButton_1.setText("ON")
+            self.offButton_1.setStyleSheet("background-color: green;")
+        else:
+            self.offButton_1.setText("OFF")
+            self.offButton_1.setStyleSheet("background-color: red;")
+
+    def toggle_button_state_tb(self, bool1):
+        # Toggle button state and color button broken rail
+        if bool1.lower() in ["yes", "true", "on"]:
             self.offButton_1.setText("ON")
             self.offButton_1.setStyleSheet("background-color: green;")
         else:
@@ -103,6 +116,8 @@ class MyMainWindow(QMainWindow):
 
 
 class TestBench(QMainWindow):
+    # Change the signal to emit a string
+    broken_rail_input_signal = pyqtSignal(str)  
     def __init__(self):
         super().__init__()
         uic.loadUi("Track Model/testbench_trackmodel.ui", self)
@@ -148,6 +163,9 @@ class TestBench(QMainWindow):
         # Set the output text for power failure
         self.power_out.setText(power)
 
+        # Emit the signal with the input text for broken rail
+        self.broken_rail_input_signal.emit(broken)
+
     #Function for inputs/outputs for dropdown menus
     def test_combo_line(self, text):
         # Get text from the test inputs
@@ -172,6 +190,7 @@ class TestBench(QMainWindow):
         power1 = text
         # Set the text to the output text
         self.power_block_out.setText(power1)
+
 
 class Data:
     def __init__(self):
@@ -264,53 +283,8 @@ class Data:
                     return row['Section']
         return None  #Return None if block number is not found or there is nothing in the Dataframe
     
-
-    
-
-
-    ################################
-    #Get and set just individual variables. 
-    def get_elevation(self):
-        return self.elevation
-    
-    def get_grade(self):
-        return self.grade
-    
-    def get_length(self):
-        return self.length1
-    
-    def get_temp(self):
-        return self.temp
-    
-    def get_heaters(self):
-        return self.heaters
-    
-    def get_occupancy(self):
-        return self.occupancy
-    
-    def get_broken_rail(self):
-        return self.broken_rail
-    
-    def get_circuit_failure(self):
-        return self.circuit_failure
-    
-    def get_power_failure(self):
-        return self.power_failure
-    
-    def get_block_num(self):
-        return self.block_num
-    
-    def get_direction(self): 
-        return self.direction
-    
-    def get_cross(self):
-        return self.cross
-    
-    def set_elevation():
-        pass
-
-    def set_grade():
-        pass
+class Communicate(QObject):
+    broken_rail_input_signal = pyqtSignal(str)
 
 # Call Main window
 if __name__ == "__main__":
@@ -318,8 +292,13 @@ if __name__ == "__main__":
     window = MyMainWindow()
     window_2 = TestBench()
 
+    # Create an instance of Communicate
+    communicator = Communicate()
+
+    # Connect the signal from window_2 to the slot in window
+    window_2.broken_rail_input_signal.connect(window.toggle_button_state_tb)
+
     window.show()
     window_2.show()
 
     sys.exit(app.exec_())
-

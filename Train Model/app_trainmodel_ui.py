@@ -10,8 +10,8 @@ class MyMainWindow(QMainWindow):
         super().__init__()
         uic.loadUi("Train Model/TrainModel_UI.ui", self)
         self.get_power()
-        #self.ui = Ui_MainWindow()
-        #self.ui.setupUi(self)
+
+    #get_power function: sets power lcd value   
     def get_power(self):
         power_value=self.Power_value_lcd
         self.Power_value_lcd.display(799)
@@ -25,13 +25,7 @@ class MyMainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-<<<<<<< HEAD
-    win = Window()
-    win.show()
-    sys.exit(app.exec())
-=======
     app.setStyle("windows")
     window = MyMainWindow()
     window.show()
     sys.exit(app.exec_())
->>>>>>> 53bc2745fa76d57570e1d82fd3d95da0815226a2

@@ -238,7 +238,7 @@ background-color: rgb(209, 153, 255);</string>
         <enum>QFrame::Panel</enum>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Acceleration (mph&lt;/span&gt;&lt;span style=&quot; font-size:11pt; vertical-align:super;&quot;&gt;2&lt;/span&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Acceleration (ft/s&lt;/span&gt;&lt;span style=&quot; font-size:11pt; vertical-align:super;&quot;&gt;2&lt;/span&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -876,7 +876,7 @@ background-color: rgb(209, 153, 255);</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>410</x>
@@ -1067,12 +1067,7 @@ background-color: rgb(209, 153, 255);</string>
      </item>
     </layout>
    </widget>
-   <zorder>Height_label</zorder>
-   <zorder>Width_label</zorder>
-   <zorder>Grade_label</zorder>
-   <zorder>car_weight_label</zorder>
-   <zorder>Passenger_count_label</zorder>
-   <zorder>Crew_count_label</zorder>
+   <zorder>layoutWidget</zorder>
    <zorder>line_2</zorder>
    <zorder>line_3</zorder>
    <zorder>verticalLayoutWidget</zorder>
@@ -1097,7 +1092,6 @@ background-color: rgb(209, 153, 255);</string>
    <zorder>buttonBox_4</zorder>
    <zorder>brake_fail_button_box</zorder>
    <zorder>buttonBox_2</zorder>
-   <zorder>LengthVehicle_label</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

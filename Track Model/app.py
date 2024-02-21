@@ -1,5 +1,7 @@
 import sys
 import os 
+import pandas as pd
+
 
 # Using Block Class as a seperate file
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -10,6 +12,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QVBoxLayout,
 from PyQt5 import uic
 from PyQt5.QtCore import Qt  
 from Track_Resources.Block import Block
+
 
 # Define the Block class
 class MyMainWindow(QMainWindow):
@@ -141,6 +144,8 @@ class TestBench(QMainWindow):
 class Data:
     def __init__(self):
         #Initializing variables
+        self.section = None
+        self.line = None
         self.elevation = None
         self.grade = None
         self.length1 = None
@@ -153,10 +158,65 @@ class Data:
         self.block_num = None
         self.direction = None
         self.cross = None
+        self.infra = None
+
+    def read_excel(self, filename):
+        # Read Excel file into a DataFrame
+        df = pd.read_excel("Track_Resources/Blue_Line_Block_Info.xlsx")
+
+        # Extract data from DataFrame and assign to variables
+        self.elevation = df.loc[0, 'ELEVATION (M)']
+        self.grade = df.loc[0, 'Block Grade (%)']
+        self.length1 = df.loc[0, 'Block Length (m)']
+        self.infra = df.loc[0, 'Infrastructure']
+        self.heaters = df.loc[0, 'Heaters']
+        self.occupancy = df.loc[0, 'Occupancy']
+        self.block_num = df.loc[0, 'Block Number']
+        self.direction = df.loc[0, 'Direction']
+        self.cross = df.loc[0, 'Cross']
 
     def get_elevation(self):
-        #start it bro
+        return self.elevation
+    
+    def get_grade(self):
+        return self.grade
+    
+    def get_length(self):
+        return self.length1
+    
+    def get_temp(self):
+        return self.temp
+    
+    def get_heaters(self):
+        return self.heaters
+    
+    def get_occupancy(self):
+        return self.occupancy
+    
+    def get_broken_rail(self):
+        return self.broken_rail
+    
+    def get_circuit_failure(self):
+        return self.circuit_failure
+    
+    def get_power_failure(self):
+        return self.power_failure
+    
+    def get_block_num(self):
+        return self.block_num
+    
+    def get_direction(self): 
+        return self.direction
+    
+    def get_cross(self):
+        return self.cross
+    
+    def set_elevation():
         pass
+
+    def set_grade():
+        pass
+
         
 if __name__ == "__main__":
     app = QApplication(sys.argv)

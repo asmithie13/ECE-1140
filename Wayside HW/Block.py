@@ -8,6 +8,7 @@ class Block:
         self.blockSection = blockSection
         self.blockNum = blockNum
         self.hasSwitch = hasSwitch
+        self.hasLight = hasSwitch #If there is a switch, there is a light
         self.hasCrossing = hasCrossing
 
         #All blocks are initialized as unoccupied and operational:

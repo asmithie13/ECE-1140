@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1076</width>
-    <height>673</height>
+    <width>1100</width>
+    <height>700</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1100</width>
+    <height>700</height>
+   </size>
   </property>
   <property name="baseSize">
    <size>
@@ -78,7 +84,7 @@
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_6">
+   <layout class="QVBoxLayout" name="verticalLayout_7">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -240,7 +246,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap>placeholder.png</pixmap>
+           <pixmap>../placeholder.png</pixmap>
           </property>
           <property name="scaledContents">
            <bool>true</bool>
@@ -489,16 +495,6 @@
      </layout>
     </item>
     <item>
-     <widget class="Line" name="line_6">
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item>
      <layout class="QHBoxLayout" name="horizontalLayout_9">
       <item>
        <widget class="QLineEdit" name="lineEditOccupiedBlocks">
@@ -569,6 +565,16 @@
      </layout>
     </item>
     <item>
+     <widget class="Line" name="line_7">
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QLabel" name="labelSwitchStates">
       <property name="font">
        <font>
@@ -577,17 +583,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Change Switch States (Later to be Hardware-Implemented):</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="Line" name="line_7">
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <string>Change Block States:</string>
       </property>
      </widget>
     </item>
@@ -599,6 +595,11 @@
          <layout class="QHBoxLayout" name="horizontalLayout_12">
           <item>
            <widget class="QLineEdit" name="lineEditLightState">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -622,26 +623,14 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_14">
           <item>
-           <widget class="QPushButton" name="buttonLightGreen">
+           <widget class="QPushButton" name="buttonLight">
             <property name="font">
              <font>
               <family>Times New Roman</family>
              </font>
             </property>
             <property name="text">
-             <string>Green</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="buttonLightRed">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-             </font>
-            </property>
-            <property name="text">
-             <string>Red</string>
+             <string>RED</string>
             </property>
            </widget>
           </item>
@@ -650,14 +639,16 @@
        </layout>
       </item>
       <item>
-       <widget class="QSplitter" name="splitter">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <widget class="QWidget" name="">
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_10">
           <item>
            <widget class="QLineEdit" name="lineEditSwitchState">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -677,36 +668,24 @@
            </widget>
           </item>
          </layout>
-        </widget>
-        <widget class="QWidget" name="">
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_11">
           <item>
-           <widget class="QPushButton" name="buttonSwitchRight">
+           <widget class="QPushButton" name="buttonSwitch">
             <property name="font">
              <font>
               <family>Times New Roman</family>
              </font>
             </property>
             <property name="text">
-             <string>Right</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="buttonSwitchLeft">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-             </font>
-            </property>
-            <property name="text">
-             <string>Left</string>
+             <string>LEFT</string>
             </property>
            </widget>
           </item>
          </layout>
-        </widget>
-       </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -714,6 +693,11 @@
          <layout class="QHBoxLayout" name="horizontalLayout_13">
           <item>
            <widget class="QLineEdit" name="lineEditCrossingState">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+             </font>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -737,26 +721,14 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_15">
           <item>
-           <widget class="QPushButton" name="buttonCrossingDown">
+           <widget class="QPushButton" name="buttonCrossing">
             <property name="font">
              <font>
               <family>Times New Roman</family>
              </font>
             </property>
             <property name="text">
-             <string>Down</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="buttonCrossingUp">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-             </font>
-            </property>
-            <property name="text">
-             <string>Up</string>
+             <string>UP</string>
             </property>
            </widget>
           </item>

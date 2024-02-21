@@ -13,11 +13,12 @@ from PyQt5 import uic
 class Schedule():
     def __init__(self, ScheduleData = []):
         #Dummy schedule data for testing
-        ScheduleData = [
-            ["Train1", "Departure Station",  QTime(5, 34, 0).toString("hh:mm"), "Destination", QTime(6, 15, 0).toString("hh:mm")],
-            [1, -1, 'hello', 1, 0]]
+        self.Scheduledata = ScheduleData
 
-        self.data = ScheduleData
+    def addTrain(self, TrainID, Destination, ArrivalTime, Departure, DepartureTime):
+        newTrain = [TrainID, Departure, DepartureTime, Destination, ArrivalTime]
+        self.Scheduledata.append(newTrain)
+
 
         
 #Table class to initialize a Pyqt5 table object that will display the schedule
@@ -40,4 +41,15 @@ class TableModel(QtCore.QAbstractTableModel):
     def columnCount(self, index):
         # The following takes the first sub-list, and returns
         # the length (only works if all rows are an equal length)
-        return len(self._data[0])
+        if(len(self._data) > 0):
+            return len(self._data[0])
+        else:
+            return 0
+    
+    def headerData(self, section, orientation, role):
+        # section is the index of the column/row.
+        headers = ['Train ID', 'Departure Station', 'Departure Time', 'Destination', 'Arrival Time']
+
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
+                return str(headers[section])

@@ -25,14 +25,20 @@ class UI(QtWidgets.QMainWindow):
         self.AddTrainButton.clicked.connect(self.addTrain_button)
 
         #Changing Button Colors
-        self.AddTrainButton.setStyleSheet("background-color : #26cf04")
-        self.UploadButton.setStyleSheet("background-color : #26cf04")
+        self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")
+        self.UploadButton.setStyleSheet("background-color : rgb(38, 207, 4)")
+
         #Changing Background colors to section off UI
         self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255);")
 
+        #Manual Dispatch Formatting
+        self.ArrivalTimeEdit.setDisplayFormat("hh:mm")
+
         #Initializing Schedule
-        trainSchedule = Schedule()
-        self.ScheduleTable.setModel(TableModel(trainSchedule.data))
+        self.trainSchedule = Schedule()
+        self.ScheduleTable.setModel(TableModel(self.trainSchedule.Scheduledata))
+        
+        
 
         
 
@@ -65,12 +71,18 @@ class UI(QtWidgets.QMainWindow):
         self.ManualModeButton.setEnabled(False)
         self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
     
-    #defing manual mode add train button functionality
+    #defining manual mode add train button functionality
     def addTrain_button(self):
-        #Time edit tutorial
-        #https://www.pythontutorial.net/pyqt/pyqt-qtimeedit/
+        TrainID = self.TrainNameField.text()
+        Departure = self.DepartureSationSelect.currentText()
+        DepartureTime = self.DepartureTimeEdit.time()
+        DepartureTime = DepartureTime.toString("hh:mm")
+        Destination = self.DestinationSelect.currentText()
         ArrivalTime = self.ArrivalTimeEdit.time()
-        print(ArrivalTime.toString("hh:mm"))
+        ArrivalTime = ArrivalTime.toString("hh:mm")
+
+        self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
+        self.ScheduleTable.setModel(TableModel(self.trainSchedule.Scheduledata))
 
 
 

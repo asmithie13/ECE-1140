@@ -38,30 +38,30 @@ class MyApp(QMainWindow):
         #Index [4] of each Block => True if Occupied
 
         #Switch Directions
-        self.B5_Switch_Positions = ["B6","B11"]
+        self.B5_Switch_Positions = ["B6","C11"]
 
         #Defining important blocks
-        B1 = Block(*NORMAL_CONST,"B1")
-        B2 = Block(*NORMAL_CONST,"B2")
-        B3 = Block(*CROSSING_CONST,"B3")
-        B4 = Block(*NORMAL_CONST,"B4") 
-        B5 = Block(*SWITCH_CONST,"B5") 
+        A1 = Block(*NORMAL_CONST,"A1")
+        A2 = Block(*NORMAL_CONST,"A2")
+        A3 = Block(*CROSSING_CONST,"A3")
+        A4 = Block(*NORMAL_CONST,"A4") 
+        A5 = Block(*SWITCH_CONST,"A5") 
         B6 = Block(*LIGHT_CONST,"B6")
         B7 = Block(*NORMAL_CONST,"B7")
         B8 = Block(*NORMAL_CONST,"B8")
         B9 = Block(*NORMAL_CONST,"B9")
         B10 = Block(*NORMAL_CONST,"B10")
-        B11 = Block(*LIGHT_CONST,"B11")
-        B12 = Block(*NORMAL_CONST,"B12")
-        B13 = Block(*NORMAL_CONST,"B13")
-        B14 = Block(*NORMAL_CONST,"B14")
-        B15 = Block(*NORMAL_CONST,"B15")
+        C11 = Block(*LIGHT_CONST,"C11")
+        C12 = Block(*NORMAL_CONST,"C12")
+        C13 = Block(*NORMAL_CONST,"C13")
+        C14 = Block(*NORMAL_CONST,"C14")
+        C15 = Block(*NORMAL_CONST,"C15")
 
         #Defines an array of these blocks
 
-        self.BlockArray = [B3,B5,B6,B11]    #Special Blocks
-        self.AllBlocks = [B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13,B14,B15] #All Blocks
-        self.SwitchBlocks = ["B5","B6","B11"]
+        self.BlockArray = [A3,A5,B6,C11]    #Special Blocks
+        self.AllBlocks = [A1,A2,A3,A4,A5,B6,B7,B8,B9,B10,C11,C12,C13,C14,C15] #All Blocks
+        self.SwitchBlocks = ["B5","B6","C11"]
 
         #Create Parser Object
         self.FileParser = Parser(None,self.BlockArray)  #Currently empty onject
@@ -87,7 +87,7 @@ class MyApp(QMainWindow):
         self.label_17.setPixmap(pixmap)
 
         #Dropdown menu
-        self.blockMenu.addItems(['B3','B5','B6','B11'])
+        self.blockMenu.addItems(['A3','A5','B6','C11'])
         self.waysideMenu.addItems(['W1'])
 
         #Input Initial Conditions
@@ -294,7 +294,7 @@ class TestBench(QMainWindow):
         self.tbBlockMenu.currentIndexChanged.connect(self.updateBlockStates)
 
         #Menu
-        self.tbBlockMenu.addItems(['B3','B5','B6','B11'])
+        self.tbBlockMenu.addItems(['A3','A5','B6','C11'])
 
         #Backend vars
         self.OccupiedBlocks = []    #Is sent to the UI
@@ -373,7 +373,7 @@ class TestBench(QMainWindow):
             else:
                 self.label_19.setText("")
                 self.label_22.setText("")
-                self.label_24.setText("B11")
+                self.label_24.setText("C11")
 
     def receiveMode(self,mode):
         if mode == True:

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1067</width>
-    <height>658</height>
+    <width>849</width>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,11 +46,11 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>1041</width>
-        <height>591</height>
+        <width>821</width>
+        <height>581</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="CTC_TabCols" stretch="5,5">
+      <layout class="QHBoxLayout" name="CTC_TabCols" stretch="5,3">
        <item>
         <layout class="QVBoxLayout" name="CTC_TabCol1" stretch="3,7">
          <item>
@@ -202,7 +202,7 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="CTC_TabCol2">
+        <layout class="QVBoxLayout" name="CTC_TabCol2" stretch="1,1,5,2,2">
          <item>
           <layout class="QHBoxLayout" name="ModeButtonLayout">
            <item>
@@ -218,9 +218,6 @@
               <string>Auto Mode</string>
              </property>
             </widget>
-           </item>
-           <item>
-            <widget class="QLCDNumber" name="Clock"/>
            </item>
           </layout>
          </item>
@@ -647,10 +644,23 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_12">
-           <property name="text">
+          <widget class="QGroupBox" name="OccupiedBlocksBox">
+           <property name="title">
             <string>Occupied Blocks</string>
            </property>
+           <widget class="QTableView" name="OccupiedBlockTable">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>20</y>
+              <width>251</width>
+              <height>231</height>
+             </rect>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOff</enum>
+            </property>
+           </widget>
           </widget>
          </item>
          <item>

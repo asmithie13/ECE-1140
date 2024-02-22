@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
 from Schedule import *
-from Clock import *
+from OccupiedBlocks import *
 #from UI_temp import MainWindow
 
 
@@ -31,6 +31,7 @@ class UI(QtWidgets.QMainWindow):
 
         #Changing Background colors to section off UI
         self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255);")
+        self.OccupiedBlocksBox.setStyleSheet("background-color : rgb(233, 247, 255);")
 
         #Manual Dispatch Formatting
         self.ArrivalTimeEdit.setDisplayFormat("hh:mm")
@@ -39,11 +40,15 @@ class UI(QtWidgets.QMainWindow):
         #Add the clock
         #self.Clock = QtCore.QTimer(self)
         #self.Clock.timeout.connect(self.showTime(time))
-        self.Clock.display(ourClock.time)
+        #self.Clock.display(ourClock.time)
 
         #Initializing Schedule
         self.trainSchedule = Schedule()
-        self.ScheduleTable.setModel(TableModel(self.trainSchedule.Scheduledata))
+        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+
+        #Initializing Occupied Blocks Table
+        self.occupiedBlocks = OccupiedBlocks()
+        self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockData))
         
         
 
@@ -89,7 +94,7 @@ class UI(QtWidgets.QMainWindow):
         ArrivalTime = ArrivalTime.toString("hh:mm")
 
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
-        self.ScheduleTable.setModel(TableModel(self.trainSchedule.Scheduledata))
+        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 
 

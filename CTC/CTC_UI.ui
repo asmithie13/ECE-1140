@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>858</width>
-    <height>655</height>
+    <width>874</width>
+    <height>674</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,10 +17,10 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>-10</y>
-      <width>1041</width>
-      <height>621</height>
+      <x>20</x>
+      <y>30</y>
+      <width>781</width>
+      <height>491</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="MainLayout"/>
@@ -28,14 +28,14 @@
    <widget class="QTabWidget" name="TabWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>1061</width>
-      <height>641</height>
+      <x>10</x>
+      <y>10</y>
+      <width>851</width>
+      <height>631</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="CTC_tab">
      <attribute name="title">
@@ -708,18 +708,28 @@
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Add Occupied Block</string>
+            <string>Occupied Blocks</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLineEdit" name="OccupiedBlocksField"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="UpdateBlocksButton">
            <property name="text">
-            <string>TextLabel</string>
+            <string>Update</string>
            </property>
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>(Enter the blocks that are currently occupied, seperated by commas)</string>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">

@@ -12,7 +12,7 @@ from PyQt5 import uic
 class OccupiedBlocks():
     def __init__(self, Blocks = []):
         #Dummy data for testing
-        Blocks = [['T1', 'B2'], ['T1', 'B1']]
+        #Blocks = [['T1', 'B2'], ['T1', 'B1']]
 
         self.BlockData = Blocks
 

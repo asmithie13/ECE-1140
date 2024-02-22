@@ -25,10 +25,13 @@ class UI(QtWidgets.QMainWindow):
         self.ManualModeButton.clicked.connect(self.selectManualMode_button)
         self.AddTrainButton.clicked.connect(self.addTrain_button)
         self.AutoModeButton.clicked.connect(self.selectAutoMode_button)
+            #TestBench Buttons
+        self.UpdateBlocksButton.clicked.connect(self.updateBlocks_button)
 
         #Changing Button Colors
         self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")
         self.UploadButton.setStyleSheet("background-color : rgb(38, 207, 4)")
+        self.UpdateBlocksButton.setStyleSheet("background-color : rgb(38, 207, 4)")
 
         #Changing Background colors to section off UI
         self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255);")
@@ -121,6 +124,19 @@ class UI(QtWidgets.QMainWindow):
 
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+
+    
+    """TEST BENCH FUNCTIONS"""
+    def updateBlocks_button(self):
+        BlockText = self.OccupiedBlocksField.text()
+        UpdatedBlocks = list(map(str.strip, BlockText.split(',')))
+
+        UpdatedBlocksWithTrain = []
+        for i in UpdatedBlocks:
+            UpdatedBlocksWithTrain.append(['X', i])
+
+        self.occupiedBlocks.BlockData = UpdatedBlocksWithTrain
+        self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockData))
 
 
 

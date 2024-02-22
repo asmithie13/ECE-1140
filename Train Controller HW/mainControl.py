@@ -16,8 +16,11 @@ class Ui_MainWindow(object):
 
     def __init__(self):
 
+        #internal power calculation
         self.power = 0
+
         self.lastSliderMoved = None
+
         self.Ki = 0
         self.Kp = 0
         self.integral_error = 0
@@ -28,7 +31,6 @@ class Ui_MainWindow(object):
         self.v_error = 0
         self.dt = 0.1
         self.control_output = 0
-
 
         self.tempTimer = QTimer()
         self.tempTimer.setInterval(1000)
@@ -41,9 +43,6 @@ class Ui_MainWindow(object):
         self.speedTimer = QTimer()
         self.speedTimer.setInterval(1000)
         self.speedTimer.timeout.connect(self.speedControl)
-
-
-
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -74,10 +73,14 @@ class Ui_MainWindow(object):
         self.label_10.setAlignment(QtCore.Qt.AlignCenter)
         self.label_10.setObjectName("label_10")
         self.verticalLayout_2.addWidget(self.label_10)
+
+
+        ### BRAKE OUTPUT
         self.lcdBrk = QtWidgets.QLCDNumber(self.BrkAcelBox)
         self.lcdBrk.setDigitCount(3)
         self.lcdBrk.setObjectName("lcdBrk")
         self.verticalLayout_2.addWidget(self.lcdBrk)
+        ### BRAKE INPUT
         self.vertSliderBrk = QtWidgets.QSlider(self.BrkAcelBox)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(10)
@@ -87,8 +90,9 @@ class Ui_MainWindow(object):
         self.vertSliderBrk.setMaximumSize(QtCore.QSize(16777215, 200))
         self.vertSliderBrk.setOrientation(QtCore.Qt.Vertical)
         self.vertSliderBrk.setObjectName("vertSliderBrk")
-        self.vertSliderBrk.setMaximum(100)
+        self.vertSliderBrk.setMaximum(1)
         self.verticalLayout_2.addWidget(self.vertSliderBrk)
+
         self.horizontalLayout.addLayout(self.verticalLayout_2)
         self.verticalLayout_5 = QtWidgets.QVBoxLayout()
         self.verticalLayout_5.setObjectName("verticalLayout_5")
@@ -102,6 +106,8 @@ class Ui_MainWindow(object):
         self.groupBox_2.setObjectName("groupBox_2")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.groupBox_2)
         self.verticalLayout.setObjectName("verticalLayout")
+
+        #### ACCELERATION PERCENT OUT
         self.lcdPwrOut = QtWidgets.QLCDNumber(self.groupBox_2)
         self.lcdPwrOut.setObjectName("lcdPwrOut")
         self.verticalLayout.addWidget(self.lcdPwrOut)
@@ -112,6 +118,8 @@ class Ui_MainWindow(object):
         self.label_20.setAlignment(QtCore.Qt.AlignCenter)
         self.label_20.setObjectName("label_20")
         self.verticalLayout.addWidget(self.label_20)
+
+        ## POWER FAILURE INDICATOR
         self.PwrFail = QtWidgets.QLabel(self.groupBox_2)
         font = QtGui.QFont()
         font.setPointSize(25)
@@ -121,6 +129,8 @@ class Ui_MainWindow(object):
         self.PwrFail.setAlignment(QtCore.Qt.AlignCenter)
         self.PwrFail.setObjectName("PwrFail")
         self.verticalLayout.addWidget(self.PwrFail)
+
+        ####BRAKE FAILURE INDICATION
         self.BrkFail = QtWidgets.QLabel(self.groupBox_2)
         font = QtGui.QFont()
         font.setPointSize(25)
@@ -130,6 +140,8 @@ class Ui_MainWindow(object):
         self.BrkFail.setAlignment(QtCore.Qt.AlignCenter)
         self.BrkFail.setObjectName("BrkFail")
         self.verticalLayout.addWidget(self.BrkFail)
+
+        ###SIGNAL FAILURE INDICATOR
         self.SigFail = QtWidgets.QLabel(self.groupBox_2)
         font = QtGui.QFont()
         font.setPointSize(25)
@@ -139,6 +151,7 @@ class Ui_MainWindow(object):
         self.SigFail.setAlignment(QtCore.Qt.AlignCenter)
         self.SigFail.setObjectName("SigFail")
         self.verticalLayout.addWidget(self.SigFail)
+
         self.verticalLayout_5.addWidget(self.groupBox_2)
         self.horizontalLayout.addLayout(self.verticalLayout_5)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
@@ -150,6 +163,8 @@ class Ui_MainWindow(object):
         self.label_11.setAlignment(QtCore.Qt.AlignCenter)
         self.label_11.setObjectName("label_11")
         self.verticalLayout_3.addWidget(self.label_11)
+
+        ### POWER OUTPUT DISPLAY
         self.lcdPow_2 = QtWidgets.QLCDNumber(self.BrkAcelBox)
         self.lcdPow_2.setMaximumSize(QtCore.QSize(16777215, 400))
         self.lcdPow_2.setFrameShape(QtWidgets.QFrame.Box)
@@ -157,6 +172,8 @@ class Ui_MainWindow(object):
         self.lcdPow_2.setDigitCount(3)
         self.lcdPow_2.setObjectName("lcdPow_2")
         self.verticalLayout_3.addWidget(self.lcdPow_2)
+
+        ### ACELLERATE INPUT
         self.vertSliderPow = QtWidgets.QSlider(self.BrkAcelBox)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(10)
@@ -171,6 +188,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addLayout(self.verticalLayout_3)
         self.horizontalLayout_8.addLayout(self.horizontalLayout)
         self.gridLayout_2.addWidget(self.BrkAcelBox, 1, 1, 2, 2)
+
+        ### TRAIN SELECTION
         self.Train_Select_Box = QtWidgets.QGroupBox(self.centralwidget)
         self.Train_Select_Box.setMaximumSize(QtCore.QSize(400, 16777215))
         self.Train_Select_Box.setStyleSheet("background-color: rgb(233, 247, 255);")
@@ -205,6 +224,8 @@ class Ui_MainWindow(object):
         self.Ebrake = QtWidgets.QPushButton(self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(25)
+
+        ####EBRAKE
         self.Ebrake.setFont(font)
         self.Ebrake.setAutoFillBackground(False)
         self.Ebrake.setStyleSheet("background-color: rgb(255, 55, 62);\n"
@@ -216,6 +237,7 @@ class Ui_MainWindow(object):
         self.Ebrake.setFlat(False)
         self.Ebrake.setObjectName("Ebrake")
         self.gridLayout_2.addWidget(self.Ebrake, 6, 0, 1, 4)
+
         self.CabinConditionsBox = QtWidgets.QGroupBox(self.centralwidget)
         self.CabinConditionsBox.setMaximumSize(QtCore.QSize(400, 16777215))
         font = QtGui.QFont()
@@ -226,6 +248,8 @@ class Ui_MainWindow(object):
         self.CabinConditionsBox.setObjectName("CabinConditionsBox")
         self.gridLayout = QtWidgets.QGridLayout(self.CabinConditionsBox)
         self.gridLayout.setObjectName("gridLayout")
+
+        ## RIGHT DOOR TRIGGER
         self.buttonDoorR = QtWidgets.QPushButton(self.CabinConditionsBox)
         self.buttonDoorR.setCheckable(True)
         self.buttonDoorR.setObjectName("buttonDoorR")
@@ -233,14 +257,19 @@ class Ui_MainWindow(object):
         self.label_13 = QtWidgets.QLabel(self.CabinConditionsBox)
         self.label_13.setObjectName("label_13")
         self.gridLayout.addWidget(self.label_13, 2, 0, 1, 1)
+
         self.IntLights = QtWidgets.QLabel(self.CabinConditionsBox)
         self.IntLights.setObjectName("IntLights")
         self.gridLayout.addWidget(self.IntLights, 1, 0, 1, 1)
+
+        ### TEMEPERATURE INPUT
         self.temp = QtWidgets.QSpinBox(self.CabinConditionsBox)
         self.temp.setProperty("minimum", 60)
         self.temp.setProperty("maximum", 90)
         self.temp.setObjectName("temp")
         self.gridLayout.addWidget(self.temp, 3, 1, 1, 1)
+
+        ### TEMPERATURE OUTPUT
         self.lcdCurTemp = QtWidgets.QLCDNumber(self.CabinConditionsBox)
         self.lcdCurTemp.setObjectName("lcdCurTemp")
         self.lcdCurTemp.display(self.temp.value())
@@ -249,12 +278,16 @@ class Ui_MainWindow(object):
         self.lcdCurTemp.setSmallDecimalPoint(False)
         self.lcdCurTemp.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
         self.gridLayout.addWidget(self.lcdCurTemp, 3, 2, 1, 3)
+
+        ### HEADLIGHT CONTROLL
         self.buttonHDon = QtWidgets.QPushButton(self.CabinConditionsBox)
         self.buttonHDon.setCheckable(True)
         self.buttonHDon.setChecked(True)
         self.buttonHDon.setAutoDefault(False)
         self.buttonHDon.setObjectName("buttonHDon")
         self.gridLayout.addWidget(self.buttonHDon, 0, 1, 1, 2)
+
+        ### LEFT DOORS CONTROLL
         self.buttonDoorL = QtWidgets.QPushButton(self.CabinConditionsBox)
         self.buttonDoorL.setCheckable(True)
         self.buttonDoorL.setObjectName("buttonDoorL")
@@ -269,6 +302,8 @@ class Ui_MainWindow(object):
         self.label_14 = QtWidgets.QLabel(self.CabinConditionsBox)
         self.label_14.setObjectName("label_14")
         self.gridLayout.addWidget(self.label_14, 3, 0, 1, 1)
+
+        ### INTERIOR LIGHTS INPUT
         self.IntLightSld = QtWidgets.QSlider(self.CabinConditionsBox)
         self.IntLightSld.setMaximum(2)
         self.IntLightSld.setSingleStep(1)
@@ -281,6 +316,8 @@ class Ui_MainWindow(object):
         self.IntLightSld.setObjectName("IntLightSld")
         self.gridLayout.addWidget(self.IntLightSld, 1, 1, 1, 4)
         self.gridLayout_2.addWidget(self.CabinConditionsBox, 0, 3, 1, 1)
+
+        ##########SPEAKER SECTION~##################
         self.SpeakerOutputBox = QtWidgets.QGroupBox(self.centralwidget)
         self.SpeakerOutputBox.setMaximumSize(QtCore.QSize(400, 16777215))
         font = QtGui.QFont()
@@ -292,6 +329,8 @@ class Ui_MainWindow(object):
         self.SpeakerOutputBox.setObjectName("SpeakerOutputBox")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.SpeakerOutputBox)
         self.gridLayout_4.setObjectName("gridLayout_4")
+
+        ### ANNOUNCEMENT INPUT
         self.Announcement = QtWidgets.QLabel(self.SpeakerOutputBox)
         self.Announcement.setObjectName("Announcement")
         self.gridLayout_4.addWidget(self.Announcement, 2, 0, 1, 1)
@@ -299,12 +338,18 @@ class Ui_MainWindow(object):
         self.lineEditAnn.setText("")
         self.lineEditAnn.setObjectName("lineEditAnn")
         self.gridLayout_4.addWidget(self.lineEditAnn, 2, 1, 1, 1)
+
+
         self.CurrentOutput = QtWidgets.QLabel(self.SpeakerOutputBox)
         self.CurrentOutput.setObjectName("CurrentOutput")
         self.gridLayout_4.addWidget(self.CurrentOutput, 3, 0, 1, 1)
+
+        ### CURRENT STATION OUTPUT
         self.CurrentStation = QtWidgets.QLabel(self.SpeakerOutputBox)
         self.CurrentStation.setObjectName("CurrentStation")
         self.gridLayout_4.addWidget(self.CurrentStation, 1, 0, 1, 1)
+
+        ###CURRENT SPEAKER OUTPUT
         self.SpeakerOuputs = QtWidgets.QLabel(self.SpeakerOutputBox)
         font = QtGui.QFont()
         font.setPointSize(20)
@@ -334,9 +379,12 @@ class Ui_MainWindow(object):
         self.DistanceTillStop.setAlignment(QtCore.Qt.AlignCenter)
         self.DistanceTillStop.setObjectName("DistanceTillStop")
         self.verticalLayout_4.addWidget(self.DistanceTillStop)
+
+       #AUTHOIRTY OUTPUT
         self.lcdAuth = QtWidgets.QLCDNumber(self.groupBox_9)
         self.lcdAuth.setFrameShape(QtWidgets.QFrame.Box)
         self.lcdAuth.setObjectName("lcdAuth")
+        self.lcdAuth.setDigitCount(4)
         self.verticalLayout_4.addWidget(self.lcdAuth)
         self.gridLayout_2.addWidget(self.groupBox_9, 2, 3, 1, 1)
         self.Mode_Box = QtWidgets.QGroupBox(self.centralwidget)
@@ -349,11 +397,13 @@ class Ui_MainWindow(object):
         self.Mode_Box.setObjectName("Mode_Box")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.Mode_Box)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        ## MANUAL MODE BUTTON
         self.buttonMan = QtWidgets.QPushButton(self.Mode_Box)
         self.buttonMan.setCheckable(True)
         self.buttonMan.setChecked(False)
         self.buttonMan.setObjectName("buttonMan")
         self.horizontalLayout_2.addWidget(self.buttonMan)
+        ## AUTOMATIC MODE BUTTON
         self.buttonAuto = QtWidgets.QPushButton(self.Mode_Box)
         self.buttonAuto.setCheckable(True)
         self.buttonAuto.setChecked(True)
@@ -452,79 +502,99 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
+
+
         self.retranslateUi(MainWindow)
+
         self.buttonMan.clicked['bool'].connect(self.buttonAuto.toggle)  # type: ignore
         self.buttonAuto.clicked['bool'].connect(self.buttonMan.toggle)  # type: ignore
-        # self.inputKi.valueChanged['double'].connect(self.lcdKi.display) # type: ignore
-        # self.inputKp.valueChanged['double'].connect(self.lcdKp.display) # type: ignore
+        #self.inputKi.valueChanged['double'].connect(self.lcdKi.display()) # type: ignore
+        #self.inputKp.valueChanged['double'].connect(self.lcdKp.display()) # type: ignore
         self.buttonHDon.clicked['bool'].connect(self.buttonHDoff.toggle)  # type: ignore
         self.buttonHDoff.clicked['bool'].connect(self.buttonHDon.toggle)  # type: ignore
         self.lineEditAnn.textChanged['QString'].connect(self.SpkrOut.setText)  # type: ignore
         self.CurStatOut.windowIconTextChanged['QString'].connect(self.SpkrOut.setText)  # type: ignore
-        # self.vertSliderBrk.valueChanged.connect(self.lcdBrk.display)
-        self.vertSliderBrk.valueChanged.connect(self.calBrakeOutput)  # type: ignore
-        # self.vertSliderPow.valueChanged.connect(self.lcdPow_2.display) # type: ignore
-        self.vertSliderPow.valueChanged.connect(self.calPower)  # type: ignore
+        self.vertSliderBrk.valueChanged.connect(lambda : self.calBrakeOutput())
+        self.vertSliderPow.valueChanged.connect(lambda : self.calAccelOutput())  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.inputKi.valueChanged['double'].connect(self.onKiValueChanged)
-        self.inputKp.valueChanged['double'].connect(self.onKpValueChanged)
 
-        self.temp.valueChanged.connect(self.tempControl)
 
-    def calBrakeOutput(self, value):
+        self.inputKp.valueChanged.connect(lambda : self.onKpValueChanged())
+        self.inputKi.valueChanged.connect(lambda : self.onKiValueChanged())
+        self.temp.valueChanged.connect(lambda :self.tempControl)
+        self.lcdAuth.valueChanged.connect(lambda : self.updateAuth())
+        #if the button is checked, it will call this function
 
-        self.lcdBrk.display(value)
-        value = (6 * 81000) * (value / 100)
-        self.brakePower = value
+        #self.buttonDoorR.clicked.connect(lambda : self.doorControl())
+        #self.buttonDoorL.clicked.connect(lambda : self.doorControl())
+
+
+    def calBrakeOutput(self):
+
+        self.lcdBrk.display(self.vertSliderBrk.value())
+        #value = (6 * 81000) * (self.vertSliderBrk.value() / 100)
+        #self.brakePower = value
         # print(f"brake value changed to: {value}")
-        if self.lastSliderMoved != 'brk':
-            self.lcdPow_2.display(0)
+        if(self.vertSliderBrk.value() > 0):
+            self.vertSliderPow.setValue(0);
+        #if self.lastSliderMoved != 'brk':
+         #   self.lcdPow_2.display(0)
+          #  self.vertSliderPow.setValue(0)
+           # self.lastSliderMoved = 'brk'
+
+    def calAccelOutput(self):
+        # if authority is zero, the power stays at zero
+        if self.lcdAuth.value() == 0:
             self.vertSliderPow.setValue(0)
-            self.lastSliderMoved = 'brk'
+            self.lcdPowOut = 0
 
-    def onKiValueChanged(self, value):
-        self.lcdKi.display(value)
-        self.Ki = value
-        # print(f"Ki set to: {self.Ki}")
+        self.lcdPow_2.display(self.vertSliderPow.value())
 
-    def onKpValueChanged(self, value):
-        self.lcdKp.display(value)
-        self.Kp = value
+        self.CalcPower()
+        if self.vertSliderPow.value() > 1:
+            self.vertSliderBrk.setValue(0)
+
+    def onKiValueChanged(self):
+        self.lcdKi.display(self.inputKi.value())
+        self.Ki = self.inputKi.value()
+        self.CalcPower()
+
+
+    def onKpValueChanged(self):
+        self.lcdKp.display(self.inputKp.value())
+        self.Kp = self.inputKp.value()
+        self.CalcPower()
         # print(f"Kp set to: {self.Kp}")
 
-    def tempControl(self,value):
-            #change temp to match the value
-            if not self.tempTimer.isActive():
-                self.tempTimer.start()
-    
+
+    def CalcPower(self):
+        # at this point in development, since we do not have time integration, dt will be static
+        self.dt = 1;
+        self.power = (self.inputKp.value() * self.inputKp.value() / self.dt) * (self.vertSliderPow.value()/100)
+        self.lcdPwrOut.display(self.power)
+
+    # need to fix this
+    def tempControl(self):
+        # change temp to match the value
+        if not self.tempTimer.isActive():
+            self.tempTimer.start()
+
     def updateTemperature(self):
-        #increase temp
+        # increase temp
         if self.temp.value() > self.lcdCurTemp.value():
             self.lcdCurTemp.display(self.lcdCurTemp.value() + 1)
 
-        #decrease temp
+        # decrease temp
         elif self.temp.value() < self.lcdCurTemp.value():
             self.lcdCurTemp.display(self.lcdCurTemp.value() - 1)
-        
-        #target temp reached
+
+        # target temp reached
         else:
             self.tempTimer.stop()
 
 
-    def calPower(self, value):
 
-        if value != self.lcdPow_2.value():
-            # Update Power related displays and values
-            self.lcdPow_2.display(value)
-            self.power = (120000) * (value / 100)
-            self.lcdPwrOut.display(self.power/1000)
-            # print(f"Power set to: {self.power}")
-
-            if self.lastSliderMoved != 'pow':  # Set the last moved slider
-                self.lcdBrk.display(0)
-                self.vertSliderBrk.setValue(0)
-                self.lastSliderMoved = 'pow'
 
         # if self.buttonMan.setChecked() == False:
         #     self.v_error = self.v_cmd - self.v_current
@@ -538,18 +608,14 @@ class Ui_MainWindow(object):
         #     self.lcdPwrOut.display(self.control_output)
         #     print(f"Control output set to: {self.control_output}")
 
+    ################################################################################ vital stff
 
+    # called when speed changes
 
-################################################################################ vital stff
-   
-   
-   
-    #called when speed changes
-                
     def calSpeed(self):
-        #update speed every second
+        # update speed every second
         if not self.speedTimer.isActive():
-                self.speedTimer.start()
+            self.speedTimer.start()
 
     def speedControl(self):
         # over speed limit
@@ -557,49 +623,40 @@ class Ui_MainWindow(object):
             self.lcdCmdSpd.display(self.lcdSpdLim.value())
             self.lcdCurSpd_2.display(self.lcdCurSpd_2.value() + 1)
 
-        #if cmd is less than current speed and speed limit
+        # if cmd is less than current speed and speed limit
         elif (self.lcdCmdSpd.value() > self.lcdCurSpd_2.value()) & (self.lcdCmdSpd.value() < self.lcdSpdLim.value()):
             self.lcdCurSpd_2.display(self.lcdCurSpd_2.value() - 1)
 
         else:
             self.speedTimer.stop()
 
-
     def doorControl(self):
-        # lauren i dont know how the door functions work but i think this is kinda close
-        # doorControl() needs to be called when the buttons are pressed
-        # we might need a doorControlL() and doorControlR()
         if self.lcdCurSpd_2.value() != 0:
-            # disable the buttons from working
-            self.buttonDoorR.setEnabled(False)
-            self.buttonDoorL.setEnabled(False)
-        
-        else:
-            self.buttonDoorR.toggle()
-            self.buttonDoorL.toggle()
 
-    
+            self.buttonDoorR.setChecked(False)
+            self.buttonDoorL.setChecked(False)
+
+        else:
+            self.buttonDoorR.setChecked(True)
+            self.buttonDoorL.setChecked(True)
+
     ## we need to call this when auth is entered from TB and we have a speed
     def calAuth(self):
-        #update auth every second
+        # update auth every second
         if not self.authTimer.isActive():
-                self.authTimer.start()
+            self.authTimer.start()
 
     def updateAuth(self):
-        #decrease auth
+        # decrease auth
         if (self.lcdAuth.value() != 0 & self.lcdCurSpd_2.value() != 0):
             rate = self.lcdCurSpd_2.value() * 1.46667
             self.lcdAuth.display(self.lcdAuth.value() - rate)
 
-        #target auth reached
+        # target auth reached
         else:
             self.authTimer.stop()
 
-
-#################################################################################
-
-
-
+    #################################################################################
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

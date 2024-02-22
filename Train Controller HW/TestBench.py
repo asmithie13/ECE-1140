@@ -70,7 +70,7 @@ class Ui_TestBench(object):
 
     def set_commanded_spped(self):
         value = int(self.CSpeed.value())
-        self.ui.lcdCmdSpd.display(value)
+        self.ui.lcdCurSpd_2.display(value)
 
     def set_speed_limit(self):
         value = int(self.SpeedLimit.value())
@@ -78,7 +78,7 @@ class Ui_TestBench(object):
 
     def set_current_speed(self):
         value = int(self.CurSpeed.value())
-        self.ui.lcdCurSpd_2.display(value)
+        self.ui.lcdCmdSpd.display(value)
 
     def set_authority(self):
         value = int(self.Authority.value())
@@ -120,6 +120,7 @@ class Ui_TestBench(object):
         self.label_7.setObjectName("label_7")
         self.formLayout.setWidget(10, QtWidgets.QFormLayout.LabelRole, self.label_7)
         self.Authority = QtWidgets.QDoubleSpinBox(self.centralwidget)
+        self.Authority.setRange(0,9999)
         self.Authority.setObjectName("Authority")
         self.Authority.editingFinished.connect( lambda : self.set_authority())
         self.formLayout.setWidget(10, QtWidgets.QFormLayout.FieldRole, self.Authority)

@@ -150,8 +150,9 @@ class UI(QtWidgets.QMainWindow):
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockData))
 
 
-
+"""
 UI_window = QtWidgets.QApplication(sys.argv)
 window = UI()
 window.show()
 UI_window.exec_()
+"""

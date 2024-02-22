@@ -220,7 +220,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="Clock" native="true"/>
+            <widget class="QLCDNumber" name="Clock"/>
            </item>
           </layout>
          </item>

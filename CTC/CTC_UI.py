@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
 from Schedule import *
+from Clock import *
 #from UI_temp import MainWindow
 
 
@@ -33,6 +34,12 @@ class UI(QtWidgets.QMainWindow):
 
         #Manual Dispatch Formatting
         self.ArrivalTimeEdit.setDisplayFormat("hh:mm")
+        self.DepartureTimeEdit.setDisplayFormat("hh:mm")
+
+        #Add the clock
+        #self.Clock = QtCore.QTimer(self)
+        #self.Clock.timeout.connect(self.showTime(time))
+        self.Clock.display(ourClock.time)
 
         #Initializing Schedule
         self.trainSchedule = Schedule()
@@ -83,7 +90,6 @@ class UI(QtWidgets.QMainWindow):
 
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
         self.ScheduleTable.setModel(TableModel(self.trainSchedule.Scheduledata))
-
 
 
 

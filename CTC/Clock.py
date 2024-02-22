@@ -13,21 +13,22 @@ def calculo():
     time = time.addSecs(60)
 
     ourClock.time = time.toString("hh:mm")
-    window.displayClock(ourClock.time)
+    CTCwindow.displayClock(ourClock.time)
     #print(ourClock.time)
 
 #app = QtCore.QCoreApplication(sys.argv)
 UI_window = QtWidgets.QApplication(sys.argv)
-    #Test#
-global window
-window = UI()
-window.show()
+
+#CTC UI connection
+global CTCwindow
+CTCwindow = UI()
+CTCwindow.show()
 
 global ourClock
 ourClock = Clock()
 
 timer0 = QtCore.QTimer()
-time = QtCore.QTime(11, 0, 0)
+time = QtCore.QTime(0, 0, 0)
 timer0.setInterval(1000)
 timer0.timeout.connect(calculo)
 timer0.start()

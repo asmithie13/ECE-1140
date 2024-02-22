@@ -15,7 +15,7 @@ from PyQt5.QtCore import Qt
 from Track_Resources.Block import Block
 from PyQt5 import QtCore as qtc
 from PyQt5.QtCore import QObject, pyqtSignal
-from PyQt5 import QtGui as qtg
+from PyQt5 import QtGui as qtg 
 
 #My main window
 class MyMainWindow(QMainWindow):
@@ -44,13 +44,13 @@ class MyMainWindow(QMainWindow):
 
         # Set default state for toggle button (default color should be red and "OFF") on all 3 buttons
         self.offButton_1.setText("OFF")
-        self.offButton_1.setStyleSheet("background-color: red;")
+        self.offButton_1.setStyleSheet("background-color: rgb(195, 16, 40);")
 
         self.offButton_2.setText("OFF")
-        self.offButton_2.setStyleSheet("background-color: red;")
+        self.offButton_2.setStyleSheet("background-color: rgb(195, 16, 40);")
 
         self.offButton_3.setText("OFF")
-        self.offButton_3.setStyleSheet("background-color: red;")
+        self.offButton_3.setStyleSheet("background-color: rgb(195, 16, 40);")
 
         # Instantiate the Data class
         self.data = Data()
@@ -75,7 +75,7 @@ class MyMainWindow(QMainWindow):
             self.offButton_1.setStyleSheet("background-color: green;")
         else:
             self.offButton_1.setText("OFF")
-            self.offButton_1.setStyleSheet("background-color: red;")
+            self.offButton_1.setStyleSheet("background-color: rgb(195, 16, 40);")
             
     def toggle_button_state_tb(self, bool1):
         # Toggle button state and color button for block broken rail but used from tb to main
@@ -84,7 +84,7 @@ class MyMainWindow(QMainWindow):
             self.offButton_1.setStyleSheet("background-color: green;")
         elif bool1.lower() in ["no", "false", "off", "0"]:
             self.offButton_1.setText("OFF")
-            self.offButton_1.setStyleSheet("background-color: red;")
+            self.offButton_1.setStyleSheet("background-color: rgb(195, 16, 40);")
 
     def toggle_button_state_2(self):
         # Toggle button state and color button for track circuit failure
@@ -93,7 +93,7 @@ class MyMainWindow(QMainWindow):
             self.offButton_2.setStyleSheet("background-color: green;")
         else:
             self.offButton_2.setText("OFF")
-            self.offButton_2.setStyleSheet("background-color: red;")
+            self.offButton_2.setStyleSheet("background-color: rgb(195, 16, 40);")
 
     def toggle_button_state_2_tb(self, bool1):
         # Toggle button state and color button for block track circuit failure but used from tb to main
@@ -102,7 +102,7 @@ class MyMainWindow(QMainWindow):
             self.offButton_2.setStyleSheet("background-color: green;")
         elif bool1.lower() in ["no", "false", "off", "0"]:
             self.offButton_2.setText("OFF")
-            self.offButton_2.setStyleSheet("background-color: red;")
+            self.offButton_2.setStyleSheet("background-color: rgb(195, 16, 40);")
 
     def toggle_button_state_3(self):
         # toggle button state and color button for power failure
@@ -111,7 +111,7 @@ class MyMainWindow(QMainWindow):
             self.offButton_3.setStyleSheet("background-color: green;")
         else:
             self.offButton_3.setText("OFF")
-            self.offButton_3.setStyleSheet("background-color: red;")
+            self.offButton_3.setStyleSheet("background-color: rgb(195, 16, 40);")
 
     def toggle_button_state_3_tb(self, bool1):
         # Toggle button state and color button for power_failure but used from tb to main
@@ -120,7 +120,7 @@ class MyMainWindow(QMainWindow):
             self.offButton_3.setStyleSheet("background-color: green;")
         elif bool1.lower() in ["no", "false", "off", "0"]:
             self.offButton_3.setText("OFF")
-            self.offButton_3.setStyleSheet("background-color: red;")
+            self.offButton_3.setStyleSheet("background-color: rgb(195, 16, 40);")
 
     def toggle_light_state_tb(self, bool1):
             # Toggle the state and color of the light button
@@ -129,7 +129,7 @@ class MyMainWindow(QMainWindow):
                 self.light_out.setStyleSheet("background-color: green;")
             elif bool1.lower() == "red":
                 self.light_out.setText("RED")
-                self.light_out.setStyleSheet("background-color: red;")
+                self.light_out.setStyleSheet("background-color: rgb(195, 16, 40);")
 
     def toggle_cross_state_tb(self, bool1):
         # Toggle the state of the railway crossing

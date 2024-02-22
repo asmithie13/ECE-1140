@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>932</width>
-    <height>681</height>
+    <width>921</width>
+    <height>710</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -50,8 +50,8 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>450</y>
-      <width>501</width>
+      <y>480</y>
+      <width>521</width>
       <height>171</height>
      </rect>
     </property>
@@ -147,8 +147,8 @@
      <rect>
       <x>20</x>
       <y>70</y>
-      <width>501</width>
-      <height>281</height>
+      <width>521</width>
+      <height>291</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -170,7 +170,7 @@
       <x>580</x>
       <y>70</y>
       <width>311</width>
-      <height>391</height>
+      <height>411</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -449,7 +449,7 @@
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>470</y>
+      <y>500</y>
       <width>311</width>
       <height>151</height>
      </rect>
@@ -575,7 +575,7 @@
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>501</width>
+      <width>521</width>
       <height>51</height>
      </rect>
     </property>
@@ -691,8 +691,8 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>360</y>
-      <width>501</width>
+      <y>380</y>
+      <width>521</width>
       <height>81</height>
      </rect>
     </property>
@@ -787,7 +787,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>932</width>
+     <width>921</width>
      <height>22</height>
     </rect>
    </property>

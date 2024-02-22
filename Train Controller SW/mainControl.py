@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from math import ceil
 
 # Form implementation generated from reading ui file 'main.ui'
 #
@@ -400,13 +401,13 @@ class Ui_MainWindow(object):
         ## MANUAL MODE BUTTON
         self.buttonMan = QtWidgets.QPushButton(self.Mode_Box)
         self.buttonMan.setCheckable(True)
-        self.buttonMan.setChecked(False)
+        self.buttonMan.setChecked(True)
         self.buttonMan.setObjectName("buttonMan")
         self.horizontalLayout_2.addWidget(self.buttonMan)
         ## AUTOMATIC MODE BUTTON
         self.buttonAuto = QtWidgets.QPushButton(self.Mode_Box)
         self.buttonAuto.setCheckable(True)
-        self.buttonAuto.setChecked(True)
+        self.buttonAuto.setChecked(False)
         self.buttonAuto.setObjectName("buttonAuto")
         self.horizontalLayout_2.addWidget(self.buttonAuto)
         self.gridLayout_2.addWidget(self.Mode_Box, 0, 0, 1, 1)
@@ -470,11 +471,13 @@ class Ui_MainWindow(object):
         self.lcdKi.setSmallDecimalPoint(True)
         self.lcdKi.setDigitCount(4)
         self.lcdKi.setObjectName("lcdKi")
+        self.lcdKi.display(70)
         self.gridLayout_3.addWidget(self.lcdKi, 0, 0, 1, 1)
         self.lcdKp = QtWidgets.QLCDNumber(self.groupBox_3)
         self.lcdKp.setSmallDecimalPoint(True)
         self.lcdKp.setDigitCount(4)
         self.lcdKp.setObjectName("lcdKp")
+        self.lcdKp.display(30)
         self.gridLayout_3.addWidget(self.lcdKp, 0, 1, 1, 1)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
@@ -530,12 +533,18 @@ class Ui_MainWindow(object):
 
 
     def calBrakeOutput(self):
-
         self.lcdBrk.display(self.vertSliderBrk.value())
-        #value = (6 * 81000) * (self.vertSliderBrk.value() / 100)
-        #self.brakePower = value
-        # print(f"brake value changed to: {value}")
-        if(self.vertSliderBrk.value() > 0):
+
+        if(self.lcdBrk.value() != 0):
+            testvalue = self.lcdCurSpd.value() - 2.68433022233
+
+            if (testvalue <= 0):
+                self.lcdCurSpd.display(0)
+            else:
+                self.lcdCurSpd.display(int(testvalue))
+            #value = (6 * 81000) * (self.vertSliderBrk.value() / 100)
+            #self.brakePower = value
+            # print(f"brake value changed to: {value}")
             self.vertSliderPow.setValue(0);
         #if self.lastSliderMoved != 'brk':
          #   self.lcdPow_2.display(0)
@@ -569,7 +578,7 @@ class Ui_MainWindow(object):
 
     def CalcPower(self):
         # at this point in development, since we do not have time integration, dt will be static
-        self.dt = 1;
+        self.dt = 1
         self.power = (self.inputKp.value() * self.inputKp.value() / self.dt) * (self.vertSliderPow.value()/100)
         self.lcdPwrOut.display(self.power)
 
@@ -591,10 +600,6 @@ class Ui_MainWindow(object):
         # target temp reached
         else:
             self.tempTimer.stop()
-
-
-
-
 
         # if self.buttonMan.setChecked() == False:
         #     self.v_error = self.v_cmd - self.v_current
@@ -618,6 +623,8 @@ class Ui_MainWindow(object):
             self.speedTimer.start()
 
     def speedControl(self):
+
+
         # over speed limit
 
         #if (self.lcdCmdSpd.value() > self.lcdSpdLim.value()) & (self.lcdCurSpd.value() < self.lcdCmdSpd.value()):
@@ -628,9 +635,18 @@ class Ui_MainWindow(object):
         #elif (self.lcdCmdSpd.value() > self.lcdCurSpd.value()) & (self.lcdCmdSpd.value() < self.lcdSpdLim.value()):
             #self.lcdCurSpd.display(self.lcdCurSpd.value() - 1)
 
-        if(self.lcdCurSpd.value() > self.lcdCmdSpd.value() or self.lcdCurSpd.value() > self.lcdSpdLim.value()):
+        if(self.lcdCurSpd.value() == 0 and self.lcdAuth.value() == 0):
+            self.speedTimer.stop()
+        elif(self.lcdCurSpd.value() > self.lcdCmdSpd.value() or self.lcdCurSpd.value() > self.lcdSpdLim.value() and self.vertSliderBrk == 0):
             self.vertSliderPow.setValue(0)
+            self.vertSliderBrk.setValue(1)
+            self.calBrakeOutput()
             self.vertSliderPow.setDisabled(True)
+        elif(self.lcdCurSpd.value() < self.lcdCmdSpd.value() and self.lcdCurSpd.value() < self.lcdSpdLim.value()):
+            self.vertSliderBrk.setValue(0)
+            self.vertSliderPow.setValue(50)
+            self.lcdCurSpd.display(self.lcdCurSpd.value() + 1)
+
         else:
             self.speedTimer.stop()
             self.vertSliderPow.setDisabled(False)
@@ -638,11 +654,10 @@ class Ui_MainWindow(object):
     def doorControl(self,enable):
         self.buttonDoorL.setEnabled(enable)
         self.buttonDoorR.setEnabled(enable)
-
-
     ## we need to call this when auth is entered from TB and we have a speed
     def calcAuth(self):
         # update auth every second
+        self.calSpeed()
         if not self.authTimer.isActive():
             self.authTimer.start()
 
@@ -670,7 +685,7 @@ class Ui_MainWindow(object):
       self.IntLightSld.setDisabled(True)
       self.lineEditAnn.setDisabled(True)
       self.inputKi.setDisabled(True)
-      self.inputKd.setDisabled(True)
+      self.inputKp.setDisabled(True)
 
 
     def set_man(self):

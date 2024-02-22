@@ -70,8 +70,11 @@ class Ui_TestBench(object):
         self.ui.lcdSpdLim.display(value)
 
     def set_current_speed(self):
-        value = int(self.CurSpeed.value())
-        self.ui.lcdCurSpd.display(value)
+        # in future iterations, move this to the UI function
+        if (self.ui.lcdAuth.value() == 0):
+            self.ui.lcdCurSpd.display(0)
+        else:
+            self.ui.lcdCurSpd.display(self.CurSpeed.value())
 
     def set_authority(self):
         value = int(self.Authority.value())
@@ -241,11 +244,12 @@ class Ui_TestBench(object):
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.Auto = QtWidgets.QPushButton(self.centralwidget, clicked = lambda : self.set_automatic_manual())
         self.Auto.setCheckable(True)
-        self.Auto.setChecked(True)
+        self.Auto.setChecked(False)
         self.Auto.setObjectName("Auto")
         self.horizontalLayout_5.addWidget(self.Auto)
         self.Manual = QtWidgets.QPushButton(self.centralwidget, clicked = lambda : self.set_automatic_manual())
         self.Manual.setCheckable(True)
+        self.Manual.setChecked(True)
         self.Manual.setObjectName("Manual")
         self.horizontalLayout_5.addWidget(self.Manual)
         self.formLayout.setLayout(21, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_5)
@@ -328,7 +332,7 @@ class Ui_TestBench(object):
         self.Manual.setText(_translate("TestBench", "Manual"))
 
         self.Authority.valueChanged.connect(lambda : self.Trigger_Authoirty_Countdown())
-        self.CurSpeed.valueChanged.connect(lambda : self.ui.speedControl())
+        self.CurSpeed.valueChanged.connect(lambda : self.ui.calSpeed())
 
     def Trigger_Authoirty_Countdown(self):
         self.ui.calcAuth()

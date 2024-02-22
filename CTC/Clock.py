@@ -25,4 +25,5 @@ timer0.setInterval(1000)
 timer0.timeout.connect(calculo)
 timer0.start()
 
-sys.exit(app.exec_())
+app.exec_()
+#sys.exit(app.exec_())

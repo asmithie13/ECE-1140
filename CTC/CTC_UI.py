@@ -1,14 +1,17 @@
 #File to run the UI for the CTC Module
 #Abby Magistro
 
+#pyqt imports
 import sys
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
+#My class import
 from Schedule import *
 from OccupiedBlocks import *
+from CTC_Maintenance import *
 #from UI_temp import MainWindow
 
 
@@ -32,10 +35,12 @@ class UI(QtWidgets.QMainWindow):
         self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")
         self.UploadButton.setStyleSheet("background-color : rgb(38, 207, 4)")
         self.UpdateBlocksButton.setStyleSheet("background-color : rgb(38, 207, 4)")
+        self.CloseBlockButton.setStyleSheet("background-color: rgb(195, 16, 40)")
 
         #Changing Background colors to section off UI
         self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255);")
         self.OccupiedBlocksBox.setStyleSheet("background-color : rgb(233, 247, 255);")
+        self.MaintenceBox.setStyleSheet("background-color : rgb(233, 247, 255);")
 
         #Manual Dispatch Formatting
         self.ArrivalTimeEdit.setDisplayFormat("hh:mm")
@@ -53,23 +58,30 @@ class UI(QtWidgets.QMainWindow):
         #Initializing Occupied Blocks Table
         self.occupiedBlocks = OccupiedBlocks()
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockData))
+
+        #Initializing Maintance Table
+        self.Maintence = CTC_Maintenance()
+        self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))    
         
-        
 
         
+    #defining manual mode add train button functionality
+    def addTrain_button(self):
+        #Indicating manual mode is selected if it's not selected beforehand
+        self.ManualModeButton.setEnabled(False)
+        self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
 
+        TrainID = self.TrainNameField.text()
+        Departure = self.DepartureSationSelect.currentText()
+        DepartureTime = self.DepartureTimeEdit.time()
+        DepartureTime = DepartureTime.toString("hh:mm")
+        Destination = self.DestinationSelect.currentText()
+        ArrivalTime = self.ArrivalTimeEdit.time()
+        ArrivalTime = ArrivalTime.toString("hh:mm")
 
-    #Define functionality for Upload File Button
-    def open_files(self):
-        # Open a file dialog to select a Excel File
-        file_dialog = QFileDialog()
-        file_path, _ = file_dialog.getOpenFileName(self, "Select Schedule File", "", "CSV FIle (*.csv);;All Files (*)")
-
-        #Parse File
-        self.trainSchedule.parseScheduleFile(file_path)
-        #Update Table
+        self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
-    
+
 
     #Define mutually exclisive auto/manual mode when manual mode is selected
     def selectManualMode_button(self):
@@ -106,26 +118,25 @@ class UI(QtWidgets.QMainWindow):
         self.DepartureTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ArrivalTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
 
-            
-    
-    #defining manual mode add train button functionality
-    def addTrain_button(self):
-        #Indicating manual mode is selected if it's not selected beforehand
-        self.ManualModeButton.setEnabled(False)
-        self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
 
-        TrainID = self.TrainNameField.text()
-        Departure = self.DepartureSationSelect.currentText()
-        DepartureTime = self.DepartureTimeEdit.time()
-        DepartureTime = DepartureTime.toString("hh:mm")
-        Destination = self.DestinationSelect.currentText()
-        ArrivalTime = self.ArrivalTimeEdit.time()
-        ArrivalTime = ArrivalTime.toString("hh:mm")
+    #Define functionality for Upload File Button
+    def open_files(self):
+        # Open a file dialog to select a Excel File
+        file_dialog = QFileDialog()
+        file_path, _ = file_dialog.getOpenFileName(self, "Select Schedule File", "", "CSV FIle (*.csv);;All Files (*)")
 
-        self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
+        #Parse File
+        self.trainSchedule.parseScheduleFile(file_path)
+        #Update Table
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
+        #Disable Manual Mode and upload button
+        self.selectAutoMode_button()
+        self.UploadButton.setEnabled(False)
+        self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
+
     
+
     """TEST BENCH FUNCTIONS"""
     def updateBlocks_button(self):
         BlockText = self.OccupiedBlocksField.text()
@@ -140,7 +151,7 @@ class UI(QtWidgets.QMainWindow):
 
 
 
-test = QtWidgets.QApplication(sys.argv)
+UI_window = QtWidgets.QApplication(sys.argv)
 window = UI()
 window.show()
-test.exec_()
+UI_window.exec_()

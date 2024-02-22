@@ -224,6 +224,9 @@
                </property>
               </widget>
              </item>
+             <item>
+              <widget class="QLCDNumber" name="CTC_clock"/>
+             </item>
             </layout>
            </item>
            <item>

@@ -12,24 +12,26 @@ def calculo():
     global time
     time = time.addSecs(60)
 
-    ourClock.time = time.toString("dd hh:mm:ss")
-    print(ourClock.time)
+    ourClock.time = time.toString("hh:mm")
+    window.displayClock(ourClock.time)
+    #print(ourClock.time)
 
 #app = QtCore.QCoreApplication(sys.argv)
 UI_window = QtWidgets.QApplication(sys.argv)
+    #Test#
+global window
+window = UI()
+window.show()
 
 global ourClock
 ourClock = Clock()
 
 timer0 = QtCore.QTimer()
-time = QtCore.QTime(0, 0, 0)
-timer0.setInterval(1000)
+time = QtCore.QTime(11, 0, 0)
+timer0.setInterval(100)
 timer0.timeout.connect(calculo)
 timer0.start()
 
-#Test#
 
-window = UI()
-window.show()
 
 sys.exit(UI_window.exec_())

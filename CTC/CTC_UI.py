@@ -135,7 +135,8 @@ class UI(QtWidgets.QMainWindow):
         self.UploadButton.setEnabled(False)
         self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
 
-    
+    def displayClock(self, time):
+        self.CTC_clock.display(time)
 
     """TEST BENCH FUNCTIONS"""
     def updateBlocks_button(self):

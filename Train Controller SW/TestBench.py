@@ -23,26 +23,19 @@ class Ui_TestBench(object):
         self.ui.buttonHDoff.toggle()
     def set_power_failure(self):
         if(not(self.PowerFailure.isChecked())):
-            self.ui.PwrFail.setStyleSheet("color: rgb(225, 225, 225);\n"
-"background-color: rgb(255, 255, 255);")
-
+            self.ui.Power_Failure_Disable()
         else:
-            self.ui.PwrFail.setStyleSheet("color: red;\n"
-"background-color: rgb(255, 255, 255);")
+            self.ui.Power_Failure_Enable()
     def set_brake_failure(self):
         if(not(self.BrakeFailure.isChecked())):
-            self.ui.BrkFail.setStyleSheet("color: rgb(225, 225, 225);\n"
-"background-color: rgb(255, 255, 255);")
+            self.ui.Brake_Failure_Disable()
         else:
-            self.ui.BrkFail.setStyleSheet("color: red;\n"
-"background-color: rgb(255, 255, 255);")
+            self.ui.Brake_Failure_Enable()
     def set_signal_failure(self):
         if(not(self.SignalFailure.isChecked())):
-            self.ui.SigFail.setStyleSheet("color: rgb(225, 225, 225);\n"
-"background-color: rgb(255, 255, 255);")
+            self.ui.Signal_Failure_Disable()
         else:
-            self.ui.SigFail.setStyleSheet("color: red;\n"
-"background-color: rgb(255, 255, 255);")
+            self.ui.Signal_Failure_Enable()
 
     def set_interior_lights(self):
         if self.CabinLights.value() == 2:

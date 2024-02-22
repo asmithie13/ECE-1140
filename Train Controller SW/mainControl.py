@@ -521,6 +521,7 @@ class Ui_MainWindow(object):
         self.inputKp.valueChanged.connect(lambda : self.onKpValueChanged())
         self.inputKi.valueChanged.connect(lambda : self.onKiValueChanged())
         self.temp.valueChanged.connect(self.tempControl)
+        self.Ebrake.clicked.connect(lambda : self.ebrake_enable())
 
         #if the button is checked, it will call HARDWARE FUCNTION ONLY
 
@@ -594,6 +595,7 @@ class Ui_MainWindow(object):
 
 
 
+
         # if self.buttonMan.setChecked() == False:
         #     self.v_error = self.v_cmd - self.v_current
         #     self.integral_error += self.v_error * self.dt
@@ -628,8 +630,10 @@ class Ui_MainWindow(object):
 
         if(self.lcdCurSpd.value() > self.lcdCmdSpd.value() or self.lcdCurSpd.value() > self.lcdSpdLim.value()):
             self.vertSliderPow.setValue(0)
+            self.vertSliderPow.setDisabled(True)
         else:
             self.speedTimer.stop()
+            self.vertSliderPow.setDisabled(False)
 
     def doorControl(self,enable):
         self.buttonDoorL.setEnabled(enable)
@@ -665,6 +669,9 @@ class Ui_MainWindow(object):
       self.buttonHDon.setDisabled(True)
       self.IntLightSld.setDisabled(True)
       self.lineEditAnn.setDisabled(True)
+      self.inputKi.setDisabled(True)
+      self.inputKd.setDisabled(True)
+
 
     def set_man(self):
         self.buttonAuto.toggle()
@@ -674,13 +681,77 @@ class Ui_MainWindow(object):
         self.buttonHDon.setDisabled(False)
         self.buttonHDoff.setDisabled(False)
         self.IntLightSld.setDisabled(False)
-        self.lineEditAnn.setDisabled(True)
+        self.lineEditAnn.setDisabled(False)
+        self.inputKi.setDisabled(False)
+        self.inputKp.setDisabled(False)
+
+    def ebrake_enable(self):
+        if self.Ebrake.isChecked() == True:
+            enable = True
+        else :
+            enable = False
+
+        self.buttonMan.setDisabled(enable)
+        self.buttonMan.setDisabled(enable)
+        self.buttonDoorL.setDisabled(enable)
+        self.buttonDoorR.setDisabled(enable)
+        self.temp.setDisabled(enable)
+        self.buttonHDoff.setDisabled(enable)
+        self.buttonHDon.setDisabled(enable)
+        self.IntLightSld.setDisabled(enable)
+        self.lineEditAnn.setDisabled(enable)
+        self.vertSliderPow.setValue(0)
+        self.vertSliderBrk.setValue(0)
+        self.vertSliderBrk.setDisabled(enable)
+        self.vertSliderPow.setDisabled(enable)
+        self.inputKi.setDisabled(enable)
+        self.inputKp.setDisabled(enable)
+
+
+    def Signal_Failure_Enable(self):
+
+        self.SigFail.setStyleSheet("color: red;\n"
+                                      "background-color: rgb(255, 255, 255);")
+        self.vertSliderPow.setValue(0)
+        self.vertSliderBrk.setValue(1)
+        self.vertSliderPow.setDisabled(True)
+        self.vertSliderBrk.setDisabled(True)
 
 
 
+    def Signal_Failure_Disable(self):
+        self.SigFail.setStyleSheet("color: rgb(225, 225, 225);\n"
+                                   "background-color: rgb(255, 255, 255);")
+        self.vertSliderPow.setDisabled(False)
+        self.vertSliderBrk.setDisabled(False)
 
+    def Power_Failure_Enable(self):
+        self.PwrFail.setStyleSheet("color: red;\n"
+                                      "background-color: rgb(255, 255, 255);")
+        self.vertSliderPow.setValue(0)
+        self.vertSliderBrk.setValue(1)
+        self.vertSliderPow.setDisabled(True)
+        self.vertSliderBrk.setDisabled(True)
 
-    #################################################################################
+    def Power_Failure_Disable(self):
+        self.PwrFail.setStyleSheet("color: rgb(225, 225, 225);\n"
+                                   "background-color: rgb(255, 255, 255);")
+        self.vertSliderPow.setDisabled(False)
+        self.vertSliderBrk.setDisabled(False)
+
+    def Brake_Failure_Enable(self):
+        self.BrkFail.setStyleSheet("color: red;\n"
+                                   "background-color: rgb(255, 255, 255);")
+
+        self.Ebrake.setChecked(True)
+        self.ebrake_enable()
+
+    def Brake_Failure_Disable(self):
+        self.BrkFail.setStyleSheet("color: rgb(225, 225, 225);\n"
+                                   "background-color: rgb(255, 255, 255);")
+        self.Ebrake.setChecked(False)
+        self.ebrake_enable()
+        #################################################################################
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

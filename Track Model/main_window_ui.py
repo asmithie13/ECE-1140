@@ -26,8 +26,7 @@ class Ui_MainWindow(object):
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(580, 10, 311, 51))
         self.pushButton.setAutoFillBackground(False)
-        self.pushButton.setStyleSheet("background-color: rgb(32, 129, 255)\n"
-"")
+        self.pushButton.setStyleSheet("background-color : rgb(38, 207, 4)")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("974868-200.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton.setIcon(icon)

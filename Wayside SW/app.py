@@ -38,7 +38,7 @@ class MyApp(QMainWindow):
         #Index [4] of each Block => True if Occupied
 
         #Switch Directions
-        self.B5_Switch_Positions = ["B6","B11"]
+        self.B5_Switch_Positions = ["B6","C11"]
 
         #Defining important blocks
         A1 = Block(*NORMAL_CONST,"A1")
@@ -294,7 +294,7 @@ class TestBench(QMainWindow):
         self.tbBlockMenu.currentIndexChanged.connect(self.updateBlockStates)
 
         #Menu
-        self.tbBlockMenu.addItems(['B3','B5','B6','B11'])
+        self.tbBlockMenu.addItems(['A3','A5','B6','C11'])
 
         #Backend vars
         self.OccupiedBlocks = []    #Is sent to the UI
@@ -373,7 +373,7 @@ class TestBench(QMainWindow):
             else:
                 self.label_19.setText("")
                 self.label_22.setText("")
-                self.label_24.setText("B11")
+                self.label_24.setText("C11")
 
     def receiveMode(self,mode):
         if mode == True:

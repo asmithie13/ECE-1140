@@ -23,6 +23,7 @@ def PLCvalid(fileName): #Reads based-on heading - Include heading in PLC files
 #Function that reads all blocks from a *.csv file and assigns block attributes:
 def readTrackFile(fileName):
     totalBlocks = []
+    fileName = "Wayside HW/" + fileName
     with open(fileName, "r") as fileObject:
         readObj = csv.reader(fileObject, delimiter=",")
         for i, line in enumerate(readObj):
@@ -50,7 +51,7 @@ class TrackController_UI(QMainWindow):
     def __init__(self):
         #Load-in UI from the TrackControllerHW_UI file:
         super(TrackController_UI, self).__init__()
-        uic.loadUi("TrackControllerHW_UI.ui", self)
+        uic.loadUi("Wayside HW/TrackControllerHW_UI.ui", self)
 
         #Initialize LEDs as OFF
         ser.write(b'B')
@@ -217,7 +218,7 @@ class TrackController_UI(QMainWindow):
     def waysideSelect(self):
         #self.buttonBrowse.setEnabled(True) #Automatic not yet implemented, so function is commented-out
         if(self.comboBoxWayside.currentText() == "Blue"): #If the "Blue" wayside is selected (Temporary wayside for the blue line):
-            pixmap = QPixmap("blueline.png")
+            pixmap = QPixmap("Wayside HW/blueline.png")
             self.labelPhoto.setPixmap(pixmap)
             self.comboBoxBlock.setEnabled(True)
             for blockNum in self.allBlueBlocks:
@@ -313,7 +314,7 @@ class TrackController_TestBench(QMainWindow):
 
     def __init__(self):
         super(TrackController_TestBench, self).__init__()
-        uic.loadUi("TrackControllerHW_TestBench.ui", self)
+        uic.loadUi("Wayside HW/TrackControllerHW_TestBench.ui", self)
 
         #List to hold occupied and failed blocks:
         self.occupiedBlocks = []

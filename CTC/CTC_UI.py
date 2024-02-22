@@ -12,6 +12,7 @@ from PyQt5 import uic
 from Schedule import *
 from OccupiedBlocks import *
 from CTC_Maintenance import *
+from Throughput import *
 #from UI_temp import MainWindow
 
 
@@ -53,7 +54,7 @@ class UI(QtWidgets.QMainWindow):
         self.DepartureSationSelect.addItems(stations)
         self.DestinationSelect.addItems(stations)
             #Test Bench
-        lines = ['blue', 'green', 'red']
+        lines = ['green', 'red']
         self.LineSelect.addItems(lines)
 
         #Initializing Schedule
@@ -69,7 +70,10 @@ class UI(QtWidgets.QMainWindow):
         self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))
 
         #Initializing Throughput    
-        
+        self.ThroughputGraph = Throughput()
+        pixmap = QPixmap('CTC/ThroughputGraph.jpeg')
+        self.ThroughputGraphLabel.setPixmap(pixmap)
+
 
         
     #defining manual mode add train button functionality

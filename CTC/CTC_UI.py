@@ -68,17 +68,9 @@ class UI(QtWidgets.QMainWindow):
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
     
 
-    #Define mutually exclisive auto/manual mode
+    #Define mutually exclisive auto/manual mode when manual mode is selected
     def selectManualMode_button(self):
-        #When Manual Mode button is pressed
-
-        #Disable AutoMode Button
-        self.AutoModeButton.setEnabled(False)
-        #And File Upload Button
-        self.UploadButton.setEnabled(False)
-        self.UploadButton.setStyleSheet("background-color : #ebfae8")
-
-        #Disable Manual Mode button (because it's one use)
+        #Disable Manual Mode button because there's no need to select it twice
         self.ManualModeButton.setEnabled(False)
         self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
 
@@ -102,11 +94,23 @@ class UI(QtWidgets.QMainWindow):
         self.AutoModeButton.setEnabled(False)
         self.AutoModeButton.setStyleSheet("background-color : blue; color: black;")
         self.ManualModeButton.setEnabled(False)
+        self.ManualModeButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
+
+        #Changing label text to gray
+        self.TrainNameLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.DepartureStationLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.DestinationLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.DepartureTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.ArrivalTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
 
             
     
     #defining manual mode add train button functionality
     def addTrain_button(self):
+        #Indicating manual mode is selected if it's not selected beforehand
+        self.ManualModeButton.setEnabled(False)
+        self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
+
         TrainID = self.TrainNameField.text()
         Departure = self.DepartureSationSelect.currentText()
         DepartureTime = self.DepartureTimeEdit.time()

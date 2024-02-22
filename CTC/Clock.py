@@ -28,7 +28,7 @@ ourClock = Clock()
 
 timer0 = QtCore.QTimer()
 time = QtCore.QTime(11, 0, 0)
-timer0.setInterval(100)
+timer0.setInterval(1000)
 timer0.timeout.connect(calculo)
 timer0.start()
 

@@ -59,14 +59,12 @@ class UI(QtWidgets.QMainWindow):
     def open_files(self):
         # Open a file dialog to select a Excel File
         file_dialog = QFileDialog()
-        file_path, _ = file_dialog.getOpenFileName(self, "Select Schedule File", "", "Excel Workbook (*.xlsx);;All Files (*)")
+        file_path, _ = file_dialog.getOpenFileName(self, "Select Schedule File", "", "CSV FIle (*.csv);;All Files (*)")
 
-        """
-        #TO DO LATER
-        if file_path:
-            # Implement your logic with the selected file path
-            print(f"Selected PLC File: {file_path}")
-        """
+        #Parse File
+        self.trainSchedule.parseScheduleFile(file_path)
+        #Update Table
+        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
     
 
     #Define mutually exclisive auto/manual mode

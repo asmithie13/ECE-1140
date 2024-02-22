@@ -64,10 +64,12 @@ class Ui_TestBench(object):
     def set_commanded_spped(self):
         value = int(self.CSpeed.value())
         self.ui.lcdCmdSpd.display(value)
+        self.ui.calSpeed()
 
     def set_speed_limit(self):
         value = int(self.SpeedLimit.value())
         self.ui.lcdSpdLim.display(value)
+        self.ui.calSpeed()
 
     def set_current_speed(self):
         # in future iterations, move this to the UI function

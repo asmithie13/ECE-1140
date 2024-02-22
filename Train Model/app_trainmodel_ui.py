@@ -95,6 +95,7 @@ class MyMainWindow(QMainWindow):
     def calculate_force(self):
         power=1000*(self.Power_value_lcd.value())
         commanded_speed=self.commanded_speed_def
+        #input commanded speed was in mph
         speed_fts=commanded_speed*(5280/3600) 
         #Using P=F*v so F= P/v
         force=power/speed_fts #in newtons
@@ -122,6 +123,9 @@ class MyMainWindow(QMainWindow):
     def set_announcements(self, ann_text):
         self.ann_out_label.setText(ann_text)
 
+    #def set_cabin_temp(self,text):
+    #    self.cabin_temp_value.setText(text)
+
     #def brake_fail_tb(self,bf_state):
     #    if bf_state:
     #        self.bf_enable.setStyleSheet('background-color: rgb(255, 170, 0);')
@@ -148,6 +152,7 @@ class trainmodel_testbench(QMainWindow):
     grade_input_signal=qtc.pyqtSignal(str)
     ebrake_input_signal=qtc.pyqtSignal(int)
     brake_fail_input_signal=qtc.pyqtSignal(int)
+    #cabin_temp_input_signal=qtc.pyqtSignal(int)
 
 
     def __init__(self):
@@ -188,8 +193,19 @@ class trainmodel_testbench(QMainWindow):
 
         #self.brake_fail_input_tb.stateChanged.connect(self.brake_fail)
 
+        #self.cabin_temp_input_tb.returnPressed.connect(self.get_cabin_temp)
+       # self.cabin_temp_input_tb.returnPressed.connect(self.display_cabin_temp)
+
     #def brake_fail(self,state):
      #   self.brake_fail_input_signal.emit(state)
+        
+    #def get_cabin_temp(self):
+     #   cabin_temp=str(self.cabin_temp_input_tb.text())
+     #   self.cabin_temp_input_signal.emit(str(cabin_temp))
+
+    #def display_cabin_temp(self):
+       # cabin_temp= self.cabin_temp_input_tb.text()
+        #self.cabin_temp_output_tb.setText(cabin_temp)
 
 
     def emit_ebrake_state(self,state):
@@ -322,6 +338,8 @@ if __name__ == "__main__":
     window.ebrake.clicked.connect(window.estop_button_clicked)
     #brake_fail
    # window_tb.brake_fail_input_signal.connect(window.brake_fail_tb)
+    #cabin_temp 
+   # window_tb.cabin_temp_input_signal.connect(window.set_cabin_temp)
 
 
     window.show()

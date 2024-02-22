@@ -1226,14 +1226,23 @@ selection-color: rgb(253, 253, 253);</string>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="bf_enable">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
        <property name="text">
         <string>Enable</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoRepeat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="bf_disable">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(255, 170, 0);</string>
        </property>
@@ -1255,14 +1264,14 @@ selection-color: rgb(253, 253, 253);</string>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="sig_fail_enable">
        <property name="text">
         <string>Enable</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="sig_fail_disable">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(255, 170, 0);</string>
        </property>
@@ -1284,14 +1293,14 @@ selection-color: rgb(253, 253, 253);</string>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
-      <widget class="QPushButton" name="pushButton_5">
+      <widget class="QPushButton" name="en_fail_enable">
        <property name="text">
         <string>Enable</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_6">
+      <widget class="QPushButton" name="en_fail_disable">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(255, 170, 0);</string>
        </property>

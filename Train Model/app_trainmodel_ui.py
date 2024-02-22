@@ -122,6 +122,13 @@ class MyMainWindow(QMainWindow):
     def set_announcements(self, ann_text):
         self.ann_out_label.setText(ann_text)
 
+    #def brake_fail_tb(self,bf_state):
+    #    if bf_state:
+    #        self.bf_enable.setStyleSheet('background-color: rgb(255, 170, 0);')
+        
+       # else: 
+          #  self.bf_enable.setStyleSheet('background-color: ;')
+
 
         
 
@@ -140,6 +147,7 @@ class trainmodel_testbench(QMainWindow):
     ccount_input_signal=qtc.pyqtSignal(str)
     grade_input_signal=qtc.pyqtSignal(str)
     ebrake_input_signal=qtc.pyqtSignal(int)
+    brake_fail_input_signal=qtc.pyqtSignal(int)
 
 
     def __init__(self):
@@ -177,6 +185,11 @@ class trainmodel_testbench(QMainWindow):
         self.crew_count_input_tb.returnPressed.connect(self.display_ccount)
 
         self.estop_input_label.stateChanged.connect(self.emit_ebrake_state)
+
+        #self.brake_fail_input_tb.stateChanged.connect(self.brake_fail)
+
+    #def brake_fail(self,state):
+     #   self.brake_fail_input_signal.emit(state)
 
 
     def emit_ebrake_state(self,state):
@@ -307,6 +320,8 @@ if __name__ == "__main__":
     window_tb.ebrake_input_signal.connect(window.change_ebrake_color)
     #estop manual
     window.ebrake.clicked.connect(window.estop_button_clicked)
+    #brake_fail
+   # window_tb.brake_fail_input_signal.connect(window.brake_fail_tb)
 
 
     window.show()

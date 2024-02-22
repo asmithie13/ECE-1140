@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>849</width>
-    <height>650</height>
+    <width>858</width>
+    <height>655</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,15 +44,18 @@
      <widget class="QWidget" name="verticalLayoutWidget_2">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>841</width>
-        <height>601</height>
+        <x>10</x>
+        <y>10</y>
+        <width>831</width>
+        <height>591</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="WholeCTC_tabLayout">
        <item>
         <layout class="QHBoxLayout" name="CTC_TabCols" stretch="5,3">
+         <property name="spacing">
+          <number>8</number>
+         </property>
          <item>
           <layout class="QVBoxLayout" name="CTC_TabCol1" stretch="3,7">
            <item>
@@ -655,7 +658,7 @@
                <rect>
                 <x>20</x>
                 <y>20</y>
-                <width>251</width>
+                <width>261</width>
                 <height>231</height>
                </rect>
               </property>

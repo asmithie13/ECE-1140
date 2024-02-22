@@ -24,6 +24,7 @@ class UI(QtWidgets.QMainWindow):
         self.UploadButton.clicked.connect(self.open_files)
         self.ManualModeButton.clicked.connect(self.selectManualMode_button)
         self.AddTrainButton.clicked.connect(self.addTrain_button)
+        self.AutoModeButton.clicked.connect(self.selectAutoMode_button)
 
         #Changing Button Colors
         self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")
@@ -80,6 +81,29 @@ class UI(QtWidgets.QMainWindow):
         #Disable Manual Mode button (because it's one use)
         self.ManualModeButton.setEnabled(False)
         self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
+
+    #Define mutually exclusive auto/manual mode when automatic mode is selected.
+    #Same behavior will occur when a schedule is uploaded, even if the mode was not explicitly selected. 
+    def selectAutoMode_button(self):
+        #Disable The train name box
+        self.TrainNameField.clear()
+        self.TrainNameField.setEnabled(False)
+        #Disable the Departure Station and Destination Drop Downs
+        self.DepartureSationSelect.setEnabled(False)
+        self.DestinationSelect.setEnabled(False)
+        #Disable the time edits
+        self.DepartureTimeEdit.setEnabled(False)
+        self.ArrivalTimeEdit.setEnabled(False)
+        #Disable the add train button
+        self.AddTrainButton.setEnabled(False)
+
+
+        #Highlight Auto selected and disable manual select button
+        self.AutoModeButton.setEnabled(False)
+        self.AutoModeButton.setStyleSheet("background-color : blue; color: black;")
+        self.ManualModeButton.setEnabled(False)
+
+            
     
     #defining manual mode add train button functionality
     def addTrain_button(self):

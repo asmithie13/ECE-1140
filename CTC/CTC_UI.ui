@@ -185,7 +185,7 @@
                   <bool>true</bool>
                  </attribute>
                  <attribute name="verticalHeaderCascadingSectionResizes">
-                  <bool>false</bool>
+                  <bool>true</bool>
                  </attribute>
                 </widget>
                </item>
@@ -740,69 +740,111 @@
      <attribute name="title">
       <string>Testbench</string>
      </attribute>
-     <widget class="QWidget" name="verticalLayoutWidget_3">
+     <widget class="QWidget" name="horizontalLayoutWidget_3">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>411</width>
-        <height>181</height>
+        <x>20</x>
+        <y>20</y>
+        <width>671</width>
+        <height>201</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="TB_inputsLayout" stretch="2,1,2">
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="6,0,1">
        <item>
-        <layout class="QHBoxLayout" name="OccupiedBlocksTBLayout">
+        <layout class="QVBoxLayout" name="TB_inputsLayout" stretch="2,1,2">
          <item>
-          <widget class="QLabel" name="OccupiedBlocksLabel">
+          <layout class="QHBoxLayout" name="OccupiedBlocksTBLayout">
+           <item>
+            <widget class="QLabel" name="OccupiedBlocksLabel">
+             <property name="text">
+              <string>Occupied Blocks:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="OccupiedBlocksField"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="UpdateBlocksButton">
+             <property name="text">
+              <string>Update</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
            <property name="text">
-            <string>Occupied Blocks:</string>
+            <string>(Enter the blocks that are currently occupied, seperated by commas)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="OccupiedBlocksField"/>
-         </item>
-         <item>
-          <widget class="QPushButton" name="UpdateBlocksButton">
-           <property name="text">
-            <string>Update</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="TicketSaleLayout" stretch="1,2,2,0">
+           <item>
+            <widget class="QLabel" name="TicketSalesLabel">
+             <property name="text">
+              <string>Ticket Sales:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="LineSelect">
+             <item>
+              <property name="text">
+               <string>Select Line</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="TicketSalesField"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="UpdateTicketSalesButton">
+             <property name="text">
+              <string>Update</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>(Enter the blocks that are currently occupied, seperated by commas)</string>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="TicketSaleLayout" stretch="1,2,2,0">
+        <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QLabel" name="TicketSalesLabel">
+          <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Ticket Sales:</string>
+            <string>Outputs</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="LineSelect">
-           <item>
-            <property name="text">
-             <string>Select Line</string>
-            </property>
-           </item>
+          <widget class="QLabel" name="AuthorityLabel">
+           <property name="text">
+            <string>Authority</string>
+           </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="TicketSalesField"/>
-         </item>
-         <item>
-          <widget class="QPushButton" name="UpdateTicketSalesButton">
+          <widget class="QLabel" name="SpeedLabel">
            <property name="text">
-            <string>Update</string>
+            <string>Suggested Speed</string>
            </property>
           </widget>
          </item>

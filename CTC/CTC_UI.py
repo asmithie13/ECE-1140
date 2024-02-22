@@ -32,12 +32,14 @@ class UI(QtWidgets.QMainWindow):
         self.CloseBlockButton.clicked.connect(self.closeBlock_button)
             #TestBench Buttons
         self.UpdateBlocksButton.clicked.connect(self.updateBlocks_button)
+        self.UpdateTicketSalesButton.clicked.connect(self.updateTicketSales_button)
 
         #Changing Button Colors
         self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")
         self.UploadButton.setStyleSheet("background-color : rgb(38, 207, 4)")
         self.UpdateBlocksButton.setStyleSheet("background-color : rgb(38, 207, 4)")
         self.CloseBlockButton.setStyleSheet("background-color: rgb(195, 16, 40)")
+        self.UpdateTicketSalesButton.setStyleSheet("background-color : rgb(38, 207, 4)")
 
         #Changing Background colors to section off UI
         self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255);")
@@ -133,6 +135,11 @@ class UI(QtWidgets.QMainWindow):
     def displayClock(self, time):
         self.CTC_clock.display(time)
 
+        for i in self.trainSchedule.Scheduledata:
+            if time == i[2]:
+                self.AuthorityLabel.setText('Authority: 500 m')
+                self.SpeedLabel.setText('Suggested Speed: 50 km/hr') 
+
     #Define functionality for Upload File Button
     def open_files(self):
         # Open a file dialog to select a Excel File
@@ -170,7 +177,20 @@ class UI(QtWidgets.QMainWindow):
 
     #Defines funtionality of the update ticket sales button on the testbench
     def updateTicketSales_button(self):
-        Sales = self.TicketSalesField.text()
+        SalesText = self.TicketSalesField.text()
+        Sales = list(map(str.strip, SalesText.split(',')))
+        line = self.LineSelect.currentText()
+
+        
+        self.ThroughputGraph.heights = Sales
+        
+
+        self.ThroughputGraph.updateThroughputGraph()
+        pixmap = QPixmap('CTC/ThroughputGraph.jpeg')
+        self.ThroughputGraphLabel.setPixmap(pixmap)
+
+        
+
 
 
 """

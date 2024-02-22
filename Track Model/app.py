@@ -23,21 +23,22 @@ class MyMainWindow(QMainWindow):
         uic.loadUi("Track Model/Track_Model.ui", self)
 
         # Connect the button's clicked signal to upload_file method
-        self.pushButton.clicked.connect(self.upload_track_layout)  
-        
+        self.pushButton.clicked.connect(self.upload_track_layout) 
+        self.update_ticket_sales()
+         
+    def update_ticket_sales(self):
         # Generate a random number between 1 and 74
         random_number = random.randint(1, 74)
-
         # Set the text of the label to the random number
         self.ticket_out.setText(str(random_number))
 
         # Connect button to method
-        #If clicked, then connect to UI
+        # If clicked, then connect to UI
         self.offButton_1.clicked.connect(self.toggle_button_state)
         self.offButton_2.clicked.connect(self.toggle_button_state_2)
         self.offButton_3.clicked.connect(self.toggle_button_state_3)
 
-        #Set default state for toggle button (default color should be red and "OFF") on all 3 buttons
+        # Set default state for toggle button (default color should be red and "OFF") on all 3 buttons
         self.offButton_1.setText("OFF")
         self.offButton_1.setStyleSheet("background-color: red;")
 
@@ -47,30 +48,44 @@ class MyMainWindow(QMainWindow):
         self.offButton_3.setText("OFF")
         self.offButton_3.setStyleSheet("background-color: red;")
 
+    def update_main_dropdown(self, selected_text):
+        # Update the dropdown in your main UI with the selected_text
+        self.block_in_1.setCurrentText(selected_text)
+    
+
     def toggle_button_state(self):
-        #Toggle button state and color button broken rail
+        # Toggle button state and color button broken rail
         if self.offButton_1.text() == "OFF":
             self.offButton_1.setText("ON")
             self.offButton_1.setStyleSheet("background-color: green;")
         else:
             self.offButton_1.setText("OFF")
             self.offButton_1.setStyleSheet("background-color: red;")
-
+            
     def toggle_button_state_tb(self, bool1):
         # Toggle button state and color button broken rail
-        if bool1.lower() in ["yes", "true", "on"]:
+        if bool1.lower() in ["yes", "true", "on", "1"]:
             self.offButton_1.setText("ON")
             self.offButton_1.setStyleSheet("background-color: green;")
-        else:
+        elif bool1.lower() in ["no", "false", "off", "0"]:
             self.offButton_1.setText("OFF")
             self.offButton_1.setStyleSheet("background-color: red;")
 
     def toggle_button_state_2(self):
-        #Toggle button state and color button track circuit failure
+        # Toggle button state and color button track circuit failure
         if self.offButton_2.text() == "OFF":
             self.offButton_2.setText("ON")
             self.offButton_2.setStyleSheet("background-color: green;")
         else:
+            self.offButton_2.setText("OFF")
+            self.offButton_2.setStyleSheet("background-color: red;")
+
+    def toggle_button_state_2_tb(self, bool1):
+        # Toggle button state and color button broken rail
+        if bool1.lower() in ["yes", "true", "on", "1"]:
+            self.offButton_2.setText("ON")
+            self.offButton_2.setStyleSheet("background-color: green;")
+        elif bool1.lower() in ["no", "false", "off", "0"]:
             self.offButton_2.setText("OFF")
             self.offButton_2.setStyleSheet("background-color: red;")
 
@@ -82,62 +97,97 @@ class MyMainWindow(QMainWindow):
         else:
             self.offButton_3.setText("OFF")
             self.offButton_3.setStyleSheet("background-color: red;")
+
+    def toggle_button_state_3_tb(self, bool1):
+        # Toggle button state and color button broken rail
+        if bool1.lower() in ["yes", "true", "on", "1"]:
+            self.offButton_3.setText("ON")
+            self.offButton_3.setStyleSheet("background-color: green;")
+        elif bool1.lower() in ["no", "false", "off", "0"]:
+            self.offButton_3.setText("OFF")
+            self.offButton_3.setStyleSheet("background-color: red;")
     
     def upload_track_layout(self):
         file_dialog = QFileDialog()
         uploaded_track, _ = file_dialog.getOpenFileName(self, 'Upload Track Layout', '', 'Excel Files (*.xlsx);;CSV (*.csv)')
         if uploaded_track:
-            #Instantiate the Data class
+            # Instantiate the Data class
             self.data = Data()
             
-            #Read data from the uploaded file using the Data class
+            # Read data from the uploaded file using the Data class
             self.data.read_excel(uploaded_track)
 
         # Connect block selection dropdown to update_block_info function
         self.block_in_1.activated[str].connect(lambda text: self.update_block_info(text))
 
     def update_block_info(self, block_text):
-        #From dropdown of "B#" take out the letter B
+        # From dropdown of "B#" take out the letter B
         block_num = int(block_text.split()[-1][1:])  
 
-        #Get elevation from chosen block
+        # Get elevation from chosen block
         elevation = self.data.get_elevation_for_block(block_num)
         grade = self.data.get_grade_for_block(block_num)
         length1 = self.data.get_length_for_block(block_num)
         block_num = self.data.get_block_for_block(block_num)
         section = self.data.get_section_for_block(block_num)
 
-        #Update the labels with the block data
+        # Update the labels with the block data
         self.elevation_in.setText(str(elevation))
         self.grade_in.setText(str(grade))
         self.length_in.setText(str(length1))
         self.block_num_in.setText(str(block_num))
         self.section_in.setText(str(section))
 
-
 class TestBench(QMainWindow):
-    # Change the signal to emit a string
-    broken_rail_input_signal = pyqtSignal(str)  
+    # Change the signal to emit a string for button
+    broken_rail_input_signal = pyqtSignal(str)
+    track_input_signal = pyqtSignal(str)
+    power_input_signal = pyqtSignal(str)  
+
+    # Change the signal to emit a string for dropdown
+    dropdown_broken_signal = pyqtSignal(str)  
+    dropdown_track_signal = pyqtSignal(str) 
+
+    ticket_sales_signal = pyqtSignal(int)
+    
     def __init__(self):
         super().__init__()
         uic.loadUi("Track Model/testbench_trackmodel.ui", self)
         self.test_input()
+        self.test_input_2()
+        self.test_input_3()
 
         #Press enter should show output for test outputs
         self.com_speed_in_1.returnPressed.connect(self.test_input)
         self.authority_in.returnPressed.connect(self.test_input)
         self.broken_in.returnPressed.connect(self.test_input)
-        self.track_in.returnPressed.connect(self.test_input)
-        self.power_in.returnPressed.connect(self.test_input)
+        self.track_in.returnPressed.connect(self.test_input_2)
+        self.power_in.returnPressed.connect(self.test_input_3)
+        self.light_in.returnPressed.connect(self.test_input_3)
 
         #Enter text through QTCombo from dropdown and output that to testbench
         self.line_in.activated[str].connect(self.test_combo_line)
         self.broken_block.activated[str].connect(self.test_combo_broken)
-        self.track_block.activated[str].connect(self.test_combo_track)
-        self.power_block.activated[str].connect(self.test_combo_power)
+
+        # Connect the activated signal of the dropdown to emit the selected block text
+        self.broken_block.activated[str].connect(self.test_combo_broken_tb)
+
+    def simulate_ticket_sales(self):
+        # Generate random ticket sales
+        sales = random.randint(1, 74)
+        # Emit the ticket sales signal
+        self.ticket_sales_signal.emit(sales)
 
     #Function for inputs/outputs for textboxes
     def test_input(self):
+        # Get text from the test inputs for broken rail
+        broken = self.broken_in.text()
+        # Set the output text for broken rail
+        self.broken_out.setText(broken)
+
+        # Emit the signal with the input text for broken rail
+        self.broken_rail_input_signal.emit(broken)
+
         # Get text from the test inputs for commanded speed
         com_speed = self.com_speed_in_1.text()
         # Set the output text for commanded speed
@@ -148,23 +198,25 @@ class TestBench(QMainWindow):
         # Set the output text for authority
         self.authority_out.setText(authority)
 
-        # Get text from the test inputs for broken rail
-        broken = self.broken_in.text()
+    #Function for inputs/outputs for textboxes
+    def test_input_2(self):
+        # Get text from the test inputs for track circuit
+        broken = self.track_in.text()
         # Set the output text for broken rail
-        self.broken_out.setText(broken)
-
-        # Get text from the test inputs for track circuit failure
-        track = self.track_in.text()
-        # Set the output text for track circuit failure
-        self.track_out.setText(track)
-
-        # Get text from the test inputs for power failure
-        power = self.power_in.text()
-        # Set the output text for power failure
-        self.power_out.setText(power)
+        self.track_out.setText(broken)
 
         # Emit the signal with the input text for broken rail
-        self.broken_rail_input_signal.emit(broken)
+        self.track_input_signal.emit(broken)
+
+    #Function for inputs/outputs for textboxes
+    def test_input_3(self):
+        # Get text from the test inputs for track circuit
+        broken = self.power_in.text()
+        # Set the output text for broken rail
+        self.power_out.setText(broken)
+
+        # Emit the signal with the input text for broken rail
+        self.power_input_signal.emit(broken)
 
     #Function for inputs/outputs for dropdown menus
     def test_combo_line(self, text):
@@ -179,6 +231,13 @@ class TestBench(QMainWindow):
         # Set the text to the output text
         self.broken_block_out.setText(broken1)
 
+    def test_combo_broken_tb(self, text):
+        # Emit the signal with the selected text from the broken_block dropdown
+        self.dropdown_broken_signal.emit(text)
+
+        # Set the text to the output text
+        self.broken_block_out.setText(text)
+
     def test_combo_track(self, text):
         # Get text from the test inputs for track circuit failure block
         track1 = text
@@ -191,10 +250,9 @@ class TestBench(QMainWindow):
         # Set the text to the output text
         self.power_block_out.setText(power1)
 
-
 class Data:
     def __init__(self):
-        #Initializing variables
+        # Initializing variables
         self.section = None
         self.line = None
         self.elevation = None
@@ -214,10 +272,10 @@ class Data:
         self.cumm_elevation = None
 
     def read_excel(self, filename):
-        #read Excel files from DataFrame
+        # read Excel files from DataFrame
         self.df = pd.read_excel("Track_Resources/Blue_Line_Block_Info.xlsx")
 
-        #Extract data from DataFrame of the Excel and assign to variables
+        # Extract data from DataFrame of the Excel and assign to variables
         self.elevation_data = self.df.set_index('Block Number')['ELEVATION (M)'].to_dict()
         self.elevation = self.df.loc[0, 'ELEVATION (M)']
         self.grade = self.df.loc[0, 'Block Grade (%)']
@@ -229,7 +287,7 @@ class Data:
         self.section = self.df.loc[0, 'Section']
         
     def get_elevation_for_block(self, block_num):
-    # Check if DataFrame is not None
+        # Check if DataFrame is not None
         if self.df is not None:
             # Iterate through the DataFrame of the Ecel file
             for index, row in self.df.iterrows():
@@ -240,51 +298,55 @@ class Data:
         return None  # Return None if block number is not found or there is nothing in the Dataframe
     
     def get_grade_for_block(self, block_num):
-        #Iterate through the DataFrame of the Ecel file
+        # Iterate through the DataFrame of the Ecel file
         if self.df is not None:
             # Iterate through the DataFrame
             for index, row in self.df.iterrows():
-                #Check if the block number matches and if so...
+                # Check if the block number matches and if so...
                 if row['Block Number'] == block_num:
                     # Return the corresponding grade value of that row
                     return row['Block Grade (%)']
-        return None  #Return None if block number is not found or there is nothing in the Dataframe
+        return None  # Return None if block number is not found or there is nothing in the Dataframe
     
     def get_length_for_block(self, block_num):
-        #Iterate through the DataFrame of the Ecel file
+        # Iterate through the DataFrame of the Ecel file
         if self.df is not None:
             #   Iterate through the DataFrame
             for index, row in self.df.iterrows():
-                #Check if the block number matches and if so...
+                # Check if the block number matches and if so...
                 if row['Block Number'] == block_num:
                     # Return the corresponding block length value of that row
                     return row['Block Length (m)']
-        return None  #Return None if block number is not found or there is nothing in the Dataframe
+        return None  # Return None if block number is not found or there is nothing in the Dataframe
     
     def get_block_for_block(self, block_num):
-        #Iterate through the DataFrame of the Ecel file
+        # Iterate through the DataFrame of the Ecel file
         if self.df is not None:
             #   Iterate through the DataFrame
             for index, row in self.df.iterrows():
-                #Check if the block number matches and if so...
+                # Check if the block number matches and if so...
                 if row['Block Number'] == block_num:
                     # Return the corresponding block num value of that row
                     return row['Block Number']
-        return None  #Return None if block number is not found or there is nothing in the Dataframe
+        return None  # Return None if block number is not found or there is nothing in the Dataframe
     
     def get_section_for_block(self, block_num):
-        #Iterate through the DataFrame of the Ecel file
+        # Iterate through the DataFrame of the Ecel file
         if self.df is not None:
             #   Iterate through the DataFrame
             for index, row in self.df.iterrows():
-                #Check if the block number matches and if so...
+                # Check if the block number matches and if so...
                 if row['Block Number'] == block_num:
                     # Return the corresponding section value of that row
                     return row['Section']
-        return None  #Return None if block number is not found or there is nothing in the Dataframe
+        return None  # Return None if block number is not found or there is nothing in the Dataframe
     
 class Communicate(QObject):
     broken_rail_input_signal = pyqtSignal(str)
+    track_input_signal = pyqtSignal(str)
+    power_input_signal = pyqtSignal(str)
+
+    dropdown_broken_signal = pyqtSignal(str)
 
 # Call Main window
 if __name__ == "__main__":
@@ -297,6 +359,12 @@ if __name__ == "__main__":
 
     # Connect the signal from window_2 to the slot in window
     window_2.broken_rail_input_signal.connect(window.toggle_button_state_tb)
+    window_2.track_input_signal.connect(window.toggle_button_state_2_tb)
+    window_2.power_input_signal.connect(window.toggle_button_state_3_tb)
+
+    window_2.dropdown_broken_signal.connect(window.update_main_dropdown)
+
+    window_2.ticket_sales_signal.connect(window.update_ticket_sales)
 
     window.show()
     window_2.show()

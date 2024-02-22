@@ -1335,7 +1335,7 @@ font: 22pt &quot;MS Shell Dlg 2&quot;;</string>
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;ADVERTISEMENTS:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_7">
+   <widget class="QPushButton" name="ebrake">
     <property name="geometry">
      <rect>
       <x>-5</x>
@@ -1432,7 +1432,7 @@ selection-color: rgb(99, 99, 99);
    <zorder>horizontalLayoutWidget_2</zorder>
    <zorder>horizontalLayoutWidget_5</zorder>
    <zorder>label_3</zorder>
-   <zorder>pushButton_7</zorder>
+   <zorder>ebrake</zorder>
    <zorder>verticalLayoutWidget</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>

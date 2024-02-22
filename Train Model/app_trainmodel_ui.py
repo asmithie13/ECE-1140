@@ -25,6 +25,21 @@ class MyMainWindow(QMainWindow):
         self.get_acceleration()
         self.calculate_acc_velocity()
 
+        self.estop_locked=False
+
+    def estop_button_clicked(self):
+        if not self.estop_locked:
+            self.ebrake.setEnabled(False)
+            self.ebrake.setStyleSheet('background-color: gray; color: white;')
+            self.estop_locked = True
+
+    def change_ebrake_color(self,ebrake_state):
+        if ebrake_state:
+            self.ebrake.setStyleSheet('background-color:  rgb(99, 99, 99);')
+        
+        else: 
+            self.ebrake.setStyleSheet('background-color: rgb(195, 16, 40);')
+
     def set_length(self, input_txt):
         self.length_of_vehicle_display.setText(input_txt)
 
@@ -124,6 +139,7 @@ class trainmodel_testbench(QMainWindow):
     pcount_input_signal=qtc.pyqtSignal(str)
     ccount_input_signal=qtc.pyqtSignal(str)
     grade_input_signal=qtc.pyqtSignal(str)
+    ebrake_input_signal=qtc.pyqtSignal(int)
 
 
     def __init__(self):
@@ -160,7 +176,15 @@ class trainmodel_testbench(QMainWindow):
         self.crew_count_input_tb.returnPressed.connect(self.get_ccount)
         self.crew_count_input_tb.returnPressed.connect(self.display_ccount)
 
+        self.estop_input_label.stateChanged.connect(self.emit_ebrake_state)
 
+
+    def emit_ebrake_state(self,state):
+        self.ebrake_input_signal.emit(state)
+
+    def ebrake_state(self):
+        return self.estop_input_label.isChecked()
+    
 
     def get_ccount(self):
         ccount_input=self.crew_count_input_tb.text()
@@ -279,8 +303,10 @@ if __name__ == "__main__":
     window_tb.pcount_input_signal.connect(window.set_pcount)
     #set ccount
     window_tb.ccount_input_signal.connect(window.set_ccount)
-
-
+    #set ebrake
+    window_tb.ebrake_input_signal.connect(window.change_ebrake_color)
+    #estop manual
+    window.ebrake.clicked.connect(window.estop_button_clicked)
 
 
     window.show()

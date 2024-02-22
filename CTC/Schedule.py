@@ -8,15 +8,30 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
+import csv
 
 #Schedule class, holds schedule data and defines methods for editing the schedule
 class Schedule():
     def __init__(self, ScheduleData = []):
         self.Scheduledata = ScheduleData
 
+    #Function to add a single train to the schedule
     def addTrain(self, TrainID, Destination, ArrivalTime, Departure, DepartureTime):
         newTrain = [TrainID, Departure, DepartureTime, Destination, ArrivalTime]
         self.Scheduledata.append(newTrain)
+
+    #function to parse a schedule file for automatic mode
+    def parseScheduleFile(self, filepath):
+        #print(filepath)
+        
+        if filepath:
+            csv_file = open(filepath,"r")
+            reader = csv.reader(csv_file)
+            csv_file.close
+
+        for row in reader:
+            self.Scheduledata.append(row)
+
 
 
         

@@ -48,7 +48,7 @@
      <item row="2" column="1">
       <widget class="QLabel" name="announcements_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
@@ -76,7 +76,7 @@
      <item row="6" column="1">
       <widget class="QLabel" name="estop_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
@@ -90,7 +90,7 @@
      <item row="8" column="1">
       <widget class="QLabel" name="sig_pick_fail_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
@@ -104,7 +104,7 @@
      <item row="10" column="1">
       <widget class="QLabel" name="efail_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
@@ -118,7 +118,7 @@
      <item row="12" column="1">
       <widget class="QLabel" name="brake_fail_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
@@ -132,7 +132,7 @@
      <item row="14" column="1">
       <widget class="QLabel" name="int_lights_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
@@ -146,7 +146,7 @@
      <item row="16" column="1">
       <widget class="QLabel" name="ext_lights_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
@@ -160,7 +160,7 @@
      <item row="18" column="1">
       <widget class="QLabel" name="right_doors_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
@@ -174,7 +174,7 @@
      <item row="20" column="1">
       <widget class="QLabel" name="left_doors_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
@@ -188,7 +188,7 @@
      <item row="22" column="1">
       <widget class="QLabel" name="cabin_temp_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
@@ -202,7 +202,7 @@
      <item row="24" column="1">
       <widget class="QLabel" name="length_of_vehicle_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
@@ -251,21 +251,21 @@
      <item row="26" column="1">
       <widget class="QLabel" name="height_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
      <item row="28" column="1">
       <widget class="QLabel" name="width_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
      <item row="30" column="1">
       <widget class="QLabel" name="grade_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
@@ -279,14 +279,14 @@
      <item row="34" column="1">
       <widget class="QLabel" name="passenger_count_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>
      <item row="36" column="1">
       <widget class="QLabel" name="crew_count_output_tb">
        <property name="text">
-        <string/>
+        <string>TextLabel</string>
        </property>
       </widget>
      </item>

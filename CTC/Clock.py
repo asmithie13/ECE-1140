@@ -1,5 +1,4 @@
 import sys
-
 from PyQt5 import QtCore
 from CTC_UI import *
 
@@ -22,7 +21,7 @@ CTCwindow.show()
 #Initializing Qtimer for clock
 timer0 = QtCore.QTimer()
 time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
-timer0.setInterval(1000)
+timer0.setInterval(100)
 timer0.timeout.connect(clock)
 timer0.start()
 

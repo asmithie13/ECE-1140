@@ -48,6 +48,14 @@ class UI(QtWidgets.QMainWindow):
         self.ArrivalTimeEdit.setDisplayFormat("hh:mm")
         self.DepartureTimeEdit.setDisplayFormat("hh:mm")
 
+        #Setting Combo box values
+        stations = ['Yard', 'Station1', 'Station2']
+        self.DepartureSationSelect.addItems(stations)
+        self.DestinationSelect.addItems(stations)
+            #Test Bench
+        lines = ['blue', 'green', 'red']
+        self.LineSelect.addItems(lines)
+
         #Initializing Schedule
         self.trainSchedule = Schedule()
         self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
@@ -58,7 +66,9 @@ class UI(QtWidgets.QMainWindow):
 
         #Initializing Maintance Table
         self.Maintence = CTC_Maintenance()
-        self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))    
+        self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))
+
+        #Initializing Throughput    
         
 
         
@@ -142,6 +152,7 @@ class UI(QtWidgets.QMainWindow):
         self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))
 
     """TEST BENCH FUNCTIONS"""
+    #Defines functionality of the update occupied blocks button on the Testbench
     def updateBlocks_button(self):
         BlockText = self.OccupiedBlocksField.text()
         UpdatedBlocks = list(map(str.strip, BlockText.split(',')))
@@ -152,6 +163,10 @@ class UI(QtWidgets.QMainWindow):
 
         self.occupiedBlocks.BlockData = UpdatedBlocksWithTrain
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockData))
+
+    #Defines funtionality of the update ticket sales button on the testbench
+    def updateTicketSales_button(self):
+        Sales = self.TicketSalesField.text()
 
 
 """

@@ -446,14 +446,14 @@ class Ui_MainWindow(object):
         self.lcdSpdLim.setDigitCount(2)
         self.lcdSpdLim.setObjectName("lcdSpdLim")
         self.horizontalLayout_6.addWidget(self.lcdSpdLim)
-        self.lcdCurSpd_2 = QtWidgets.QLCDNumber(self.groupBox_8)
-        self.lcdCurSpd_2.setDigitCount(2)
-        self.lcdCurSpd_2.setObjectName("lcdCurSpd_2")
-        self.horizontalLayout_6.addWidget(self.lcdCurSpd_2)
         self.lcdCmdSpd = QtWidgets.QLCDNumber(self.groupBox_8)
         self.lcdCmdSpd.setDigitCount(2)
         self.lcdCmdSpd.setObjectName("lcdCmdSpd")
         self.horizontalLayout_6.addWidget(self.lcdCmdSpd)
+        self.lcdCurSpd = QtWidgets.QLCDNumber(self.groupBox_8)
+        self.lcdCurSpd.setDigitCount(2)
+        self.lcdCurSpd.setObjectName("lcdCurSpd")
+        self.horizontalLayout_6.addWidget(self.lcdCurSpd)
         self.gridLayout_5.addLayout(self.horizontalLayout_6, 1, 0, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox_8, 4, 0, 1, 4)
         self.groupBox_3 = QtWidgets.QGroupBox(self.centralwidget)
@@ -506,8 +506,8 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.buttonMan.clicked['bool'].connect(self.buttonAuto.toggle)  # type: ignore
-        self.buttonAuto.clicked['bool'].connect(self.buttonMan.toggle)  # type: ignore
+        self.buttonMan.clicked['bool'].connect(self.set_man)  # type: ignore
+        self.buttonAuto.clicked['bool'].connect(self.set_auto)  # type: ignore
         #self.inputKi.valueChanged['double'].connect(self.lcdKi.display()) # type: ignore
         #self.inputKp.valueChanged['double'].connect(self.lcdKp.display()) # type: ignore
         self.buttonHDon.clicked['bool'].connect(self.buttonHDoff.toggle)  # type: ignore
@@ -518,16 +518,14 @@ class Ui_MainWindow(object):
         self.vertSliderPow.valueChanged.connect(lambda : self.calAccelOutput())  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-
-
         self.inputKp.valueChanged.connect(lambda : self.onKpValueChanged())
         self.inputKi.valueChanged.connect(lambda : self.onKiValueChanged())
-        self.temp.valueChanged.connect(lambda :self.tempControl)
-        self.lcdAuth.valueChanged.connect(lambda : self.updateAuth())
-        #if the button is checked, it will call this function
+        self.temp.valueChanged.connect(self.tempControl)
 
-        #self.buttonDoorR.clicked.connect(lambda : self.doorControl())
-        #self.buttonDoorL.clicked.connect(lambda : self.doorControl())
+        #if the button is checked, it will call HARDWARE FUCNTION ONLY
+
+        #self.buttonDoorR.clicked.connect(chad function)
+        #self.buttonDoorL.clicked.connect(chad function)
 
 
     def calBrakeOutput(self):
@@ -619,42 +617,68 @@ class Ui_MainWindow(object):
 
     def speedControl(self):
         # over speed limit
-        if (self.lcdCmdSpd.value() > self.lcdSpdLim.value()) & (self.lcdCurSpd_2.value() < self.lcdCmdSpd.value()):
-            self.lcdCmdSpd.display(self.lcdSpdLim.value())
-            self.lcdCurSpd_2.display(self.lcdCurSpd_2.value() + 1)
+
+        #if (self.lcdCmdSpd.value() > self.lcdSpdLim.value()) & (self.lcdCurSpd.value() < self.lcdCmdSpd.value()):
+            #self.lcdCmdSpd.display(self.lcdSpdLim.value())
+            #self.lcdCurSpd.display(self.lcdCurSpd.value() + 1)
 
         # if cmd is less than current speed and speed limit
-        elif (self.lcdCmdSpd.value() > self.lcdCurSpd_2.value()) & (self.lcdCmdSpd.value() < self.lcdSpdLim.value()):
-            self.lcdCurSpd_2.display(self.lcdCurSpd_2.value() - 1)
+        #elif (self.lcdCmdSpd.value() > self.lcdCurSpd.value()) & (self.lcdCmdSpd.value() < self.lcdSpdLim.value()):
+            #self.lcdCurSpd.display(self.lcdCurSpd.value() - 1)
 
+        if(self.lcdCurSpd.value() > self.lcdCmdSpd.value() or self.lcdCurSpd.value() > self.lcdSpdLim.value()):
+            self.vertSliderPow.setValue(0)
         else:
             self.speedTimer.stop()
 
-    def doorControl(self):
-        if self.lcdCurSpd_2.value() != 0:
+    def doorControl(self,enable):
+        self.buttonDoorL.setEnabled(enable)
+        self.buttonDoorR.setEnabled(enable)
 
-            self.buttonDoorR.setChecked(False)
-            self.buttonDoorL.setChecked(False)
-
-        else:
-            self.buttonDoorR.setChecked(True)
-            self.buttonDoorL.setChecked(True)
 
     ## we need to call this when auth is entered from TB and we have a speed
-    def calAuth(self):
+    def calcAuth(self):
         # update auth every second
         if not self.authTimer.isActive():
             self.authTimer.start()
 
     def updateAuth(self):
         # decrease auth
-        if (self.lcdAuth.value() != 0 & self.lcdCurSpd_2.value() != 0):
-            rate = self.lcdCurSpd_2.value() * 1.46667
+        if ((self.lcdAuth.value() != 0) & (self.lcdCurSpd.value() != 0)):
+            self.doorControl(False)
+            rate = self.lcdCurSpd.value() * 1.46667
             self.lcdAuth.display(self.lcdAuth.value() - rate)
 
         # target auth reached
         else:
+
             self.authTimer.stop()
+            self.doorControl(True)
+
+
+    def set_auto(self):
+      self.buttonMan.toggle()
+      self.buttonDoorL.setDisabled(True)
+      self.buttonDoorR.setDisabled(True)
+      self.temp.setDisabled(True)
+      self.buttonHDoff.setDisabled(True)
+      self.buttonHDon.setDisabled(True)
+      self.IntLightSld.setDisabled(True)
+      self.lineEditAnn.setDisabled(True)
+
+    def set_man(self):
+        self.buttonAuto.toggle()
+        self.buttonDoorL.setDisabled(False)
+        self.buttonDoorR.setDisabled(False)
+        self.temp.setDisabled(False)
+        self.buttonHDon.setDisabled(False)
+        self.buttonHDoff.setDisabled(False)
+        self.IntLightSld.setDisabled(False)
+        self.lineEditAnn.setDisabled(True)
+
+
+
+
 
     #################################################################################
 

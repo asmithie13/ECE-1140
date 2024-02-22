@@ -70,7 +70,7 @@ class Ui_TestBench(object):
 
     def set_commanded_spped(self):
         value = int(self.CSpeed.value())
-        self.ui.lcdCurSpd_2.display(value)
+        self.ui.lcdCmdSpd.display(value)
 
     def set_speed_limit(self):
         value = int(self.SpeedLimit.value())
@@ -78,7 +78,7 @@ class Ui_TestBench(object):
 
     def set_current_speed(self):
         value = int(self.CurSpeed.value())
-        self.ui.lcdCmdSpd.display(value)
+        self.ui.lcdCurSpd.display(value)
 
     def set_authority(self):
         value = int(self.Authority.value())
@@ -334,6 +334,11 @@ class Ui_TestBench(object):
         self.Auto.setText(_translate("TestBench", "Auto"))
         self.Manual.setText(_translate("TestBench", "Manual"))
 
+        self.Authority.valueChanged.connect(lambda : self.Trigger_Authoirty_Countdown())
+        self.CurSpeed.valueChanged.connect(lambda : self.ui.speedControl())
+
+    def Trigger_Authoirty_Countdown(self):
+        self.ui.calcAuth()
     def Open_Main_UI(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_MainWindow()

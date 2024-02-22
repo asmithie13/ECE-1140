@@ -28,6 +28,7 @@ class UI(QtWidgets.QMainWindow):
         self.ManualModeButton.clicked.connect(self.selectManualMode_button)
         self.AddTrainButton.clicked.connect(self.addTrain_button)
         self.AutoModeButton.clicked.connect(self.selectAutoMode_button)
+        self.CloseBlockButton.clicked.connect(self.closeBlock_button)
             #TestBench Buttons
         self.UpdateBlocksButton.clicked.connect(self.updateBlocks_button)
 
@@ -39,6 +40,7 @@ class UI(QtWidgets.QMainWindow):
 
         #Changing Background colors to section off UI
         self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255);")
+        self.ScheduleBox.setStyleSheet("background-color : rgb(233, 247, 255);")
         self.OccupiedBlocksBox.setStyleSheet("background-color : rgb(233, 247, 255);")
         self.MaintenceBox.setStyleSheet("background-color : rgb(233, 247, 255);")
 
@@ -46,14 +48,9 @@ class UI(QtWidgets.QMainWindow):
         self.ArrivalTimeEdit.setDisplayFormat("hh:mm")
         self.DepartureTimeEdit.setDisplayFormat("hh:mm")
 
-        #Add the clock
-        #self.Clock = QtCore.QTimer(self)
-        #self.Clock.timeout.connect(self.showTime(time))
-        #self.Clock.display(ourClock.time)
-
         #Initializing Schedule
         self.trainSchedule = Schedule()
-        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
         #Initializing Occupied Blocks Table
         self.occupiedBlocks = OccupiedBlocks()
@@ -80,7 +77,7 @@ class UI(QtWidgets.QMainWindow):
         ArrivalTime = ArrivalTime.toString("hh:mm")
 
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
-        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 
     #Define mutually exclisive auto/manual mode when manual mode is selected
@@ -118,6 +115,9 @@ class UI(QtWidgets.QMainWindow):
         self.DepartureTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ArrivalTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
 
+    #function to update the clock display on the layout
+    def displayClock(self, time):
+        self.CTC_clock.display(time)
 
     #Define functionality for Upload File Button
     def open_files(self):
@@ -128,15 +128,18 @@ class UI(QtWidgets.QMainWindow):
         #Parse File
         self.trainSchedule.parseScheduleFile(file_path)
         #Update Table
-        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
         #Disable Manual Mode and upload button
         self.selectAutoMode_button()
         self.UploadButton.setEnabled(False)
         self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
 
-    def displayClock(self, time):
-        self.CTC_clock.display(time)
+    #Function to add a block closure
+    def closeBlock_button(self):
+        BlockToClose = self.CloseBlockField.text()
+        self.Maintence.BlocksClosed.append([BlockToClose])
+        self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))
 
     """TEST BENCH FUNCTIONS"""
     def updateBlocks_button(self):

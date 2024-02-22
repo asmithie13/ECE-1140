@@ -12,9 +12,6 @@ from PyQt5 import uic
 #Class to manage maintenece mode for CTC
 class CTC_Maintenance():
     def __init__(self, Blocks = []):
-        #Dummy data for testing
-        Blocks = [['B2'], ['B1']]
-
         self.BlocksClosed = Blocks
 
     def addBlockOccupancy(self, BlockNum):

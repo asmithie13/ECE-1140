@@ -36,8 +36,7 @@
      <bool>false</bool>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(32, 129, 255)
-</string>
+     <string notr="true">background-color : rgb(38, 207, 4)</string>
     </property>
     <property name="text">
      <string>Upload Track Layout</string>

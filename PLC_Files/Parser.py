@@ -11,6 +11,10 @@ class Parser():
     def __init__(self, inputPLC, outPuttedBlocks):
         self.inputPLC = inputPLC
         self.outPuttedBlocks = outPuttedBlocks
+        self.commandsToRun = None
+
+    def blockState(self):   #will break up inputPLC into what commands to run based off of conditions of occupancies
+        lines = self.inputPLC.split('\n')
 
     def parsePLC(self):
         lines = self.inputPLC.split('\n')

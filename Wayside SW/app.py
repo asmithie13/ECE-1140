@@ -64,7 +64,7 @@ class MyApp(QMainWindow):
         self.SwitchBlocks = ["B5","B6","C11"]
 
         #Create Parser Object
-        self.FileParser = Parser(None,self.BlockArray)  #Currently empty onject
+        self.FileParser = Parser(None,self.AllBlocks)  #Currently empty onject
 
         # Buttons
         self.fileButton.clicked.connect(self.on_file_button_clicked)
@@ -272,6 +272,7 @@ class MyApp(QMainWindow):
                     block.occupied = True
 
         self.BlockOcc.setText(" ".join(sentBlocks))
+        self.FileParser.parsePLC()
         self.sendSpecialBlocks.emit(self.BlockArray)
         
 

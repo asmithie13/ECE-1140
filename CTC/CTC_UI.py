@@ -156,6 +156,23 @@ class UI(QtWidgets.QMainWindow):
         self.UploadButton.setEnabled(False)
         self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
 
+
+        #Disable Manual Mode button (because it's one use)
+        self.ManualModeButton.setEnabled(False)
+        self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
+    
+    #defining manual mode add train button functionality
+    def addTrain_button(self):
+        TrainID = self.TrainNameField.text()
+        Departure = self.DepartureSationSelect.currentText()
+        DepartureTime = self.DepartureTimeEdit.time()
+        DepartureTime = DepartureTime.toString("hh:mm")
+        Destination = self.DestinationSelect.currentText()
+        ArrivalTime = self.ArrivalTimeEdit.time()
+        ArrivalTime = ArrivalTime.toString("hh:mm")
+        self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
+        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+=======
     #Function to add a block closure
     def closeBlock_button(self):
         BlockToClose = self.CloseBlockField.text()

@@ -19,18 +19,20 @@ class Parser():
             tokens = line.strip().split()
             command = tokens[0]
             parameters = tokens[1:]
+            match = [block for block in self.outPuttedBlocks if block.ID == parameters[0]]
 
             if command == "LIGHT" or command == "CROSSING":
                 if parameters[0][0] != '!':
-                    match = [block for block in self.outPuttedBlocks if block.ID == parameters[0]]
                     match[0].state = True
                 else:
-                    match = [block for block in self.outPuttedBlocks if block.ID == parameters[0][1:]]
                     match[0].state = False
 
             elif command == "SWITCH":
-                match = [block for block in self.outPuttedBlocks if block.ID == parameters[0]]
                 if int(parameters[1][1:]) - 1 == int(parameters[0][1:]): match[0].state = True
                 else : match[0].state = False
+
+            elif command == "OCCUPIED":
+                match[0].occupied = True
+
 
 

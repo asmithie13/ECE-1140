@@ -1,31 +1,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from mainControl import *
-import sys
-
-import serial
-import time
-
-
 
 class Ui_TestBench(object):
-    ser = serial.Serial('COM5', 9600, timeout=0)
-    time.sleep(2)
-
-    def __init__(self):
-
-        self.doorL = True
-        self.doorR = True
-        self.headLights = True
-        self.cabinLights = True
-
-        self.ser.write(b'B')  # doorL
-        self.ser.write(b'D')  # doorR
-        self.ser.write(b'F')  # Headlights
-        #self.ser.write(b'H')  # Cabin Lights
-
-
-
     def set_automatic_manual(self):
        self.ui.buttonAuto.toggle()
        self.ui.buttonMan.toggle()
@@ -39,27 +16,11 @@ class Ui_TestBench(object):
 
     def set_left_door(self):
         self.ui.buttonDoorL.toggle()
-        self.doorL = not self.doorL
-        if(self.doorL == True):
-            self.ser.write(b'A')
-        else:
-            self.ser.write(b'B')  # L
-
     def set_right_door(self):
         self.ui.buttonDoorR.toggle()
-        self.doorR = not self.doorR
-        if(self.doorR == True):
-            self.ser.write(b'C')
-        else:
-            self.ser.write(b'D')
     def set_headlights(self):
         self.ui.buttonHDon.toggle()
         self.ui.buttonHDoff.toggle()
-        self.headLights = not self.headLights
-        if(self.headLights == True):
-            self.ser.write(b'E')
-        else:
-            self.ser.write(b'F')
     def set_power_failure(self):
         if(not(self.PowerFailure.isChecked())):
             self.ui.Power_Failure_Disable()
@@ -79,10 +40,8 @@ class Ui_TestBench(object):
     def set_interior_lights(self):
         if self.CabinLights.value() == 2:
             self.ui.IntLightSld.setValue(2)
-            self.ser.write(b'G')
         elif self.CabinLights.value() == 0:
             self.ui.IntLightSld.setValue(0)
-            self.ser.write(b'H')
         elif self.CabinLights.value() == 1:
             self.ui.IntLightSld.setValue(1)
 
@@ -105,10 +64,12 @@ class Ui_TestBench(object):
     def set_commanded_spped(self):
         value = int(self.CSpeed.value())
         self.ui.lcdCmdSpd.display(value)
+        self.ui.calSpeed()
 
     def set_speed_limit(self):
         value = int(self.SpeedLimit.value())
         self.ui.lcdSpdLim.display(value)
+        self.ui.calSpeed()
 
     def set_current_speed(self):
         # in future iterations, move this to the UI function

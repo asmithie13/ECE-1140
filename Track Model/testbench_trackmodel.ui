@@ -7,11 +7,17 @@
     <x>0</x>
     <y>0</y>
     <width>884</width>
-    <height>475</height>
+    <height>554</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(233, 247, 255);</string>
+  </property>
+  <property name="windowFilePath">
+   <string>background-color: rgb(233, 247, 255);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="groupBox_2">
@@ -20,13 +26,112 @@
       <x>9</x>
       <y>9</y>
       <width>431</width>
-      <height>431</height>
+      <height>501</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QGroupBox {
+    background-color: white;
+}
+</string>
     </property>
     <property name="title">
      <string/>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+       <property name="text">
+        <string>Railway Crossings (Up/Down): </string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="authority_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="0">
+      <widget class="QLabel" name="label_23">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+       <property name="text">
+        <string>Power Failure (Off/On):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+       <property name="text">
+        <string>Lights (Red/Green):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="QLineEdit" name="track_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="rail_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLineEdit" name="light_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="1">
+      <widget class="QLineEdit" name="power_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+       <property name="text">
+        <string>Broken Rail (Off/On):</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_7">
        <property name="sizePolicy">
@@ -41,13 +146,86 @@
          <pointsize>14</pointsize>
         </font>
        </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
        <property name="text">
         <string>Test Inputs:</string>
        </property>
       </widget>
      </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+       <property name="text">
+        <string>Commanded Speed (mph): </string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+       <property name="text">
+        <string>Switch Positions:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="ticket_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QLineEdit" name="broken_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="com_speed_in_1">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_11">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+       <property name="text">
+        <string>Ticket Sales: </string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="1">
       <widget class="QComboBox" name="line_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
        <item>
         <property name="text">
          <string>Select Line</string>
@@ -60,35 +238,17 @@
        </item>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Commanded Speed: </string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="com_speed_in_1"/>
-     </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_2">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
        <property name="text">
-        <string>Authority:</string>
+        <string>Authority (ft):</string>
        </property>
       </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="authority_in"/>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_11">
-       <property name="text">
-        <string>Ticket Sales: </string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLineEdit" name="ticket_in"/>
      </item>
      <item row="4" column="0" colspan="2">
       <widget class="Line" name="line_4">
@@ -97,31 +257,61 @@
        </property>
       </widget>
      </item>
+     <item row="8" column="1">
+      <widget class="QLineEdit" name="switch_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="label_22">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+       <property name="text">
+        <string>Track Circuit Failure (Off/On): </string>
+       </property>
+      </widget>
+     </item>
      <item row="5" column="0">
       <widget class="QComboBox" name="broken_block">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <item>
         <property name="text">
-         <string>B1</string>
+         <string>Select Block</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B2</string>
+         <string>A1</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B3</string>
+         <string>A2</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B4</string>
+         <string>A3</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B5</string>
+         <string>A4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A5</string>
         </property>
        </item>
        <item>
@@ -151,90 +341,30 @@
        </item>
        <item>
         <property name="text">
-         <string>B11</string>
+         <string>C11</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B12</string>
+         <string>C12</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B13</string>
+         <string>C13</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B14</string>
+         <string>C14</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B15</string>
+         <string>C15</string>
         </property>
        </item>
       </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>Railway Crossings: </string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QLineEdit" name="rail_in"/>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Lights:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QLineEdit" name="light_in"/>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Switch Positions:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="1">
-      <widget class="QLineEdit" name="switch_in"/>
-     </item>
-     <item row="9" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Broken Rail</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="1">
-      <widget class="QLineEdit" name="broken_in"/>
-     </item>
-     <item row="10" column="0">
-      <widget class="QLabel" name="label_22">
-       <property name="text">
-        <string>Track Circuit Failure: </string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1">
-      <widget class="QLineEdit" name="track_in"/>
-     </item>
-     <item row="11" column="0">
-      <widget class="QLabel" name="label_23">
-       <property name="text">
-        <string>Power Failure:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="1">
-      <widget class="QLineEdit" name="power_in"/>
      </item>
     </layout>
    </widget>
@@ -244,8 +374,12 @@
       <x>470</x>
       <y>10</y>
       <width>401</width>
-      <height>421</height>
+      <height>501</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white;
+</string>
     </property>
     <property name="title">
      <string/>
@@ -265,6 +399,10 @@
          <pointsize>14</pointsize>
         </font>
        </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="text">
         <string>Test Outputs:</string>
        </property>
@@ -272,6 +410,10 @@
      </item>
      <item row="0" column="2">
       <widget class="QLabel" name="line_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="text">
         <string>Current Line</string>
        </property>
@@ -279,6 +421,10 @@
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_9">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="text">
         <string>Commanded Speed (mph): </string>
        </property>
@@ -286,6 +432,10 @@
      </item>
      <item row="1" column="2">
       <widget class="QLabel" name="com_speed_out_1">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
@@ -296,6 +446,10 @@
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_10">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="text">
         <string>Authority (ft):</string>
        </property>
@@ -303,6 +457,10 @@
      </item>
      <item row="2" column="2">
       <widget class="QLabel" name="authority_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
@@ -313,6 +471,10 @@
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_26">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="text">
         <string>Ticket Sales: </string>
        </property>
@@ -320,6 +482,10 @@
      </item>
      <item row="3" column="2">
       <widget class="QLabel" name="ticket_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
@@ -330,6 +496,10 @@
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_12">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="text">
         <string>Presence on block:</string>
        </property>
@@ -337,6 +507,10 @@
      </item>
      <item row="4" column="2">
       <widget class="QLabel" name="label_17">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
@@ -347,6 +521,10 @@
      </item>
      <item row="5" column="0">
       <widget class="QLabel" name="label_20">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="text">
         <string>Grade (%):</string>
        </property>
@@ -354,6 +532,10 @@
      </item>
      <item row="5" column="2">
       <widget class="QLabel" name="grade_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
@@ -364,6 +546,10 @@
      </item>
      <item row="6" column="0">
       <widget class="QLabel" name="label_21">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="text">
         <string>Broken Rail Failure: </string>
        </property>
@@ -376,6 +562,10 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
@@ -390,6 +580,10 @@
      </item>
      <item row="6" column="2">
       <widget class="QLabel" name="broken_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
@@ -400,6 +594,10 @@
      </item>
      <item row="7" column="0">
       <widget class="QLabel" name="label_24">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="text">
         <string>Track Circuit Failure: </string>
        </property>
@@ -407,6 +605,10 @@
      </item>
      <item row="7" column="2">
       <widget class="QLabel" name="track_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
@@ -417,6 +619,10 @@
      </item>
      <item row="8" column="0">
       <widget class="QLabel" name="label_25">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="text">
         <string>Power Failure:</string>
        </property>
@@ -424,6 +630,10 @@
      </item>
      <item row="8" column="2">
       <widget class="QLabel" name="power_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>

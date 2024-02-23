@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>932</width>
-    <height>681</height>
+    <width>921</width>
+    <height>710</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -36,8 +36,7 @@
      <bool>false</bool>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(32, 129, 255)
-</string>
+     <string notr="true">background-color : rgb(38, 207, 4)</string>
     </property>
     <property name="text">
      <string>Upload Track Layout</string>
@@ -51,8 +50,8 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>450</y>
-      <width>501</width>
+      <y>480</y>
+      <width>521</width>
       <height>171</height>
      </rect>
     </property>
@@ -148,8 +147,8 @@
      <rect>
       <x>20</x>
       <y>70</y>
-      <width>501</width>
-      <height>281</height>
+      <width>521</width>
+      <height>291</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -171,7 +170,7 @@
       <x>580</x>
       <y>70</y>
       <width>311</width>
-      <height>391</height>
+      <height>411</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -450,7 +449,7 @@
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>470</y>
+      <y>500</y>
       <width>311</width>
       <height>151</height>
      </rect>
@@ -576,7 +575,7 @@
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>501</width>
+      <width>521</width>
       <height>51</height>
      </rect>
     </property>
@@ -594,27 +593,27 @@
        </item>
        <item>
         <property name="text">
-         <string>B1</string>
+         <string>A1</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B2</string>
+         <string>A2</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B3</string>
+         <string>A3</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B4</string>
+         <string>A4</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B5</string>
+         <string>A5</string>
         </property>
        </item>
        <item>
@@ -644,27 +643,27 @@
        </item>
        <item>
         <property name="text">
-         <string>B11</string>
+         <string>C11</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B12</string>
+         <string>C12</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B13</string>
+         <string>C13</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B14</string>
+         <string>C14</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B15</string>
+         <string>C15</string>
         </property>
        </item>
       </widget>
@@ -692,8 +691,8 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>360</y>
-      <width>501</width>
+      <y>380</y>
+      <width>521</width>
       <height>81</height>
      </rect>
     </property>
@@ -788,7 +787,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>932</width>
+     <width>921</width>
      <height>22</height>
     </rect>
    </property>

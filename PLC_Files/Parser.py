@@ -11,15 +11,42 @@ class Parser():
     def __init__(self, inputPLC, outPuttedBlocks):
         self.inputPLC = inputPLC
         self.outPuttedBlocks = outPuttedBlocks
-        self.commandsToRun = None
+        self.commandsToRun = []
+        self.blockOccsByID = [False] * 26 #initially no blocks are occupied
 
     def blockState(self):   #will break up inputPLC into what commands to run based off of conditions of occupancies
         lines = self.inputPLC.split('\n')
+        index = 0
+
+        for char in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+            occupied_blocks = [block for block in self.outPuttedBlocks if char in block.ID and block.occupied]
+            self.blockOccsByID[index] = True if occupied_blocks else False
+            index = index + 1
+
+        index = 0
+        
+        for length in range(2,25):  #start with 2 for C
+
+            if self.blockOccsByID[length]:
+                index = index
+            else:
+                index = index + 4 
+
+            if index > 8 : break
+
+            for len in range(index + 1, index + 4):
+                self.commandsToRun.append(lines[len])
+
+            index = index + 8
+
+            if index > 8 : break
+
 
     def parsePLC(self):
-        lines = self.inputPLC.split('\n')
+        self.blockState()
 
-        for line in lines:
+        for line in self.commandsToRun:
+            if line == '' : break
             tokens = line.strip().split()
             command = tokens[0]
             parameters = tokens[1:]
@@ -36,8 +63,6 @@ class Parser():
                 if int(parameters[1][1:]) - 1 == int(parameters[0][1:]): match[0].state = True
                 else : match[0].state = False
 
-            elif command == "OCCUPIED":
-                match[0].occupied = True
-
+        self.commandsToRun = []
 
 

@@ -1,28 +1,30 @@
 import sys
-
 from PyQt5 import QtCore
-
-class Clock:
-    def __init__(self):
-        self.time = ""
+from CTC_UI import *
 
 
-def calculo():
+def clock():
     global time
     time = time.addSecs(60)
 
-    ourClock.time = time.toString("dd hh:mm:ss")
-    print(ourClock.time)
+    current_time = time.toString("hh:mm")
+    CTCwindow.displayClock(current_time)
 
-app = QtCore.QCoreApplication(sys.argv)
+#app = QtCore.QCoreApplication(sys.argv)
+UI_window = QtWidgets.QApplication(sys.argv)
 
-global ourClock
-ourClock = Clock()
+#CTC UI connection
+global CTCwindow
+CTCwindow = UI()
+CTCwindow.show()
 
+#Initializing Qtimer for clock
 timer0 = QtCore.QTimer()
-time = QtCore.QTime(0, 0, 0)
-timer0.setInterval(1000)
-timer0.timeout.connect(calculo)
+time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
+timer0.setInterval(100)
+timer0.timeout.connect(clock)
 timer0.start()
 
-sys.exit(app.exec_())
+
+
+sys.exit(UI_window.exec_())

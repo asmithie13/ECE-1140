@@ -497,6 +497,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.label_3)
         self.inputKi = QtWidgets.QDoubleSpinBox(self.groupBox_3)
         self.inputKi.setObjectName("inputKi")
+        self.inputKi.setValue(70)
+        self.inputKp.setValue(30)
+        self.CalcPower()
         self.horizontalLayout_3.addWidget(self.inputKi)
         self.gridLayout_3.addLayout(self.horizontalLayout_3, 2, 0, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox_3, 0, 1, 1, 2)
@@ -511,6 +514,8 @@ class Ui_MainWindow(object):
 
         self.buttonMan.clicked['bool'].connect(self.set_man)  # type: ignore
         self.buttonAuto.clicked['bool'].connect(self.set_auto)  # type: ignore
+        #self.inputKi.valueChanged['double'].connect(self.lcdKi.display()) # type: ignore
+        #self.inputKp.valueChanged['double'].connect(self.lcdKp.display()) # type: ignore
         self.buttonHDon.clicked['bool'].connect(self.buttonHDoff.toggle)  # type: ignore
         self.buttonHDoff.clicked['bool'].connect(self.buttonHDon.toggle)  # type: ignore
         self.lineEditAnn.textChanged['QString'].connect(self.SpkrOut.setText)  # type: ignore
@@ -540,26 +545,27 @@ class Ui_MainWindow(object):
                 self.lcdCurSpd.display(0)
             else:
                 self.lcdCurSpd.display(int(testvalue))
-            value = (6 * 81000) * (self.vertSliderBrk.value() / 100)
-            self.brakePower = value
+            #value = (6 * 81000) * (self.vertSliderBrk.value() / 100)
+            #self.brakePower = value
             # print(f"brake value changed to: {value}")
             self.vertSliderPow.setValue(0);
-        if self.lastSliderMoved != 'brk':
-            self.lcdPow_2.display(0)
-            self.vertSliderPow.setValue(0)
-            self.lastSliderMoved = 'brk'
+        #if self.lastSliderMoved != 'brk':
+         #   self.lcdPow_2.display(0)
+          #  self.vertSliderPow.setValue(0)
+           # self.lastSliderMoved = 'brk'
 
     def calAccelOutput(self):
         # if authority is zero, the power stays at zero
         if self.lcdAuth.value() == 0:
             self.vertSliderPow.setValue(0)
-            self.lcdPowOut = 0
+            self.lcdPowOut.display(0)
 
         self.lcdPow_2.display(self.vertSliderPow.value())
 
         self.CalcPower()
         if self.vertSliderPow.value() > 1:
             self.vertSliderBrk.setValue(0)
+        self.lcdCurSpd.display(self.lcdCurSpd.value() + 20 * self.vertSliderPow.value()/100)
 
     def onKiValueChanged(self):
         self.lcdKi.display(self.inputKi.value())
@@ -580,25 +586,6 @@ class Ui_MainWindow(object):
         self.power = (self.inputKp.value() * self.inputKp.value() / self.dt) * (self.vertSliderPow.value()/100)
         self.lcdPwrOut.display(self.power)
 
-        if self.buttonMan.setChecked() == False:
-            
-            self.v_error = self.v_cmd - self.v_current
-
-            self.integral_error += self.v_error * self.dt
-
-            self.control_output = self.Kp * self.v_error + self.Ki * self.integral_error
-
-
-            if self.control_output > 120000:
-                self.control_output = 120000
-            elif self.control_output < 0:
-                self.control_output = 0
-        
-            self.lcdPwrOut.display(self.control_output)
-            print(f"Control output set to: {self.control_output}")
-
-        
-
     # need to fix this
     def tempControl(self):
         # change temp to match the value
@@ -618,6 +605,17 @@ class Ui_MainWindow(object):
         else:
             self.tempTimer.stop()
 
+        # if self.buttonMan.setChecked() == False:
+        #     self.v_error = self.v_cmd - self.v_current
+        #     self.integral_error += self.v_error * self.dt
+        #     self.control_output = self.Kp * self.v_error + self.Ki * self.integral_error
+        #     if self.control_output > 120000:
+        #         self.control_output = 120000
+        #     elif self.control_output < 0:
+        #         self.control_output = 0
+        #
+        #     self.lcdPwrOut.display(self.control_output)
+        #     print(f"Control output set to: {self.control_output}")
 
     ################################################################################ vital stff
 
@@ -636,11 +634,10 @@ class Ui_MainWindow(object):
         #if (self.lcdCmdSpd.value() > self.lcdSpdLim.value()) & (self.lcdCurSpd.value() < self.lcdCmdSpd.value()):
             #self.lcdCmdSpd.display(self.lcdSpdLim.value())
             #self.lcdCurSpd.display(self.lcdCurSpd.value() + 1)
-
         # if cmd is less than current speed and speed limit
         #elif (self.lcdCmdSpd.value() > self.lcdCurSpd.value()) & (self.lcdCmdSpd.value() < self.lcdSpdLim.value()):
             #self.lcdCurSpd.display(self.lcdCurSpd.value() - 1)
-
+        #self.calcAuth()
         if(self.lcdCurSpd.value() == 0 and self.lcdAuth.value() == 0):
             self.speedTimer.stop()
         elif(self.lcdCurSpd.value() > self.lcdCmdSpd.value() or self.lcdCurSpd.value() > self.lcdSpdLim.value() and self.vertSliderBrk == 0):
@@ -648,14 +645,14 @@ class Ui_MainWindow(object):
             self.vertSliderBrk.setValue(1)
             self.calBrakeOutput()
             self.vertSliderPow.setDisabled(True)
-        elif(self.lcdCurSpd.value() < self.lcdCmdSpd.value() and self.lcdCurSpd.value() < self.lcdSpdLim.value()):
+        elif (self.lcdCurSpd.value() < self.lcdCmdSpd.value() and self.lcdCurSpd.value() < self.lcdSpdLim.value()):
             self.vertSliderBrk.setValue(0)
             self.vertSliderPow.setValue(50)
             self.lcdCurSpd.display(self.lcdCurSpd.value() + 1)
-
         else:
             self.speedTimer.stop()
             self.vertSliderPow.setDisabled(False)
+            self.vertSliderPow.setValue(0)
 
     def doorControl(self,enable):
         self.buttonDoorL.setEnabled(enable)
@@ -667,12 +664,18 @@ class Ui_MainWindow(object):
         if not self.authTimer.isActive():
             self.authTimer.start()
 
+
     def updateAuth(self):
         # decrease auth
         if ((self.lcdAuth.value() != 0) & (self.lcdCurSpd.value() != 0)):
             self.doorControl(False)
             rate = self.lcdCurSpd.value() * 1.46667
-            self.lcdAuth.display(self.lcdAuth.value() - rate)
+            if self.lcdAuth.value() - rate <= 0:
+                self.lcdAuth.display(0)
+                self.vertSliderPow.setValue(0)
+                self.lcdCurSpd.display(0)
+            else:
+                self.lcdAuth.display(self.lcdAuth.value() - rate)
 
         # target auth reached
         else:

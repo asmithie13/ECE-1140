@@ -172,7 +172,7 @@ class UI(QtWidgets.QMainWindow):
         ArrivalTime = ArrivalTime.toString("hh:mm")
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
-=======
+
     #Function to add a block closure
     def closeBlock_button(self):
         BlockToClose = self.CloseBlockField.text()

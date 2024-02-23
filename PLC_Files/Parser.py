@@ -19,7 +19,8 @@ class Parser():
             tokens = line.strip().split()
             command = tokens[0]
             parameters = tokens[1:]
-            match = [block for block in self.outPuttedBlocks if block.ID == parameters[0]]
+            block_id = parameters[0][1:] if parameters[0][0] == '!' else parameters[0]
+            match = [block for block in self.outPuttedBlocks if block.ID == block_id]
 
             if command == "LIGHT" or command == "CROSSING":
                 if parameters[0][0] != '!':

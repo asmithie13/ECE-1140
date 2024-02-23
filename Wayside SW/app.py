@@ -175,11 +175,11 @@ class MyApp(QMainWindow):
             self.label_11.setText("")
             
             if selectedBlock.state:
-                self.greenButton.setStyleSheet("background-color: green")
+                self.greenButton.setStyleSheet('QPushButton {background-color: green; color: yellow;}')
                 self.redButton.setStyleSheet("")
             elif not selectedBlock.state:
                 self.greenButton.setStyleSheet("")
-                self.redButton.setStyleSheet("background-color: red")
+                self.redButton.setStyleSheet('QPushButton {background-color: red; color: yellow;}')
 
         elif selectedBlock.CROSSING and self.selectLine.isChecked():
             self.greenButton.setEnabled(False)
@@ -222,7 +222,7 @@ class MyApp(QMainWindow):
         self.BlockArray[selectedIndex].state = True
         self.greenButton.setEnabled(False)
         self.redButton.setEnabled(True)
-        self.greenButton.setStyleSheet("background-color: green")
+        self.greenButton.setStyleSheet('QPushButton {background-color: green; color: yellow;}')
         self.redButton.setStyleSheet("")
         self.sendSpecialBlocks.emit(self.BlockArray)
 
@@ -232,7 +232,7 @@ class MyApp(QMainWindow):
         self.greenButton.setEnabled(True)
         self.redButton.setEnabled(False)
         self.greenButton.setStyleSheet("")
-        self.redButton.setStyleSheet("background-color: red")
+        self.redButton.setStyleSheet('QPushButton {background-color: red; color: yellow;}')
         self.sendSpecialBlocks.emit(self.BlockArray)
 
     def upButtonPushed(self):

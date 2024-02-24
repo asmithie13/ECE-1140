@@ -26,7 +26,7 @@ class MyApp(QMainWindow):
         uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
 
         # Global constants for LIGHT, CROSSING, and SWITCH
-        LIGHT_CONST = [True, False, False, False,False]
+        LIGHT_CONST = [True, False, False, True,False]
         CROSSING_CONST = [False, True, False, True,False]
         SWITCH_CONST = [False, False, True, True,False]
         NORMAL_CONST = [False, False, False, False, False]
@@ -41,21 +41,21 @@ class MyApp(QMainWindow):
         self.B5_Switch_Positions = ["B6","C11"]
 
         #Defining important blocks
-        A1 = Block(*NORMAL_CONST,"A1")
-        A2 = Block(*NORMAL_CONST,"A2")
-        A3 = Block(*CROSSING_CONST,"A3")
-        A4 = Block(*NORMAL_CONST,"A4") 
-        A5 = Block(*SWITCH_CONST,"A5") 
-        B6 = Block(*LIGHT_CONST,"B6")
-        B7 = Block(*NORMAL_CONST,"B7")
-        B8 = Block(*NORMAL_CONST,"B8")
-        B9 = Block(*NORMAL_CONST,"B9")
-        B10 = Block(*NORMAL_CONST,"B10")
-        C11 = Block(*LIGHT_CONST,"C11")
-        C12 = Block(*NORMAL_CONST,"C12")
-        C13 = Block(*NORMAL_CONST,"C13")
-        C14 = Block(*NORMAL_CONST,"C14")
-        C15 = Block(*NORMAL_CONST,"C15")
+        A1 = Block(*NORMAL_CONST,"A1",50,None)
+        A2 = Block(*NORMAL_CONST,"A2",50,None)
+        A3 = Block(*CROSSING_CONST,"A3",50,None)
+        A4 = Block(*NORMAL_CONST,"A4",50,None) 
+        A5 = Block(*SWITCH_CONST,"A5",50,None) 
+        B6 = Block(*LIGHT_CONST,"B6",50,None)
+        B7 = Block(*NORMAL_CONST,"B7",50,None)
+        B8 = Block(*NORMAL_CONST,"B8",50,None)
+        B9 = Block(*NORMAL_CONST,"B9",50,None)
+        B10 = Block(*NORMAL_CONST,"B10",50,None)
+        C11 = Block(*LIGHT_CONST,"C11",50,None)
+        C12 = Block(*NORMAL_CONST,"C12",50,None)
+        C13 = Block(*NORMAL_CONST,"C13",50,None)
+        C14 = Block(*NORMAL_CONST,"C14",50,None)
+        C15 = Block(*NORMAL_CONST,"C15",50,None)
 
         #Defines an array of these blocks
 
@@ -64,7 +64,7 @@ class MyApp(QMainWindow):
         self.SwitchBlocks = ["B5","B6","C11"]
 
         #Create Parser Object
-        self.FileParser = Parser(None,self.BlockArray)  #Currently empty onject
+        self.FileParser = Parser(None,self.AllBlocks)  #Currently empty onject
 
         # Buttons
         self.fileButton.clicked.connect(self.on_file_button_clicked)
@@ -266,12 +266,17 @@ class MyApp(QMainWindow):
 
     def updateBlocks(self,new_data):
         sentBlocks = new_data
+
+        for block in self.AllBlocks: block.occupied = False
+
         for block_id in sentBlocks:
             for block in self.AllBlocks:
                 if block_id == block.ID:
                     block.occupied = True
 
         self.BlockOcc.setText(" ".join(sentBlocks))
+        if self.label_7.text() == "AUTOMATIC" : self.FileParser.parsePLC()
+        self.blockActions()
         self.sendSpecialBlocks.emit(self.BlockArray)
         
 

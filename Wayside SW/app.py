@@ -266,13 +266,17 @@ class MyApp(QMainWindow):
 
     def updateBlocks(self,new_data):
         sentBlocks = new_data
+
+        for block in self.AllBlocks: block.occupied = False
+
         for block_id in sentBlocks:
             for block in self.AllBlocks:
                 if block_id == block.ID:
                     block.occupied = True
 
         self.BlockOcc.setText(" ".join(sentBlocks))
-        self.FileParser.parsePLC()
+        if self.label_7.text() == "AUTOMATIC" : self.FileParser.parsePLC()
+        self.blockActions()
         self.sendSpecialBlocks.emit(self.BlockArray)
         
 

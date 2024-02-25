@@ -11,9 +11,31 @@ from PyQt5 import QtCore, QtWidgets, uic, QtGui
 from Track_Resources.Block import Block
 from PLC_Files.Parser import Parser
 from PyQt5.QtCore import QTimer,pyqtSignal
+import csv
 
 def sort_by_number(block):
     return int(block[1:])  # Convert the string to an integer, excluding the 'B' prefix
+
+#Function that reads all blocks from a *.csv file and assigns block attributes:
+def readTrackFile(fileName):
+    totalBlocks = []
+    fileName = "Wayside HW/" + fileName
+    with open(fileName, "r") as fileObject:
+        readObj = csv.reader(fileObject, delimiter=",")
+        for i, line in enumerate(readObj):
+            hasCrossingTemp = False
+            hasSwitchTemp = False
+            if(i == 0):
+                continue
+            else:
+                if(line[6] == "RAILWAY CROSSING"):
+                    hasCrossingTemp = True
+                elif(line[6][0:6] == "Switch"):
+                    hasSwitchTemp = True
+            tempBlock = Block(line[0], line[1], line[2], hasSwitchTemp, hasCrossingTemp)
+            totalBlocks.append(tempBlock)
+    
+    return totalBlocks #Return a list of all blocks within the file
 
 class MyApp(QMainWindow):
 
@@ -40,7 +62,7 @@ class MyApp(QMainWindow):
         #Switch Directions
         self.B5_Switch_Positions = ["B6","C11"]
 
-        #Defining important blocks
+        #Defining blue line blocks
         A1 = Block(*NORMAL_CONST,"A1",50,None)
         A2 = Block(*NORMAL_CONST,"A2",50,None)
         A3 = Block(*CROSSING_CONST,"A3",50,None)
@@ -62,6 +84,8 @@ class MyApp(QMainWindow):
         self.BlockArray = [A3,A5,B6,C11]    #Special Blocks
         self.AllBlocks = [A1,A2,A3,A4,A5,B6,B7,B8,B9,B10,C11,C12,C13,C14,C15] #All Blocks
         self.SwitchBlocks = ["B5","B6","C11"]
+
+        #Defines Red line blocks
 
         #Create Parser Object
         self.FileParser = Parser(None,self.AllBlocks)  #Currently empty onject

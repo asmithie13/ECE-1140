@@ -17,6 +17,10 @@ UI_window = QtWidgets.QApplication(sys.argv)
 global CTCwindow
 CTCwindow = CTC_UI()
 CTCwindow.show()
+#CTC Testbench connection
+global CTC_tb
+CTC_tb = CTC_Testbench()
+CTC_tb.show()
 
 #Initializing Qtimer for clock
 timer0 = QtCore.QTimer()

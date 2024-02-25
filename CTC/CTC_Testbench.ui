@@ -16,13 +16,13 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="6,0,1">
+     <layout class="QHBoxLayout" name="MainColumnsLayout" stretch="6,0,1">
       <item>
        <layout class="QVBoxLayout" name="TB_inputsLayout" stretch="0,1,2">
         <item>
-         <layout class="QHBoxLayout" name="OccupiedBlocksTBLayout_2">
+         <layout class="QHBoxLayout" name="OccupiedBlocksLayout">
           <item>
-           <widget class="QLabel" name="OccupiedBlocksLabel_2">
+           <widget class="QLabel" name="OccupiedBlocksInputLabel">
             <property name="text">
              <string>Occupied Blocks:</string>
             </property>
@@ -32,10 +32,10 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="OccupiedBlocksField_2"/>
+           <widget class="QLineEdit" name="OccupiedBlocksInput"/>
           </item>
           <item>
-           <widget class="QPushButton" name="UpdateBlocksButton_2">
+           <widget class="QPushButton" name="UpdateOccupiedBlocksButton">
             <property name="text">
              <string>Update</string>
             </property>
@@ -44,7 +44,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="OccupiedBlocksInstructionLabel">
           <property name="text">
            <string>(Enter the blocks that are currently occupied, seperated by commas)</string>
           </property>
@@ -99,9 +99,9 @@
        </spacer>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="TB_OutputsLayout">
         <item>
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="OuptutsLabel">
           <property name="text">
            <string>Outputs</string>
           </property>

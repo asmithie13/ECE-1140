@@ -1,4 +1,4 @@
-#File to run the UI for the CTC Module
+#File that holds the data to run the CTC UI
 #Abby Magistro
 
 #pyqt imports
@@ -17,9 +17,9 @@ from Throughput import *
 
 
 
-class UI(QtWidgets.QMainWindow):
+class CTC_UI(QtWidgets.QMainWindow):
     def __init__(self):
-        super(UI, self).__init__()
+        super(CTC_UI, self).__init__()
         #Loading base UI layout from .ui file
         uic.loadUi("CTC/CTC_UI.ui", self)
 

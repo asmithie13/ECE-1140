@@ -1,6 +1,7 @@
 import sys
 from PyQt5 import QtCore
 from CTC_UI import *
+from CTC_Testbench import *
 
 
 def clock():
@@ -10,12 +11,11 @@ def clock():
     current_time = time.toString("hh:mm")
     CTCwindow.displayClock(current_time)
 
-#app = QtCore.QCoreApplication(sys.argv)
 UI_window = QtWidgets.QApplication(sys.argv)
 
 #CTC UI connection
 global CTCwindow
-CTCwindow = UI()
+CTCwindow = CTC_UI()
 CTCwindow.show()
 
 #Initializing Qtimer for clock

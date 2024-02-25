@@ -19,20 +19,28 @@ def sort_by_number(block):
 #Function that reads all blocks from a *.csv file and assigns block attributes:
 def readTrackFile(fileName):
     totalBlocks = []
-    fileName = "Wayside HW/" + fileName
+    fileName = "Wayside SW/" + fileName
     with open(fileName, "r") as fileObject:
         readObj = csv.reader(fileObject, delimiter=",")
         for i, line in enumerate(readObj):
             hasCrossingTemp = False
             hasSwitchTemp = False
+            hasLightTemp = False
+            notNormalBlock = False
+            blockId = line[1] + line[2]
             if(i == 0):
                 continue
             else:
                 if(line[6] == "RAILWAY CROSSING"):
                     hasCrossingTemp = True
-                elif(line[6][0:6] == "Switch"):
+                    notNormalBlock = True
+                elif(line[6][0:6] == "SWITCH"):
                     hasSwitchTemp = True
-            tempBlock = Block(line[0], line[1], line[2], hasSwitchTemp, hasCrossingTemp)
+                    notNormalBlock = True
+                elif(line[6] == "Light"):
+                    hasLightTemp = True
+                    notNormalBlock = True
+            tempBlock = Block(hasLightTemp,hasCrossingTemp,hasSwitchTemp,notNormalBlock,False,blockId, line[5],None)
             totalBlocks.append(tempBlock)
     
     return totalBlocks #Return a list of all blocks within the file
@@ -86,6 +94,11 @@ class MyApp(QMainWindow):
         self.SwitchBlocks = ["B5","B6","C11"]
 
         #Defines Red line blocks
+        self.allRedBlocks = readTrackFile("Red_Line.csv")
+        self.specialRedBlocks = []
+
+        for block in self.allRedBlocks:
+            if block.state == True: self.specialRedBlocks.append(block)
 
         #Create Parser Object
         self.FileParser = Parser(None,self.AllBlocks)  #Currently empty onject

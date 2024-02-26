@@ -12,6 +12,7 @@ from PyQt5 import uic
 class CTC_Testbench(QtWidgets.QMainWindow):
     #Signals, to CTC module
     sendOccupiedBlocks = pyqtSignal(list)
+    sendTicketSales = pyqtSignal(list)
 
 
     def __init__(self):
@@ -28,11 +29,12 @@ class CTC_Testbench(QtWidgets.QMainWindow):
         self.UpdateTicketSalesButton.setStyleSheet("background-color : rgb(38, 207, 4)")    #Green
 
         #Setting Combo box values
-        lines = ['green', 'red']
+        lines = ['blue']
         self.LineSelect.addItems(lines)
 
-        #Initializing signal values
+        #Initializing signal values for communication with other UI windows
         self.sendOccupiedBlocks.emit([])
+        self.sendTicketSales.emit([0])
 
 
     #Defines functionality of the update occupied blocks button on the Testbench
@@ -49,16 +51,15 @@ class CTC_Testbench(QtWidgets.QMainWindow):
     #Defines funtionality of the update ticket sales button on the testbench
     def updateTicketSales_button(self):
         SalesText = self.TicketSalesField.text()
-        Sales = list(map(str.strip, SalesText.split(',')))
         line = self.LineSelect.currentText()
 
-        
-        self.ThroughputGraph.heights = Sales
+        Sales = [int(SalesText)]
+        self.sendTicketSales.emit(Sales)
+
+
         
 
-        self.ThroughputGraph.updateThroughputGraph()
-        pixmap = QPixmap('CTC/ThroughputGraph.jpeg')
-        self.ThroughputGraphLabel.setPixmap(pixmap)
+        
 
 
 """

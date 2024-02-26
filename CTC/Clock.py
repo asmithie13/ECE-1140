@@ -25,6 +25,7 @@ CTC_tb.show()
 
 #CTC Signals
 CTC_tb.sendOccupiedBlocks.connect(CTCwindow.updateOccupiedBlocks)
+CTC_tb.sendTicketSales.connect(CTCwindow.updateTicketSales)
 
 
 

@@ -68,7 +68,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Initializing Throughput    
         self.ThroughputGraph = Throughput()
-        pixmap = QPixmap('CTC/ThroughputGraph.jpeg')
+        pixmap = QPixmap('CTC/ThroughputGraph.png')
         self.ThroughputGraphLabel.setPixmap(pixmap)
         
         #Connecting signals for testbench
@@ -159,7 +159,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ManualModeButton.setEnabled(False)
         self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
 
-    #function to update block occupied table based on input from another window
+    #function to update block occupied table based on input from Wayside
     def updateOccupiedBlocks(self, arr):
         self.OccupiedBlockTable.setModel(BlocksTableModel(arr))
     
@@ -180,6 +180,15 @@ class CTC_UI(QtWidgets.QMainWindow):
         BlockToClose = self.CloseBlockField.text()
         self.Maintence.BlocksClosed.append([BlockToClose])
         self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))
+
+    #Function to update the ticket sales based on information from Track Model
+    def updateTicketSales(self, Sales):
+        self.ThroughputGraph.heights = Sales
+
+        self.ThroughputGraph.updateThroughputGraph()
+        pixmap = QPixmap('CTC/ThroughputGraph.png')
+        self.ThroughputGraphLabel.setPixmap(pixmap)
+
 
         
 

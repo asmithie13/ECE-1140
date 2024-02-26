@@ -17,29 +17,43 @@ class Parser():
     def blockState(self):   #will break up inputPLC into what commands to run based off of conditions of occupancies
         lines = self.inputPLC.split('\n')
         index = 0
+        alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-        for char in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+        for char in alphabet:
             occupied_blocks = [block for block in self.outPuttedBlocks if char in block.ID and block.occupied]
             self.blockOccsByID[index] = True if occupied_blocks else False
             index = index + 1
 
         index = 0
+        indexOcc = 0
+        indexNotOcc = 0
+        indexNextOcc = 0
+        indexEnd = len(lines) - 1
         
         for length in range(2,25):  #start with 2 for C
+            if (length + 1) >= 25 or not ("OCCUPIED " + alphabet[length]) in lines: break
+
+            isOcc = False
+        
+            if (length + 1) < 25 and "OCCUPIED " + alphabet[length + 1] in lines  : indexNextOcc = lines.index("OCCUPIED " + alphabet[length + 1])
+            else: indexNextOcc = indexEnd
+
+            indexOcc = lines.index("OCCUPIED " + alphabet[length])
+            indexNotOcc = lines.index("OCCUPIED !" + alphabet[length])
 
             if self.blockOccsByID[length]:
-                index = index
+                isOcc = True
+           
+            if isOcc: 
+                indexLoopStart = indexOcc + 1
+                indexLoopEnd = indexNotOcc - 1
             else:
-                index = index + 4 
-
-            if index > 8 : break
-
-            for len in range(index + 1, index + 4):
-                self.commandsToRun.append(lines[len])
-
-            index = index + 8
-
-            if index > 8 : break
+                indexLoopStart = indexNotOcc + 1
+                if indexNextOcc != indexEnd : indexLoopEnd = indexNextOcc - 1
+                else: indexLoopEnd = indexNextOcc + 1
+        
+            for pos in range(indexLoopStart, indexLoopEnd):
+                self.commandsToRun.append(lines[pos])
 
 
     def parsePLC(self):
@@ -58,6 +72,8 @@ class Parser():
                     match[0].state = True
                 else:
                     match[0].state = False
+
+            #CHANGE TO BE LIKE ABOVE JUST WITH DEFAULT STATES
 
             elif command == "SWITCH":
                 if int(parameters[1][1:]) - 1 == int(parameters[0][1:]): match[0].state = True

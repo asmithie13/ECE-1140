@@ -18,6 +18,9 @@ from Throughput import *
 
 
 class CTC_UI(QtWidgets.QMainWindow):
+    #Signals, for testbench
+    #sendAuthority = pyqtSignal(int)
+
     def __init__(self):
         super(CTC_UI, self).__init__()
         #Loading base UI layout from .ui file
@@ -67,6 +70,9 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ThroughputGraph = Throughput()
         pixmap = QPixmap('CTC/ThroughputGraph.jpeg')
         self.ThroughputGraphLabel.setPixmap(pixmap)
+        
+        #Connecting signals for testbench
+        #self.sendAuthority.emit(0)
 
 
         
@@ -152,6 +158,10 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Disable Manual Mode button (because it's one use)
         self.ManualModeButton.setEnabled(False)
         self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
+
+    #function to update block occupied table based on input from another window
+    def updateOccupiedBlocks(self, arr):
+        self.OccupiedBlockTable.setModel(BlocksTableModel(arr))
     
     #defining manual mode add train button functionality
     def addTrain_button(self):

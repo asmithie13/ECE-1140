@@ -13,6 +13,7 @@ def clock():
 
 UI_window = QtWidgets.QApplication(sys.argv)
 
+"""CTC"""
 #CTC UI connection
 global CTCwindow
 CTCwindow = CTC_UI()
@@ -22,6 +23,12 @@ global CTC_tb
 CTC_tb = CTC_Testbench()
 CTC_tb.show()
 
+#CTC Signals
+CTC_tb.sendOccupiedBlocks.connect(CTCwindow.updateOccupiedBlocks)
+
+
+
+"""Clock"""
 #Initializing Qtimer for clock
 timer0 = QtCore.QTimer()
 time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second

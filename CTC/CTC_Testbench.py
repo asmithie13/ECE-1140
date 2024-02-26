@@ -10,6 +10,10 @@ from PyQt5.QtCore import *
 from PyQt5 import uic
 
 class CTC_Testbench(QtWidgets.QMainWindow):
+    #Signals, to CTC module
+    sendOccupiedBlocks = pyqtSignal(list)
+
+
     def __init__(self):
         super(CTC_Testbench, self).__init__()
         #Loading base UI layout from .ui file
@@ -27,18 +31,20 @@ class CTC_Testbench(QtWidgets.QMainWindow):
         lines = ['green', 'red']
         self.LineSelect.addItems(lines)
 
+        #Initializing signal values
+        self.sendOccupiedBlocks.emit([])
+
 
     #Defines functionality of the update occupied blocks button on the Testbench
     def updateBlocks_button(self):
-        BlockText = self.OccupiedBlocksField.text()
+        BlockText = self.OccupiedBlocksInput.text()
         UpdatedBlocks = list(map(str.strip, BlockText.split(',')))
 
         UpdatedBlocksWithTrain = []
         for i in UpdatedBlocks:
             UpdatedBlocksWithTrain.append(['X', i])
 
-        self.occupiedBlocks.BlockData = UpdatedBlocksWithTrain
-        self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockData))
+        self.sendOccupiedBlocks.emit(UpdatedBlocksWithTrain)
 
     #Defines funtionality of the update ticket sales button on the testbench
     def updateTicketSales_button(self):
@@ -55,8 +61,9 @@ class CTC_Testbench(QtWidgets.QMainWindow):
         self.ThroughputGraphLabel.setPixmap(pixmap)
 
 
-
+"""
 UI_Window = QtWidgets.QApplication(sys.argv)
 CTC_tb_widow = CTC_Testbench()
 CTC_tb_widow.show()
 UI_Window.exec_()
+"""

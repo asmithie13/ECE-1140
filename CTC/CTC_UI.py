@@ -68,7 +68,9 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Initializing Throughput    
         self.ThroughputGraph = Throughput()
+        resolution = QtCore.QSize(250, 200)
         pixmap = QPixmap('CTC/ThroughputGraph.png')
+        pixmap = pixmap.scaled(resolution, aspectRatioMode=QtCore.Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
         self.ThroughputGraphLabel.setPixmap(pixmap)
         
         #Connecting signals for testbench
@@ -184,9 +186,11 @@ class CTC_UI(QtWidgets.QMainWindow):
     #Function to update the ticket sales based on information from Track Model
     def updateTicketSales(self, Sales):
         self.ThroughputGraph.heights = Sales
-
+        
         self.ThroughputGraph.updateThroughputGraph()
+        resolution = QtCore.QSize(250, 200)
         pixmap = QPixmap('CTC/ThroughputGraph.png')
+        pixmap = pixmap.scaled(resolution, aspectRatioMode=QtCore.Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
         self.ThroughputGraphLabel.setPixmap(pixmap)
 
 

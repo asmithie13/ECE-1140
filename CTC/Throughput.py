@@ -14,10 +14,11 @@ class Throughput():
 
     def updateThroughputGraph(self):
         f = plt.figure()
-        #f.set_figwidth(2)
-        #f.set_figheight(1)
+        #f.set_figwidth(4)
+        #f.set_figheight(3)
         
         plt.bar(self.left_coordinates, height = self.heights, tick_label= self.bar_labels, width=0.6, color = self.colors)
+        plt.title('Throughput')
         plt.xlabel('Line')
         plt.ylabel('# of Tickets Sold per Hour')
         plt.savefig('CTC/ThroughputGraph.png')

@@ -23,9 +23,12 @@ global CTC_tb
 CTC_tb = CTC_Testbench()
 CTC_tb.show()
 
-#CTC Signals
+#CTC Input Signals
 CTC_tb.sendOccupiedBlocks.connect(CTCwindow.updateOccupiedBlocks)
 CTC_tb.sendTicketSales.connect(CTCwindow.updateTicketSales)
+#CTC Output Signals
+CTCwindow.sendDispatchInfo.connect(CTC_tb.showDispatchInfo)
+
 
 
 

@@ -19,7 +19,7 @@ from Throughput import *
 
 class CTC_UI(QtWidgets.QMainWindow):
     #Signals, for testbench
-    #sendAuthority = pyqtSignal(int)
+    sendDispatchInfo = pyqtSignal(list)
 
     def __init__(self):
         super(CTC_UI, self).__init__()
@@ -39,7 +39,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.UploadButton.setStyleSheet("background-color : rgb(38, 207, 4)")       #Green
         self.CloseBlockButton.setStyleSheet("background-color: rgb(195, 16, 40)")   #Red
 
-        #Changing Background colors to section off UI
+        #Changing Background colors to section off UI, all light blue
         self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255);")
         self.ScheduleBox.setStyleSheet("background-color : rgb(233, 247, 255);")
         self.OccupiedBlocksBox.setStyleSheet("background-color : rgb(233, 247, 255);")
@@ -82,7 +82,7 @@ class CTC_UI(QtWidgets.QMainWindow):
     def addTrain_button(self):
         #Indicating manual mode is selected if it's not selected beforehand
         self.ManualModeButton.setEnabled(False)
-        self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
+        self.ManualModeButton.setStyleSheet("background-color: blue; color: black;")
 
         TrainID = self.TrainNameField.text()
         Departure = self.DepartureSationSelect.currentText()
@@ -131,14 +131,15 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.DepartureTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ArrivalTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
 
+
     #function to update the clock display on the layout
     def displayClock(self, time):
         self.CTC_clock.display(time)
 
         for i in self.trainSchedule.Scheduledata:
             if time == i[2]:
-                self.AuthorityLabel.setText('Authority: 500 m')
-                self.SpeedLabel.setText('Suggested Speed: 50 km/hr') 
+                self.sendDispatchInfo.emit([500, 50])
+
 
     #Define functionality for Upload File Button
     def open_files(self):
@@ -161,10 +162,12 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ManualModeButton.setEnabled(False)
         self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
 
+
     #function to update block occupied table based on input from Wayside
     def updateOccupiedBlocks(self, arr):
         self.OccupiedBlockTable.setModel(BlocksTableModel(arr))
-    
+
+
     #defining manual mode add train button functionality
     def addTrain_button(self):
         TrainID = self.TrainNameField.text()
@@ -175,13 +178,15 @@ class CTC_UI(QtWidgets.QMainWindow):
         ArrivalTime = self.ArrivalTimeEdit.time()
         ArrivalTime = ArrivalTime.toString("hh:mm")
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
-        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+
 
     #Function to add a block closure
     def closeBlock_button(self):
         BlockToClose = self.CloseBlockField.text()
         self.Maintence.BlocksClosed.append([BlockToClose])
         self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))
+
 
     #Function to update the ticket sales based on information from Track Model
     def updateTicketSales(self, Sales):

@@ -338,6 +338,7 @@ class Ui_TestBench(object):
 
     def Trigger_Authoirty_Countdown(self):
         self.ui.calcAuth()
+    
     def Open_Main_UI(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_MainWindow()

@@ -457,13 +457,16 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.addWidget(self.lcdCurSpd)
         self.gridLayout_5.addLayout(self.horizontalLayout_6, 1, 0, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox_8, 4, 0, 1, 4)
+
         self.groupBox_3 = QtWidgets.QGroupBox(self.centralwidget)
+
         font = QtGui.QFont()
         font.setPointSize(20)
         self.groupBox_3.setFont(font)
-        self.groupBox_3.setStyleSheet("background-color: rgb(233, 247, 255);")
+        self.groupBox_3.setStyleSheet("background-color: rgb(229, 255, 204);")
         self.groupBox_3.setAlignment(QtCore.Qt.AlignCenter)
         self.groupBox_3.setObjectName("groupBox_3")
+
         self.gridLayout_3 = QtWidgets.QGridLayout(self.groupBox_3)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.lcdKi = QtWidgets.QLCDNumber(self.groupBox_3)
@@ -510,6 +513,7 @@ class Ui_MainWindow(object):
 
 
 
+
         self.retranslateUi(MainWindow)
 
         self.buttonMan.clicked['bool'].connect(self.set_man)  # type: ignore
@@ -523,7 +527,7 @@ class Ui_MainWindow(object):
         self.vertSliderBrk.valueChanged.connect(lambda : self.calBrakeOutput())
         self.vertSliderPow.valueChanged.connect(lambda : self.calAccelOutput())  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
+        self.groupBox_3.setTitle("FOR TRAIN ENGINEER ONLY")
         self.inputKp.valueChanged.connect(lambda : self.onKpValueChanged())
         self.inputKi.valueChanged.connect(lambda : self.onKiValueChanged())
         self.temp.valueChanged.connect(self.tempControl)

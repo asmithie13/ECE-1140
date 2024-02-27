@@ -39,7 +39,7 @@ def readTrackFile(fileName):
                     notNormalBlock = True
                 elif(line[6] == "Light"):
                     hasLightTemp = True
-                    notNormalBlock = True
+                    notNormalBlock = False
             tempBlock = Block(hasLightTemp,hasCrossingTemp,hasSwitchTemp,notNormalBlock,False,blockId, line[5],None)
             totalBlocks.append(tempBlock)
     

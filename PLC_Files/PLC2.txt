@@ -1,0 +1,11 @@
+SwitchOcc or not SwitchRightOcc
+SWITCH
+
+SwitchOcc or SwitchRightOcc
+CurrentLIGHT
+
+SwitchOcc
+LeftLIGHT
+
+not SwitchOcc or SwitchRightOcc
+RightLIGHT

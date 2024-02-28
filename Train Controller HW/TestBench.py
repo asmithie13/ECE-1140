@@ -1,8 +1,31 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from mainControl import *
+import sys
+
+import serial
+import time
+
+
 
 class Ui_TestBench(object):
+    ser = serial.Serial('COM5', 9600, timeout=0)
+    time.sleep(2)
+
+    def __init__(self):
+
+        self.doorL = True
+        self.doorR = True
+        self.headLights = True
+        self.cabinLights = True
+
+        self.ser.write(b'B')  # doorL
+        self.ser.write(b'D')  # doorR
+        self.ser.write(b'F')  # Headlights
+        #self.ser.write(b'H')  # Cabin Lights
+
+
+
     def set_automatic_manual(self):
        self.ui.buttonAuto.toggle()
        self.ui.buttonMan.toggle()
@@ -16,39 +39,50 @@ class Ui_TestBench(object):
 
     def set_left_door(self):
         self.ui.buttonDoorL.toggle()
+        self.doorL = not self.doorL
+        if(self.doorL == True):
+            self.ser.write(b'A')
+        else:
+            self.ser.write(b'B')  # L
+
     def set_right_door(self):
         self.ui.buttonDoorR.toggle()
+        self.doorR = not self.doorR
+        if(self.doorR == True):
+            self.ser.write(b'C')
+        else:
+            self.ser.write(b'D')
     def set_headlights(self):
         self.ui.buttonHDon.toggle()
         self.ui.buttonHDoff.toggle()
+        self.headLights = not self.headLights
+        if(self.headLights == True):
+            self.ser.write(b'E')
+        else:
+            self.ser.write(b'F')
     def set_power_failure(self):
         if(not(self.PowerFailure.isChecked())):
-            self.ui.PwrFail.setStyleSheet("color: rgb(225, 225, 225);\n"
-"background-color: rgb(255, 255, 255);")
-
+            self.ui.Power_Failure_Disable()
         else:
-            self.ui.PwrFail.setStyleSheet("color: red;\n"
-"background-color: rgb(255, 255, 255);")
+            self.ui.Power_Failure_Enable()
     def set_brake_failure(self):
         if(not(self.BrakeFailure.isChecked())):
-            self.ui.BrkFail.setStyleSheet("color: rgb(225, 225, 225);\n"
-"background-color: rgb(255, 255, 255);")
+            self.ui.Brake_Failure_Disable()
         else:
-            self.ui.BrkFail.setStyleSheet("color: red;\n"
-"background-color: rgb(255, 255, 255);")
+            self.ui.Brake_Failure_Enable()
     def set_signal_failure(self):
         if(not(self.SignalFailure.isChecked())):
-            self.ui.SigFail.setStyleSheet("color: rgb(225, 225, 225);\n"
-"background-color: rgb(255, 255, 255);")
+            self.ui.Signal_Failure_Disable()
         else:
-            self.ui.SigFail.setStyleSheet("color: red;\n"
-"background-color: rgb(255, 255, 255);")
+            self.ui.Signal_Failure_Enable()
 
     def set_interior_lights(self):
         if self.CabinLights.value() == 2:
             self.ui.IntLightSld.setValue(2)
+            self.ser.write(b'G')
         elif self.CabinLights.value() == 0:
             self.ui.IntLightSld.setValue(0)
+            self.ser.write(b'H')
         elif self.CabinLights.value() == 1:
             self.ui.IntLightSld.setValue(1)
 
@@ -77,8 +111,11 @@ class Ui_TestBench(object):
         self.ui.lcdSpdLim.display(value)
 
     def set_current_speed(self):
-        value = int(self.CurSpeed.value())
-        self.ui.lcdCurSpd_2.display(value)
+        # in future iterations, move this to the UI function
+        if (self.ui.lcdAuth.value() == 0):
+            self.ui.lcdCurSpd.display(0)
+        else:
+            self.ui.lcdCurSpd.display(self.CurSpeed.value())
 
     def set_authority(self):
         value = int(self.Authority.value())
@@ -120,6 +157,7 @@ class Ui_TestBench(object):
         self.label_7.setObjectName("label_7")
         self.formLayout.setWidget(10, QtWidgets.QFormLayout.LabelRole, self.label_7)
         self.Authority = QtWidgets.QDoubleSpinBox(self.centralwidget)
+        self.Authority.setRange(0,9999)
         self.Authority.setObjectName("Authority")
         self.Authority.editingFinished.connect( lambda : self.set_authority())
         self.formLayout.setWidget(10, QtWidgets.QFormLayout.FieldRole, self.Authority)
@@ -247,11 +285,12 @@ class Ui_TestBench(object):
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.Auto = QtWidgets.QPushButton(self.centralwidget, clicked = lambda : self.set_automatic_manual())
         self.Auto.setCheckable(True)
-        self.Auto.setChecked(True)
+        self.Auto.setChecked(False)
         self.Auto.setObjectName("Auto")
         self.horizontalLayout_5.addWidget(self.Auto)
         self.Manual = QtWidgets.QPushButton(self.centralwidget, clicked = lambda : self.set_automatic_manual())
         self.Manual.setCheckable(True)
+        self.Manual.setChecked(True)
         self.Manual.setObjectName("Manual")
         self.horizontalLayout_5.addWidget(self.Manual)
         self.formLayout.setLayout(21, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_5)
@@ -333,6 +372,11 @@ class Ui_TestBench(object):
         self.Auto.setText(_translate("TestBench", "Auto"))
         self.Manual.setText(_translate("TestBench", "Manual"))
 
+        self.Authority.valueChanged.connect(lambda : self.Trigger_Authoirty_Countdown())
+        self.CurSpeed.valueChanged.connect(lambda : self.ui.calSpeed())
+
+    def Trigger_Authoirty_Countdown(self):
+        self.ui.calcAuth()
     def Open_Main_UI(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_MainWindow()

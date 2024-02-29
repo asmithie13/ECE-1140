@@ -779,6 +779,9 @@ class Ui_MainWindow(object):
                                    "background-color: rgb(255, 255, 255);")
         self.Ebrake.setChecked(False)
         self.ebrake_enable()
+
+    def trainSelect(self):
+        
         #################################################################################
 
     def retranslateUi(self, MainWindow):

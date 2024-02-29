@@ -21,6 +21,7 @@ def sort_by_number(block):
 def readTrackFile(fileName):
     totalBlocks = []
     lightBlocks = {}
+    crossingBlocks = []
     fileName = "Wayside SW/" + fileName
     with open(fileName, "r") as fileObject:
         readObj = csv.reader(fileObject, delimiter=",")
@@ -45,7 +46,9 @@ def readTrackFile(fileName):
 
                     #numbers = [part for part in line[6].split('-') if part.isdigit()]
                     numbers = re.findall(r'\b(\d+)-(\d+)\b', line[6])
-                    lightBlocks.update({num: False for pair in numbers for num in pair})
+                    current = {num: False for pair in numbers for num in pair}
+                    crossingBlocks.append(list(current.keys()))
+                    lightBlocks.update(current)
 
             tempBlock = Block(hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,False,blockId, line[5],None)
             totalBlocks.append(tempBlock)

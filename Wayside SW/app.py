@@ -107,7 +107,7 @@ class MyApp(QMainWindow):
         self.specialRedBlocks = []
 
         for block in self.allRedBlocks:
-            if block.state == True: self.specialRedBlocks.append(block)
+            if block.LIGHT or block.CROSSING or block.SWITCH : self.specialRedBlocks.append(block)
 
         #Create Parser Object
         self.FileParser = Parser(None,self.AllBlocks)  #Currently empty onject
@@ -210,8 +210,8 @@ class MyApp(QMainWindow):
         selectedBlock = self.BlockArray[selectedIndex]
 
         if selectedBlock.LIGHT and self.label_7.text():
-            self.greenButton.setEnabled(not selectedBlock.state and self.label_7.text() == "MANUAL")
-            self.redButton.setEnabled(selectedBlock.state and self.label_7.text() == "MANUAL")
+            self.greenButton.setEnabled(not selectedBlock.lightState and self.label_7.text() == "MANUAL")
+            self.redButton.setEnabled(selectedBlock.lightState and self.label_7.text() == "MANUAL")
             self.upCrossingButton.setEnabled(False)
             self.downCrossingButton.setEnabled(False)
             self.switchButton.setEnabled(False)
@@ -220,28 +220,28 @@ class MyApp(QMainWindow):
             self.downCrossingButton.setStyleSheet("")
             self.label_11.setText("")
             
-            if selectedBlock.state:
+            if selectedBlock.lightState:
                 self.greenButton.setStyleSheet('QPushButton {background-color: green; color: yellow;}')
                 self.redButton.setStyleSheet("")
-            elif not selectedBlock.state:
+            elif not selectedBlock.lightState:
                 self.greenButton.setStyleSheet("")
                 self.redButton.setStyleSheet('QPushButton {background-color: red; color: yellow;}')
 
         elif selectedBlock.CROSSING and self.selectLine.isChecked():
             self.greenButton.setEnabled(False)
             self.redButton.setEnabled(False)
-            self.upCrossingButton.setEnabled(not selectedBlock.state and self.label_7.text() == "MANUAL")
-            self.downCrossingButton.setEnabled(selectedBlock.state and self.label_7.text() == "MANUAL")
+            self.upCrossingButton.setEnabled(not selectedBlock.crossingState and self.label_7.text() == "MANUAL")
+            self.downCrossingButton.setEnabled(selectedBlock.crossingState and self.label_7.text() == "MANUAL")
             self.switchButton.setEnabled(False)
 
             self.greenButton.setStyleSheet("")
             self.redButton.setStyleSheet("")
             self.label_11.setText("")
 
-            if selectedBlock.state:
+            if selectedBlock.crossingState:
                 self.upCrossingButton.setStyleSheet("background-color: yellow")
                 self.downCrossingButton.setStyleSheet("")
-            elif not selectedBlock.state:
+            elif not selectedBlock.crossingState:
                 self.upCrossingButton.setStyleSheet("")
                 self.downCrossingButton.setStyleSheet("background-color: yellow")
 
@@ -252,7 +252,7 @@ class MyApp(QMainWindow):
             self.downCrossingButton.setEnabled(False)
             self.switchButton.setEnabled(True and self.label_7.text() == "MANUAL")
 
-            if selectedBlock.state == True:
+            if selectedBlock.switchState:
                 self.label_11.setText(self.SwitchBlocks[1])
 
             else:
@@ -265,7 +265,7 @@ class MyApp(QMainWindow):
 
     def greenButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].state = True
+        self.BlockArray[selectedIndex].lightState = True
         self.greenButton.setEnabled(False)
         self.redButton.setEnabled(True)
         self.greenButton.setStyleSheet('QPushButton {background-color: green; color: yellow;}')
@@ -274,7 +274,7 @@ class MyApp(QMainWindow):
 
     def redButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].state = False
+        self.BlockArray[selectedIndex].lightState = False
         self.greenButton.setEnabled(True)
         self.redButton.setEnabled(False)
         self.greenButton.setStyleSheet("")
@@ -283,7 +283,7 @@ class MyApp(QMainWindow):
 
     def upButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].state = True
+        self.BlockArray[selectedIndex].crossingState = True
         self.upCrossingButton.setEnabled(False)
         self.downCrossingButton.setEnabled(True)
         self.upCrossingButton.setStyleSheet("background-color: yellow")
@@ -292,7 +292,7 @@ class MyApp(QMainWindow):
 
     def downButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].state = False
+        self.BlockArray[selectedIndex].crossingState = False
         self.upCrossingButton.setEnabled(True)
         self.downCrossingButton.setEnabled(False)
         self.upCrossingButton.setStyleSheet("")
@@ -301,7 +301,7 @@ class MyApp(QMainWindow):
 
     def switchButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].state = not self.BlockArray[selectedIndex].state
+        self.BlockArray[selectedIndex].switchState = not self.BlockArray[selectedIndex].switchState
 
         current_text = self.label_11.text()
         if current_text == self.B5_Switch_Positions[0]:
@@ -400,7 +400,7 @@ class TestBench(QMainWindow):
 
             self.label_24.setText("")
 
-            if selectedBlock.state:
+            if selectedBlock.lightState:
                 self.label_19.setText("Green")
                 self.label_22.setText("")
             else:
@@ -410,14 +410,14 @@ class TestBench(QMainWindow):
             
             self.label_24.setText("")
 
-            if selectedBlock.state:
+            if selectedBlock.crossingState:
                 self.label_19.setText("")
                 self.label_22.setText("Up")
             else:
                 self.label_19.setText("")
                 self.label_22.setText("Down")
         elif selectedBlock.SWITCH:
-            if selectedBlock.state:
+            if selectedBlock.switchState:
                 self.label_19.setText("")
                 self.label_22.setText("")
                 self.label_24.setText("B6")

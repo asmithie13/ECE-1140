@@ -16,7 +16,7 @@ class Train_Controller_Signals :
 
         # Add PyQT signal declarations
 
-        #signals that we take as inputs
+        #signals that we take as inputs # I dont think we need these, I think this is on Tanvis side
         self.curr_spd_sig =pyqtSignal(int)
         self.curr_spd_sig.connect(self.Control_Current_Speed())
         self.curr_auth_sig=pyqtSignal(int)
@@ -56,6 +56,7 @@ class Train_Controller_Signals :
         #connect all of these to power calc function
         self.door_control_sig = pyqtSignal(int)
         self.announcement_sig = pyqtSignal(str)
+        self.temp_control_sig = pyqtSignal(int)
 
 
         #connecting UI buttons to functions
@@ -178,13 +179,13 @@ class Train_Controller_Signals :
             self.door_control_sig.emit(open)
 
     ## we need to call this when auth is entered from TB and we have a speed
-    def calcAuth(self):
+    def Control_Authority(self):
         # update auth every second
         self.calSpeed()
         if not self.authTimer.isActive():
             self.authTimer.start()
 
-    def updateAuth(self):
+    def Authority_Montior(self):
         # decrease auth
         # Get current speed every second from train model to calc auth for display
         if ((self.lcdAuth.value() != 0) & (self.lcdCurSpd.value() != 0)):
@@ -295,5 +296,8 @@ class Train_Controller_Signals :
     def Control_Annoucement(self,announcement):
         self.ui.SpkrOut.setText(announcement)
         self.announcement_sig.emit(announcement)
+
+
+
 
       

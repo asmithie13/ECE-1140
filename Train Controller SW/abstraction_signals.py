@@ -97,6 +97,29 @@ class Train_Controller_Signals :
         self.power = (self.ui.inputKp.value() * self.ui.inputKp.value() / self.dt) * (self.ui.vertSliderPow.value()/100)
         self.ui.lcdPwrOut.display(self.power)
         self.curr_power_sig.emit(self.power)
+        
+
+        ##I think this is the correct way to do it
+        
+        #get current time from global clock called
+        #self.time = self.globalClock
+        #self.dt = self.time - self.prevTime
+        #self.prevTime = self.time
+        #self.error = self.lcdCmdSpd.value() - self.lcdCurSpd.value()
+        #self.uk = self.prevUk + (self.error + self.prevError) * self.dt / 2
+        #self.prevError = self.error
+        #self.prevUk = self.uk
+        #self.power = self.lcdKp.value() * self.error + self.lcdKi.value() * self.uk
+        #if self.power > 120000:
+        #    self.power = 120000
+        #elif self.power < 0:
+        #    self.power = 0
+        #self.lcdPwrOut.display(self.power)
+        #self.curr_power_sig.emit(self.power)
+
+
+
+
 
     def Control_Temperature(self,temp):
         self.ui.lcdCurTemp.display(temp)

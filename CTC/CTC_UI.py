@@ -171,44 +171,6 @@ class UI(QtWidgets.QMainWindow):
         ArrivalTime = ArrivalTime.toString("hh:mm")
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
-<<<<<<< HEAD
-=======
-=======
-    #Function to add a block closure
-    def closeBlock_button(self):
-        BlockToClose = self.CloseBlockField.text()
-        self.Maintence.BlocksClosed.append([BlockToClose])
-        self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))
-
-    """TEST BENCH FUNCTIONS"""
-    #Defines functionality of the update occupied blocks button on the Testbench
-    def updateBlocks_button(self):
-        BlockText = self.OccupiedBlocksField.text()
-        UpdatedBlocks = list(map(str.strip, BlockText.split(',')))
-
-        UpdatedBlocksWithTrain = []
-        for i in UpdatedBlocks:
-            UpdatedBlocksWithTrain.append(['X', i])
-
-        self.occupiedBlocks.BlockData = UpdatedBlocksWithTrain
-        self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockData))
-
-    #Defines funtionality of the update ticket sales button on the testbench
-    def updateTicketSales_button(self):
-        SalesText = self.TicketSalesField.text()
-        Sales = list(map(str.strip, SalesText.split(',')))
-        line = self.LineSelect.currentText()
-
-        
-        self.ThroughputGraph.heights = Sales
-        
-
-        self.ThroughputGraph.updateThroughputGraph()
-        pixmap = QPixmap('CTC/ThroughputGraph.jpeg')
-        self.ThroughputGraphLabel.setPixmap(pixmap)
-
-        
->>>>>>> b7811e0ac4cac2368796855e3584866c283f91df
 
 
 

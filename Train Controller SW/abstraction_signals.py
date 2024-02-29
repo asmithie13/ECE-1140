@@ -57,6 +57,7 @@ class Train_Controller_Signals :
         self.door_control_sig = pyqtSignal(int)
         self.announcement_sig = pyqtSignal(str)
         self.temp_control_sig = pyqtSignal(int)
+        self.underground_sig = pyqtSignal(bool)
 
 
         #connecting UI buttons to functions
@@ -296,6 +297,15 @@ class Train_Controller_Signals :
     def Control_Annoucement(self,announcement):
         self.ui.SpkrOut.setText(announcement)
         self.announcement_sig.emit(announcement)
+
+    def Control_Underground(self,underground):
+        if (underground == True):
+            self.ui.underground_disp.setStyleSheet("color: red;\n"
+                                          "background-color: rgb(255, 255, 255);")
+            # DISABLE
+        else:
+            self.ui.underground_disp.setStyleSheet("color: rgb(225, 225, 225);\n"
+                                          "background-color: rgb(255, 255, 255);")
 
 
 

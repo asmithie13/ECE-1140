@@ -16,8 +16,8 @@ class Train_Controller_Signals :
 
         # Add PyQT signal declarations
 
-        #signals that we take as inputs
-        self.curr_spd_sig = pyqtSignal(int)
+        #signals that we take as inputs # I dont think we need these, I think this is on Tanvis side
+        self.curr_spd_sig =pyqtSignal(int)
         self.curr_spd_sig.connect(self.Control_Current_Speed())
         self.curr_auth_sig=pyqtSignal(int)
 
@@ -56,6 +56,7 @@ class Train_Controller_Signals :
         #connect all of these to power calc function
         self.door_control_sig = pyqtSignal(int)
         self.announcement_sig = pyqtSignal(str)
+        self.temp_control_sig = pyqtSignal(int)
 
 
         #connecting UI buttons to functions
@@ -89,6 +90,8 @@ class Train_Controller_Signals :
             #self.curr_accel_sig.emit(self.ui.vertSliderPow.value())
             #call power function
             self.Control_Power()
+
+
 
     def Control_KI(self):
         self.lcdKi.display(self.inputKi.value())
@@ -155,7 +158,6 @@ class Train_Controller_Signals :
     def Control_Commanded_Speed(self,cmd_spd):
         self.ui.lcdCmdSpd.display(cmd_spd)
         self.Speed_Montior()
-    
     def Speed_Montior(self):
         if(self.ui.lcdCurSpd.value() > self.lcdCmdSpd.value() or self.ui.lcdCurSpd.value() > self.ui.lcdSpdLim.value() and self.ui.vertSliderBrk == 0):
             self.ui.vertSliderPow.setValue(0)
@@ -177,17 +179,16 @@ class Train_Controller_Signals :
             self.door_control_sig.emit(open)
 
     ## we need to call this when auth is entered from TB and we have a speed
-    def calcAuth(self):
+    def Control_Authority(self):
         # update auth every second
         self.calSpeed()
         if not self.authTimer.isActive():
             self.authTimer.start()
 
-    def updateAuth(self):
+    def Authority_Montior(self):
         # decrease auth
         # Get current speed every second from train model to calc auth for display
         if ((self.lcdAuth.value() != 0) & (self.lcdCurSpd.value() != 0)):
-            #change door control function
             self.doorControl(False)
             rate = self.lcdCurSpd.value() * 1.46667
             if self.lcdAuth.value() - rate <= 0:
@@ -200,7 +201,6 @@ class Train_Controller_Signals :
         # target auth reached
         else:
             self.authTimer.stop()
-            #change door control function
             self.doorControl(True)
 
 
@@ -297,14 +297,7 @@ class Train_Controller_Signals :
         self.ui.SpkrOut.setText(announcement)
         self.announcement_sig.emit(announcement)
 
-    def underground_sig(self,underground):
-        if(underground == True):
-            self.ui.Underground.setStyleSheet("color: red;\n"
-                                       "background-color: rgb(255, 255, 255);")
-        else:
-            self.ui.Underground.setStyleSheet("color: rgb(225, 225, 225);\n"
-                                       "background-color: rgb(255, 255, 255);")
-            
-    
+
+
 
       

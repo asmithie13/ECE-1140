@@ -27,6 +27,7 @@ class Train_Controller_Signals :
         self.curr_temp_sig.connect(self.Control_Temperature())
 
         self.ebrake_sig = pyqtSignal(bool)
+        self.ebrake_sig.connect(self.Control_Emergency_Brake())
 
         self.pwr_fail_sig = pyqtSignal(bool)
         self.pwr_fail_sig.connect(self.Control_Power_Failure())
@@ -54,6 +55,16 @@ class Train_Controller_Signals :
         self.curr_power_sig = pyqtSignal(int)
         #connect all of these to power calc function
         self.door_control_sig = pyqtSignal(int)
+        self.announcement_sig = pyqtSignal(str)
+
+
+        #connecting UI buttons to functions
+        self.ui.Ebrake.clicked.connect(self.Control_Emergency_Brake())
+        self.ui.buttonMan.clicked.connect(self.Control_Manual)
+        self.ui.buttonAuto.clicked.connect(self.Control_Automatic())
+        self.ui.temp.valueChanged.connect(self.Control_Temperature())
+        self.ui.lineEditAnn.editingFinished.connect(self.Control_Annoucement(self.ui.lineEditAnn.text()))
+
 
 
 
@@ -78,6 +89,7 @@ class Train_Controller_Signals :
             #self.curr_accel_sig.emit(self.ui.vertSliderPow.value())
             #call power function
             self.Control_Power()
+
 
 
     def Control_KI(self):
@@ -126,10 +138,9 @@ class Train_Controller_Signals :
 
     # called when speed changes
     def Control_Current_Speed(self,curr_speed):
-        self.ui.currentSpeed.display(curr_speed)
+        self.ui.lcdCurSpd.display(curr_speed)
+        self.Speed_Montior()
         #need an internal function that will adjust other paramters as the current speed adjusts
-        self.Speed_Control
-
         # over speed limit
 
         #if (self.lcdCmdSpd.value() > self.lcdSpdLim.value()) & (self.lcdCurSpd.value() < self.lcdCmdSpd.value()):
@@ -138,23 +149,27 @@ class Train_Controller_Signals :
         # if cmd is less than current speed and speed limit
         #elif (self.lcdCmdSpd.value() > self.lcdCurSpd.value()) & (self.lcdCmdSpd.value() < self.lcdSpdLim.value()):
             #self.lcdCurSpd.display(self.lcdCurSpd.value() - 1)
-        #self.calcAuth()
-        if(self.lcdCurSpd.value() == 0 and self.lcdAuth.value() == 0):
-            self.speedTimer.stop()
-        elif(self.lcdCurSpd.value() > self.lcdCmdSpd.value() or self.lcdCurSpd.value() > self.lcdSpdLim.value() and self.vertSliderBrk == 0):
-            self.vertSliderPow.setValue(0)
-            self.vertSliderBrk.setValue(1)
-            self.calBrakeOutput()
-            self.vertSliderPow.setDisabled(True)
-        elif (self.lcdCurSpd.value() < self.lcdCmdSpd.value() and self.lcdCurSpd.value() < self.lcdSpdLim.value()):
+        #self.calcAuth(
+    def Control_Speed_Limit(self,spd_lim):
+        self.ui.lcdSpdLim.display(spd_lim)
+        self.Speed_Montior()
+
+    def Control_Commanded_Speed(self,cmd_spd):
+        self.ui.lcdCmdSpd.display(cmd_spd)
+        self.Speed_Montior()
+    def Speed_Montior(self):
+        if(self.ui.lcdCurSpd.value() > self.lcdCmdSpd.value() or self.ui.lcdCurSpd.value() > self.ui.lcdSpdLim.value() and self.ui.vertSliderBrk == 0):
+            self.ui.vertSliderPow.setValue(0)
+            self.ui.vertSliderBrk.setValue(1)
+            self.ui.vertSliderPow.setDisabled(True)
+        ########AUTOMATIC MODE ONLY ##########
+        elif (self.ui.lcdCurSpd.value() < self.ui.lcdCmdSpd.value() and self.ui.lcdCurSpd.value() < self.ui.lcdSpdLim.value()):
             self.vertSliderBrk.setValue(0)
             self.vertSliderPow.setValue(50)
-            self.lcdCurSpd.display(self.lcdCurSpd.value() + 1)
+        #######################################
         else:
-            self.speedTimer.stop()
-            self.vertSliderPow.setDisabled(False)
-            self.vertSliderPow.setValue(0)
-
+            self.ui.vertSliderPow.setDisabled(False)
+            self.ui.vertSliderPow.setValue(0)
 
     # I am coming back to you
     # this function I don't get around
@@ -162,14 +177,12 @@ class Train_Controller_Signals :
         if (self.ui.lcdAuth.value == 0):
             self.door_control_sig.emit(open)
 
-
     ## we need to call this when auth is entered from TB and we have a speed
     def calcAuth(self):
         # update auth every second
         self.calSpeed()
         if not self.authTimer.isActive():
             self.authTimer.start()
-
 
     def updateAuth(self):
         # decrease auth
@@ -186,7 +199,6 @@ class Train_Controller_Signals :
 
         # target auth reached
         else:
-
             self.authTimer.stop()
             self.doorControl(True)
 
@@ -202,40 +214,41 @@ class Train_Controller_Signals :
       self.lineEditAnn.setDisabled(True)
       self.inputKi.setDisabled(True)
       self.inputKp.setDisabled(True)
+      self.Speed_Montior()
 
 
     def Control_Manual(self):
-        self.buttonAuto.toggle()
-        self.buttonDoorL.setDisabled(False)
-        self.buttonDoorR.setDisabled(False)
-        self.temp.setDisabled(False)
-        self.buttonHDon.setDisabled(False)
-        self.buttonHDoff.setDisabled(False)
-        self.IntLightSld.setDisabled(False)
-        self.lineEditAnn.setDisabled(False)
-        self.inputKi.setDisabled(False)
-        self.inputKp.setDisabled(False)
+        self.ui.buttonAuto.toggle()
+        self.ui.buttonDoorL.setDisabled(False)
+        self.ui.buttonDoorR.setDisabled(False)
+        self.ui.temp.setDisabled(False)
+        self.ui.buttonHDon.setDisabled(False)
+        self.ui.buttonHDoff.setDisabled(False)
+        self.ui.IntLightSld.setDisabled(False)
+        self.ui.lineEditAnn.setDisabled(False)
+        self.ui.inputKi.setDisabled(False)
+        self.ui.inputKp.setDisabled(False)
 
     def Control_Emergency_Brake(self):
-        if self.Ebrake.isChecked() == True:
+        if self.ui.Ebrake.isChecked() == True:
             enable = True
-        else :
+        else:
             enable = False
-        self.buttonMan.setDisabled(enable)
-        self.buttonMan.setDisabled(enable)
-        self.buttonDoorL.setDisabled(enable)
-        self.buttonDoorR.setDisabled(enable)
-        self.temp.setDisabled(enable)
-        self.buttonHDoff.setDisabled(enable)
-        self.buttonHDon.setDisabled(enable)
-        self.IntLightSld.setDisabled(enable)
-        self.lineEditAnn.setDisabled(enable)
-        self.vertSliderPow.setValue(0)
-        self.vertSliderBrk.setValue(0)
-        self.vertSliderBrk.setDisabled(enable)
-        self.vertSliderPow.setDisabled(enable)
-        self.inputKi.setDisabled(enable)
-        self.inputKp.setDisabled(enable)
+        self.ui.buttonMan.setDisabled(enable)
+        self.ui.buttonMan.setDisabled(enable)
+        self.ui.buttonDoorL.setDisabled(enable)
+        self.ui.buttonDoorR.setDisabled(enable)
+        self.ui.temp.setDisabled(enable)
+        self.ui.buttonHDoff.setDisabled(enable)
+        self.ui.buttonHDon.setDisabled(enable)
+        self.ui.IntLightSld.setDisabled(enable)
+        self.ui.lineEditAnn.setDisabled(enable)
+        self.ui.vertSliderPow.setValue(0)
+        self.ui.vertSliderBrk.setValue(0)
+        self.ui.vertSliderBrk.setDisabled(enable)
+        self.ui.vertSliderPow.setDisabled(enable)
+        self.ui.inputKi.setDisabled(enable)
+        self.ui.inputKp.setDisabled(enable)
 
 
     def Control_Signal_Failure(self,sig_fail):
@@ -246,7 +259,7 @@ class Train_Controller_Signals :
             self.ui.vertSliderBrk.setValue(1)
             self.ui.vertSliderPow.setDisabled(True)
             self.ui.vertSliderBrk.setDisabled(True)
-        else :
+        else:
             self.ui.SigFail.setStyleSheet("color: rgb(225, 225, 225);\n"
                                        "background-color: rgb(255, 255, 255);")
             self.ui.vertSliderPow.setDisabled(False)
@@ -254,7 +267,7 @@ class Train_Controller_Signals :
 
 
     def Control_Power_Failure(self,pwr_fail):
-        if(pwr_fail == True):
+        if pwr_fail == True:
             self.ui.PwrFail.setStyleSheet("color: red;\n"
                                           "background-color: rgb(255, 255, 255);")
             self.ui.vertSliderPow.setValue(0)
@@ -279,6 +292,8 @@ class Train_Controller_Signals :
                                        "background-color: rgb(255, 255, 255);")
             self.ui.Ebrake.setChecked(False)
 
-
+    def Control_Annoucement(self,announcement):
+        self.ui.SpkrOut.setText(announcement)
+        self.announcement_sig.emit(announcement)
 
       

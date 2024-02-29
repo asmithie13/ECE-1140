@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 
 # Using Block Class as a seperate file
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -19,6 +20,7 @@ def sort_by_number(block):
 #Function that reads all blocks from a *.csv file and assigns block attributes:
 def readTrackFile(fileName):
     totalBlocks = []
+    lightBlocks = {}
     fileName = "Wayside SW/" + fileName
     with open(fileName, "r") as fileObject:
         readObj = csv.reader(fileObject, delimiter=",")
@@ -26,22 +28,35 @@ def readTrackFile(fileName):
             hasCrossingTemp = False
             hasSwitchTemp = False
             hasLightTemp = False
-            notNormalBlock = False
+            lightState = None
+            crossingState = None
+            switchState = None
             blockId = line[1] + line[2]
             if(i == 0):
                 continue
             else:
                 if(line[6] == "RAILWAY CROSSING"):
                     hasCrossingTemp = True
-                    notNormalBlock = True
+                    crossingState = True
+
                 elif(line[6][0:6] == "SWITCH"):
                     hasSwitchTemp = True
-                    notNormalBlock = True
-                elif(line[6] == "Light"):
-                    hasLightTemp = True
-                    notNormalBlock = False
-            tempBlock = Block(hasLightTemp,hasCrossingTemp,hasSwitchTemp,notNormalBlock,False,blockId, line[5],None)
+                    switchState = True
+
+                    #numbers = [part for part in line[6].split('-') if part.isdigit()]
+                    numbers = re.findall(r'\b(\d+)-(\d+)\b', line[6])
+                    lightBlocks.update({num: False for pair in numbers for num in pair})
+
+            tempBlock = Block(hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,False,blockId, line[5],None)
             totalBlocks.append(tempBlock)
+
+            #Assign light values now
+
+        for block in totalBlocks:
+            if block.ID[1:] in lightBlocks:
+                block.LIGHT = True
+                block.lightState = False
+
     
     return totalBlocks #Return a list of all blocks within the file
 
@@ -56,16 +71,10 @@ class MyApp(QMainWindow):
         uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
 
         # Global constants for LIGHT, CROSSING, and SWITCH
-        LIGHT_CONST = [True, False, False, True,False]
-        CROSSING_CONST = [False, True, False, True,False]
-        SWITCH_CONST = [False, False, True, True,False]
-        NORMAL_CONST = [False, False, False, False, False]
-
-        #Index [0] of each Block => True if Light
-        #Index [1] of each Block => True if Crossing
-        #Index [2] of each Block => True if Switch
-        #Index [3] of each Block => Default
-        #Index [4] of each Block => True if Occupied
+        LIGHT_CONST = [True, False, False, False,None,None,False]
+        CROSSING_CONST = [False, True, False, None,True,None,False]
+        SWITCH_LIGHT_CONST = [True, False, True, False,None,True,False]
+        NORMAL_CONST = [False, False, False, None,None,None,False]
 
         #Switch Directions
         self.B5_Switch_Positions = ["B6","C11"]
@@ -75,7 +84,7 @@ class MyApp(QMainWindow):
         A2 = Block(*NORMAL_CONST,"A2",50,None)
         A3 = Block(*CROSSING_CONST,"A3",50,None)
         A4 = Block(*NORMAL_CONST,"A4",50,None) 
-        A5 = Block(*SWITCH_CONST,"A5",50,None) 
+        A5 = Block(*SWITCH_LIGHT_CONST,"A5",50,None) 
         B6 = Block(*LIGHT_CONST,"B6",50,None)
         B7 = Block(*NORMAL_CONST,"B7",50,None)
         B8 = Block(*NORMAL_CONST,"B8",50,None)

@@ -36,7 +36,7 @@ CTCwindow.sendDispatchInfo.connect(CTC_tb.showDispatchInfo)
 #Initializing Qtimer for clock
 timer0 = QtCore.QTimer()
 time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
-timer0.setInterval(100)
+timer0.setInterval(100)         #Interval in ms
 timer0.timeout.connect(clock)
 timer0.start()
 

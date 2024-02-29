@@ -14,8 +14,8 @@ class CTC_Maintenance():
     def __init__(self, Blocks = []):
         self.BlocksClosed = Blocks
 
-    def addBlockOccupancy(self, BlockNum):
-        newBlockClosure = [BlockNum]
+    def addBlockClosure(self, BlockNID):
+        newBlockClosure = [BlockID]
         self.BlockData.append(newBlockClosure)
 
 

@@ -23,9 +23,12 @@ class Parser():
             for i in range(0, len(self.CrossingTriplesIDS)*3, 3)
         ]
 
+        for data in CrossingTripleBlocks:
+            SwitchOcc = data[0].occupied
+            SwitchRightOcc = data[2].occupied
+
+            data[0].switchState = eval(switchLogic)
+            data[0].lightState = eval(curLightLogic)
+            data[1].lightState = eval(leftLightLogic)
+            data[2].lightState = eval(rightLightLogic)
         
-
-            
-            
-
-

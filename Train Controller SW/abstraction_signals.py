@@ -306,7 +306,10 @@ class Train_Controller_Signals :
         else:
             self.ui.underground_disp.setStyleSheet("color: rgb(225, 225, 225);\n"
                                           "background-color: rgb(255, 255, 255);")
-
+    def Control_Beacon_Informattion(self,beacon_information):
+        ## need to add stuff here
+        ### THIS IS NOT RIGHT
+        self.ui.CurrentStation.setText(beacon_information)
 
 
 

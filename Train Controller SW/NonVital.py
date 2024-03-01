@@ -38,3 +38,27 @@ class NonVital(TrainController):
             self.ui.IntLightSld.setValue(1)
             self.stationTimer.start()
             self.stationTimer.timeout.connect(lambda: self.ui.buttonDoorR.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
+
+        def BothStation(self):
+            #open both doors
+            #send announcement
+            #turn on int lights
+            #wait 60 seconds
+            #close both doors
+            #turn off int lights
+            #send announcement to next station
+
+            self.ui.buttonDoorL.toggle()
+            self.ui.buttonDoorR.toggle()
+            self.ui.announcement_sig.emit("Welcome to " + self.ui.lineEditAnn.text())
+            self.ui.IntLightSld.setValue(1)
+            self.stationTimer.start()
+            self.stationTimer.timeout.connect(lambda: self.ui.buttonDoorL.toggle(), self.ui.buttonDoorR.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
+
+        def Read_Beacon(self):
+            #take in beacon info from tanvi
+            #call station function depending on beacon info
+        
+        def Control_Underground(self)
+            #calc distance from beacon to underground block using d=rt
+            #when distance traveled is equal to distance to underground block, turn on beacan indicator

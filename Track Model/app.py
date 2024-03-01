@@ -21,15 +21,26 @@ from PyQt5 import QtGui as qtg
 class MyMainWindow(QMainWindow):
     # Define a signal to emit the grade to testBench UI
     grade_signal = pyqtSignal(float)
+    #Adding a signal to update information based on block selection:
+    block_selected_signal = pyqtSignal(str)  # Add this at the beginning of the class
 
     def __init__(self):
         super().__init__()
-
+        self.blockStates = {}
+        
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track Model/Track_Model.ui", self)
 
         # Connect Upload Track Layout button to make upload file
         self.pushButton.clicked.connect(self.upload_track_layout) 
+
+        #Connect failure screen to block selection to make it easier for user/disable dropdown for failure
+        self.block_in_1.activated.connect(self.update_block_in_2_based_on_block_in_1)
+        self.block_in_2.setEnabled(False)
+
+
+
+
 
         # Generate a random number between 1 and 74 for ticket sales
         random_number = random.randint(1, 74)
@@ -160,12 +171,15 @@ class MyMainWindow(QMainWindow):
         self.block_in_1.activated[str].connect(lambda text: self.update_block_info(text))
 
     # This function uses the data from the data class to update block data and output it to main UI
+    # This function uses the data from the data class to update block data and output it to main UI
     def update_block_info(self, block_text):
+        # Reset the states of the buttons whenever a new block is selected
+        #self.reset_button_states()
 
         # From dropdown of "B#" take out the letter B
         block_num = int(block_text.split()[-1][1:])  
 
-        #Get certain data from specific block
+        # Get certain data from specific block
         elevation_m = self.data.get_elevation_for_block(block_num)
         grade = self.data.get_grade_for_block(block_num)
         length1_m = self.data.get_length_for_block(block_num)
@@ -173,8 +187,8 @@ class MyMainWindow(QMainWindow):
         section = self.data.get_section_for_block(block_num)
         speed_limit_km = self.data.get_speed_for_block(block_num)
 
-        #Math conversion from metric to imperical for track length, speed limit, and elevation.
-        elevation_ft = elevation_m *3.28084
+        # Math conversion from metric to imperial for track length, speed limit, and elevation.
+        elevation_ft = elevation_m * 3.28084
         elevation_str = "{:.4f}".format(elevation_ft).rstrip('0').rstrip('.')
 
         length_ft = length1_m * 3.28084
@@ -191,8 +205,37 @@ class MyMainWindow(QMainWindow):
         self.section_in.setText(str(section))
         self.speed_in.setText(speed_limit_str)
 
-        #Emit the grade signal with the grade value (sig)
+        # Emit the grade signal with the grade value (sig)
         self.grade_signal.emit(grade)
+
+        # Emit screen change based on block selection
+        self.block_selected_signal.emit(block_text)
+    
+        # After updating the UI, restore the state of toggle buttons for the selected block
+        self.restore_block_state(block_text)
+
+#does not work
+    def restore_block_state(self, block_text):
+            if block_text in self.blockStates:
+                #Restore states for known elements; example for offButton_1
+                state = self.blockStates[block_text].get('offButton_1', 'OFF')  # Default to 'OFF'
+                self.offButton_1.setText(state)
+                color = "green" if state == "ON" else "rgb(195, 16, 40)"
+                self.offButton_1.setStyleSheet(f"background-color: {color};")
+            else:
+                self.offButton_1.setText("OFF")
+                self.offButton_1.setStyleSheet("background-color: rgb(195, 16, 40);")
+                self.offButton_2.setText("OFF")
+                self.offButton_2.setStyleSheet("background-color: rgb(195, 16, 40);")
+                self.offButton_3.setText("OFF")
+                self.offButton_3.setStyleSheet("background-color: rgb(195, 16, 40);")
+
+
+    def update_block_in_2_based_on_block_in_1(self):
+    # Get the currently selected text in block_in_1
+        selected_text = self.block_in_1.currentText()
+
+        self.block_in_2.setCurrentText(selected_text)
 
 #this is my testbench window
 class TestBench(QMainWindow):
@@ -217,6 +260,7 @@ class TestBench(QMainWindow):
 
         # Load the track model testbench straight from the UI file using uic
         uic.loadUi("Track Model/testbench_trackmodel.ui", self)
+
 
         # Calling test input functions
         self.test_input()
@@ -343,6 +387,9 @@ class TestBench(QMainWindow):
         power1 = text
         # Set the text to the output text
         self.power_block_out.setText(power1)
+
+    def update_on_block_selection(self, selected_block):
+        pass
 
 #My data class containing data from excel 
 class Data:
@@ -473,7 +520,7 @@ if __name__ == "__main__":
     window_2.track_input_signal.connect(window.toggle_button_state_2_tb)
     window_2.power_input_signal.connect(window.toggle_button_state_3_tb)
 
-    window_2.dropdown_broken_signal.connect(window.update_main_dropdown)
+    window_2.dropdown_broken_signal.connect(window.update_main_dropdown) 
 
     window_2.ticket_sales_signal.connect(window.update_ticket_sales)
 
@@ -484,6 +531,7 @@ if __name__ == "__main__":
     # Connect MyMainWindow's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)
 
+    window.block_selected_signal.connect(window_2.update_on_block_selection)
     window.show()
     window_2.show()
 

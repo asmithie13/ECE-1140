@@ -50,9 +50,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>480</y>
+      <y>490</y>
       <width>521</width>
-      <height>171</height>
+      <height>161</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -62,10 +62,121 @@
 </string>
     </property>
     <property name="title">
-     <string>Failure Modes on Selected Block</string>
+     <string>Failure Modes</string>
     </property>
-    <layout class="QGridLayout" name="gridLayout">
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0" colspan="2">
+      <widget class="QComboBox" name="block_in_2">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Select Block</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A5</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B6</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B7</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B8</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B9</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C11</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C12</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C13</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C14</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C15</string>
+        </property>
+       </item>
+      </widget>
+     </item>
      <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>Broken Rail</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="offButton_1">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="text">
+        <string>OFF</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
       <widget class="QLabel" name="label_3">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -84,20 +195,17 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_2">
+     <item row="2" column="1">
+      <widget class="QPushButton" name="offButton_2">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(white);</string>
        </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
        <property name="text">
-        <string>Broken Rail</string>
+        <string>OFF</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="label_4">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(white);</string>
@@ -110,28 +218,8 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="3" column="1">
       <widget class="QPushButton" name="offButton_3">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="text">
-        <string>OFF</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QPushButton" name="offButton_2">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="text">
-        <string>OFF</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="offButton_1">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(white);</string>
        </property>

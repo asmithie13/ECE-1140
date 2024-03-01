@@ -7,5 +7,5 @@ CurrentLIGHT
 SwitchOcc
 LeftLIGHT
 
-not SwitchOcc or SwitchRightOcc
+not SwitchOcc and SwitchRightOcc
 RightLIGHT

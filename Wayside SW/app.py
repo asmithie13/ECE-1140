@@ -113,7 +113,10 @@ class MyApp(QMainWindow):
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialRedBlocks.append(block)
 
         #Create Parser Object
-        self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)  #Currently testing red object
+        self.SwitchBlocksNums = [['5','6','11']]
+
+        #self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)  #Currently testing red object
+        self.FileParser = Parser(None,self.SwitchBlocksNums,self.AllBlocks)
 
         # Buttons
         self.fileButton.clicked.connect(self.on_file_button_clicked)

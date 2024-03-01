@@ -72,64 +72,33 @@ class Train_Controller_Signals :
 
     #connecting internal UI signals to interal fucntion
 
-    def Control_Service_Brake(self):
-        #set output display
-        self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
-        #send to Train Model
-        self.service_brake_sig.emit(1)
 
-    def Control_Acceleration(self):
-       #not sure if this part commented out is neccesary
-       # if self.curr_auth_sig == 0:
-        #    self.vertSliderPow.setValue(0)
 
-       #as long as authority is not equal to zero
-       if(self.curr_auth_sig > 0):
-            self.ui.lcdPow_2.display(self.ui.vertSliderPow.value())
-            self.ui.vertSliderBrk.setValue(0)
-            #need to add a signal to change that triggers the power calculation function
-            #self.curr_accel_sig.emit(self.ui.vertSliderPow.value())
-            #call power function
-            self.Control_Power()
+   
 
 
 
-    def Control_KI(self):
-        self.lcdKi.display(self.inputKi.value())
-        self.Control_Power()
-        #self.curr_KI_sig.emit(self.inputKi.value())
+    # def Control_KI(self):
+    #     self.lcdKi.display(self.inputKi.value())
+    #     self.Control_Power()
+    #     #self.curr_KI_sig.emit(self.inputKi.value())
 
-    def Control_KP(self):
+    # def Control_KP(self):
+    #     self.lcdKp.display(self.inputKp.value())
+    #     #self.curr_KI_sig.emit(self.inputKi.value())
+    #     self.Control_Power()
 
-        self.lcdKp.display(self.inputKp.value())
-        #self.curr_KI_sig.emit(self.inputKi.value())
-        self.Control_Power()
-
-    def Control_Power(self):
-        # at this point in development, since we do not have time integration, dt will be static
-        self.dt = 1
-        self.power = (self.ui.inputKp.value() * self.ui.inputKp.value() / self.dt) * (self.ui.vertSliderPow.value()/100)
-        self.ui.lcdPwrOut.display(self.power)
-        self.curr_power_sig.emit(self.power)
+    # def Control_Power(self):
+    #     # at this point in development, since we do not have time integration, dt will be static
+    #     self.dt = 1
+    #     self.power = (self.ui.inputKp.value() * self.ui.inputKp.value() / self.dt) * (self.ui.vertSliderPow.value()/100)
+    #     self.ui.lcdPwrOut.display(self.power)
+    #     self.curr_power_sig.emit(self.power)
         
 
         ##I think this is the correct way to do it
         
-        #get current time from global clock called
-        #self.time = self.globalClock
-        #self.dt = self.time - self.prevTime
-        #self.prevTime = self.time
-        #self.error = self.lcdCmdSpd.value() - self.lcdCurSpd.value()
-        #self.uk = self.prevUk + (self.error + self.prevError) * self.dt / 2
-        #self.prevError = self.error
-        #self.prevUk = self.uk
-        #self.power = self.lcdKp.value() * self.error + self.lcdKi.value() * self.uk
-        #if self.power > 120000:
-        #    self.power = 120000
-        #elif self.power < 0:
-        #    self.power = 0
-        #self.lcdPwrOut.display(self.power)
-        #self.curr_power_sig.emit(self.power)
+
 
 
 
@@ -152,6 +121,7 @@ class Train_Controller_Signals :
         #elif (self.lcdCmdSpd.value() > self.lcdCurSpd.value()) & (self.lcdCmdSpd.value() < self.lcdSpdLim.value()):
             #self.lcdCurSpd.display(self.lcdCurSpd.value() - 1)
         #self.calcAuth(
+        
     def Control_Speed_Limit(self,spd_lim):
         self.ui.lcdSpdLim.display(spd_lim)
         self.Speed_Montior()
@@ -205,31 +175,31 @@ class Train_Controller_Signals :
             self.doorControl(True)
 
 
-    def Control_Automatic(self):
-      self.buttonMan.toggle()
-      self.buttonDoorL.setDisabled(True)
-      self.buttonDoorR.setDisabled(True)
-      self.temp.setDisabled(True)
-      self.buttonHDoff.setDisabled(True)
-      self.buttonHDon.setDisabled(True)
-      self.IntLightSld.setDisabled(True)
-      self.lineEditAnn.setDisabled(True)
-      self.inputKi.setDisabled(True)
-      self.inputKp.setDisabled(True)
-      self.Speed_Montior()
+    # def Control_Automatic(self):
+    #   self.buttonMan.toggle()
+    #   self.buttonDoorL.setDisabled(True)
+    #   self.buttonDoorR.setDisabled(True)
+    #   self.temp.setDisabled(True)
+    #   self.buttonHDoff.setDisabled(True)
+    #   self.buttonHDon.setDisabled(True)
+    #   self.IntLightSld.setDisabled(True)
+    #   self.lineEditAnn.setDisabled(True)
+    #   self.inputKi.setDisabled(True)
+    #   self.inputKp.setDisabled(True)
+    #   self.Speed_Montior()
 
 
-    def Control_Manual(self):
-        self.ui.buttonAuto.toggle()
-        self.ui.buttonDoorL.setDisabled(False)
-        self.ui.buttonDoorR.setDisabled(False)
-        self.ui.temp.setDisabled(False)
-        self.ui.buttonHDon.setDisabled(False)
-        self.ui.buttonHDoff.setDisabled(False)
-        self.ui.IntLightSld.setDisabled(False)
-        self.ui.lineEditAnn.setDisabled(False)
-        self.ui.inputKi.setDisabled(False)
-        self.ui.inputKp.setDisabled(False)
+    # def Control_Manual(self):
+    #     self.ui.buttonAuto.toggle()
+    #     self.ui.buttonDoorL.setDisabled(False)
+    #     self.ui.buttonDoorR.setDisabled(False)
+    #     self.ui.temp.setDisabled(False)
+    #     self.ui.buttonHDon.setDisabled(False)
+    #     self.ui.buttonHDoff.setDisabled(False)
+    #     self.ui.IntLightSld.setDisabled(False)
+    #     self.ui.lineEditAnn.setDisabled(False)
+    #     self.ui.inputKi.setDisabled(False)
+    #     self.ui.inputKp.setDisabled(False)
 
     def Control_Emergency_Brake(self):
         if self.ui.Ebrake.isChecked() == True:

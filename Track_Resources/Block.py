@@ -1,14 +1,17 @@
 # Define the Block class
 class Block:
-    def __init__(self, light, crossing, switch, lightState, crossingState, switchState, occupied,id,speedLimit,authority):
-        self.LIGHT = light
-        self.CROSSING = crossing
-        self.SWITCH = switch
+    def __init__(self, lineColor, blockSection, blockNum, hasLight, hasCrossing, hasSwitch, lightState, crossingState, switchState,id,speedLimit):
+        self.lineColor = lineColor
+        self.blockSection = blockSection
+        self.blockNum = blockNum
+        self.LIGHT = hasLight
+        self.CROSSING = hasCrossing
+        self.SWITCH = hasSwitch
         self.lightState = lightState
         self.crossingState = crossingState
         self.switchState = switchState
-        self.occupied = occupied
+        self.occupied = False
         self.ID = id
         self.speedLimit = speedLimit
-        self.authority = authority
+        self.authority = None
 

@@ -18,10 +18,9 @@ def sort_by_number(block):
     return int(block[1:])  # Convert the string to an integer, excluding the 'B' prefix
 
 #Function that reads all blocks from a *.csv file and assigns block attributes:
-def readTrackFile(fileName):
+def readTrackFile(fileName,crossingTriples):
     totalBlocks = []
     lightBlocks = {}
-    crossingBlocks = []
     fileName = "Wayside SW/" + fileName
     with open(fileName, "r") as fileObject:
         readObj = csv.reader(fileObject, delimiter=",")
@@ -47,7 +46,7 @@ def readTrackFile(fileName):
                     #numbers = [part for part in line[6].split('-') if part.isdigit()]
                     numbers = re.findall(r'\b(\d+)-(\d+)\b', line[6])
                     current = {num: False for pair in numbers for num in pair}
-                    crossingBlocks.append(list(current.keys()))
+                    crossingTriples.append(list(current.keys()))
                     lightBlocks.update(current)
 
             tempBlock = Block(hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,False,blockId, line[5],None)
@@ -60,7 +59,6 @@ def readTrackFile(fileName):
                 block.LIGHT = True
                 block.lightState = False
 
-    
     return totalBlocks #Return a list of all blocks within the file
 
 class MyApp(QMainWindow):
@@ -76,6 +74,7 @@ class MyApp(QMainWindow):
         # Global constants for LIGHT, CROSSING, and SWITCH
         LIGHT_CONST = [True, False, False, False,None,None,False]
         CROSSING_CONST = [False, True, False, None,True,None,False]
+        SWITCH_CONST = [False, False, True, None,None,True,False]
         SWITCH_LIGHT_CONST = [True, False, True, False,None,True,False]
         NORMAL_CONST = [False, False, False, None,None,None,False]
 
@@ -87,7 +86,7 @@ class MyApp(QMainWindow):
         A2 = Block(*NORMAL_CONST,"A2",50,None)
         A3 = Block(*CROSSING_CONST,"A3",50,None)
         A4 = Block(*NORMAL_CONST,"A4",50,None) 
-        A5 = Block(*SWITCH_LIGHT_CONST,"A5",50,None) 
+        A5 = Block(*SWITCH_CONST,"A5",50,None) 
         B6 = Block(*LIGHT_CONST,"B6",50,None)
         B7 = Block(*NORMAL_CONST,"B7",50,None)
         B8 = Block(*NORMAL_CONST,"B8",50,None)
@@ -106,14 +105,15 @@ class MyApp(QMainWindow):
         self.SwitchBlocks = ["B5","B6","C11"]
 
         #Defines Red line blocks
-        self.allRedBlocks = readTrackFile("Red_Line.csv")
+        self.redCrossingTriplesIDS = [] #ids of red crossing blocks
+        self.allRedBlocks = readTrackFile("Red_Line.csv",self.redCrossingTriplesIDS)
         self.specialRedBlocks = []
 
         for block in self.allRedBlocks:
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialRedBlocks.append(block)
 
         #Create Parser Object
-        self.FileParser = Parser(None,self.AllBlocks)  #Currently empty onject
+        self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)  #Currently testing red object
 
         # Buttons
         self.fileButton.clicked.connect(self.on_file_button_clicked)

@@ -1,4 +1,5 @@
 import sys
+import json
 import tkinter as tk
 import os #read other .py file
 import pandas as pd #read excel files
@@ -16,6 +17,11 @@ from Track_Resources.Block import Block
 from PyQt5 import QtCore as qtc
 from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5 import QtGui as qtg 
+from PyQt5 import QtWidgets, uic
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem
+from PyQt5.QtCore import QRectF, Qt
+from PyQt5 import QtGui
+
 
 #My main window
 class MyMainWindow(QMainWindow):
@@ -31,13 +37,18 @@ class MyMainWindow(QMainWindow):
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track Model/Track_Model.ui", self)
 
+        #Load track layout
+         # Initialize the QGraphicsScene
+        self.scene = QGraphicsScene(self)
+        self.track_layout_1.setScene(self.scene)
+        
+
         # Connect Upload Track Layout button to make upload file
         self.pushButton.clicked.connect(self.upload_track_layout) 
 
         #Connect failure screen to block selection to make it easier for user/disable dropdown for failure
         self.block_in_1.activated.connect(self.update_block_in_2_based_on_block_in_1)
         self.block_in_2.setEnabled(False)
-
 
 
 
@@ -65,6 +76,35 @@ class MyMainWindow(QMainWindow):
 
         # Instantiate the Data class
         self.data = Data()
+
+        
+
+    def loadTrackLayout(self, json_file):
+        #Open file
+        with open(json_file, 'r') as file:
+            data = json.load(file)
+            map_width = data['width']
+            map_height = data['height']
+            tile_width = data['tilewidth']
+            tile_height = data['tileheight']
+            
+            for layer in data['layers']:
+                #Check layers in json file
+                if layer['type'] == 'tilelayer':
+                    tiles = layer['data']
+                    for i, tile_gid in enumerate(tiles):
+                        if tile_gid == 0:
+                            continue  #Ensures that no empty block exists
+                        x = (i % map_width) * tile_width
+                        y = (i // map_width) * tile_height
+                        rect = QRectF(x, y, tile_width, tile_height)
+                        self.scene.addRect(rect, pen=QtGui.QPen(Qt.NoPen), brush=QtGui.QBrush(Qt.blue))
+                    
+                        #Scaling the map so it fits
+                        self.track_layout_1.setScene(self.scene)
+                        self.track_layout_1.fitInView(self.scene.sceneRect(), Qt.KeepAspectRatio)
+                        self.track_layout_1.scale(7, 10)
+
 
     #This function is a starter connector to UI from tb for ticket sales
     def update_ticket_sales(self, sales):
@@ -232,7 +272,7 @@ class MyMainWindow(QMainWindow):
 
 
     def update_block_in_2_based_on_block_in_1(self):
-    # Get the currently selected text in block_in_1
+    #Get the currently selected text in block_in_1
         selected_text = self.block_in_1.currentText()
 
         self.block_in_2.setCurrentText(selected_text)
@@ -530,6 +570,8 @@ if __name__ == "__main__":
 
     # Connect MyMainWindow's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)
+
+    window.loadTrackLayout("Track Model\Track_Layout.json")
 
     window.block_selected_signal.connect(window_2.update_on_block_selection)
     window.show()

@@ -385,29 +385,6 @@
      <string/>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_8">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Tw Cen MT Condensed Extra Bold</family>
-         <pointsize>14</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: white;
-</string>
-       </property>
-       <property name="text">
-        <string>Test Outputs:</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="2">
       <widget class="QLabel" name="line_out">
        <property name="styleSheet">
@@ -416,67 +393,6 @@
        </property>
        <property name="text">
         <string>Current Line</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_9">
-       <property name="styleSheet">
-        <string notr="true">background-color: white;
-</string>
-       </property>
-       <property name="text">
-        <string>Commanded Speed (mph): </string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="com_speed_out_1">
-       <property name="styleSheet">
-        <string notr="true">background-color: white;
-</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_10">
-       <property name="styleSheet">
-        <string notr="true">background-color: white;
-</string>
-       </property>
-       <property name="text">
-        <string>Authority (ft):</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QLabel" name="authority_out">
-       <property name="styleSheet">
-        <string notr="true">background-color: white;
-</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_26">
-       <property name="styleSheet">
-        <string notr="true">background-color: white;
-</string>
-       </property>
-       <property name="text">
-        <string>Ticket Sales: </string>
        </property>
       </widget>
      </item>
@@ -491,67 +407,6 @@
        </property>
        <property name="text">
         <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_12">
-       <property name="styleSheet">
-        <string notr="true">background-color: white;
-</string>
-       </property>
-       <property name="text">
-        <string>Presence on block:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QLabel" name="label_17">
-       <property name="styleSheet">
-        <string notr="true">background-color: white;
-</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_20">
-       <property name="styleSheet">
-        <string notr="true">background-color: white;
-</string>
-       </property>
-       <property name="text">
-        <string>Grade (%):</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="2">
-      <widget class="QLabel" name="grade_out">
-       <property name="styleSheet">
-        <string notr="true">background-color: white;
-</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_21">
-       <property name="styleSheet">
-        <string notr="true">background-color: white;
-</string>
-       </property>
-       <property name="text">
-        <string>Broken Rail Failure: </string>
        </property>
       </widget>
      </item>
@@ -578,33 +433,30 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="2">
-      <widget class="QLabel" name="broken_out">
-       <property name="styleSheet">
-        <string notr="true">background-color: white;
-</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_24">
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_12">
        <property name="styleSheet">
         <string notr="true">background-color: white;
 </string>
        </property>
        <property name="text">
-        <string>Track Circuit Failure: </string>
+        <string>Presence on block:</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="2">
-      <widget class="QLabel" name="track_out">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <property name="text">
+        <string>Commanded Speed (mph): </string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QLabel" name="grade_out">
        <property name="styleSheet">
         <string notr="true">background-color: white;
 </string>
@@ -628,8 +480,156 @@
        </property>
       </widget>
      </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>Tw Cen MT Condensed Extra Bold</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <property name="text">
+        <string>Test Outputs:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_20">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <property name="text">
+        <string>Grade (%):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="authority_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="2">
+      <widget class="QLabel" name="track_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QLabel" name="label_17">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_26">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <property name="text">
+        <string>Ticket Sales: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_21">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <property name="text">
+        <string>Broken Rail Failure: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <widget class="QLabel" name="broken_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_10">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <property name="text">
+        <string>Authority (ft):</string>
+       </property>
+      </widget>
+     </item>
      <item row="8" column="2">
       <widget class="QLabel" name="power_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_24">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <property name="text">
+        <string>Track Circuit Failure: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="com_speed_out_1">
        <property name="styleSheet">
         <string notr="true">background-color: white;
 </string>

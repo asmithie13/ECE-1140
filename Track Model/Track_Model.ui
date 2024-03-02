@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>921</width>
-    <height>710</height>
+    <width>913</width>
+    <height>773</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,7 +27,7 @@
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>10</y>
+      <y>70</y>
       <width>311</width>
       <height>51</height>
      </rect>
@@ -50,7 +50,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>490</y>
+      <y>550</y>
       <width>521</width>
       <height>161</height>
      </rect>
@@ -230,33 +230,11 @@
      </item>
     </layout>
    </widget>
-   <widget class="QLabel" name="label_5">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>70</y>
-      <width>521</width>
-      <height>291</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::Box</enum>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>../Blue Line Images/BlueLine.png</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>70</y>
+      <y>130</y>
       <width>311</width>
       <height>411</height>
      </rect>
@@ -537,7 +515,7 @@
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>500</y>
+      <y>560</y>
       <width>311</width>
       <height>151</height>
      </rect>
@@ -662,7 +640,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>10</y>
+      <y>70</y>
       <width>521</width>
       <height>51</height>
      </rect>
@@ -779,7 +757,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>380</y>
+      <y>440</y>
       <width>521</width>
       <height>81</height>
      </rect>
@@ -862,20 +840,41 @@
      </item>
     </layout>
    </widget>
+   <widget class="QGraphicsView" name="track_layout_1">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>140</y>
+      <width>521</width>
+      <height>281</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="CTC_clock">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>100</width>
+      <height>44</height>
+     </rect>
+    </property>
+   </widget>
    <zorder>layoutWidget</zorder>
    <zorder>groupBox</zorder>
    <zorder>groupBox_2</zorder>
    <zorder>groupBox_3</zorder>
-   <zorder>label_5</zorder>
    <zorder>groupBox_4</zorder>
    <zorder>pushButton</zorder>
+   <zorder>track_layout_1</zorder>
+   <zorder>CTC_clock</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>921</width>
+     <width>913</width>
      <height>22</height>
     </rect>
    </property>

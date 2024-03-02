@@ -1,0 +1,61 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "#Blue_rectangle": {
+            "scaleInDock": 1
+        },
+        "Blue_rectangle.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Track Layout.tmx": {
+            "scale": 0.7303125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 481.30081300813,
+                "y": 321.09542148053055
+            }
+        },
+        "Track Layout.tmx#Blue_rectangle": {
+            "scaleInDock": 1
+        },
+        "Track.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Track_Layout..tmj": {
+            "scale": 0.7303125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 481.30081300813,
+                "y": 321.09542148053055
+            }
+        },
+        "Track_Layout..tmj#Blue_rectangle": {
+            "scaleInDock": 1
+        }
+    },
+    "last.exportedFilePath": "C:/Users/anhqu/OneDrive/Documents/GitHub/ECE-1140/Track Model",
+    "last.imagePath": "C:/Users/anhqu/Downloads",
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "openFiles": [
+    ],
+    "project": "blue_line_track_layout.tiled-project",
+    "recentFiles": [
+        "Track.tsx",
+        "Blue_rectangle.tsx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.transparentColor": "#0055ff",
+    "tileset.useTransparentColor": false
+}

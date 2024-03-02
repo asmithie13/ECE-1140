@@ -49,7 +49,7 @@ def readTrackFile(fileName,crossingTriples):
                     crossingTriples.append(list(current.keys()))
                     lightBlocks.update(current)
 
-            tempBlock = Block(hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,False,blockId, line[5],None)
+            tempBlock = Block(line[0],line[1],line[2],hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,blockId, line[5])
             totalBlocks.append(tempBlock)
 
             #Assign light values now
@@ -72,31 +72,31 @@ class MyApp(QMainWindow):
         uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
 
         # Global constants for LIGHT, CROSSING, and SWITCH
-        LIGHT_CONST = [True, False, False, False,None,None,False]
-        CROSSING_CONST = [False, True, False, None,True,None,False]
-        SWITCH_CONST = [False, False, True, None,None,True,False]
-        SWITCH_LIGHT_CONST = [True, False, True, False,None,True,False]
-        NORMAL_CONST = [False, False, False, None,None,None,False]
+        LIGHT_CONST = [True, False, False, False,None,None]
+        CROSSING_CONST = [False, True, False, None,True,None]
+        SWITCH_CONST = [False, False, True, None,None,True]
+        SWITCH_LIGHT_CONST = [True, False, True, False,None,True]
+        NORMAL_CONST = [False, False, False, None,None,None]
 
         #Switch Directions
         self.B5_Switch_Positions = ["B6","C11"]
 
         #Defining blue line blocks
-        A1 = Block(*NORMAL_CONST,"A1",50,None)
-        A2 = Block(*NORMAL_CONST,"A2",50,None)
-        A3 = Block(*CROSSING_CONST,"A3",50,None)
-        A4 = Block(*NORMAL_CONST,"A4",50,None) 
-        A5 = Block(*SWITCH_CONST,"A5",50,None) 
-        B6 = Block(*LIGHT_CONST,"B6",50,None)
-        B7 = Block(*NORMAL_CONST,"B7",50,None)
-        B8 = Block(*NORMAL_CONST,"B8",50,None)
-        B9 = Block(*NORMAL_CONST,"B9",50,None)
-        B10 = Block(*NORMAL_CONST,"B10",50,None)
-        C11 = Block(*LIGHT_CONST,"C11",50,None)
-        C12 = Block(*NORMAL_CONST,"C12",50,None)
-        C13 = Block(*NORMAL_CONST,"C13",50,None)
-        C14 = Block(*NORMAL_CONST,"C14",50,None)
-        C15 = Block(*NORMAL_CONST,"C15",50,None)
+        A1 = Block("Blue",'A',1,*NORMAL_CONST,"A1",50)
+        A2 = Block("Blue",'A',2,*NORMAL_CONST,"A2",50)
+        A3 = Block("Blue",'A',3,*CROSSING_CONST,"A3",50)
+        A4 = Block("Blue",'A',4,*NORMAL_CONST,"A4",50) 
+        A5 = Block("Blue",'A',5,*SWITCH_CONST,"A5",50) 
+        B6 = Block("Blue",'B',6,*LIGHT_CONST,"B6",50)
+        B7 = Block("Blue",'B',7, *NORMAL_CONST,"B7",50)
+        B8 = Block("Blue",'B',8, *NORMAL_CONST,"B8",50)
+        B9 = Block("Blue",'B',9, *NORMAL_CONST,"B9",50)
+        B10 = Block("Blue",'B', 10, *NORMAL_CONST,"B10",50)
+        C11 = Block("Blue",'C',11,*LIGHT_CONST,"C11",50)
+        C12 = Block("Blue",'C',12,*NORMAL_CONST,"C12",50)
+        C13 = Block("Blue",'C',13,*NORMAL_CONST,"C13",50)
+        C14 = Block("Blue",'C',14,*NORMAL_CONST,"C14",50)
+        C15 = Block("Blue",'C',15,*NORMAL_CONST,"C15",50)
 
         #Defines an array of these blocks
 

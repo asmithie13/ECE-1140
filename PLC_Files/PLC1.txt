@@ -1,7 +1,11 @@
-OCCUPIED C
-SWITCH A5 B6
-LIGHT !C11
+SwitchOcc or not SwitchRightOcc
+SWITCH
 
-OCCUPIED !C
-SWITCH A5 C11
-LIGHT C11
+SwitchOcc or SwitchRightOcc
+CurrentLIGHT
+
+SwitchOcc
+LeftLIGHT
+
+not SwitchOcc and SwitchRightOcc
+RightLIGHT

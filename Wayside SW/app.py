@@ -215,7 +215,7 @@ class MyApp(QMainWindow):
         selectedIndex = self.blockMenu.currentIndex()
         selectedBlock = self.BlockArray[selectedIndex]
 
-        if selectedBlock.LIGHT and self.label_7.text():
+        if selectedBlock.LIGHT and self.label_7.text() and not selectedBlock.SWITCH:
             self.greenButton.setEnabled(not selectedBlock.lightState and self.label_7.text() == "MANUAL")
             self.redButton.setEnabled(selectedBlock.lightState and self.label_7.text() == "MANUAL")
             self.upCrossingButton.setEnabled(False)
@@ -252,8 +252,8 @@ class MyApp(QMainWindow):
                 self.downCrossingButton.setStyleSheet("background-color: yellow")
 
         elif selectedBlock.SWITCH:
-            self.greenButton.setEnabled(False)
-            self.redButton.setEnabled(False)
+            self.greenButton.setEnabled(False or selectedBlock.LIGHT and selectedBlock.lightState)
+            self.redButton.setEnabled(False or selectedBlock.LIGHT and not selectedBlock.lightState)
             self.upCrossingButton.setEnabled(False)
             self.downCrossingButton.setEnabled(False)
             self.switchButton.setEnabled(True and self.label_7.text() == "MANUAL")
@@ -264,9 +264,21 @@ class MyApp(QMainWindow):
             else:
                 self.label_11.setText(self.SwitchBlocks[2])
 
-            self.greenButton.setStyleSheet("")
-            self.redButton.setStyleSheet("")
+            if not selectedBlock.LIGHT:
+                self.greenButton.setStyleSheet("")
+                self.redButton.setStyleSheet("")
+            else:
+                self.greenButton.setEnabled(not selectedBlock.lightState and self.label_7.text() == "MANUAL")
+                self.redButton.setEnabled(selectedBlock.lightState and self.label_7.text() == "MANUAL")
+
+                if selectedBlock.lightState:
+                    self.greenButton.setStyleSheet('QPushButton {background-color: green; color: yellow;}')
+                    self.redButton.setStyleSheet("")
+                elif not selectedBlock.lightState:
+                    self.greenButton.setStyleSheet("")
+                    self.redButton.setStyleSheet('QPushButton {background-color: red; color: yellow;}')
             self.upCrossingButton.setStyleSheet("")
+
             self.downCrossingButton.setStyleSheet("")
 
     def greenButtonPushed(self):

@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 
 # Using Block Class as a seperate file
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -17,8 +18,9 @@ def sort_by_number(block):
     return int(block[1:])  # Convert the string to an integer, excluding the 'B' prefix
 
 #Function that reads all blocks from a *.csv file and assigns block attributes:
-def readTrackFile(fileName):
+def readTrackFile(fileName,crossingTriples):
     totalBlocks = []
+    lightBlocks = {}
     fileName = "Wayside SW/" + fileName
     with open(fileName, "r") as fileObject:
         readObj = csv.reader(fileObject, delimiter=",")
@@ -26,23 +28,37 @@ def readTrackFile(fileName):
             hasCrossingTemp = False
             hasSwitchTemp = False
             hasLightTemp = False
-            notNormalBlock = False
+            lightState = None
+            crossingState = None
+            switchState = None
             blockId = line[1] + line[2]
             if(i == 0):
                 continue
             else:
                 if(line[6] == "RAILWAY CROSSING"):
                     hasCrossingTemp = True
-                    notNormalBlock = True
+                    crossingState = True
+
                 elif(line[6][0:6] == "SWITCH"):
                     hasSwitchTemp = True
-                    notNormalBlock = True
-                elif(line[6] == "Light"):
-                    hasLightTemp = True
-                    notNormalBlock = False
-            tempBlock = Block(hasLightTemp,hasCrossingTemp,hasSwitchTemp,notNormalBlock,False,blockId, line[5],None)
+                    switchState = True
+
+                    #numbers = [part for part in line[6].split('-') if part.isdigit()]
+                    numbers = re.findall(r'\b(\d+)-(\d+)\b', line[6])
+                    current = {num: False for pair in numbers for num in pair}
+                    crossingTriples.append(list(current.keys()))
+                    lightBlocks.update(current)
+
+            tempBlock = Block(line[0],line[1],line[2],hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,blockId, line[5])
             totalBlocks.append(tempBlock)
-    
+
+            #Assign light values now
+
+        for block in totalBlocks:
+            if block.ID[1:] in lightBlocks:
+                block.LIGHT = True
+                block.lightState = False
+
     return totalBlocks #Return a list of all blocks within the file
 
 class MyApp(QMainWindow):
@@ -56,36 +72,31 @@ class MyApp(QMainWindow):
         uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
 
         # Global constants for LIGHT, CROSSING, and SWITCH
-        LIGHT_CONST = [True, False, False, True,False]
-        CROSSING_CONST = [False, True, False, True,False]
-        SWITCH_CONST = [False, False, True, True,False]
-        NORMAL_CONST = [False, False, False, False, False]
-
-        #Index [0] of each Block => True if Light
-        #Index [1] of each Block => True if Crossing
-        #Index [2] of each Block => True if Switch
-        #Index [3] of each Block => Default
-        #Index [4] of each Block => True if Occupied
+        LIGHT_CONST = [True, False, False, False,None,None]
+        CROSSING_CONST = [False, True, False, None,True,None]
+        SWITCH_CONST = [False, False, True, None,None,True]
+        SWITCH_LIGHT_CONST = [True, False, True, False,None,True]
+        NORMAL_CONST = [False, False, False, None,None,None]
 
         #Switch Directions
         self.B5_Switch_Positions = ["B6","C11"]
 
         #Defining blue line blocks
-        A1 = Block(*NORMAL_CONST,"A1",50,None)
-        A2 = Block(*NORMAL_CONST,"A2",50,None)
-        A3 = Block(*CROSSING_CONST,"A3",50,None)
-        A4 = Block(*NORMAL_CONST,"A4",50,None) 
-        A5 = Block(*SWITCH_CONST,"A5",50,None) 
-        B6 = Block(*LIGHT_CONST,"B6",50,None)
-        B7 = Block(*NORMAL_CONST,"B7",50,None)
-        B8 = Block(*NORMAL_CONST,"B8",50,None)
-        B9 = Block(*NORMAL_CONST,"B9",50,None)
-        B10 = Block(*NORMAL_CONST,"B10",50,None)
-        C11 = Block(*LIGHT_CONST,"C11",50,None)
-        C12 = Block(*NORMAL_CONST,"C12",50,None)
-        C13 = Block(*NORMAL_CONST,"C13",50,None)
-        C14 = Block(*NORMAL_CONST,"C14",50,None)
-        C15 = Block(*NORMAL_CONST,"C15",50,None)
+        A1 = Block("Blue",'A',1,*NORMAL_CONST,"A1",50)
+        A2 = Block("Blue",'A',2,*NORMAL_CONST,"A2",50)
+        A3 = Block("Blue",'A',3,*CROSSING_CONST,"A3",50)
+        A4 = Block("Blue",'A',4,*NORMAL_CONST,"A4",50) 
+        A5 = Block("Blue",'A',5,*SWITCH_CONST,"A5",50) 
+        B6 = Block("Blue",'B',6,*LIGHT_CONST,"B6",50)
+        B7 = Block("Blue",'B',7, *NORMAL_CONST,"B7",50)
+        B8 = Block("Blue",'B',8, *NORMAL_CONST,"B8",50)
+        B9 = Block("Blue",'B',9, *NORMAL_CONST,"B9",50)
+        B10 = Block("Blue",'B', 10, *NORMAL_CONST,"B10",50)
+        C11 = Block("Blue",'C',11,*LIGHT_CONST,"C11",50)
+        C12 = Block("Blue",'C',12,*NORMAL_CONST,"C12",50)
+        C13 = Block("Blue",'C',13,*NORMAL_CONST,"C13",50)
+        C14 = Block("Blue",'C',14,*NORMAL_CONST,"C14",50)
+        C15 = Block("Blue",'C',15,*NORMAL_CONST,"C15",50)
 
         #Defines an array of these blocks
 
@@ -94,14 +105,18 @@ class MyApp(QMainWindow):
         self.SwitchBlocks = ["B5","B6","C11"]
 
         #Defines Red line blocks
-        self.allRedBlocks = readTrackFile("Red_Line.csv")
+        self.redCrossingTriplesIDS = [] #ids of red crossing blocks
+        self.allRedBlocks = readTrackFile("Red_Line.csv",self.redCrossingTriplesIDS)
         self.specialRedBlocks = []
 
         for block in self.allRedBlocks:
-            if block.state == True: self.specialRedBlocks.append(block)
+            if block.LIGHT or block.CROSSING or block.SWITCH : self.specialRedBlocks.append(block)
 
         #Create Parser Object
-        self.FileParser = Parser(None,self.AllBlocks)  #Currently empty onject
+        self.SwitchBlocksNums = [['5','6','11']]
+
+        #self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)  #Currently testing red object
+        self.FileParser = Parser(None,self.SwitchBlocksNums,self.AllBlocks)
 
         # Buttons
         self.fileButton.clicked.connect(self.on_file_button_clicked)
@@ -200,9 +215,9 @@ class MyApp(QMainWindow):
         selectedIndex = self.blockMenu.currentIndex()
         selectedBlock = self.BlockArray[selectedIndex]
 
-        if selectedBlock.LIGHT and self.label_7.text():
-            self.greenButton.setEnabled(not selectedBlock.state and self.label_7.text() == "MANUAL")
-            self.redButton.setEnabled(selectedBlock.state and self.label_7.text() == "MANUAL")
+        if selectedBlock.LIGHT and self.label_7.text() and not selectedBlock.SWITCH:
+            self.greenButton.setEnabled(not selectedBlock.lightState and self.label_7.text() == "MANUAL")
+            self.redButton.setEnabled(selectedBlock.lightState and self.label_7.text() == "MANUAL")
             self.upCrossingButton.setEnabled(False)
             self.downCrossingButton.setEnabled(False)
             self.switchButton.setEnabled(False)
@@ -211,52 +226,64 @@ class MyApp(QMainWindow):
             self.downCrossingButton.setStyleSheet("")
             self.label_11.setText("")
             
-            if selectedBlock.state:
+            if selectedBlock.lightState:
                 self.greenButton.setStyleSheet('QPushButton {background-color: green; color: yellow;}')
                 self.redButton.setStyleSheet("")
-            elif not selectedBlock.state:
+            elif not selectedBlock.lightState:
                 self.greenButton.setStyleSheet("")
                 self.redButton.setStyleSheet('QPushButton {background-color: red; color: yellow;}')
 
         elif selectedBlock.CROSSING and self.selectLine.isChecked():
             self.greenButton.setEnabled(False)
             self.redButton.setEnabled(False)
-            self.upCrossingButton.setEnabled(not selectedBlock.state and self.label_7.text() == "MANUAL")
-            self.downCrossingButton.setEnabled(selectedBlock.state and self.label_7.text() == "MANUAL")
+            self.upCrossingButton.setEnabled(not selectedBlock.crossingState and self.label_7.text() == "MANUAL")
+            self.downCrossingButton.setEnabled(selectedBlock.crossingState and self.label_7.text() == "MANUAL")
             self.switchButton.setEnabled(False)
 
             self.greenButton.setStyleSheet("")
             self.redButton.setStyleSheet("")
             self.label_11.setText("")
 
-            if selectedBlock.state:
+            if selectedBlock.crossingState:
                 self.upCrossingButton.setStyleSheet("background-color: yellow")
                 self.downCrossingButton.setStyleSheet("")
-            elif not selectedBlock.state:
+            elif not selectedBlock.crossingState:
                 self.upCrossingButton.setStyleSheet("")
                 self.downCrossingButton.setStyleSheet("background-color: yellow")
 
         elif selectedBlock.SWITCH:
-            self.greenButton.setEnabled(False)
-            self.redButton.setEnabled(False)
+            self.greenButton.setEnabled(False or selectedBlock.LIGHT and selectedBlock.lightState)
+            self.redButton.setEnabled(False or selectedBlock.LIGHT and not selectedBlock.lightState)
             self.upCrossingButton.setEnabled(False)
             self.downCrossingButton.setEnabled(False)
             self.switchButton.setEnabled(True and self.label_7.text() == "MANUAL")
 
-            if selectedBlock.state == True:
+            if selectedBlock.switchState:
                 self.label_11.setText(self.SwitchBlocks[1])
 
             else:
                 self.label_11.setText(self.SwitchBlocks[2])
 
-            self.greenButton.setStyleSheet("")
-            self.redButton.setStyleSheet("")
+            if not selectedBlock.LIGHT:
+                self.greenButton.setStyleSheet("")
+                self.redButton.setStyleSheet("")
+            else:
+                self.greenButton.setEnabled(not selectedBlock.lightState and self.label_7.text() == "MANUAL")
+                self.redButton.setEnabled(selectedBlock.lightState and self.label_7.text() == "MANUAL")
+
+                if selectedBlock.lightState:
+                    self.greenButton.setStyleSheet('QPushButton {background-color: green; color: yellow;}')
+                    self.redButton.setStyleSheet("")
+                elif not selectedBlock.lightState:
+                    self.greenButton.setStyleSheet("")
+                    self.redButton.setStyleSheet('QPushButton {background-color: red; color: yellow;}')
             self.upCrossingButton.setStyleSheet("")
+
             self.downCrossingButton.setStyleSheet("")
 
     def greenButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].state = True
+        self.BlockArray[selectedIndex].lightState = True
         self.greenButton.setEnabled(False)
         self.redButton.setEnabled(True)
         self.greenButton.setStyleSheet('QPushButton {background-color: green; color: yellow;}')
@@ -265,7 +292,7 @@ class MyApp(QMainWindow):
 
     def redButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].state = False
+        self.BlockArray[selectedIndex].lightState = False
         self.greenButton.setEnabled(True)
         self.redButton.setEnabled(False)
         self.greenButton.setStyleSheet("")
@@ -274,7 +301,7 @@ class MyApp(QMainWindow):
 
     def upButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].state = True
+        self.BlockArray[selectedIndex].crossingState = True
         self.upCrossingButton.setEnabled(False)
         self.downCrossingButton.setEnabled(True)
         self.upCrossingButton.setStyleSheet("background-color: yellow")
@@ -283,7 +310,7 @@ class MyApp(QMainWindow):
 
     def downButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].state = False
+        self.BlockArray[selectedIndex].crossingState = False
         self.upCrossingButton.setEnabled(True)
         self.downCrossingButton.setEnabled(False)
         self.upCrossingButton.setStyleSheet("")
@@ -292,7 +319,7 @@ class MyApp(QMainWindow):
 
     def switchButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].state = not self.BlockArray[selectedIndex].state
+        self.BlockArray[selectedIndex].switchState = not self.BlockArray[selectedIndex].switchState
 
         current_text = self.label_11.text()
         if current_text == self.B5_Switch_Positions[0]:
@@ -391,7 +418,7 @@ class TestBench(QMainWindow):
 
             self.label_24.setText("")
 
-            if selectedBlock.state:
+            if selectedBlock.lightState:
                 self.label_19.setText("Green")
                 self.label_22.setText("")
             else:
@@ -401,14 +428,14 @@ class TestBench(QMainWindow):
             
             self.label_24.setText("")
 
-            if selectedBlock.state:
+            if selectedBlock.crossingState:
                 self.label_19.setText("")
                 self.label_22.setText("Up")
             else:
                 self.label_19.setText("")
                 self.label_22.setText("Down")
         elif selectedBlock.SWITCH:
-            if selectedBlock.state:
+            if selectedBlock.switchState:
                 self.label_19.setText("")
                 self.label_22.setText("")
                 self.label_24.setText("B6")

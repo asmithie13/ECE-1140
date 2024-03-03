@@ -30,6 +30,7 @@ class TrackController_UI(QMainWindow):
         self.allGreenBlocks = readTrackFile("greenLine.csv")
         self.allRedBlocks = readTrackFile("redLine.csv")
     
+        #Divide the red and green line sections into four separate waysides:
         self.waysideOne, self.waysideTwo = splitGreenBlocks(self.allGreenBlocks)
         self.waysideThree, self.waysideFour = splitRedBlocks(self.allRedBlocks)
     
@@ -491,9 +492,9 @@ class TrackController_TestBench(QMainWindow):
 
         self.totalBlueBlock = readTrackFile("blueLine.csv")
         for block in self.totalBlueBlock:
-            self.comboBoxOccIn.addItem(block.returnBlockID())
-            self.comboBoxFailedIn.addItem(block.returnBlockID())
-            self.comboBoxCheckBlock.addItem(block.returnBlockID())
+            self.comboBoxOccIn.addItem(block.blockSection + block.blockNum)
+            self.comboBoxFailedIn.addItem(block.blockSection + block.blockNum)
+            self.comboBoxCheckBlock.addItem(block.blockSection + block.blockNum)
         
         #Clear block fields:
         self.buttonClearOcc.clicked.connect(self.clearOccupied)
@@ -530,7 +531,7 @@ class TrackController_TestBench(QMainWindow):
     #Handle failure input:
     def sendFailed(self):
         selectedBlock = self.comboBoxFailedIn.currentText()
-        currentText = self.lineEditFailedOut.text()
+        #currentText = self.lineEditFailedOut.text()
         if selectedBlock in self.failedBlocks:
             pass
         else:
@@ -562,7 +563,7 @@ class TrackController_TestBench(QMainWindow):
     
     def displayBlockStates(self):
         for block in self.tempBlockList:
-            if(block.returnBlockID() == self.comboBoxCheckBlock.currentText()):
+            if((block.blockSection + block.blockNum) == self.comboBoxCheckBlock.currentText()):
                 if(block.hasCrossing == False):
                     self.lineEditCrossingOut.setText("-")
                 else:

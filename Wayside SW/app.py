@@ -49,7 +49,7 @@ def readTrackFile(fileName,crossingTriples):
                     crossingTriples.append(list(current.keys()))
                     lightBlocks.update(current)
 
-            tempBlock = Block(line[0],line[1],line[2],hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,blockId, line[5])
+            tempBlock = Block(line[0],line[1],line[2],hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,blockId, line[5],line[3])
             totalBlocks.append(tempBlock)
 
             #Assign light values now
@@ -82,21 +82,21 @@ class MyApp(QMainWindow):
         self.B5_Switch_Positions = ["B6","C11"]
 
         #Defining blue line blocks
-        A1 = Block("Blue",'A',1,*NORMAL_CONST,"A1",50)
-        A2 = Block("Blue",'A',2,*NORMAL_CONST,"A2",50)
-        A3 = Block("Blue",'A',3,*CROSSING_CONST,"A3",50)
-        A4 = Block("Blue",'A',4,*NORMAL_CONST,"A4",50) 
-        A5 = Block("Blue",'A',5,*SWITCH_CONST,"A5",50) 
-        B6 = Block("Blue",'B',6,*LIGHT_CONST,"B6",50)
-        B7 = Block("Blue",'B',7, *NORMAL_CONST,"B7",50)
-        B8 = Block("Blue",'B',8, *NORMAL_CONST,"B8",50)
-        B9 = Block("Blue",'B',9, *NORMAL_CONST,"B9",50)
-        B10 = Block("Blue",'B', 10, *NORMAL_CONST,"B10",50)
-        C11 = Block("Blue",'C',11,*LIGHT_CONST,"C11",50)
-        C12 = Block("Blue",'C',12,*NORMAL_CONST,"C12",50)
-        C13 = Block("Blue",'C',13,*NORMAL_CONST,"C13",50)
-        C14 = Block("Blue",'C',14,*NORMAL_CONST,"C14",50)
-        C15 = Block("Blue",'C',15,*NORMAL_CONST,"C15",50)
+        A1 = Block("Blue",'A',1,*NORMAL_CONST,"A1",50,50)
+        A2 = Block("Blue",'A',2,*NORMAL_CONST,"A2",50,50)
+        A3 = Block("Blue",'A',3,*CROSSING_CONST,"A3",50,50)
+        A4 = Block("Blue",'A',4,*NORMAL_CONST,"A4",50,50) 
+        A5 = Block("Blue",'A',5,*SWITCH_CONST,"A5",50,50) 
+        B6 = Block("Blue",'B',6,*LIGHT_CONST,"B6",50,50)
+        B7 = Block("Blue",'B',7, *NORMAL_CONST,"B7",50,50)
+        B8 = Block("Blue",'B',8, *NORMAL_CONST,"B8",50,50)
+        B9 = Block("Blue",'B',9, *NORMAL_CONST,"B9",50,50)
+        B10 = Block("Blue",'B', 10, *NORMAL_CONST,"B10",50,50)
+        C11 = Block("Blue",'C',11,*LIGHT_CONST,"C11",50,50)
+        C12 = Block("Blue",'C',12,*NORMAL_CONST,"C12",50,50)
+        C13 = Block("Blue",'C',13,*NORMAL_CONST,"C13",50,50)
+        C14 = Block("Blue",'C',14,*NORMAL_CONST,"C14",50,50)
+        C15 = Block("Blue",'C',15,*NORMAL_CONST,"C15",50,50)
 
         #Defines an array of these blocks
 
@@ -131,7 +131,7 @@ class MyApp(QMainWindow):
         self.saveButton.clicked.connect(self.onSavePLCFile)
 
         #initial signals
-        self.sendSpecialBlocks.emit(self.BlockArray)
+        self.sendSpecialBlocks.emit(self.AllBlocks)
         self.changeModeSend.emit(True)
 
         #Original Map Image
@@ -187,13 +187,13 @@ class MyApp(QMainWindow):
             self.label_7.setText("AUTOMATIC")
             self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
             self.blockActions()
-            self.sendSpecialBlocks.emit(self.BlockArray)
+            self.sendSpecialBlocks.emit(self.AllBlocks)
             self.changeModeSend.emit(False)
 
         elif current_text == "AUTOMATIC":
             self.label_7.setText("MANUAL")
             self.blockActions()
-            self.sendSpecialBlocks.emit(self.BlockArray)
+            self.sendSpecialBlocks.emit(self.AllBlocks)
             self.changeModeSend.emit(True)
             
 
@@ -209,7 +209,7 @@ class MyApp(QMainWindow):
             self.blockMenu.setEnabled(False)
             self.modeButton.setEnabled(False)
 
-        self.sendSpecialBlocks.emit(self.BlockArray)
+        self.sendSpecialBlocks.emit(self.AllBlocks)
 
     def blockActions(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -288,7 +288,7 @@ class MyApp(QMainWindow):
         self.redButton.setEnabled(True)
         self.greenButton.setStyleSheet('QPushButton {background-color: green; color: yellow;}')
         self.redButton.setStyleSheet("")
-        self.sendSpecialBlocks.emit(self.BlockArray)
+        self.sendSpecialBlocks.emit(self.AllBlocks)
 
     def redButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -297,7 +297,7 @@ class MyApp(QMainWindow):
         self.redButton.setEnabled(False)
         self.greenButton.setStyleSheet("")
         self.redButton.setStyleSheet('QPushButton {background-color: red; color: yellow;}')
-        self.sendSpecialBlocks.emit(self.BlockArray)
+        self.sendSpecialBlocks.emit(self.AllBlocks)
 
     def upButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -306,7 +306,7 @@ class MyApp(QMainWindow):
         self.downCrossingButton.setEnabled(True)
         self.upCrossingButton.setStyleSheet("background-color: yellow")
         self.downCrossingButton.setStyleSheet("")
-        self.sendSpecialBlocks.emit(self.BlockArray)
+        self.sendSpecialBlocks.emit(self.AllBlocks)
 
     def downButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -315,7 +315,7 @@ class MyApp(QMainWindow):
         self.downCrossingButton.setEnabled(False)
         self.upCrossingButton.setStyleSheet("")
         self.downCrossingButton.setStyleSheet("background-color: yellow")
-        self.sendSpecialBlocks.emit(self.BlockArray)
+        self.sendSpecialBlocks.emit(self.AllBlocks)
 
     def switchButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -326,7 +326,7 @@ class MyApp(QMainWindow):
             self.label_11.setText(self.B5_Switch_Positions[1])
         elif current_text == self.B5_Switch_Positions[1]:
             self.label_11.setText(self.B5_Switch_Positions[0])
-        self.sendSpecialBlocks.emit(self.BlockArray)
+        self.sendSpecialBlocks.emit(self.AllBlocks)
 
     def updateBlocks(self,new_data):
         sentBlocks = new_data
@@ -341,7 +341,13 @@ class MyApp(QMainWindow):
         self.BlockOcc.setText(" ".join(sentBlocks))
         if self.label_7.text() == "AUTOMATIC" : self.FileParser.parsePLC()
         self.blockActions()
-        self.sendSpecialBlocks.emit(self.BlockArray)
+        self.sendSpecialBlocks.emit(self.AllBlocks)
+
+    def receiveSpeed(self,changedBlock):
+         for block in self.AllBlocks:
+            if block.lineColor == changedBlock.lineColor and block.ID == changedBlock.ID:
+                block = changedBlock
+                break
         
 
 class TestBench(QMainWindow):
@@ -349,6 +355,7 @@ class TestBench(QMainWindow):
     #signals
     OccBlocksChanged = pyqtSignal(list) #Sending block occupancies to UI
     tbChangeMode = pyqtSignal() #Fliping mode
+    ctcSpeedAuthority = pyqtSignal(Block) #sending updated block with speed
 
     def __init__(self):
         super().__init__()
@@ -363,7 +370,7 @@ class TestBench(QMainWindow):
         self.tbBlockMenu.currentIndexChanged.connect(self.updateBlockStates)
 
         #Menu
-        self.tbBlockMenu.addItems(['A3','A5','B6','C11'])
+        self.tbBlockMenu.addItems(['A1','A2','A3','A4','A5','B6','B7','B8','B9','B10','C11','C12','C13','C14','C15'])
 
         #Backend vars
         self.OccupiedBlocks = []    #Is sent to the UI
@@ -372,6 +379,10 @@ class TestBench(QMainWindow):
     def sendSpeed(self):
         speed = self.speedInput.text()
         self.comSpeed.setText(speed)
+        index = self.tbBlockMenu.currentIndex()
+        selectedBlock = self.specialBlocks[index]
+        selectedBlock.speedLimit = speed
+        self.ctcSpeedAuthority.emit(selectedBlock)
 
     def sendAuthority(self):
         authority = self.authorityInput.text()
@@ -463,6 +474,7 @@ if __name__ == "__main__":
     #Signal: Window 2
     window2.OccBlocksChanged.connect(window.updateBlocks)
     window2.tbChangeMode.connect(window.changeMode)
+    window2.ctcSpeedAuthority.connect(window.receiveSpeed)
 
     window.show()
     window2.show()

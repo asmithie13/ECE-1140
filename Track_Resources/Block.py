@@ -1,6 +1,6 @@
 # Define the Block class
 class Block:
-    def __init__(self, lineColor, blockSection, blockNum, hasLight, hasCrossing, hasSwitch, lightState, crossingState, switchState,id,speedLimit):
+    def __init__(self, lineColor, blockSection, blockNum, hasLight, hasCrossing, hasSwitch, lightState, crossingState, switchState,id,speedLimit,blockLength):
         self.lineColor = lineColor
         self.blockSection = blockSection
         self.blockNum = blockNum
@@ -14,4 +14,5 @@ class Block:
         self.ID = id
         self.speedLimit = speedLimit
         self.authority = None
+        self.blockLength = blockLength
 

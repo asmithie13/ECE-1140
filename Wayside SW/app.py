@@ -420,11 +420,13 @@ class TestBench(QMainWindow):
             self.specialBlocks = arr
             index = self.tbBlockMenu.currentIndex()
             selectedBlock = self.specialBlocks[index]
+            self.comSpeed.setText(str(selectedBlock.speedLimit))
 
         else:  
             if arr > len(self.specialBlocks) - 1: return 
             selectedBlock = self.specialBlocks[arr]
-            
+            self.comSpeed.setText(str(selectedBlock.speedLimit))
+
         if selectedBlock.LIGHT:
 
             self.label_24.setText("")

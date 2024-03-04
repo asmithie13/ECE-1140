@@ -18,8 +18,10 @@ from Throughput import *
 
 
 class CTC_UI(QtWidgets.QMainWindow):
-    #Signals, for testbench
+    #Signals, for Wayside (and Testbench)
     sendDispatchInfo = pyqtSignal(list)
+    sendBlockClosures = pyqtSignal(list)
+    sendSwitchPositions = pyqtSignal(list)
 
     def __init__(self):
         super(CTC_UI, self).__init__()
@@ -28,7 +30,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
 
         #Connect Buttons to signals defining behavior
-        self.UploadButton.clicked.connect(self.open_files)
+        self.UploadButton.clicked.connect(self.selectScheduleFile)
         self.ManualModeButton.clicked.connect(self.selectManualMode_button)
         self.AddTrainButton.clicked.connect(self.addTrain_button)
         self.AutoModeButton.clicked.connect(self.selectAutoMode_button)
@@ -142,7 +144,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
 
     #Define functionality for Upload File Button
-    def open_files(self):
+    def selectScheduleFile(self):
         # Open a file dialog to select a Excel File
         file_dialog = QFileDialog()
         file_path, _ = file_dialog.getOpenFileName(self, "Select Schedule File", "", "CSV FIle (*.csv);;All Files (*)")

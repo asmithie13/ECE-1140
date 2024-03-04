@@ -159,7 +159,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.UploadButton.setEnabled(False)
         self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
 
-
         #Disable Manual Mode button (because it's one use)
         self.ManualModeButton.setEnabled(False)
         self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
@@ -180,6 +179,9 @@ class CTC_UI(QtWidgets.QMainWindow):
         ArrivalTime = self.ArrivalTimeEdit.time()
         ArrivalTime = ArrivalTime.toString("hh:mm")
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
+
+        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+
         self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 
@@ -200,8 +202,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         pixmap = pixmap.scaled(resolution, aspectRatioMode=QtCore.Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
         self.ThroughputGraphLabel.setPixmap(pixmap)
 
-
-        
 
 
 

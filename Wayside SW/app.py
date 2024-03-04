@@ -343,19 +343,19 @@ class MyApp(QMainWindow):
         self.blockActions()
         self.sendSpecialBlocks.emit(self.AllBlocks)
 
-    def receiveSpeed(self,changedBlock):
+    def receiveSpeedAuth(self,changedBlock):
          for block in self.AllBlocks:
             if block.lineColor == changedBlock.lineColor and block.ID == changedBlock.ID:
                 block = changedBlock
                 break
         
-
 class TestBench(QMainWindow):
 
     #signals
     OccBlocksChanged = pyqtSignal(list) #Sending block occupancies to UI
     tbChangeMode = pyqtSignal() #Fliping mode
-    ctcSpeedAuthority = pyqtSignal(Block) #sending updated block with speed
+    ctcSpeed = pyqtSignal(Block) #sending updated block with speed
+    ctcAuthority = pyqtSignal(Block) #sending updated block with authority
 
     def __init__(self):
         super().__init__()
@@ -382,11 +382,15 @@ class TestBench(QMainWindow):
         index = self.tbBlockMenu.currentIndex()
         selectedBlock = self.specialBlocks[index]
         selectedBlock.speedLimit = speed
-        self.ctcSpeedAuthority.emit(selectedBlock)
+        self.ctcSpeed.emit(selectedBlock)
 
     def sendAuthority(self):
         authority = self.authorityInput.text()
         self.authOut.setText(authority)
+        index = self.tbBlockMenu.currentIndex()
+        selectedBlock = self.specialBlocks[index]
+        selectedBlock.authority = authority
+        self.ctcAuthority.emit(selectedBlock)
 
     def sendMode(self):
         current_text = self.label_16.text()
@@ -420,12 +424,14 @@ class TestBench(QMainWindow):
             self.specialBlocks = arr
             index = self.tbBlockMenu.currentIndex()
             selectedBlock = self.specialBlocks[index]
-            self.comSpeed.setText(str(selectedBlock.speedLimit))
+            
 
         else:  
             if arr > len(self.specialBlocks) - 1: return 
             selectedBlock = self.specialBlocks[arr]
-            self.comSpeed.setText(str(selectedBlock.speedLimit))
+            
+        self.comSpeed.setText(str(selectedBlock.speedLimit))
+        self.authOut.setText(str(selectedBlock.authority))
 
         if selectedBlock.LIGHT:
 
@@ -476,7 +482,8 @@ if __name__ == "__main__":
     #Signal: Window 2
     window2.OccBlocksChanged.connect(window.updateBlocks)
     window2.tbChangeMode.connect(window.changeMode)
-    window2.ctcSpeedAuthority.connect(window.receiveSpeed)
+    window2.ctcSpeed.connect(window.receiveSpeedAuth)
+    window2.ctcAuthority.connect(window.receiveSpeedAuth)
 
     window.show()
     window2.show()

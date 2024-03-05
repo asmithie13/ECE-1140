@@ -8,12 +8,6 @@ import sys
 import serial
 import time
 
-#Set-up serial communication
-#Testing w/o Arduino connection
-
-#ser = serial.Serial('COM5', 9600, timeout=0)
-#time.sleep(2)
-
 #Initialization of UI:
 class TrackController_UI(QMainWindow):
 

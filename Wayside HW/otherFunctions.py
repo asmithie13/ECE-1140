@@ -36,16 +36,18 @@ def readTrackFile(fileName, crossingTriples):
 
             tempBlock = Block(line[0],line[1],line[2],hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,blockId, line[5])
             totalBlocks.append(tempBlock)
-
             #Assign light values now
 
         for block in totalBlocks:
             if block.ID[1:] in lightBlocks:
                 block.LIGHT = True
                 block.lightState = False
+            
+            if block.lineColor == "Green" or block.lineColor == "Blue":
+                if block.SWITCH == True:
+                    block.LIGHT = False
+                    block.lightState = None
 
-    return totalBlocks #Return a list of all blocks within the file
-    
     return totalBlocks #Return a list of all blocks within the file
 
 #Function that divides blocks on the red line depending on wayside:

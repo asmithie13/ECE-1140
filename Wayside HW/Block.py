@@ -1,21 +1,16 @@
-import csv
-
-#Implementation of a block class:
+# Define the Block class
 class Block:
-    def __init__(self, lineColor, blockSection, blockNum, hasSwitch, hasCrossing):
-        #Assign arguments:
+    def __init__(self, lineColor, blockSection, blockNum, hasLight, hasCrossing, hasSwitch, lightState, crossingState, switchState, id,speedLimit):
         self.lineColor = lineColor
         self.blockSection = blockSection
         self.blockNum = blockNum
-        self.hasSwitch = hasSwitch
-        self.hasLight = hasSwitch #If there is a switch, there is a light
-        self.hasCrossing = hasCrossing
-
-        #All blocks are initialized as unoccupied and operational:
-        self.isOccupied = False
-        self.isFailed = False
-
-        #All block ttributes begin in the default position:
-        self.switchState = False #Switch is left
-        self.lightState = False #Light is red
-        self.crossingState = False #Crossing is up
+        self.LIGHT = hasLight
+        self.CROSSING = hasCrossing
+        self.SWITCH = hasSwitch
+        self.lightState = lightState
+        self.crossingState = crossingState
+        self.switchState = switchState
+        self.occupied = False
+        self.ID = id
+        self.speedLimit = speedLimit
+        self.authority = None

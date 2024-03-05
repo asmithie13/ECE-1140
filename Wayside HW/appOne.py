@@ -1,18 +1,17 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QPixmap
-from PyQt5 import QtCore, QtWidgets, uic, QtGui
+from PyQt5 import uic
 from PyQt5.QtCore import (Qt, pyqtSignal)
 from Block import Block
 from otherFunctions import *
 import sys
-import serial
-import time
 
 #Initialization of UI:
 class TrackController_UI(QMainWindow):
-
+    
     #Signals:
     blockStates = pyqtSignal(list)
+
 
     def __init__(self):
         #Load-in UI from the TrackControllerHW_UI file:
@@ -21,18 +20,8 @@ class TrackController_UI(QMainWindow):
         
         #Read all blocks and their attributes (Crossings, switches, etc.)
         self.waysideBlue = readTrackFile("blueLine.csv")
-        self.allGreenBlocks = readTrackFile("greenLine.csv")
-        self.allRedBlocks = readTrackFile("redLine.csv")
-    
-        #Divide the red and green line sections into four separate waysides:
-        self.waysideOne, self.waysideTwo = splitGreenBlocks(self.allGreenBlocks)
-        self.waysideThree, self.waysideFour = splitRedBlocks(self.allRedBlocks)
-    
-        #Disable automatic mode button until a PLC file is uploaded:
-        self.modeFlag = 0 #Determines if system is in initial manual or post-automatic manual
-        self.checkAuto.setEnabled(False)
-        self.checkManual.setChecked(True)
-        self.manualMode()
+        self.waysideOne, self.waysideTwo = splitGreenBlocks(readTrackFile("greenLine.csv"))
+        self.waysideThree, self.waysideFour = splitRedBlocks(readTrackFile("redLine.csv"))
 
         #Set wayside and block selections as disabled before a line is selected:
         self.comboBoxWayside.setEnabled(False)

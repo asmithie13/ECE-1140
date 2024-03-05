@@ -1,24 +1,50 @@
 from Block import Block
 import csv
+import re
 
 #Function that reads all blocks from a *.csv file and assigns block attributes:
-def readTrackFile(fileName):
+def readTrackFile(fileName, crossingTriples):
     totalBlocks = []
+    lightBlocks = {}
     fileName = "Wayside HW/" + fileName
     with open(fileName, "r") as fileObject:
         readObj = csv.reader(fileObject, delimiter=",")
         for i, line in enumerate(readObj):
             hasCrossingTemp = False
             hasSwitchTemp = False
+            hasLightTemp = False
+            lightState = None
+            crossingState = None
+            switchState = None
+            blockId = line[1] + line[2]
             if(i == 0):
                 continue
             else:
                 if(line[6] == "RAILWAY CROSSING"):
                     hasCrossingTemp = True
-                elif(line[6][0:6] == "Switch" or line[6][0:6] == "SWITCH" ):
+                    crossingState = True
+
+                elif(line[6][0:6] == "SWITCH"):
                     hasSwitchTemp = True
-            tempBlock = Block(line[0], line[1], line[2], hasSwitchTemp, hasCrossingTemp)
+                    switchState = True
+
+                    #numbers = [part for part in line[6].split('-') if part.isdigit()]
+                    numbers = re.findall(r'\b(\d+)-(\d+)\b', line[6])
+                    current = {num: False for pair in numbers for num in pair}
+                    crossingTriples.append(list(current.keys()))
+                    lightBlocks.update(current)
+
+            tempBlock = Block(line[0],line[1],line[2],hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,blockId, line[5])
             totalBlocks.append(tempBlock)
+
+            #Assign light values now
+
+        for block in totalBlocks:
+            if block.ID[1:] in lightBlocks:
+                block.LIGHT = True
+                block.lightState = False
+
+    return totalBlocks #Return a list of all blocks within the file
     
     return totalBlocks #Return a list of all blocks within the file
 

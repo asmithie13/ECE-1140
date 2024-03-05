@@ -22,7 +22,7 @@ class TrackController_UI(QMainWindow):
         self.greenTriplesIDs = []
 
         #Read all blocks and their attributes (Crossings, switches, etc.)
-        #self.waysideBlue = readTrackFile("blueLine.csv", self.blueTriplesIDs)
+        self.waysideBlue = readTrackFile("blueLine.csv", self.blueTriplesIDs)
         self.waysideOne, self.waysideTwo = splitGreenBlocks(readTrackFile("greenLine.csv", self.greenTriplesIDs))
         self.waysideThree, self.waysideFour = splitRedBlocks(readTrackFile("redLine.csv", self.redTriplesIDs))
 
@@ -34,6 +34,17 @@ class TrackController_UI(QMainWindow):
         self.buttonCrossing.setEnabled(False)
         self.buttonSwitch.setEnabled(False)
         self.buttonLight.setEnabled(False)
+
+        #Initialize wayside in manual mode before a PLC file is uploaded:
+        self.modeFlag = 0
+        self.checkManual.setChecked(True)
+        self.checkAuto.setEnabled(False)
+        self.manualMode()
+
+        #Disable combo boxes until a line is selected:
+        self.comboBoxWayside.setEnabled(False)
+        self.comboBoxSection.setEnabled(False)
+        self.comboBoxBlock.setEnabled(False)
 
         #Signals for PLC upload menu:
         self.buttonBrowse.clicked.connect(self.uploadPLCFile)
@@ -196,6 +207,7 @@ class TrackController_UI(QMainWindow):
         self.checkManual.setChecked(False)
         self.checkAuto.setEnabled(True)
         self.checkAuto.setChecked(True)
+
         self.automaticMode()
     
     #Occurs if the blue line is selected:
@@ -248,7 +260,19 @@ class TrackController_UI(QMainWindow):
     #Occurs if the system is in automatic operation:
     def automaticMode(self):
         self.modeFlag = 1
+        self.radioButtonBlue.setChecked(False)
+        self.radioButtonGreen.setChecked(False)
+        self.radioButtonRed.setChecked(False)
+        self.radioButtonBlue.setCheckable(False)
+        self.radioButtonGreen.setCheckable(False)
+        self.radioButtonRed.setCheckable(False)
+
+        self.comboBoxWayside.clear()
+        self.comboBoxSection.clear()
+        self.comboBoxBlock.clear()
+
         self.comboBoxWayside.setEnabled(False)
+        self.comboBoxSection.setEnabled(False)
         self.comboBoxBlock.setEnabled(False)
 
         self.buttonSwitch.setEnabled(False)
@@ -263,11 +287,15 @@ class TrackController_UI(QMainWindow):
     
     #Occcurs if the user selects manual operation:
     def manualMode(self):
-        if(self.modeFlag == 1): #Indicates that this is not initial manual mode, but manual-from-automatic
+        if(self.modeFlag == 1):
             self.buttonBrowse.setEnabled(False) #Unable to move back to automatic operation if currently in manual
             self.checkAuto.setChecked(False)
             self.checkAuto.setEnabled(False) 
             self.lineEditBrowse.setText("")
+
+        self.radioButtonBlue.setCheckable(True)
+        self.radioButtonGreen.setCheckable(True)
+        self.radioButtonRed.setCheckable(True)
 
         self.comboBoxWayside.setEnabled(True)
         self.comboBoxSection.setEnabled(True)

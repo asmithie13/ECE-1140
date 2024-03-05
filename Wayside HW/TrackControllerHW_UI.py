@@ -284,6 +284,8 @@ class TrackController_UI(QMainWindow):
         self.lineEditCrossingState.setText("-")
         #Here, there should be a connection to a function that interprets the PLC file,
         #and adjusts block attributes accordingly
+
+        
     
     #Occcurs if the user selects manual operation:
     def manualMode(self):

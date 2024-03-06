@@ -17,9 +17,20 @@ class TrackController_TestBench(QMainWindow):
         super(TrackController_TestBench, self).__init__()
         uic.loadUi("Wayside HW/TrackControllerHW_TestBench.ui", self)
 
-        #List to hold occupied and failed blocks:
+        #List to hold occupied and failed block strings:
         self.occupiedBlocks = []
         self.failedBlocks = []
+
+        #List to hold occupied and failed block objects:
+        self.occupiedBlockObjects = []
+        self.failedBlockObjects = []
+
+        self.blueTriplesIDs = []
+
+        lineStr = "blueLine.csv" #Change depending on which line you want to test
+        #lineStr = "greenLine.csv" #The actual occupied block list received from the track model includes blocks from each line
+        #lineStr = "redLine.csv"
+        self.waysideBlue = readTrackFile(lineStr, self.blueTriplesIDs)
 
         #Receive the text from the type inputs:
         self.lineEditSpeedInput.returnPressed.connect(self.sendSpeed)
@@ -27,29 +38,13 @@ class TrackController_TestBench(QMainWindow):
         #Receive blocks from combo box:
         self.comboBoxOccIn.activated.connect(self.sendOccupied)
         self.comboBoxFailedIn.activated.connect(self.sendFailed)
-
-        self.blueTriplesIDs = []
-        self.redTriplesIDs = []
-        self.greenTriplesIDs = []
-
-        self.waysideBlue = readTrackFile("blueLine.csv", self.blueTriplesIDs)
-        self.waysideOne, self.waysideTwo = splitGreenBlocks(readTrackFile("greenLine.csv", self.greenTriplesIDs))
-        self.waysideThree, self.waysideFour = splitRedBlocks(readTrackFile("redLine.csv", self.redTriplesIDs))
-
-        self.allBlocks = []
-        self.allBlocks.append(self.waysideBlue)
-        self.allBlocks.append(self.waysideOne)
-        self.allBlocks.append(self.waysideTwo)
-        self.allBlocks.append(self.waysideThree)
-        self.allBlocks.append(self.waysideFour)
-
-        for wayside in self.allBlocks:
-            for block in wayside:
-                self.comboBoxOccIn.addItem(block.blockSection + block.blockNum)
-                self.comboBoxFailedIn.addItem(block.blockSection + block.blockNum)
-                self.comboBoxCheckBlock.addItem(block.blockSection + block.blockNum)
+    
+        for block in self.waysideBlue:
+            self.comboBoxOccIn.addItem(block.blockSection + block.blockNum)
+            self.comboBoxFailedIn.addItem(block.blockSection + block.blockNum)
+            self.comboBoxCheckBlock.addItem(block.blockSection + block.blockNum)
         
-        #Clear block fields:
+        #Signals to clear block fields:
         self.buttonClearOcc.clicked.connect(self.clearOccupied)
         self.buttonClearFailed.clicked.connect(self.clearFailed)
 
@@ -77,14 +72,13 @@ class TrackController_TestBench(QMainWindow):
             self.occupiedBlocks.append(selectedBlock)
             self.occupiedBlocks.sort()
         
-        tempStr = ""
-        for block in self.occupiedBlocks:
-            tempStr = tempStr + block + " "
-        self.lineEditOccupiedOut.setText(tempStr)
+        self.occupiedBlockObjects = []
+        for block in self.waysideBlue:
+            if block.ID in self.occupiedBlocks:
+                self.occupiedBlockObjects.append(block)
 
-        self.occBlocksChanged.emit(self.occupiedBlocks)
-        #Send this string to the UI to be displayed
-    
+        self.occBlocksChanged.emit(self.occupiedBlockObjects)
+        
     #Handle failure input:
     def sendFailed(self):
         selectedBlock = self.comboBoxFailedIn.currentText()
@@ -93,12 +87,11 @@ class TrackController_TestBench(QMainWindow):
         else:
             self.failedBlocks.append(selectedBlock)
             self.failedBlocks.sort()
-        
+
         self.failedBlockObjects = []
-        for wayside in self.allBlocks:
-            for block in wayside:
-                if block.ID in self.failedBlocks:
-                    self.failedBlockObjects.append(block)
+        for block in self.waysideBlue:
+            if block.ID in self.failedBlocks:
+                self.failedBlockObjects.append(block)
 
         self.failedBlocksChanged.emit(self.failedBlockObjects)
         #Send this string to the UI to be displayed

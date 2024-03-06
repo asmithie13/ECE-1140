@@ -26,6 +26,16 @@ class TrackController_UI(QMainWindow):
         self.waysideOne, self.waysideTwo = splitGreenBlocks(readTrackFile("greenLine.csv", self.greenTriplesIDs))
         self.waysideThree, self.waysideFour = splitRedBlocks(readTrackFile("redLine.csv", self.redTriplesIDs))
 
+        #Occupied and failed blocks for each line:
+        self.occupiedBlue = []
+        self.failedBlue = []
+
+        self.occupiedGreen = []
+        self.failedGreen = []
+
+        self.occupiedRed = []
+        self.failedRed = []
+
         #Set wayside and block selections as disabled before a line is selected:
         self.comboBoxWayside.setEnabled(False)
         self.comboBoxSection.setEnabled(False)
@@ -212,6 +222,18 @@ class TrackController_UI(QMainWindow):
     
     #Occurs if the blue line is selected:
     def blueLineButton(self): #FUNCTION IS GOOD
+        self.lineEditOccupiedBlocks.setText("")
+        self.lineEditClosedBlocks.setText("")
+
+        tempStr = ""
+        for block in self.occupiedBlue:
+            tempStr = tempStr + block.ID + " "
+        self.lineEditOccupiedBlocks.setText(tempStr)
+        tempStr = ""
+        for block in self.failedBlue:
+            tempStr = tempStr + block.ID + " "
+        self.lineEditClosedBlocks.setText(tempStr)
+
         self.comboBoxWayside.setEnabled(True)
         self.buttonBrowse.setEnabled(True)
 
@@ -222,11 +244,26 @@ class TrackController_UI(QMainWindow):
         self.lineEditCrossingState.setText("-")
         self.lineEditSwitchState.setText("-")
         self.lineEditLightState.setText("-")
+
+        #self.displayOccupancies()
+        #self.displayFailures()
 
         self.comboBoxWayside.addItem("Blue") #Number of waysides will be hard-coded
 
     #Occurs if the red line is selected:
     def redLineButton(self): #FUNCTION IS GOOD
+        self.lineEditOccupiedBlocks.setText("")
+        self.lineEditClosedBlocks.setText("")
+
+        tempStr = ""
+        for block in self.occupiedRed:
+            tempStr = tempStr + block.ID + " "
+        self.lineEditOccupiedBlocks.setText(tempStr)
+        tempStr = ""
+        for block in self.failedRed:
+            tempStr = tempStr + block.ID + " "
+        self.lineEditClosedBlocks.setText(tempStr)
+
         self.comboBoxWayside.setEnabled(True)
         self.buttonBrowse.setEnabled(True)
 
@@ -237,12 +274,27 @@ class TrackController_UI(QMainWindow):
         self.lineEditCrossingState.setText("-")
         self.lineEditSwitchState.setText("-")
         self.lineEditLightState.setText("-")
+
+        #self.displayOccupancies()
+        #self.displayFailures()
 
         self.comboBoxWayside.addItem("3")
         self.comboBoxWayside.addItem("4")
 
     #Occurs if the green line is selected:
     def greenLineButton(self): #FUNCTION IS GOOD
+        self.lineEditOccupiedBlocks.setText("")
+        self.lineEditClosedBlocks.setText("")
+
+        tempStr = ""
+        for block in self.occupiedGreen:
+            tempStr = tempStr + block.ID + " "
+        self.lineEditOccupiedBlocks.setText(tempStr)
+        tempStr = ""
+        for block in self.failedGreen:
+            tempStr = tempStr + block.ID + " "
+        self.lineEditClosedBlocks.setText(tempStr)
+
         self.comboBoxWayside.setEnabled(True)
         self.buttonBrowse.setEnabled(True)
         
@@ -254,18 +306,15 @@ class TrackController_UI(QMainWindow):
         self.lineEditSwitchState.setText("-")
         self.lineEditLightState.setText("-")
 
+        #self.displayOccupancies()
+        #self.displayFailures()
+
         self.comboBoxWayside.addItem("1")
         self.comboBoxWayside.addItem("2")
 
     #Occurs if the system is in automatic operation:
     def automaticMode(self):
         self.modeFlag = 1
-        self.radioButtonBlue.setChecked(False)
-        self.radioButtonGreen.setChecked(False)
-        self.radioButtonRed.setChecked(False)
-        self.radioButtonBlue.setCheckable(False)
-        self.radioButtonGreen.setCheckable(False)
-        self.radioButtonRed.setCheckable(False)
 
         self.comboBoxWayside.clear()
         self.comboBoxSection.clear()
@@ -274,6 +323,10 @@ class TrackController_UI(QMainWindow):
         self.comboBoxWayside.setEnabled(False)
         self.comboBoxSection.setEnabled(False)
         self.comboBoxBlock.setEnabled(False)
+
+        self.radioButtonBlue.setCheckable(False)
+        self.radioButtonGreen.setCheckable(False)
+        self.radioButtonRed.setCheckable(False)
 
         self.buttonSwitch.setEnabled(False)
         self.buttonLight.setEnabled(False)
@@ -284,8 +337,6 @@ class TrackController_UI(QMainWindow):
         self.lineEditCrossingState.setText("-")
         #Here, there should be a connection to a function that interprets the PLC file,
         #and adjusts block attributes accordingly
-
-        
     
     #Occcurs if the user selects manual operation:
     def manualMode(self):
@@ -416,17 +467,58 @@ class TrackController_UI(QMainWindow):
 
     #Function to receive and display block occupancies:
     def displayOccupancies(self, occBlock):
-        tempStr = ""
+        self.occupiedBlue = []
+        self.occupiedGreen = []
+        self.occupiedRed = []
+       
+        blueOcc = ""
+        redOcc = ""
+        greenOcc = ""
         for block in occBlock:
-            tempStr = tempStr + block + " "
-        self.lineEditOccupiedBlocks.setText(tempStr)
+            if block.lineColor == "Blue":
+                blueOcc = blueOcc + block.ID + " "
+                self.occupiedBlue.append(block)
+            elif block.lineColor == "Green":
+                greenOcc = greenOcc + block.ID + " "
+                self.occupiedGreen.append(block)
+            if block.lineColor == "Red":
+                redOcc = redOcc + block.ID + " "
+                self.occupiedRed.append(block)
+        
+        if self.radioButtonBlue.isChecked():
+            self.lineEditOccupiedBlocks.setText(blueOcc)
+        elif self.radioButtonGreen.isChecked():
+            self.lineEditOccupiedBlocks.setText(greenOcc)
+        elif self.radioButtonRed.isChecked():
+            self.lineEditOccupiedBlocks.setText(redOcc)
     
     #Function to receive and display block failures:
     def displayFailures(self, failBlock):
-        tempStr = ""
+        self.failedBlue = []
+        self.failedGreen = []
+        self.failedRed = []
+
+        blueFail = ""
+        redFail = ""
+        greenFail = ""
+    
         for block in failBlock:
-            tempStr = tempStr + block + " "
-        self.lineEditClosedBlocks.setText(tempStr)
+            if block.lineColor == "Blue":
+                blueFail = blueFail + block.ID + " "
+                self.failedBlue.append(block)
+            elif block.lineColor == "Green":
+                greenFail = greenFail + block.ID + " "
+                self.failedGreen.append(block)
+            if block.lineColor == "Red":
+                redFail = redFail + block.ID + " "
+                self.failedRed.append(block)
+        
+        if self.radioButtonBlue.isChecked():
+            self.lineEditClosedBlocks.setText(blueFail)
+        elif self.radioButtonGreen.isChecked():
+            self.lineEditClosedBlocks.setText(greenFail)
+        elif self.radioButtonRed.isChecked():
+            self.lineEditClosedBlocks.setText(redFail)
 
     #Function to set a selected block - Enables programmer to edit block states:
     def setBlockConditions(self):

@@ -30,11 +30,13 @@ class CTC_UI(QtWidgets.QMainWindow):
 
 
         #Connect Buttons to signals defining behavior
-        self.UploadButton.clicked.connect(self.selectScheduleFile)
         self.ManualModeButton.clicked.connect(self.selectManualMode_button)
-        self.AddTrainButton.clicked.connect(self.addTrain_button)
         self.AutoModeButton.clicked.connect(self.selectAutoMode_button)
+        self.UploadButton.clicked.connect(self.selectScheduleFile)
+        self.AddTrainButton.clicked.connect(self.addTrain_button)
+        self.MaintenanceModeButton.clicked.connect(self.enterMaintenanceMode_button)
         self.CloseBlockButton.clicked.connect(self.closeBlock_button)
+        self.SetSwitchPositionButton.clicked.connect(self.setSwitch_button)
 
         #Changing Button Colors
         self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")     #Green
@@ -58,7 +60,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Initializing Schedule
         self.trainSchedule = Schedule()
-        self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
         #Initializing Occupied Blocks Table
         self.occupiedBlocks = OccupiedBlocks()
@@ -95,7 +97,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         ArrivalTime = ArrivalTime.toString("hh:mm")
 
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
-        self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 
     #Define mutually exclisive auto/manual mode when manual mode is selected
@@ -152,7 +154,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Parse File
         self.trainSchedule.parseScheduleFile(file_path)
         #Update Table
-        self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
         #Disable Manual Mode and upload button
         self.selectAutoMode_button()
@@ -161,7 +163,13 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Disable Manual Mode button (because it's one use)
         self.ManualModeButton.setEnabled(False)
-        self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
+        self.ManualModeButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
+
+
+    #Indication that the system is in maintenance mode
+    #Same behavior will occur if a block is closed or a switch is sets
+    def enterMaintenanceMode_button(self):
+        print("You still need to write this")
 
 
     #function to update block occupied table based on input from Wayside
@@ -180,16 +188,19 @@ class CTC_UI(QtWidgets.QMainWindow):
         ArrivalTime = ArrivalTime.toString("hh:mm")
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
 
-        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
-
         self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 
-    #Function to add a block closure
+    #Function to add a block closure when in maintence mode
     def closeBlock_button(self):
         BlockToClose = self.CloseBlockField.text()
         self.Maintence.BlocksClosed.append([BlockToClose])
         self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))
+
+
+    #Function to set switch positons when in maintenance mode
+    def setSwitch_button(self):
+        print("You didn't implement this yet")
 
 
     #Function to update the ticket sales based on information from Track Model

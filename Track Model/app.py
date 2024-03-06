@@ -10,15 +10,16 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 # import libraries
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QVBoxLayout, QComboBox, QHBoxLayout, QWidget, QLabel, QPushButton, QSizePolicy
+from PyQt5.QtWidgets import QApplication, QLCDNumber, QMainWindow, QFileDialog, QVBoxLayout, QComboBox, QHBoxLayout, QWidget, QLabel, QPushButton, QSizePolicy
 from PyQt5 import uic
-from PyQt5.QtCore import Qt  
+from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QTimer, QTime
 from Track_Resources.Block import Block
 from PyQt5 import QtCore as qtc
 from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5 import QtGui as qtg 
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QGraphicsItem
 from PyQt5.QtCore import QRectF, Qt
 from PyQt5 import QtGui
 
@@ -36,21 +37,13 @@ class MyMainWindow(QMainWindow):
         
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track Model/Track_Model.ui", self)
-
-        #Load track layout
-         # Initialize the QGraphicsScene
-        self.scene = QGraphicsScene(self)
-        self.track_layout_1.setScene(self.scene)
         
-
         # Connect Upload Track Layout button to make upload file
         self.pushButton.clicked.connect(self.upload_track_layout) 
 
         #Connect failure screen to block selection to make it easier for user/disable dropdown for failure
         self.block_in_1.activated.connect(self.update_block_in_2_based_on_block_in_1)
         self.block_in_2.setEnabled(False)
-
-
 
 
         # Generate a random number between 1 and 74 for ticket sales
@@ -78,33 +71,6 @@ class MyMainWindow(QMainWindow):
         self.data = Data()
 
         
-
-    def loadTrackLayout(self, json_file):
-        #Open file
-        with open(json_file, 'r') as file:
-            data = json.load(file)
-            map_width = data['width']
-            map_height = data['height']
-            tile_width = data['tilewidth']
-            tile_height = data['tileheight']
-            
-            for layer in data['layers']:
-                #Check layers in json file
-                if layer['type'] == 'tilelayer':
-                    tiles = layer['data']
-                    for i, tile_gid in enumerate(tiles):
-                        if tile_gid == 0:
-                            continue  #Ensures that no empty block exists
-                        x = (i % map_width) * tile_width
-                        y = (i // map_width) * tile_height
-                        rect = QRectF(x, y, tile_width, tile_height)
-                        self.scene.addRect(rect, pen=QtGui.QPen(Qt.NoPen), brush=QtGui.QBrush(Qt.blue))
-                    
-                        #Scaling the map so it fits
-                        self.track_layout_1.setScene(self.scene)
-                        self.track_layout_1.fitInView(self.scene.sceneRect(), Qt.KeepAspectRatio)
-                        self.track_layout_1.scale(7, 10)
-
 
     #This function is a starter connector to UI from tb for ticket sales
     def update_ticket_sales(self, sales):
@@ -204,9 +170,17 @@ class MyMainWindow(QMainWindow):
             # Instantiate the Data class and pull
             self.data = Data()
             
-            # read data from the uploaded file using the Data class (pandas)
-            self.data.read_excel(uploaded_track)
+        current_selection = self.line_select.currentText()
 
+        if current_selection == "Blue Line":
+            self.data.read_excel(uploaded_track ,1)
+        elif current_selection == "Red Line":
+            self.data.read_excel(uploaded_track ,2)
+        else:
+            pass
+            
+            #self.data.read_excel(uploaded_track ,1)
+ 
         # Connect the block selection dropdown to update_block_info function!
         self.block_in_1.activated[str].connect(lambda text: self.update_block_info(text))
 
@@ -276,6 +250,20 @@ class MyMainWindow(QMainWindow):
         selected_text = self.block_in_1.currentText()
 
         self.block_in_2.setCurrentText(selected_text)
+
+    def blockClicked(self, block_id):
+        # Fetch block data and update UI elements
+        block_data = self.data.get_data_for_block(block_id)
+        if block_data:
+            self.block_num_in.setText(str(block_data['block_num']))
+            self.section_in.setText(block_data['section'])
+            self.speed_in.setText(str(block_data['speed_limit_km']))
+            self.grade_in.setText(str(block_data['grade']))
+            self.length_in.setText(str(block_data['length1_m']))
+            self.elevation_in.setText(str(block_data['elevation_m']))
+            # Update additional UI components as needed
+
+
 
 #this is my testbench window
 class TestBench(QMainWindow):
@@ -454,9 +442,19 @@ class Data:
         self.infra = None
         self.cumm_elevation = None
 
+
+    
     # read Excel files from DataFrame
-    def read_excel(self, filename):
-        self.df = pd.read_excel("Track_Resources/Blue_Line_Block_Info.xlsx")
+    def read_excel(self, filename, num):
+
+        current_selection = self.line_select.currentText()
+        # Use an if statement to check the current selection and set the filename accordingly
+        if num == 1:
+            self.df = pd.read_excel("Track_Resources/Blue_Line_Block_Info.xlsx")
+        elif num == 2:
+            self.df = pd.read_excel("Track_Resources/red_line.xlsx")
+        else:
+            pass
 
         #extract data from DataFrame of the Excel and assign to variables
         self.elevation_data = self.df.set_index('Block Number')['ELEVATION (M)'].to_dict()
@@ -468,7 +466,26 @@ class Data:
         self.cumm_elevation = self.df.loc[0, 'CUMALTIVE ELEVATION (M)']
         self.speed_limit = self.df.loc[0,'Speed Limit (Km/Hr)']
         self.section = self.df.loc[0, 'Section']
-        
+
+
+    def get_data_for_block(self, block_num):
+        # Ensure the DataFrame is not empty and contains data
+        if self.df is not None and not self.df.empty:
+            # Find the row in the DataFrame for the given block number
+            block_row = self.df[self.df['Block Number'] == block_num]
+            if not block_row.empty:
+                # Assuming you want to return a dictionary of the relevant block data
+                return {
+                    'block_num': block_row.iloc[0]['Block Number'],
+                    'section': block_row.iloc[0]['Section'],
+                    'speed_limit_km': block_row.iloc[0]['Speed Limit (Km/Hr)'],
+                    'grade': block_row.iloc[0]['Block Grade (%)'],
+                    'length1_m': block_row.iloc[0]['Block Length (m)'],
+                    'elevation_m': block_row.iloc[0]['ELEVATION (M)'],
+                    # Add more fields as needed
+                }
+        return None 
+    
     def get_elevation_for_block(self, block_num):
         # check if DataFrame is not None
         if self.df is not None:
@@ -571,7 +588,6 @@ if __name__ == "__main__":
     # Connect MyMainWindow's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)
 
-    window.loadTrackLayout("Track Model\Track_Layout.json")
 
     window.block_selected_signal.connect(window_2.update_on_block_selection)
     window.show()

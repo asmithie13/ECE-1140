@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "Track_Layout.json",
     "expandedProjectPaths": [
         "."
     ],
@@ -20,8 +20,8 @@
             "scale": 0.7303125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 481.30081300813,
-                "y": 321.09542148053055
+                "x": 479.9315361574667,
+                "y": 319.72614462986735
             }
         },
         "Track Layout.tmx#Blue_rectangle": {
@@ -35,11 +35,22 @@
             "scale": 0.7303125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 481.30081300813,
-                "y": 321.09542148053055
+                "x": 479.9315361574667,
+                "y": 319.72614462986735
             }
         },
         "Track_Layout..tmj#Blue_rectangle": {
+            "scaleInDock": 1
+        },
+        "Track_Layout.json": {
+            "scale": 0.7303125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 429.2682926829268,
+                "y": 348.4809584937954
+            }
+        },
+        "Track_Layout.json#Blue_rectangle": {
             "scaleInDock": 1
         }
     },
@@ -48,9 +59,15 @@
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
     "map.lastUsedFormat": "tmx",
     "openFiles": [
+        "Track Layout.tmx",
+        "Track_Layout..tmj",
+        "Track_Layout.json"
     ],
     "project": "blue_line_track_layout.tiled-project",
     "recentFiles": [
+        "Track Layout.tmx",
+        "Track_Layout..tmj",
+        "Track_Layout.json",
         "Track.tsx",
         "Blue_rectangle.tsx"
     ],

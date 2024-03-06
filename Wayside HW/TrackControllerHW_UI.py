@@ -28,13 +28,13 @@ class TrackController_UI(QMainWindow):
 
         #Occupied and failed blocks for each line:
         self.occupiedBlue = []
-        self.failedBlue = []
+        #self.failedBlue = []
 
         self.occupiedGreen = []
-        self.failedGreen = []
+        #self.failedGreen = []
 
         self.occupiedRed = []
-        self.failedRed = []
+        #self.failedRed = []
 
         #Set wayside and block selections as disabled before a line is selected:
         self.comboBoxWayside.setEnabled(False)
@@ -81,7 +81,7 @@ class TrackController_UI(QMainWindow):
         self.buttonCrossing.clicked.connect(self.setCrossing)
         self.buttonSwitch.clicked.connect(self.setSwitch)
         self.buttonLight.clicked.connect(self.setLight)
-        
+
     #Function to change the position of the crossing:
     def setCrossing(self):
         #Assign the temporary list to be altered by the wayside programmer:

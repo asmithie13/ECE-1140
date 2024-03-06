@@ -28,12 +28,26 @@ class TrackController_TestBench(QMainWindow):
         self.comboBoxOccIn.activated.connect(self.sendOccupied)
         self.comboBoxFailedIn.activated.connect(self.sendFailed)
 
-        self.crossingTriples = []
-        self.totalBlueBlock = readTrackFile("blueLine.csv", self.crossingTriples)
-        for block in self.totalBlueBlock:
-            self.comboBoxOccIn.addItem(block.blockSection + block.blockNum)
-            self.comboBoxFailedIn.addItem(block.blockSection + block.blockNum)
-            self.comboBoxCheckBlock.addItem(block.blockSection + block.blockNum)
+        self.blueTriplesIDs = []
+        self.redTriplesIDs = []
+        self.greenTriplesIDs = []
+
+        self.waysideBlue = readTrackFile("blueLine.csv", self.blueTriplesIDs)
+        self.waysideOne, self.waysideTwo = splitGreenBlocks(readTrackFile("greenLine.csv", self.greenTriplesIDs))
+        self.waysideThree, self.waysideFour = splitRedBlocks(readTrackFile("redLine.csv", self.redTriplesIDs))
+
+        self.allBlocks = []
+        self.allBlocks.append(self.waysideBlue)
+        self.allBlocks.append(self.waysideOne)
+        self.allBlocks.append(self.waysideTwo)
+        self.allBlocks.append(self.waysideThree)
+        self.allBlocks.append(self.waysideFour)
+
+        for wayside in self.allBlocks:
+            for block in wayside:
+                self.comboBoxOccIn.addItem(block.blockSection + block.blockNum)
+                self.comboBoxFailedIn.addItem(block.blockSection + block.blockNum)
+                self.comboBoxCheckBlock.addItem(block.blockSection + block.blockNum)
         
         #Clear block fields:
         self.buttonClearOcc.clicked.connect(self.clearOccupied)
@@ -44,7 +58,12 @@ class TrackController_TestBench(QMainWindow):
 
         self.comboBoxCheckBlock.activated.connect(self.displayBlockStates)
     
-    #Send input speed to output (Wayside does not change):
+    #Send input speed to output:
+    def sendSpeed(self):
+        inputSpeed = self.lineEditSpeedInput.text()
+        self.lineEditSpeedOut.setText(inputSpeed)
+    
+    #Send input authority to output:
     def sendSpeed(self):
         inputSpeed = self.lineEditSpeedInput.text()
         self.lineEditSpeedOut.setText(inputSpeed)
@@ -52,7 +71,6 @@ class TrackController_TestBench(QMainWindow):
     #Handle occupancy input:
     def sendOccupied(self):
         selectedBlock = self.comboBoxOccIn.currentText()
-        currentText = self.lineEditOccupiedOut.text()
         if selectedBlock in self.occupiedBlocks:
             pass
         else:
@@ -70,19 +88,19 @@ class TrackController_TestBench(QMainWindow):
     #Handle failure input:
     def sendFailed(self):
         selectedBlock = self.comboBoxFailedIn.currentText()
-        #currentText = self.lineEditFailedOut.text()
         if selectedBlock in self.failedBlocks:
             pass
         else:
             self.failedBlocks.append(selectedBlock)
             self.failedBlocks.sort()
         
-        tempStr = ""
-        for block in self.failedBlocks:
-            tempStr = tempStr + block + " "
-        self.lineEditFailedOut.setText(tempStr)
+        self.failedBlockObjects = []
+        for wayside in self.allBlocks:
+            for block in wayside:
+                if block.ID in self.failedBlocks:
+                    self.failedBlockObjects.append(block)
 
-        self.failedBlocksChanged.emit(self.failedBlocks)
+        self.failedBlocksChanged.emit(self.failedBlockObjects)
         #Send this string to the UI to be displayed
     
     #Handle clear buttons:

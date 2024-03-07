@@ -38,9 +38,10 @@ class MyMainWindow(QMainWindow):
         super().__init__()
         self.blockStates = {}
         
+
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track Model/Track_Model.ui", self)
-        
+        self.clock_in.display("09:22")
         # Connect Upload Track Layout button to make upload file
         self.pushButton.clicked.connect(self.upload_track_layout) 
 
@@ -49,7 +50,7 @@ class MyMainWindow(QMainWindow):
         self.block_in_2.setEnabled(False)
 
 
-        self.generateTickets()
+        #self.generateTickets()
 
         # Connect button to method
         # If clicked, then connect to UI
@@ -81,6 +82,14 @@ class MyMainWindow(QMainWindow):
         pass
 
     def send_boarding(self):
+        pass
+    
+    #set temperature
+    def set_temp(self):
+        pass
+
+    #use global clock
+    def clock(self):
         pass
 
     #failures:
@@ -204,14 +213,14 @@ class MyMainWindow(QMainWindow):
             # Instantiate the Data class and pull
             self.data = Data()
             
-        current_selection = self.line_select.currentText()
+        #current_selection = self.line_select.currentText()
 
-        if current_selection == "Blue Line":
-            self.data.read_excel(uploaded_track ,1)
-        elif current_selection == "Red Line":
-            self.data.read_excel(uploaded_track ,2)
-        else:
-            pass
+        #if current_selection == "Blue Line":
+        self.data.read_excel(uploaded_track)
+        #elif current_selection == "Red Line":
+            #self.data.read_excel(uploaded_track ,2)
+        #else:
+            #pass
             
             #self.data.read_excel(uploaded_track ,1)
  
@@ -259,7 +268,7 @@ class MyMainWindow(QMainWindow):
         self.block_selected_signal.emit(block_text)
     
         # After updating the UI, restore the state of toggle buttons for the selected block
-        self.restore_block_state(block_text)
+        #self.restore_block_state(block_text)
 
 
     def update_block_in_2_based_on_block_in_1(self):
@@ -461,16 +470,16 @@ class Data:
 
     
     # read Excel files from DataFrame
-    def read_excel(self, filename, num):
+    def read_excel(self, filename):
 
-        current_selection = self.line_select.currentText()
+        #current_selection = self.line_select.currentText()
         # Use an if statement to check the current selection and set the filename accordingly
-        if num == 1:
-            self.df = pd.read_excel("Track_Resources/Blue_Line_Block_Info.xlsx")
-        elif num == 2:
-            self.df = pd.read_excel("Track_Resources/red_line.xlsx")
-        else:
-            pass
+        #if num == 1:
+        self.df = pd.read_excel("Track_Resources/Blue_Line_Block_Info.xlsx")
+        #elif num == 2:
+        #   self.df = pd.read_excel("Track_Resources/red_line.xlsx")
+        #else:
+           # pass
 
         #extract data from DataFrame of the Excel and assign to variables
         self.elevation_data = self.df.set_index('Block Number')['ELEVATION (M)'].to_dict()
@@ -616,7 +625,7 @@ if __name__ == "__main__":
     window_2 = TestBench()
 
     #Create an instance of Communicate
-    communicator = Communicate()
+    #communicator = Communicate()
 
     # connect the signal from window_2 to the slot in window
     window_2.broken_rail_input_signal.connect(window.toggle_button_state_tb)

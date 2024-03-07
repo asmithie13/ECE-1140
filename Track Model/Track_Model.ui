@@ -51,7 +51,7 @@
      <rect>
       <x>10</x>
       <y>870</y>
-      <width>621</width>
+      <width>631</width>
       <height>161</height>
      </rect>
     </property>
@@ -758,7 +758,7 @@
      <rect>
       <x>20</x>
       <y>70</y>
-      <width>611</width>
+      <width>621</width>
       <height>51</height>
      </rect>
     </property>
@@ -890,7 +890,7 @@
      <rect>
       <x>10</x>
       <y>790</y>
-      <width>621</width>
+      <width>631</width>
       <height>71</height>
      </rect>
     </property>
@@ -977,7 +977,7 @@
      <rect>
       <x>20</x>
       <y>130</y>
-      <width>611</width>
+      <width>621</width>
       <height>651</height>
      </rect>
     </property>
@@ -2814,8 +2814,8 @@
     <widget class="QPushButton" name="pushButton_41">
      <property name="geometry">
       <rect>
-       <x>550</x>
-       <y>110</y>
+       <x>580</x>
+       <y>70</y>
        <width>21</width>
        <height>21</height>
       </rect>
@@ -2838,8 +2838,8 @@
     <widget class="QPushButton" name="pushButton_42">
      <property name="geometry">
       <rect>
-       <x>540</x>
-       <y>140</y>
+       <x>580</x>
+       <y>100</y>
        <width>21</width>
        <height>21</height>
       </rect>
@@ -2862,8 +2862,8 @@
     <widget class="QPushButton" name="pushButton_43">
      <property name="geometry">
       <rect>
-       <x>520</x>
-       <y>170</y>
+       <x>570</x>
+       <y>130</y>
        <width>21</width>
        <height>21</height>
       </rect>
@@ -3029,42 +3029,7 @@
      <property name="geometry">
       <rect>
        <x>280</x>
-       <y>470</y>
-       <width>21</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">
-    QPushButton {
-        border-style: solid;
-        border-width: 2px;
-    }
-&quot;&quot;&quot;)
-</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>switch.png</normaloff>switch.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>23</width>
-       <height>23</height>
-      </size>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_88">
-     <property name="geometry">
-      <rect>
-       <x>290</x>
-       <y>90</y>
+       <y>310</y>
        <width>21</width>
        <height>21</height>
       </rect>
@@ -3099,7 +3064,7 @@
      <property name="geometry">
       <rect>
        <x>280</x>
-       <y>150</y>
+       <y>190</y>
        <width>21</width>
        <height>21</height>
       </rect>
@@ -3133,8 +3098,8 @@
     <widget class="QPushButton" name="pushButton_175">
      <property name="geometry">
       <rect>
-       <x>350</x>
-       <y>80</y>
+       <x>400</x>
+       <y>120</y>
        <width>21</width>
        <height>21</height>
       </rect>
@@ -3168,8 +3133,8 @@
     <widget class="QPushButton" name="pushButton_176">
      <property name="geometry">
       <rect>
-       <x>520</x>
-       <y>30</y>
+       <x>590</x>
+       <y>40</y>
        <width>21</width>
        <height>21</height>
       </rect>
@@ -3228,6 +3193,41 @@
      <property name="icon">
       <iconset>
        <normaloff>crossing.png</normaloff>crossing.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_88">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>490</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>switch.png</normaloff>switch.png</iconset>
      </property>
      <property name="iconSize">
       <size>

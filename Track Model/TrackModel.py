@@ -31,6 +31,9 @@ class MyMainWindow(QMainWindow):
     #Adding a signal to update information based on block selection:
     block_selected_signal = pyqtSignal(str)  # Add this at the beginning of the class
 
+    getSpecialBlocks = pyqtSignal(list)
+    #sendOccupancies = pyqtSignal(list)
+
     def __init__(self):
         super().__init__()
         self.blockStates = {}
@@ -46,10 +49,7 @@ class MyMainWindow(QMainWindow):
         self.block_in_2.setEnabled(False)
 
 
-        # Generate a random number between 1 and 74 for ticket sales
-        random_number = random.randint(1, 74)
-        #Output the random numberto ticket sales block info
-        self.ticket_out.setText(str(random_number))
+        self.generateTickets()
 
         # Connect button to method
         # If clicked, then connect to UI
@@ -70,7 +70,41 @@ class MyMainWindow(QMainWindow):
         # Instantiate the Data class
         self.data = Data()
 
-        
+    def generateTickets(self):
+        # Generate a random number between 1 and 74 for ticket sales
+        random_number = random.randint(1, 74)
+        #Output the random numberto ticket sales block info
+        self.ticket_out.setText(str(random_number))
+
+    #send to CTC
+    def send_tickets(self):
+        pass
+
+    def send_boarding(self):
+        pass
+
+    #failures:
+    def set_broken(broke):
+        broken = broke
+        #send occupancies
+
+    def set_track_circuit(fail1):
+        track_circuit = fail1
+        #send occupancies
+
+    def set_power_fail(fail2):
+        power_fail = fail2
+        #send occupancies
+
+    def get_broken(self):
+        return self.broken
+
+    def get_track_circuit(self):
+        return self.track_circuit
+
+    def get_power_fail(self):
+        return self.power_fail
+
 
     #This function is a starter connector to UI from tb for ticket sales
     def update_ticket_sales(self, sales):
@@ -184,8 +218,7 @@ class MyMainWindow(QMainWindow):
         # Connect the block selection dropdown to update_block_info function!
         self.block_in_1.activated[str].connect(lambda text: self.update_block_info(text))
 
-    # This function uses the data from the data class to update block data and output it to main UI
-    # This function uses the data from the data class to update block data and output it to main UI
+    #This function uses the data from the data class to update block data and output it to main UI
     def update_block_info(self, block_text):
         # Reset the states of the buttons whenever a new block is selected
         #self.reset_button_states()
@@ -228,22 +261,6 @@ class MyMainWindow(QMainWindow):
         # After updating the UI, restore the state of toggle buttons for the selected block
         self.restore_block_state(block_text)
 
-#does not work
-    def restore_block_state(self, block_text):
-            if block_text in self.blockStates:
-                #Restore states for known elements; example for offButton_1
-                state = self.blockStates[block_text].get('offButton_1', 'OFF')  # Default to 'OFF'
-                self.offButton_1.setText(state)
-                color = "green" if state == "ON" else "rgb(195, 16, 40)"
-                self.offButton_1.setStyleSheet(f"background-color: {color};")
-            else:
-                self.offButton_1.setText("OFF")
-                self.offButton_1.setStyleSheet("background-color: rgb(195, 16, 40);")
-                self.offButton_2.setText("OFF")
-                self.offButton_2.setStyleSheet("background-color: rgb(195, 16, 40);")
-                self.offButton_3.setText("OFF")
-                self.offButton_3.setStyleSheet("background-color: rgb(195, 16, 40);")
-
 
     def update_block_in_2_based_on_block_in_1(self):
     #Get the currently selected text in block_in_1
@@ -252,7 +269,7 @@ class MyMainWindow(QMainWindow):
         self.block_in_2.setCurrentText(selected_text)
 
     def blockClicked(self, block_id):
-        # Fetch block data and update UI elements
+        #Fetch block data and update UI elements
         block_data = self.data.get_data_for_block(block_id)
         if block_data:
             self.block_num_in.setText(str(block_data['block_num']))
@@ -261,7 +278,6 @@ class MyMainWindow(QMainWindow):
             self.grade_in.setText(str(block_data['grade']))
             self.length_in.setText(str(block_data['length1_m']))
             self.elevation_in.setText(str(block_data['elevation_m']))
-            # Update additional UI components as needed
 
 
 
@@ -418,7 +434,7 @@ class TestBench(QMainWindow):
 
     def update_on_block_selection(self, selected_block):
         pass
-
+    
 #My data class containing data from excel 
 class Data:
     def __init__(self):
@@ -552,16 +568,46 @@ class Data:
                     return row['Speed Limit (Km/Hr)']
         return None  # Return None if block number is not found or there is nothing in the Dataframe
     
-class Communicate(QObject):
-    #object signals (mainly for failures inputs button)
-    broken_rail_input_signal = pyqtSignal(str)
-    track_input_signal = pyqtSignal(str)
-    power_input_signal = pyqtSignal(str)
-    ticket_sales_signal = pyqtSignal(int)
-    light_input_signal = pyqtSignal(str)
-    switch_input_signal = pyqtSignal(str)
-    cross_input_signal = pyqtSignal(str)
-    dropdown_broken_signal = pyqtSignal(str)
+    #receive speed
+    def recieveSpeedAuthority(data):#block
+        pass
+
+    #function to send commanded speed to train model
+    def send_commandedSpeed(void):
+        pass
+
+    #function to send authority to train model
+    def send_Authority(void):
+        pass
+    
+    #function to update light status from wayside
+    def updateSpecialBlocks(data):
+        pass
+
+    #send beacon information ot train model
+    def send_beacon(self):
+        #underground
+        #station
+        pass
+
+    #calculate where train is/occupancies
+    def set_occupancies(self):
+        pass
+
+    def send_occupancies(self):
+        pass
+
+    
+# class Communicate(QObject):
+#     #object signals (mainly for failures inputs button)
+#     broken_rail_input_signal = pyqtSignal(str)
+#     track_input_signal = pyqtSignal(str)
+#     power_input_signal = pyqtSignal(str)
+#     ticket_sales_signal = pyqtSignal(int)
+#     light_input_signal = pyqtSignal(str)
+#     switch_input_signal = pyqtSignal(str)
+#     cross_input_signal = pyqtSignal(str)
+#     dropdown_broken_signal = pyqtSignal(str)
 
 # Call Main window
 if __name__ == "__main__":

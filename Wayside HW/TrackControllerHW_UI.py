@@ -9,7 +9,10 @@ from otherFunctions import *
 class TrackController_UI(QMainWindow):
     
     #Signals:
-    blockStates = pyqtSignal(list)
+    blockStates = pyqtSignal(list) #Emit changed block attributes to track model
+    occBlocks = pyqtSignal(list) #Send block occupancies to the CTC office
+    commandAuth = pyqtSignal(int) #Relay commanded authority to track model
+    commandSpeed = pyqtSignal(int) #Relay commanded speed to track model
 
     def __init__(self):
         #Load-in UI from the TrackControllerHW_UI file:
@@ -28,13 +31,13 @@ class TrackController_UI(QMainWindow):
 
         #Occupied and failed blocks for each line:
         self.occupiedBlue = []
-        #self.failedBlue = []
+        self.failedBlue = []
 
         self.occupiedGreen = []
-        #self.failedGreen = []
+        self.failedGreen = []
 
         self.occupiedRed = []
-        #self.failedRed = []
+        self.failedRed = []
 
         #Set wayside and block selections as disabled before a line is selected:
         self.comboBoxWayside.setEnabled(False)
@@ -245,9 +248,6 @@ class TrackController_UI(QMainWindow):
         self.lineEditSwitchState.setText("-")
         self.lineEditLightState.setText("-")
 
-        #self.displayOccupancies()
-        #self.displayFailures()
-
         self.comboBoxWayside.addItem("Blue") #Number of waysides will be hard-coded
 
     #Occurs if the red line is selected:
@@ -274,9 +274,6 @@ class TrackController_UI(QMainWindow):
         self.lineEditCrossingState.setText("-")
         self.lineEditSwitchState.setText("-")
         self.lineEditLightState.setText("-")
-
-        #self.displayOccupancies()
-        #self.displayFailures()
 
         self.comboBoxWayside.addItem("3")
         self.comboBoxWayside.addItem("4")
@@ -305,9 +302,6 @@ class TrackController_UI(QMainWindow):
         self.lineEditCrossingState.setText("-")
         self.lineEditSwitchState.setText("-")
         self.lineEditLightState.setText("-")
-
-        #self.displayOccupancies()
-        #self.displayFailures()
 
         self.comboBoxWayside.addItem("1")
         self.comboBoxWayside.addItem("2")
@@ -412,7 +406,7 @@ class TrackController_UI(QMainWindow):
                     continue
                 listBlockSec.append(blockNum.blockSection)
             self.comboBoxSection.addItems(listBlockSec)
-        
+
         elif(self.comboBoxWayside.currentText() == "4"): #If the "Blue" wayside is selected (Temporary wayside for the blue line):
             #pixmap = QPixmap("Wayside HW/blueline.png") #Add photo later
             #self.labelPhoto.setPixmap(pixmap)
@@ -588,3 +582,12 @@ class TrackController_UI(QMainWindow):
         elif(self.comboBoxWayside.currentText() == "4"):
             self.waysideFour = tempBlockList
             self.blockStates.emit(self.waysideFour)
+        
+    def sendAuth(self): #NOT YET IMPLEMENTED
+        #self.commandAuth.emit(self.speed)
+        print("Sending Authority")
+    
+    def sendSpeed(self): #NOT YET IMPLEMENTED
+        #self.commandSpeed.emit(self.auth)
+        print("Sending Authority")
+       

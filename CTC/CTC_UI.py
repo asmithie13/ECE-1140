@@ -34,7 +34,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.AutoModeButton.clicked.connect(self.selectAutoMode_button)
         self.UploadButton.clicked.connect(self.selectScheduleFile)
         self.AddTrainButton.clicked.connect(self.addTrain_button)
-        self.MaintenanceModeButton.clicked.connect(self.enterMaintenanceMode_button)
+        self.MaintenanceModeButton.clicked.connect(self.enterMaintenanceMode)
         self.CloseBlockButton.clicked.connect(self.closeBlock_button)
         self.SetSwitchPositionButton.clicked.connect(self.setSwitch_button)
 
@@ -58,6 +58,9 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.DepartureSationSelect.addItems(stations)
         self.DestinationSelect.addItems(stations)
 
+        AllBlocks = ['2']
+        self.CloseBlockSelect.addItems(AllBlocks)
+
         #Initializing Schedule
         self.trainSchedule = Schedule()
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
@@ -66,9 +69,10 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.occupiedBlocks = OccupiedBlocks()
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockData))
 
-        #Initializing Maintance Table
+        #Initializing Maintance Tables
         self.Maintence = CTC_Maintenance()
-        self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))
+        self.BlockClosureTable.setModel(OccupiedBlocksTableModel(self.Maintence.BlocksClosed))
+        self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintence.BlocksClosed))
 
         #Initializing Throughput    
         self.ThroughputGraph = Throughput()
@@ -168,7 +172,16 @@ class CTC_UI(QtWidgets.QMainWindow):
 
     #Indication that the system is in maintenance mode
     #Same behavior will occur if a block is closed or a switch is sets
-    def enterMaintenanceMode_button(self):
+    def enterMaintenanceMode(self):
+        print("You still need to write this")
+
+        self.MaintenanceModeButton.setStyleSheet("background-color : blue; color: black;")
+
+
+    #Will indicate that the system is no longer in maintenance mode
+    #Should work on the double press of the button
+    #or if the block closures/switch position are empty
+    def exitMaintenanceMode(self):
         print("You still need to write this")
 
 
@@ -193,9 +206,9 @@ class CTC_UI(QtWidgets.QMainWindow):
 
     #Function to add a block closure when in maintence mode
     def closeBlock_button(self):
-        BlockToClose = self.CloseBlockField.text()
+        BlockToClose = self.CloseBlockSelect.currentText()
         self.Maintence.BlocksClosed.append([BlockToClose])
-        self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))
+        self.BlockClosureTable.setModel(OccupiedBlocksTableModel(self.Maintence.BlocksClosed))
 
 
     #Function to set switch positons when in maintenance mode

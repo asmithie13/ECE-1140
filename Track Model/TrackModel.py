@@ -1,4 +1,5 @@
 import sys
+import json
 import tkinter as tk
 import os #read other .py file
 import pandas as pd #read excel files
@@ -9,32 +10,46 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 # import libraries
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QVBoxLayout, QComboBox, QHBoxLayout, QWidget, QLabel, QPushButton, QSizePolicy
+from PyQt5.QtWidgets import QApplication, QLCDNumber, QMainWindow, QFileDialog, QVBoxLayout, QComboBox, QHBoxLayout, QWidget, QLabel, QPushButton, QSizePolicy
 from PyQt5 import uic
-from PyQt5.QtCore import Qt  
+from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QTimer, QTime
 from Track_Resources.Block import Block
 from PyQt5 import QtCore as qtc
 from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5 import QtGui as qtg 
+from PyQt5 import QtWidgets, uic
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QGraphicsItem
+from PyQt5.QtCore import QRectF, Qt
+from PyQt5 import QtGui
+
 
 #My main window
 class MyMainWindow(QMainWindow):
     # Define a signal to emit the grade to testBench UI
     grade_signal = pyqtSignal(float)
+    #Adding a signal to update information based on block selection:
+    block_selected_signal = pyqtSignal(str)  # Add this at the beginning of the class
+
+    getSpecialBlocks = pyqtSignal(list)
+    #sendOccupancies = pyqtSignal(list)
 
     def __init__(self):
         super().__init__()
-
+        self.blockStates = {}
+        
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track Model/Track_Model.ui", self)
-
+        
         # Connect Upload Track Layout button to make upload file
         self.pushButton.clicked.connect(self.upload_track_layout) 
 
-        # Generate a random number between 1 and 74 for ticket sales
-        random_number = random.randint(1, 74)
-        #Output the random numberto ticket sales block info
-        self.ticket_out.setText(str(random_number))
+        #Connect failure screen to block selection to make it easier for user/disable dropdown for failure
+        self.block_in_1.activated.connect(self.update_block_in_2_based_on_block_in_1)
+        self.block_in_2.setEnabled(False)
+
+
+        self.generateTickets()
 
         # Connect button to method
         # If clicked, then connect to UI
@@ -54,6 +69,42 @@ class MyMainWindow(QMainWindow):
 
         # Instantiate the Data class
         self.data = Data()
+
+    def generateTickets(self):
+        # Generate a random number between 1 and 74 for ticket sales
+        random_number = random.randint(1, 74)
+        #Output the random numberto ticket sales block info
+        self.ticket_out.setText(str(random_number))
+
+    #send to CTC
+    def send_tickets(self):
+        pass
+
+    def send_boarding(self):
+        pass
+
+    #failures:
+    def set_broken(broke):
+        broken = broke
+        #send occupancies
+
+    def set_track_circuit(fail1):
+        track_circuit = fail1
+        #send occupancies
+
+    def set_power_fail(fail2):
+        power_fail = fail2
+        #send occupancies
+
+    def get_broken(self):
+        return self.broken
+
+    def get_track_circuit(self):
+        return self.track_circuit
+
+    def get_power_fail(self):
+        return self.power_fail
+
 
     #This function is a starter connector to UI from tb for ticket sales
     def update_ticket_sales(self, sales):
@@ -153,19 +204,29 @@ class MyMainWindow(QMainWindow):
             # Instantiate the Data class and pull
             self.data = Data()
             
-            # read data from the uploaded file using the Data class (pandas)
-            self.data.read_excel(uploaded_track)
+        current_selection = self.line_select.currentText()
 
+        if current_selection == "Blue Line":
+            self.data.read_excel(uploaded_track ,1)
+        elif current_selection == "Red Line":
+            self.data.read_excel(uploaded_track ,2)
+        else:
+            pass
+            
+            #self.data.read_excel(uploaded_track ,1)
+ 
         # Connect the block selection dropdown to update_block_info function!
         self.block_in_1.activated[str].connect(lambda text: self.update_block_info(text))
 
-    # This function uses the data from the data class to update block data and output it to main UI
+    #This function uses the data from the data class to update block data and output it to main UI
     def update_block_info(self, block_text):
+        # Reset the states of the buttons whenever a new block is selected
+        #self.reset_button_states()
 
         # From dropdown of "B#" take out the letter B
         block_num = int(block_text.split()[-1][1:])  
 
-        #Get certain data from specific block
+        # Get certain data from specific block
         elevation_m = self.data.get_elevation_for_block(block_num)
         grade = self.data.get_grade_for_block(block_num)
         length1_m = self.data.get_length_for_block(block_num)
@@ -173,8 +234,8 @@ class MyMainWindow(QMainWindow):
         section = self.data.get_section_for_block(block_num)
         speed_limit_km = self.data.get_speed_for_block(block_num)
 
-        #Math conversion from metric to imperical for track length, speed limit, and elevation.
-        elevation_ft = elevation_m *3.28084
+        # Math conversion from metric to imperial for track length, speed limit, and elevation.
+        elevation_ft = elevation_m * 3.28084
         elevation_str = "{:.4f}".format(elevation_ft).rstrip('0').rstrip('.')
 
         length_ft = length1_m * 3.28084
@@ -191,8 +252,34 @@ class MyMainWindow(QMainWindow):
         self.section_in.setText(str(section))
         self.speed_in.setText(speed_limit_str)
 
-        #Emit the grade signal with the grade value (sig)
+        # Emit the grade signal with the grade value (sig)
         self.grade_signal.emit(grade)
+
+        # Emit screen change based on block selection
+        self.block_selected_signal.emit(block_text)
+    
+        # After updating the UI, restore the state of toggle buttons for the selected block
+        self.restore_block_state(block_text)
+
+
+    def update_block_in_2_based_on_block_in_1(self):
+    #Get the currently selected text in block_in_1
+        selected_text = self.block_in_1.currentText()
+
+        self.block_in_2.setCurrentText(selected_text)
+
+    def blockClicked(self, block_id):
+        #Fetch block data and update UI elements
+        block_data = self.data.get_data_for_block(block_id)
+        if block_data:
+            self.block_num_in.setText(str(block_data['block_num']))
+            self.section_in.setText(block_data['section'])
+            self.speed_in.setText(str(block_data['speed_limit_km']))
+            self.grade_in.setText(str(block_data['grade']))
+            self.length_in.setText(str(block_data['length1_m']))
+            self.elevation_in.setText(str(block_data['elevation_m']))
+
+
 
 #this is my testbench window
 class TestBench(QMainWindow):
@@ -217,6 +304,7 @@ class TestBench(QMainWindow):
 
         # Load the track model testbench straight from the UI file using uic
         uic.loadUi("Track Model/testbench_trackmodel.ui", self)
+
 
         # Calling test input functions
         self.test_input()
@@ -344,6 +432,9 @@ class TestBench(QMainWindow):
         # Set the text to the output text
         self.power_block_out.setText(power1)
 
+    def update_on_block_selection(self, selected_block):
+        pass
+    
 #My data class containing data from excel 
 class Data:
     def __init__(self):
@@ -367,9 +458,19 @@ class Data:
         self.infra = None
         self.cumm_elevation = None
 
+
+    
     # read Excel files from DataFrame
-    def read_excel(self, filename):
-        self.df = pd.read_excel("Track_Resources/Blue_Line_Block_Info.xlsx")
+    def read_excel(self, filename, num):
+
+        current_selection = self.line_select.currentText()
+        # Use an if statement to check the current selection and set the filename accordingly
+        if num == 1:
+            self.df = pd.read_excel("Track_Resources/Blue_Line_Block_Info.xlsx")
+        elif num == 2:
+            self.df = pd.read_excel("Track_Resources/red_line.xlsx")
+        else:
+            pass
 
         #extract data from DataFrame of the Excel and assign to variables
         self.elevation_data = self.df.set_index('Block Number')['ELEVATION (M)'].to_dict()
@@ -381,7 +482,26 @@ class Data:
         self.cumm_elevation = self.df.loc[0, 'CUMALTIVE ELEVATION (M)']
         self.speed_limit = self.df.loc[0,'Speed Limit (Km/Hr)']
         self.section = self.df.loc[0, 'Section']
-        
+
+
+    def get_data_for_block(self, block_num):
+        # Ensure the DataFrame is not empty and contains data
+        if self.df is not None and not self.df.empty:
+            # Find the row in the DataFrame for the given block number
+            block_row = self.df[self.df['Block Number'] == block_num]
+            if not block_row.empty:
+                # Assuming you want to return a dictionary of the relevant block data
+                return {
+                    'block_num': block_row.iloc[0]['Block Number'],
+                    'section': block_row.iloc[0]['Section'],
+                    'speed_limit_km': block_row.iloc[0]['Speed Limit (Km/Hr)'],
+                    'grade': block_row.iloc[0]['Block Grade (%)'],
+                    'length1_m': block_row.iloc[0]['Block Length (m)'],
+                    'elevation_m': block_row.iloc[0]['ELEVATION (M)'],
+                    # Add more fields as needed
+                }
+        return None 
+    
     def get_elevation_for_block(self, block_num):
         # check if DataFrame is not None
         if self.df is not None:
@@ -448,16 +568,46 @@ class Data:
                     return row['Speed Limit (Km/Hr)']
         return None  # Return None if block number is not found or there is nothing in the Dataframe
     
-class Communicate(QObject):
-    #object signals (mainly for failures inputs button)
-    broken_rail_input_signal = pyqtSignal(str)
-    track_input_signal = pyqtSignal(str)
-    power_input_signal = pyqtSignal(str)
-    ticket_sales_signal = pyqtSignal(int)
-    light_input_signal = pyqtSignal(str)
-    switch_input_signal = pyqtSignal(str)
-    cross_input_signal = pyqtSignal(str)
-    dropdown_broken_signal = pyqtSignal(str)
+    #receive speed
+    def recieveSpeedAuthority(data):#block
+        pass
+
+    #function to send commanded speed to train model
+    def send_commandedSpeed(void):
+        pass
+
+    #function to send authority to train model
+    def send_Authority(void):
+        pass
+    
+    #function to update light status from wayside
+    def updateSpecialBlocks(data):
+        pass
+
+    #send beacon information ot train model
+    def send_beacon(self):
+        #underground
+        #station
+        pass
+
+    #calculate where train is/occupancies
+    def set_occupancies(self):
+        pass
+
+    def send_occupancies(self):
+        pass
+
+    
+# class Communicate(QObject):
+#     #object signals (mainly for failures inputs button)
+#     broken_rail_input_signal = pyqtSignal(str)
+#     track_input_signal = pyqtSignal(str)
+#     power_input_signal = pyqtSignal(str)
+#     ticket_sales_signal = pyqtSignal(int)
+#     light_input_signal = pyqtSignal(str)
+#     switch_input_signal = pyqtSignal(str)
+#     cross_input_signal = pyqtSignal(str)
+#     dropdown_broken_signal = pyqtSignal(str)
 
 # Call Main window
 if __name__ == "__main__":
@@ -473,7 +623,7 @@ if __name__ == "__main__":
     window_2.track_input_signal.connect(window.toggle_button_state_2_tb)
     window_2.power_input_signal.connect(window.toggle_button_state_3_tb)
 
-    window_2.dropdown_broken_signal.connect(window.update_main_dropdown)
+    window_2.dropdown_broken_signal.connect(window.update_main_dropdown) 
 
     window_2.ticket_sales_signal.connect(window.update_ticket_sales)
 
@@ -484,6 +634,8 @@ if __name__ == "__main__":
     # Connect MyMainWindow's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)
 
+
+    window.block_selected_signal.connect(window_2.update_on_block_selection)
     window.show()
     window_2.show()
 

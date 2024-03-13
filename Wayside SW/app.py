@@ -49,7 +49,7 @@ def readTrackFile(fileName,crossingTriples):
                     crossingTriples.append(list(current.keys()))
                     lightBlocks.update(current)
 
-            tempBlock = Block(line[0],line[1],line[2],hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,blockId, line[5],line[3])
+            tempBlock = Block(line[0],line[1],line[2],hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,blockId)
             totalBlocks.append(tempBlock)
 
             #Assign light values now
@@ -82,21 +82,21 @@ class MyApp(QMainWindow):
         self.B5_Switch_Positions = ["B6","C11"]
 
         #Defining blue line blocks
-        A1 = Block("Blue",'A',1,*NORMAL_CONST,"A1",50,50)
-        A2 = Block("Blue",'A',2,*NORMAL_CONST,"A2",50,50)
-        A3 = Block("Blue",'A',3,*CROSSING_CONST,"A3",50,50)
-        A4 = Block("Blue",'A',4,*NORMAL_CONST,"A4",50,50) 
-        A5 = Block("Blue",'A',5,*SWITCH_CONST,"A5",50,50) 
-        B6 = Block("Blue",'B',6,*LIGHT_CONST,"B6",50,50)
-        B7 = Block("Blue",'B',7, *NORMAL_CONST,"B7",50,50)
-        B8 = Block("Blue",'B',8, *NORMAL_CONST,"B8",50,50)
-        B9 = Block("Blue",'B',9, *NORMAL_CONST,"B9",50,50)
-        B10 = Block("Blue",'B', 10, *NORMAL_CONST,"B10",50,50)
-        C11 = Block("Blue",'C',11,*LIGHT_CONST,"C11",50,50)
-        C12 = Block("Blue",'C',12,*NORMAL_CONST,"C12",50,50)
-        C13 = Block("Blue",'C',13,*NORMAL_CONST,"C13",50,50)
-        C14 = Block("Blue",'C',14,*NORMAL_CONST,"C14",50,50)
-        C15 = Block("Blue",'C',15,*NORMAL_CONST,"C15",50,50)
+        A1 = Block("Blue",'A',1,*NORMAL_CONST,"A1")
+        A2 = Block("Blue",'A',2,*NORMAL_CONST,"A2")
+        A3 = Block("Blue",'A',3,*CROSSING_CONST,"A3")
+        A4 = Block("Blue",'A',4,*NORMAL_CONST,"A4") 
+        A5 = Block("Blue",'A',5,*SWITCH_CONST,"A5") 
+        B6 = Block("Blue",'B',6,*LIGHT_CONST,"B6")
+        B7 = Block("Blue",'B',7, *NORMAL_CONST,"B7")
+        B8 = Block("Blue",'B',8, *NORMAL_CONST,"B8")
+        B9 = Block("Blue",'B',9, *NORMAL_CONST,"B9")
+        B10 = Block("Blue",'B', 10, *NORMAL_CONST,"B10")
+        C11 = Block("Blue",'C',11,*LIGHT_CONST,"C11")
+        C12 = Block("Blue",'C',12,*NORMAL_CONST,"C12")
+        C13 = Block("Blue",'C',13,*NORMAL_CONST,"C13")
+        C14 = Block("Blue",'C',14,*NORMAL_CONST,"C14")
+        C15 = Block("Blue",'C',15,*NORMAL_CONST,"C15")
 
         #Defines an array of these blocks
 

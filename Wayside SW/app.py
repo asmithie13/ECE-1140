@@ -46,7 +46,9 @@ def readTrackFile(fileName,crossingTriples):
                     #numbers = [part for part in line[6].split('-') if part.isdigit()]
                     numbers = re.findall(r'\b(\d+)-(\d+)\b', line[6])
                     current = {num: False for pair in numbers for num in pair}
-                    crossingTriples.append(list(current.keys()))
+
+                    #CONFIGURE YARD SWITCH BLOCKS LATER
+                    if line[6].find("YARD") == -1: crossingTriples.append(list(current.keys()))
                     lightBlocks.update(current)
 
             tempBlock = Block(line[0],line[1],line[2],hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,blockId)
@@ -103,6 +105,14 @@ class MyApp(QMainWindow):
         self.BlockArray = [A3,A5,B6,C11]    #Special Blocks
         self.AllBlocks = [A1,A2,A3,A4,A5,B6,B7,B8,B9,B10,C11,C12,C13,C14,C15] #All Blocks
         self.SwitchBlocks = ["B5","B6","C11"]
+
+        #Defines Green Line blocks
+        self.greenCrossingTriplesIDS = [] #ids of red crossing blocks
+        self.allGreenBlocks = readTrackFile("Green_Line.csv",self.greenCrossingTriplesIDS)
+        self.specialGreenBlocks = []
+
+        for block in self.allGreenBlocks:
+            if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocks.append(block)
 
         #Defines Red line blocks
         self.redCrossingTriplesIDS = [] #ids of red crossing blocks

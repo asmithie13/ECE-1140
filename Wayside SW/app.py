@@ -43,7 +43,6 @@ def readTrackFile(fileName,crossingTriples):
                     hasSwitchTemp = True
                     switchState = True
 
-                    #numbers = [part for part in line[6].split('-') if part.isdigit()]
                     numbers = re.findall(r'\b(\d+)-(\d+)\b', line[6])
                     current = {num: False for pair in numbers for num in pair}
 
@@ -57,7 +56,7 @@ def readTrackFile(fileName,crossingTriples):
             #Assign light values now
 
         for block in totalBlocks:
-            if block.ID[1:] in lightBlocks:
+            if block.ID[1:] in lightBlocks and (not block.SWITCH or block.lineColor == "Red"):
                 block.LIGHT = True
                 block.lightState = False
 
@@ -111,6 +110,11 @@ class MyApp(QMainWindow):
         self.allGreenBlocks = readTrackFile("Green_Line.csv",self.greenCrossingTriplesIDS)
         self.specialGreenBlocks = []
 
+        #SW in charge of W1, HW in charge of W2
+
+        wayside1Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
+        self.greenWayside1Blocks = [x for x in self.allGreenBlocks if x.blockSection in wayside1Chars]
+     
         for block in self.allGreenBlocks:
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocks.append(block)
 
@@ -118,6 +122,8 @@ class MyApp(QMainWindow):
         self.redCrossingTriplesIDS = [] #ids of red crossing blocks
         self.allRedBlocks = readTrackFile("Red_Line.csv",self.redCrossingTriplesIDS)
         self.specialRedBlocks = []
+        self.redWayside1Blocks = []
+        self.redWayside2Blocks = []
 
         for block in self.allRedBlocks:
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialRedBlocks.append(block)
@@ -163,12 +169,6 @@ class MyApp(QMainWindow):
         self.upCrossingButton.setDisabled(True)
         self.switchButton.setDisabled(True)
         self.saveButton.setDisabled(True)
-
-        # Timer for updating block occupancy every 5 seconds
-        #self.timer = QTimer(self)
-        #self.timer.timeout.connect(self.updateBlockOccupancy)
-        #self.timer.start(5000)  # 5000 milliseconds (5 seconds)
-        
     
     def on_file_button_clicked(self):
         # Open a file dialog to select a PLC file

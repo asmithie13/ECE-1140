@@ -167,7 +167,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox">
+             <widget class="QCheckBox" name="selectGreenLine">
               <property name="font">
                <font>
                 <family>Times New Roman</family>
@@ -180,7 +180,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_2">
+             <widget class="QCheckBox" name="selectRedLine">
               <property name="font">
                <font>
                 <family>Times New Roman</family>

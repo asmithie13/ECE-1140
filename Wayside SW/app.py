@@ -138,6 +138,8 @@ class MyApp(QMainWindow):
         self.fileButton.clicked.connect(self.on_file_button_clicked)
         self.modeButton.clicked.connect(self.changeMode)
         self.selectLine.stateChanged.connect(self.checkLine)
+        self.selectGreenLine.stateChanged.connect(self.checkLine)
+        self.selectRedLine.stateChanged.connect(self.checkLine)
         self.blockMenu.currentIndexChanged.connect(self.blockActions)
         self.greenButton.clicked.connect(self.greenButtonPushed)
         self.redButton.clicked.connect(self.redButtonPushed)
@@ -156,7 +158,7 @@ class MyApp(QMainWindow):
 
         #Dropdown menu
         self.blockMenu.addItems(['A3','A5','B6','C11'])
-        self.waysideMenu.addItems(['W1'])
+        #self.waysideMenu.addItems(['W1'])
 
         #Input Initial Conditions
         self.waysideMenu.setDisabled(True)
@@ -209,17 +211,39 @@ class MyApp(QMainWindow):
 
     def checkLine(self):
         checkStatus = self.selectLine.isChecked()
-        if checkStatus:
+        checkGreen = self.selectGreenLine.isChecked()
+        checkRed = self.selectRedLine.isChecked()
+
+        if checkGreen:
+            self.selectRedLine.setDisabled(True)
+            self.waysideMenu.clear()
             self.waysideMenu.setEnabled(True)
-            self.blockMenu.setEnabled(True)
-            self.modeButton.setEnabled(self.FileParser.inputPLC != None) #Can't Change to automatic until PLC is inserted
-            self.blockActions()
+            self.waysideMenu.addItems(['W1'])
+
+        elif checkRed:
+            self.selectGreenLine.setDisabled(True)
+            self.waysideMenu.clear()
+            self.waysideMenu.setEnabled(True)
+            self.waysideMenu.addItems(['W1','W2'])
+
         else:
+            self.selectGreenLine.setEnabled(True)
+            self.selectRedLine.setEnabled(True)
             self.waysideMenu.setEnabled(False)
-            self.blockMenu.setEnabled(False)
-            self.modeButton.setEnabled(False)
+
+        # if checkStatus:
+        #     self.waysideMenu.setEnabled(True)
+        #     self.blockMenu.setEnabled(True)
+        #     self.modeButton.setEnabled(self.FileParser.inputPLC != None) #Can't Change to automatic until PLC is inserted
+        #     self.blockActions()
+        # else:
+        #     self.waysideMenu.setEnabled(False)
+        #     self.blockMenu.setEnabled(False)
+        #     self.modeButton.setEnabled(False)
 
         self.sendSpecialBlocks.emit(self.AllBlocks)
+
+    #def selectWayside(self):
 
     def blockActions(self):
         selectedIndex = self.blockMenu.currentIndex()

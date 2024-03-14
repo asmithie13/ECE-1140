@@ -85,7 +85,7 @@ class MyMainWindow(QMainWindow):
         pass
     
     #set temperature
-    def set_temp(self):
+    def set_temp(self, temp):
         pass
 
     #use global clock
@@ -467,7 +467,8 @@ class Data:
         self.infra = None
         self.cumm_elevation = None
 
-
+    def set_heater(self):
+        pass
     
     # read Excel files from DataFrame
     def read_excel(self, filename):

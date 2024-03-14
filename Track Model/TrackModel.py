@@ -270,7 +270,7 @@ class MyMainWindow(QMainWindow):
         # After updating the UI, restore the state of toggle buttons for the selected block
         #self.restore_block_state(block_text)
 
-
+    #Updates block in failure based on block selection
     def update_block_in_2_based_on_block_in_1(self):
     #Get the currently selected text in block_in_1
         selected_text = self.block_in_1.currentText()

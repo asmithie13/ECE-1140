@@ -93,12 +93,18 @@ class MyApp(QMainWindow):
         #Defines Red line blocks
         self.redCrossingTriplesIDS = [] #ids of red crossing blocks
         self.allRedBlocks = readTrackFile("Red_Line.csv",self.redCrossingTriplesIDS)
-        self.specialRedBlocks = []
-        self.redWayside1Blocks = []
-        self.redWayside2Blocks = []
+        self.specialRedBlocksW1 = []
+        self.specialRedBlocksW2 = []
 
-        for block in self.allRedBlocks:
-            if block.LIGHT or block.CROSSING or block.SWITCH : self.specialRedBlocks.append(block)
+        wayside1Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+        self.redWayside1Blocks = [x for x in self.allRedBlocks if x.blockSection in wayside1Chars]
+        self.redWayside2Blocks = [x for x in self.allRedBlocks if x.blockSection not in wayside1Chars]
+
+        for block in self.redWayside1Blocks:
+            if block.LIGHT or block.CROSSING or block.SWITCH : self.specialRedBlocksW1.append(block)
+
+        for block in self.redWayside2Blocks:
+            if block.LIGHT or block.CROSSING or block.SWITCH : self.specialRedBlocksW2.append(block)
 
         #Create Parser Object
         self.currentSwitchBlocksNums = [['5','6','11']]
@@ -193,17 +199,33 @@ class MyApp(QMainWindow):
             self.waysideMenu.clear()
             self.waysideMenu.setEnabled(True)
             self.waysideMenu.addItems(['W1'])
+            self.selectWayside()
 
         elif checkRed:
             self.selectGreenLine.setDisabled(True)
             self.waysideMenu.clear()
             self.waysideMenu.setEnabled(True)
             self.waysideMenu.addItems(['W1','W2'])
+            self.selectWayside()
 
         else:
             self.selectGreenLine.setEnabled(True)
             self.selectRedLine.setEnabled(True)
             self.waysideMenu.setEnabled(False)
+            self.blockMenu.setDisabled(True)
+
+            self.greenButton.setStyleSheet("")
+            self.redButton.setStyleSheet("")
+            self.upCrossingButton.setStyleSheet("")
+            self.downCrossingButton.setStyleSheet("")
+
+            self.greenButton.setEnabled(False)
+            self.redButton.setEnabled(False)
+            self.upCrossingButton.setEnabled(False)
+            self.downCrossingButton.setEnabled(False)
+            self.switchButton.setEnabled(False)
+
+            self.label_11.setText("")
 
     def selectWayside(self):
         selectedIndex = self.waysideMenu.currentIndex()  
@@ -222,11 +244,34 @@ class MyApp(QMainWindow):
             self.currentSwitchBlocksNums = self.greenCrossingTriplesIDS
 
             self.FileParser = Parser(None,self.greenCrossingTriplesIDS,self.allGreenBlocks)
-        #self.FileParser = Parser(None,None,self.currentBlocks)
 
-        #elif selectedIndex == 0 and self.selectRedLine.isChecked():
-        #finish red blocks for W1 and W2
+        if selectedIndex == 0 and self.selectRedLine.isChecked():
+            self.currentBlocks = self.redWayside1Blocks
+            self.currentSpecialBlocks = self.specialRedBlocksW1
+            self.blockMenu.setDisabled(False)
 
+            self.blockMenu.clear()
+
+            for block in self.currentSpecialBlocks:
+                self.blockMenu.addItems([block.ID])
+
+            self.currentSwitchBlocksNums = self.redCrossingTriplesIDS
+
+            self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)
+
+        if selectedIndex == 1 and self.selectRedLine.isChecked():
+            self.currentBlocks = self.redWayside2Blocks
+            self.currentSpecialBlocks = self.specialRedBlocksW2
+            self.blockMenu.setDisabled(False)
+
+            self.blockMenu.clear()
+
+            for block in self.currentSpecialBlocks:
+                self.blockMenu.addItems([block.ID])
+
+            self.currentSwitchBlocksNums = self.redCrossingTriplesIDS
+
+            self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)
 
     def blockActions(self):
         selectedIndex = self.blockMenu.currentIndex()

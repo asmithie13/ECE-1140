@@ -14,6 +14,15 @@ from CTC.OccupiedBlocks import *
 from CTC.CTC_Maintenance import *
 from CTC.Throughput import *
 from CTC.TempData import *
+"""
+#My Class imports temp
+from Schedule import *
+from OccupiedBlocks import *
+from CTC_Maintenance import *
+from Throughput import *
+from TempData import *
+"""
+
 #from UI_temp import MainWindow
 
 

@@ -1,47 +1,45 @@
+#pyqt imports
 import sys
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5 import uic
 #CTC Imports
 import CTC
 from CTC.CTC_UI import *
 from CTC.CTC_Testbench import *
 
+class Main_UI(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(Main_UI, self).__init__()
+        #Loading base UI layout from .ui file
+        uic.loadUi("MainUI.ui", self)
 
-def clock():
-    global time
-    time = time.addSecs(60)
+        #CTC UI Window
+        self.CTCwindow = CTC_UI()
+        self.CTC_tb = CTC_Testbench()
 
-    current_time = time.toString("hh:mm")
-    CTCwindow.displayClock(current_time)
+        #Wayside Software Window
 
+
+        #Wayside HW Window
+
+
+        #Track Model Window
+
+
+        #Connect Buttons to signals to open UIs
+        self.CTC_Button.clicked.connect(self.open_CTC_UI)
+
+    def open_CTC_UI(self):
+        self.CTCwindow.show()
+        self.CTC_tb.show()
+
+
+"""
 UI_window = QtWidgets.QApplication(sys.argv)
-
-"""CTC"""
-#CTC UI connection
-global CTCwindow
-CTCwindow = CTC_UI()
-CTCwindow.show()
-#CTC Testbench connection
-global CTC_tb
-CTC_tb = CTC_Testbench()
-CTC_tb.show()
-
-#CTC Input Signals
-CTC_tb.sendOccupiedBlocks.connect(CTCwindow.updateOccupiedBlocks)
-CTC_tb.sendTicketSales.connect(CTCwindow.updateTicketSales)
-#CTC Output Signals
-CTCwindow.sendDispatchInfo.connect(CTC_tb.showDispatchInfo)
-
-
-
-
-"""Clock"""
-#Initializing Qtimer for clock
-timer0 = QtCore.QTimer()
-time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
-timer0.setInterval(100)         #Interval in ms
-timer0.timeout.connect(clock)
-timer0.start()
-
-
-
-sys.exit(UI_window.exec_())
+window = MainUI()
+window.show()
+UI_window.exec_()
+"""

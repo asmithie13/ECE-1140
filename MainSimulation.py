@@ -2,7 +2,7 @@
 
 import sys
 from PyQt5 import QtCore
-from MainUI import *
+from Main_UI import *
 #CTC Imports
 import CTC
 from CTC.CTC_UI import *

@@ -19,6 +19,7 @@ class Main_UI(QtWidgets.QMainWindow):
         #CTC UI Window
         self.CTCwindow = CTC_UI()
         self.CTC_tb = CTC_Testbench()
+        self.CTC_Button.clicked.connect(self.open_CTC_UI)
 
         #Wayside SW Window
 
@@ -38,8 +39,6 @@ class Main_UI(QtWidgets.QMainWindow):
         #Train Controller HW (Might need initialized per train)
 
 
-        #Connect Buttons to signals to open UIs
-        self.CTC_Button.clicked.connect(self.open_CTC_UI)
 
     def open_CTC_UI(self):
         self.CTCwindow.show()

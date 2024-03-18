@@ -101,22 +101,27 @@ class MyApp(QMainWindow):
 
         #Defines an array of these blocks
 
-        self.BlockArray = [A3,A5,B6,C11]    #Special Blocks
-        self.AllBlocks = [A1,A2,A3,A4,A5,B6,B7,B8,B9,B10,C11,C12,C13,C14,C15] #All Blocks
+        self.currentSpecialBlocks = [A3,A5,B6,C11]    #Special Blocks
+        self.currentBlocks = [A1,A2,A3,A4,A5,B6,B7,B8,B9,B10,C11,C12,C13,C14,C15] #All Blocks
         self.SwitchBlocks = ["B5","B6","C11"]
+
+        #Define current blocks in selected wayside
+        #self.currentBlocks = None
+        #self.currentSpecialBlocks = None
 
         #Defines Green Line blocks
         self.greenCrossingTriplesIDS = [] #ids of red crossing blocks
         self.allGreenBlocks = readTrackFile("Green_Line.csv",self.greenCrossingTriplesIDS)
-        self.specialGreenBlocks = []
+        self.specialGreenBlocksW1 = []
 
         #SW in charge of W1, HW in charge of W2
 
         wayside1Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
         self.greenWayside1Blocks = [x for x in self.allGreenBlocks if x.blockSection in wayside1Chars]
      
-        for block in self.allGreenBlocks:
-            if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocks.append(block)
+        #Defines special greenblocks in wayside 1     
+        for block in self.greenWayside1Blocks:
+            if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocksW1.append(block)
 
         #Defines Red line blocks
         self.redCrossingTriplesIDS = [] #ids of red crossing blocks
@@ -132,7 +137,7 @@ class MyApp(QMainWindow):
         self.SwitchBlocksNums = [['5','6','11']]
 
         #self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)  #Currently testing red object
-        self.FileParser = Parser(None,self.SwitchBlocksNums,self.AllBlocks)
+        self.FileParser = Parser(None,self.SwitchBlocksNums,self.currentBlocks)
 
         # Buttons
         self.fileButton.clicked.connect(self.on_file_button_clicked)
@@ -147,9 +152,10 @@ class MyApp(QMainWindow):
         self.downCrossingButton.clicked.connect(self.downButtonPushed)
         self.switchButton.clicked.connect(self.switchButtonPushed)
         self.saveButton.clicked.connect(self.onSavePLCFile)
+        self.waysideMenu.activated.connect(self.selectWayside)
 
         #initial signals
-        self.sendSpecialBlocks.emit(self.AllBlocks)
+        self.sendSpecialBlocks.emit(self.currentBlocks)
         self.changeModeSend.emit(True)
 
         #Original Map Image
@@ -199,13 +205,13 @@ class MyApp(QMainWindow):
             self.label_7.setText("AUTOMATIC")
             self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
             self.blockActions()
-            self.sendSpecialBlocks.emit(self.AllBlocks)
+            self.sendSpecialBlocks.emit(self.currentBlocks)
             self.changeModeSend.emit(False)
 
         elif current_text == "AUTOMATIC":
             self.label_7.setText("MANUAL")
             self.blockActions()
-            self.sendSpecialBlocks.emit(self.AllBlocks)
+            self.sendSpecialBlocks.emit(self.currentBlocks)
             self.changeModeSend.emit(True)
             
 
@@ -231,23 +237,26 @@ class MyApp(QMainWindow):
             self.selectRedLine.setEnabled(True)
             self.waysideMenu.setEnabled(False)
 
-        # if checkStatus:
-        #     self.waysideMenu.setEnabled(True)
-        #     self.blockMenu.setEnabled(True)
-        #     self.modeButton.setEnabled(self.FileParser.inputPLC != None) #Can't Change to automatic until PLC is inserted
-        #     self.blockActions()
-        # else:
-        #     self.waysideMenu.setEnabled(False)
-        #     self.blockMenu.setEnabled(False)
-        #     self.modeButton.setEnabled(False)
+    def selectWayside(self):
+        selectedIndex = self.waysideMenu.currentIndex()   
 
-        self.sendSpecialBlocks.emit(self.AllBlocks)
+        if selectedIndex == 0 and self.selectGreenLine.isChecked():
+            self.currentBlocks = self.greenWayside1Blocks
+            self.currentSpecialBlocks = self.specialGreenBlocksW1
+            self.blockMenu.setDisabled(False)
 
-    #def selectWayside(self):
+            self.blockMenu.clear()
+
+            for block in self.currentSpecialBlocks:
+                self.blockMenu.addItems([block.ID])
+
+        #elif selectedIndex == 0 and self.selectRedLine.isChecked():
+        #finish red blocks for W1 and W2
+
 
     def blockActions(self):
         selectedIndex = self.blockMenu.currentIndex()
-        selectedBlock = self.BlockArray[selectedIndex]
+        selectedBlock = self.currentSpecialBlocks[selectedIndex]
 
         if selectedBlock.LIGHT and self.label_7.text() and not selectedBlock.SWITCH:
             self.greenButton.setEnabled(not selectedBlock.lightState and self.label_7.text() == "MANUAL")
@@ -267,7 +276,7 @@ class MyApp(QMainWindow):
                 self.greenButton.setStyleSheet("")
                 self.redButton.setStyleSheet('QPushButton {background-color: red; color: yellow;}')
 
-        elif selectedBlock.CROSSING and self.selectLine.isChecked():
+        elif selectedBlock.CROSSING and (self.selectGreenLine.isChecked() or self.selectRedLine.isChecked()):
             self.greenButton.setEnabled(False)
             self.redButton.setEnabled(False)
             self.upCrossingButton.setEnabled(not selectedBlock.crossingState and self.label_7.text() == "MANUAL")
@@ -317,68 +326,68 @@ class MyApp(QMainWindow):
 
     def greenButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].lightState = True
+        self.currentSpecialBlocks[selectedIndex].lightState = True
         self.greenButton.setEnabled(False)
         self.redButton.setEnabled(True)
         self.greenButton.setStyleSheet('QPushButton {background-color: green; color: yellow;}')
         self.redButton.setStyleSheet("")
-        self.sendSpecialBlocks.emit(self.AllBlocks)
+        self.sendSpecialBlocks.emit(self.currentBlocks)
 
     def redButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].lightState = False
+        self.currentSpecialBlocks[selectedIndex].lightState = False
         self.greenButton.setEnabled(True)
         self.redButton.setEnabled(False)
         self.greenButton.setStyleSheet("")
         self.redButton.setStyleSheet('QPushButton {background-color: red; color: yellow;}')
-        self.sendSpecialBlocks.emit(self.AllBlocks)
+        self.sendSpecialBlocks.emit(self.currentBlocks)
 
     def upButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].crossingState = True
+        self.currentSpecialBlocks[selectedIndex].crossingState = True
         self.upCrossingButton.setEnabled(False)
         self.downCrossingButton.setEnabled(True)
         self.upCrossingButton.setStyleSheet("background-color: yellow")
         self.downCrossingButton.setStyleSheet("")
-        self.sendSpecialBlocks.emit(self.AllBlocks)
+        self.sendSpecialBlocks.emit(self.currentBlocks)
 
     def downButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].crossingState = False
+        self.currentSpecialBlocks[selectedIndex].crossingState = False
         self.upCrossingButton.setEnabled(True)
         self.downCrossingButton.setEnabled(False)
         self.upCrossingButton.setStyleSheet("")
         self.downCrossingButton.setStyleSheet("background-color: yellow")
-        self.sendSpecialBlocks.emit(self.AllBlocks)
+        self.sendSpecialBlocks.emit(self.currentBlocks)
 
     def switchButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
-        self.BlockArray[selectedIndex].switchState = not self.BlockArray[selectedIndex].switchState
+        self.currentSpecialBlocks[selectedIndex].switchState = not self.currentSpecialBlocks[selectedIndex].switchState
 
         current_text = self.label_11.text()
         if current_text == self.B5_Switch_Positions[0]:
             self.label_11.setText(self.B5_Switch_Positions[1])
         elif current_text == self.B5_Switch_Positions[1]:
             self.label_11.setText(self.B5_Switch_Positions[0])
-        self.sendSpecialBlocks.emit(self.AllBlocks)
+        self.sendSpecialBlocks.emit(self.currentBlocks)
 
     def updateBlocks(self,new_data):
         sentBlocks = new_data
 
-        for block in self.AllBlocks: block.occupied = False
+        for block in self.currentBlocks: block.occupied = False
 
         for block_id in sentBlocks:
-            for block in self.AllBlocks:
+            for block in self.currentBlocks:
                 if block_id == block.ID:
                     block.occupied = True
 
         self.BlockOcc.setText(" ".join(sentBlocks))
         if self.label_7.text() == "AUTOMATIC" : self.FileParser.parsePLC()
         self.blockActions()
-        self.sendSpecialBlocks.emit(self.AllBlocks)
+        self.sendSpecialBlocks.emit(self.currentBlocks)
 
     def receiveSpeedAuth(self,changedBlock):
-         for block in self.AllBlocks:
+         for block in self.currentBlocks:
             if block.lineColor == changedBlock.lineColor and block.ID == changedBlock.ID:
                 block = changedBlock
                 break

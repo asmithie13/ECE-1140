@@ -20,13 +20,22 @@ class Main_UI(QtWidgets.QMainWindow):
         self.CTCwindow = CTC_UI()
         self.CTC_tb = CTC_Testbench()
 
-        #Wayside Software Window
+        #Wayside SW Window
 
 
         #Wayside HW Window
 
 
         #Track Model Window
+
+
+        #Train Model (Might need initialized per train)
+
+
+        #Train Controller SW (Might need initialized per train)
+
+
+        #Train Controller HW (Might need initialized per train)
 
 
         #Connect Buttons to signals to open UIs

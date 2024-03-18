@@ -77,7 +77,7 @@
       <item>
        <widget class="QLabel" name="LogoLabel">
         <property name="text">
-         <string>OJ and th Cowboy Hats Logo</string>
+         <string>OJ and the Cowboy Hats Logo</string>
         </property>
        </widget>
       </item>

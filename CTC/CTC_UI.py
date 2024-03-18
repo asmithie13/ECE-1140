@@ -8,11 +8,12 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
-#My class import
-from Schedule import *
-from OccupiedBlocks import *
-from CTC_Maintenance import *
-from Throughput import *
+#My class imports
+from CTC.Schedule import *
+from CTC.OccupiedBlocks import *
+from CTC.CTC_Maintenance import *
+from CTC.Throughput import *
+from CTC.TempData import *
 #from UI_temp import MainWindow
 
 
@@ -32,6 +33,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Connect Buttons to signals defining behavior
         self.ManualModeButton.clicked.connect(self.selectManualMode_button)
         self.AutoModeButton.clicked.connect(self.selectAutoMode_button)
+        self.GreenLineButton.clicked.connect(self.greenLine_button)
+        self.RedLineButton.clicked.connect(self.redLine_button)
         self.UploadButton.clicked.connect(self.selectScheduleFile)
         self.AddTrainButton.clicked.connect(self.addTrain_button)
         self.MaintenanceModeButton.clicked.connect(self.enterMaintenanceMode)
@@ -51,12 +54,14 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Manual Dispatch Formatting
         self.ArrivalTimeEdit.setDisplayFormat("hh:mm")
-        self.DepartureTimeEdit.setDisplayFormat("hh:mm")
+
+        #Importing Track Data
+        self.TrackData = TempData()
 
         #Setting Combo box values
-        stations = ['Yard', 'Station1', 'Station2']
-        self.DepartureSationSelect.addItems(stations)
-        self.DestinationSelect.addItems(stations)
+        #stations = ['Yard', 'Station1', 'Station2']
+        #self.DepartureSationSelect.addItems(stations)
+        #self.DestinationSelect.addItems(stations)
 
         AllBlocks = ['2']
         self.CloseBlockSelect.addItems(AllBlocks)
@@ -139,6 +144,21 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.DepartureTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ArrivalTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
 
+    #Sets drop down options if green line is selected
+    def greenLine_button(self):
+        self.GreenLineButton.setStyleSheet("background-color : rgb(38, 207, 4)")     #Green
+        self.RedLineButton.setStyleSheet("background-color : white")
+
+        self.DestinationSelect.addItems(self.TrackData.GreenStations)
+        self.DepartureSationSelect.addItems(self.TrackData.GreenStations)
+        
+    
+    def redLine_button(self):
+        self.RedLineButton.setStyleSheet("background-color: rgb(195, 16, 40)")     #Red
+        self.GreenLineButton.setStyleSheet("background-color : white")
+
+        self.DestinationSelect.addItems(self.TrackData.RedStations)
+        self.DepartureSationSelect.addItems(self.TrackData.RedStations)
 
     #function to update the clock display on the layout
     def displayClock(self, time):

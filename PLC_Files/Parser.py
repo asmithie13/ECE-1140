@@ -23,6 +23,11 @@ class Parser():
             for i in range(0, len(self.CrossingTriplesIDS) * 3, 3)
         ]
 
+        for block in self.outPuttedBlocks:
+            if block.CROSSING:
+                setattr(block, str(lines[13]), not block.occupied)
+            
+
         for data in CrossingTripleBlocks:
             SwitchOcc = data[0].occupied
             SwitchRightOcc = data[2].occupied

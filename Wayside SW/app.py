@@ -72,42 +72,9 @@ class MyApp(QMainWindow):
         super().__init__()
         uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
 
-        # Global constants for LIGHT, CROSSING, and SWITCH
-        LIGHT_CONST = [True, False, False, False,None,None]
-        CROSSING_CONST = [False, True, False, None,True,None]
-        SWITCH_CONST = [False, False, True, None,None,True]
-        SWITCH_LIGHT_CONST = [True, False, True, False,None,True]
-        NORMAL_CONST = [False, False, False, None,None,None]
-
-        #Switch Directions
-        self.B5_Switch_Positions = ["B6","C11"]
-
-        #Defining blue line blocks
-        A1 = Block("Blue",'A',1,*NORMAL_CONST,"A1")
-        A2 = Block("Blue",'A',2,*NORMAL_CONST,"A2")
-        A3 = Block("Blue",'A',3,*CROSSING_CONST,"A3")
-        A4 = Block("Blue",'A',4,*NORMAL_CONST,"A4") 
-        A5 = Block("Blue",'A',5,*SWITCH_CONST,"A5") 
-        B6 = Block("Blue",'B',6,*LIGHT_CONST,"B6")
-        B7 = Block("Blue",'B',7, *NORMAL_CONST,"B7")
-        B8 = Block("Blue",'B',8, *NORMAL_CONST,"B8")
-        B9 = Block("Blue",'B',9, *NORMAL_CONST,"B9")
-        B10 = Block("Blue",'B', 10, *NORMAL_CONST,"B10")
-        C11 = Block("Blue",'C',11,*LIGHT_CONST,"C11")
-        C12 = Block("Blue",'C',12,*NORMAL_CONST,"C12")
-        C13 = Block("Blue",'C',13,*NORMAL_CONST,"C13")
-        C14 = Block("Blue",'C',14,*NORMAL_CONST,"C14")
-        C15 = Block("Blue",'C',15,*NORMAL_CONST,"C15")
-
-        #Defines an array of these blocks
-
-        self.currentSpecialBlocks = [A3,A5,B6,C11]    #Special Blocks
-        self.currentBlocks = [A1,A2,A3,A4,A5,B6,B7,B8,B9,B10,C11,C12,C13,C14,C15] #All Blocks
-        self.currentSwitchBlocks = ["B5","B6","C11"]
-
-        #Define current blocks in selected wayside
-        #self.currentBlocks = None
-        #self.currentSpecialBlocks = None
+        self.currentSpecialBlocks = None
+        self.currentBlocks = None
+        self.currentSwitchBlocks = None
 
         #Defines Green Line blocks
         self.greenCrossingTriplesIDS = [] #ids of red crossing blocks
@@ -155,12 +122,12 @@ class MyApp(QMainWindow):
         self.waysideMenu.activated.connect(self.selectWayside)
 
         #initial signals
-        self.sendSpecialBlocks.emit(self.currentBlocks)
+        #self.sendSpecialBlocks.emit(self.currentBlocks)
         self.changeModeSend.emit(True)
 
         #Original Map Image
-        pixmap = QPixmap('Blue Line Images\BlueLine.png')
-        #self.label_17.setPixmap(pixmap)
+        pixmap = QPixmap('Wayside SW\green_red_lines.png')
+        self.label_17.setPixmap(pixmap)
 
         #Dropdown menu
         self.blockMenu.addItems(['A3','A5','B6','C11'])
@@ -254,7 +221,7 @@ class MyApp(QMainWindow):
 
             self.currentSwitchBlocksNums = self.greenCrossingTriplesIDS
 
-            self.FileParser = Parser(None,self.greenCrossingTriplesIDS,self.allGreenBlocks)  #Currently testing red object
+            self.FileParser = Parser(None,self.greenCrossingTriplesIDS,self.allGreenBlocks)
         #self.FileParser = Parser(None,None,self.currentBlocks)
 
         #elif selectedIndex == 0 and self.selectRedLine.isChecked():
@@ -263,6 +230,7 @@ class MyApp(QMainWindow):
 
     def blockActions(self):
         selectedIndex = self.blockMenu.currentIndex()
+        if self.currentBlocks is None : return
         selectedBlock = self.currentSpecialBlocks[selectedIndex]
 
         if selectedBlock.LIGHT and self.label_7.text() and not selectedBlock.SWITCH:

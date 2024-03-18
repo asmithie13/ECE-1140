@@ -103,7 +103,7 @@ class MyApp(QMainWindow):
 
         self.currentSpecialBlocks = [A3,A5,B6,C11]    #Special Blocks
         self.currentBlocks = [A1,A2,A3,A4,A5,B6,B7,B8,B9,B10,C11,C12,C13,C14,C15] #All Blocks
-        self.SwitchBlocks = ["B5","B6","C11"]
+        self.currentSwitchBlocks = ["B5","B6","C11"]
 
         #Define current blocks in selected wayside
         #self.currentBlocks = None
@@ -134,15 +134,15 @@ class MyApp(QMainWindow):
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialRedBlocks.append(block)
 
         #Create Parser Object
-        self.SwitchBlocksNums = [['5','6','11']]
+        self.currentSwitchBlocksNums = [['5','6','11']]
 
         #self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)  #Currently testing red object
-        self.FileParser = Parser(None,self.SwitchBlocksNums,self.currentBlocks)
+        self.FileParser = Parser(None,self.currentSwitchBlocksNums,self.currentBlocks)
 
         # Buttons
         self.fileButton.clicked.connect(self.on_file_button_clicked)
         self.modeButton.clicked.connect(self.changeMode)
-        self.selectLine.stateChanged.connect(self.checkLine)
+        #self.selectLine.stateChanged.connect(self.checkLine)
         self.selectGreenLine.stateChanged.connect(self.checkLine)
         self.selectRedLine.stateChanged.connect(self.checkLine)
         self.blockMenu.currentIndexChanged.connect(self.blockActions)
@@ -160,7 +160,7 @@ class MyApp(QMainWindow):
 
         #Original Map Image
         pixmap = QPixmap('Blue Line Images\BlueLine.png')
-        self.label_17.setPixmap(pixmap)
+        #self.label_17.setPixmap(pixmap)
 
         #Dropdown menu
         self.blockMenu.addItems(['A3','A5','B6','C11'])
@@ -177,6 +177,7 @@ class MyApp(QMainWindow):
         self.upCrossingButton.setDisabled(True)
         self.switchButton.setDisabled(True)
         self.saveButton.setDisabled(True)
+        self.fileButton.setDisabled(True)
     
     def on_file_button_clicked(self):
         # Open a file dialog to select a PLC file
@@ -216,7 +217,7 @@ class MyApp(QMainWindow):
             
 
     def checkLine(self):
-        checkStatus = self.selectLine.isChecked()
+        #checkStatus = self.selectLine.isChecked()
         checkGreen = self.selectGreenLine.isChecked()
         checkRed = self.selectRedLine.isChecked()
 
@@ -238,7 +239,8 @@ class MyApp(QMainWindow):
             self.waysideMenu.setEnabled(False)
 
     def selectWayside(self):
-        selectedIndex = self.waysideMenu.currentIndex()   
+        selectedIndex = self.waysideMenu.currentIndex()  
+        self.fileButton.setDisabled(False) 
 
         if selectedIndex == 0 and self.selectGreenLine.isChecked():
             self.currentBlocks = self.greenWayside1Blocks
@@ -249,6 +251,11 @@ class MyApp(QMainWindow):
 
             for block in self.currentSpecialBlocks:
                 self.blockMenu.addItems([block.ID])
+
+            self.currentSwitchBlocksNums = self.greenCrossingTriplesIDS
+
+            self.FileParser = Parser(None,self.greenCrossingTriplesIDS,self.allGreenBlocks)  #Currently testing red object
+        #self.FileParser = Parser(None,None,self.currentBlocks)
 
         #elif selectedIndex == 0 and self.selectRedLine.isChecked():
         #finish red blocks for W1 and W2
@@ -301,11 +308,30 @@ class MyApp(QMainWindow):
             self.downCrossingButton.setEnabled(False)
             self.switchButton.setEnabled(True and self.label_7.text() == "MANUAL")
 
+            self.currentTriple = None
+
+            for triple in self.currentSwitchBlocksNums:
+                if triple[0] == selectedBlock.blockNum: 
+                    self.currentTriple = triple
+                    break
+
             if selectedBlock.switchState:
-                self.label_11.setText(self.SwitchBlocks[1])
+
+                for block in self.currentBlocks:
+                    if block.blockNum == triple[1]:
+                        letter = block.blockSection
+                        break
+
+                self.label_11.setText(letter + self.currentTriple[1])
 
             else:
-                self.label_11.setText(self.SwitchBlocks[2])
+
+                for block in self.currentBlocks:
+                    if block.blockNum == triple[2]:
+                        letter = block.blockSection
+                        break
+
+                self.label_11.setText(letter + self.currentTriple[2])
 
             if not selectedBlock.LIGHT:
                 self.greenButton.setStyleSheet("")
@@ -364,11 +390,17 @@ class MyApp(QMainWindow):
         selectedIndex = self.blockMenu.currentIndex()
         self.currentSpecialBlocks[selectedIndex].switchState = not self.currentSpecialBlocks[selectedIndex].switchState
 
+        for block in self.currentBlocks:
+            if block.blockNum == self.currentTriple[1]:
+                letter1 = block.blockSection
+            if block.blockNum == self.currentTriple[2]:
+                letter2 = block.blockSection        
+
         current_text = self.label_11.text()
-        if current_text == self.B5_Switch_Positions[0]:
-            self.label_11.setText(self.B5_Switch_Positions[1])
-        elif current_text == self.B5_Switch_Positions[1]:
-            self.label_11.setText(self.B5_Switch_Positions[0])
+        if current_text[1:] == self.currentTriple[1]:
+            self.label_11.setText(letter2 + self.currentTriple[2])
+        elif current_text[1:] == self.currentTriple[2]:
+            self.label_11.setText(letter1 + self.currentTriple[1])
         self.sendSpecialBlocks.emit(self.currentBlocks)
 
     def updateBlocks(self,new_data):

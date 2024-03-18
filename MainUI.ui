@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainUIWindow</class>
+ <widget class="QMainWindow" name="MainUIWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1099</width>
+    <height>736</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Main UI</string>
+  </property>
+  <widget class="QWidget" name="MainColumnLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,1">
+    <item>
+     <layout class="QVBoxLayout" name="Column1" stretch="1,1,1">
+      <item>
+       <widget class="QPushButton" name="CTC_Button">
+        <property name="text">
+         <string>CTC</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="WaysideSW_Button">
+        <property name="text">
+         <string>Wayside SW</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="WaysideHW_Button">
+        <property name="text">
+         <string>Wayside HW</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="Column2" stretch="1,1,1,1">
+      <item>
+       <widget class="QPushButton" name="TrackModelButton">
+        <property name="text">
+         <string>Track Model</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="TrainModelButton">
+        <property name="text">
+         <string>Train Model</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="TrainControllerSW_Button">
+        <property name="text">
+         <string>Train Controller SW</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="TrainControllerHW_Button">
+        <property name="text">
+         <string>Train Controller HW</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="Column3">
+      <item>
+       <widget class="QLabel" name="LogoLabel">
+        <property name="text">
+         <string>OJ and the Cowboy Hats Logo</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="TrainSelectionLayout">
+        <item>
+         <widget class="QLabel" name="TrainSelecLabel">
+          <property name="text">
+           <string>Select Train</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="TrainSelect"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="SpeedBox">
+        <property name="title">
+         <string>Simulation Speed Control</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <layout class="QHBoxLayout" name="SpeedSliderLayout">
+           <property name="spacing">
+            <number>18</number>
+           </property>
+           <property name="leftMargin">
+            <number>3</number>
+           </property>
+           <property name="rightMargin">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>0x Speed</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="horizontalSlider">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>10x Speed</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

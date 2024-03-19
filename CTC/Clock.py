@@ -1,5 +1,12 @@
 import sys
 from PyQt5 import QtCore
+
+#Fixing file hierarchy issues
+import os
+import re
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_root)
+
 from CTC_UI import *
 from CTC_Testbench import *
 
@@ -36,7 +43,7 @@ CTCwindow.sendDispatchInfo.connect(CTC_tb.showDispatchInfo)
 #Initializing Qtimer for clock
 timer0 = QtCore.QTimer()
 time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
-timer0.setInterval(100)
+timer0.setInterval(100)         #Interval in ms
 timer0.timeout.connect(clock)
 timer0.start()
 

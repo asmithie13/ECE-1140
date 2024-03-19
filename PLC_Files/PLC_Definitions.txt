@@ -1,7 +1,7 @@
-LIGHT ID    #Block is Green
-LIGHT !ID   #Block is Red
-
-CROSSING ID #Block is Up
-CROSSING !ID    #Block is Down
-
-SWITCH ID1 ID2  #Block SWITCH points to ID2 now
+OCCUPIED A  #Perform actions if any block of A is OCCUPIED
+SWITCH A5 B6    #SWITCH position of A5 to B6
+LIGHT !C11      #Light of C11 is red
+            #CROSSING goes here, if blank, we just skip
+OCCUPIED !A #Perform if every block of A is not OCCUPIED
+SWITCH A5 C11
+LIGHT C11   #Light of C11 is green

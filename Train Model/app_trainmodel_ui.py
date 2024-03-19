@@ -26,8 +26,17 @@ class MyMainWindow(QMainWindow):
         self.calculate_acc_velocity()
 
         self.estop_locked=False
-        self.bf_enable.clicked.connect(self.brake_fail_tb)
 
+        #changing state when bf_enable/disable are clicked
+        self.bf_enable.clicked.connect(self.bf_enable_clicked)
+        self.bf_disable.clicked.connect(self.bf_disable_clicked)
+        #self.brake_fail_input_tb.stateChanged.connect(self.brake_fail_tb)
+
+        #Initially setting the default colors
+        self.bf_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
+        self.bf_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+
+        self.brake_fail_state = False
 
     def estop_button_clicked(self):
         if not self.estop_locked:
@@ -57,8 +66,8 @@ class MyMainWindow(QMainWindow):
     def set_width(self, width):
         self.width_display.setText(width)
 
-    def set_grade(self, input_txt):
-        self.grade_display.setText(input_txt)
+    def set_grade(self, grade):
+        self.grade_display.setText(grade)
 
 
     def get_train_selection(self,seltext):
@@ -125,19 +134,47 @@ class MyMainWindow(QMainWindow):
     def set_announcements(self, ann_text):
         self.ann_out_label.setText(ann_text)
 
-    def set_cabin_temp(self,text):
+    def set_cabin_temp(self,cabin_temp):
        self.cabin_temp_value.setFixedSize(279, 98)
-       self.cabin_temp_value.setText(text+' F')
+       self.cabin_temp_value.setText(cabin_temp+' F')
+
+    #bf_enable_clicked
+    def bf_enable_clicked(self):
+        if not self.brake_fail_state:
+            self.bf_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.bf_disable.setStyleSheet('background-color: rgb(233, 247, 255);')
+            self.brake_fail_state = True
+
+    #bf_disable_clicked
+    def bf_disable_clicked(self):
+        if self.brake_fail_state:
+            self.bf_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
+            self.bf_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.brake_fail_state = False
        
+    #brake_fail_tb
+    def brake_fail_tb(self,state):
+       
+        self.brake_fail_state = state
+        if state:
+            self.bf_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.bf_disable.setStyleSheet('')
+        else:
+            self.bf_enable.setStyleSheet('')
+            self.bf_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
 
-    def brake_fail_tb(self,bf_state):
-       if bf_state:
-           self.bf_enable.setStyleSheet('background-color: rgb(255, 170, 0);')
-        
-       else: 
-           self.bf_enable.setStyleSheet('background-color: ')
+    #signal_fail_tb
+    def signal_fail_tb(self,state):
+       
+        self.brake_fail_state = state
+        if state:
+            self.bf_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.bf_disable.setStyleSheet('')
+        else:
+            self.bf_enable.setStyleSheet('')
+            self.bf_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
 
-
+    
         
 
 class trainmodel_testbench(QMainWindow):
@@ -156,6 +193,8 @@ class trainmodel_testbench(QMainWindow):
     grade_input_signal=qtc.pyqtSignal(str)
     ebrake_input_signal=qtc.pyqtSignal(int)
     brake_fail_input_signal=qtc.pyqtSignal(int)
+    signal_fail_input_signal=qtc.pyqtSignal(int)
+    engine_fail_input_signal=qtc.pyqtSignal(int)
     cabin_temp_input_signal=qtc.pyqtSignal(str)
 
 
@@ -196,9 +235,13 @@ class trainmodel_testbench(QMainWindow):
         self.estop_input_label.stateChanged.connect(self.emit_ebrake_state)
 
         self.brake_fail_input_tb.stateChanged.connect(self.brake_fail)
+        self.sig_pick_input_tb.stateChanged.connect(self.sig_pick_fail)
 
         self.cabin_temp_input_tb.returnPressed.connect(self.get_cabin_temp)
         self.cabin_temp_input_tb.returnPressed.connect(self.display_cabin_temp)
+
+    def sig_pick_fail(self,state):
+        self.signal_fail_input_signal.emit(state)
 
     def brake_fail(self,state):
        self.brake_fail_input_signal.emit(state)
@@ -341,7 +384,9 @@ if __name__ == "__main__":
     #estop manual
     window.ebrake.clicked.connect(window.estop_button_clicked)
     #brake_fail
-    #window_tb.brake_fail_input_signal.connect(window.brake_fail_tb)
+    window_tb.brake_fail_input_signal.connect(window.brake_fail_tb)
+    #signal_fail
+    window_tb.signal_fail_input_signal.connect(window.signal_fail_tb)
     #cabin_temp 
     window_tb.cabin_temp_input_signal.connect(window.set_cabin_temp)
 

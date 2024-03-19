@@ -8,18 +8,22 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
-#My class import
-from Schedule import *
-from OccupiedBlocks import *
-from CTC_Maintenance import *
-from Throughput import *
+#My class imports
+from CTC.Schedule import *
+from CTC.OccupiedBlocks import *
+from CTC.CTC_Maintenance import *
+from CTC.Throughput import *
+from CTC.TempData import *
+
 #from UI_temp import MainWindow
 
 
 
 class CTC_UI(QtWidgets.QMainWindow):
-    #Signals, for testbench
+    #Signals, for Wayside (and Testbench)
     sendDispatchInfo = pyqtSignal(list)
+    sendBlockClosures = pyqtSignal(list)
+    sendSwitchPositions = pyqtSignal(list)
 
     def __init__(self):
         super(CTC_UI, self).__init__()
@@ -28,11 +32,15 @@ class CTC_UI(QtWidgets.QMainWindow):
 
 
         #Connect Buttons to signals defining behavior
-        self.UploadButton.clicked.connect(self.open_files)
         self.ManualModeButton.clicked.connect(self.selectManualMode_button)
-        self.AddTrainButton.clicked.connect(self.addTrain_button)
         self.AutoModeButton.clicked.connect(self.selectAutoMode_button)
+        self.GreenLineButton.clicked.connect(self.greenLine_button)
+        self.RedLineButton.clicked.connect(self.redLine_button)
+        self.UploadButton.clicked.connect(self.selectScheduleFile)
+        self.AddTrainButton.clicked.connect(self.addTrain_button)
+        self.MaintenanceModeButton.clicked.connect(self.enterMaintenanceMode)
         self.CloseBlockButton.clicked.connect(self.closeBlock_button)
+        self.SetSwitchPositionButton.clicked.connect(self.setSwitch_button)
 
         #Changing Button Colors
         self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")     #Green
@@ -47,24 +55,30 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Manual Dispatch Formatting
         self.ArrivalTimeEdit.setDisplayFormat("hh:mm")
-        self.DepartureTimeEdit.setDisplayFormat("hh:mm")
+
+        #Importing Track Data
+        self.TrackData = TempData()
 
         #Setting Combo box values
-        stations = ['Yard', 'Station1', 'Station2']
-        self.DepartureSationSelect.addItems(stations)
-        self.DestinationSelect.addItems(stations)
+        #stations = ['Yard', 'Station1', 'Station2']
+        #self.DepartureSationSelect.addItems(stations)
+        #self.DestinationSelect.addItems(stations)
+
+        AllBlocks = ['2']
+        self.CloseBlockSelect.addItems(AllBlocks)
 
         #Initializing Schedule
         self.trainSchedule = Schedule()
-        self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
         #Initializing Occupied Blocks Table
         self.occupiedBlocks = OccupiedBlocks()
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockData))
 
-        #Initializing Maintance Table
+        #Initializing Maintance Tables
         self.Maintence = CTC_Maintenance()
-        self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))
+        self.BlockClosureTable.setModel(OccupiedBlocksTableModel(self.Maintence.BlocksClosed))
+        self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintence.BlocksClosed))
 
         #Initializing Throughput    
         self.ThroughputGraph = Throughput()
@@ -93,7 +107,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         ArrivalTime = ArrivalTime.toString("hh:mm")
 
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
-        self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 
     #Define mutually exclisive auto/manual mode when manual mode is selected
@@ -131,6 +145,21 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.DepartureTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ArrivalTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
 
+    #Sets drop down options if green line is selected
+    def greenLine_button(self):
+        self.GreenLineButton.setStyleSheet("background-color : rgb(38, 207, 4)")     #Green
+        self.RedLineButton.setStyleSheet("background-color : white")
+
+        self.DestinationSelect.addItems(self.TrackData.GreenStations)
+        self.DepartureSationSelect.addItems(self.TrackData.GreenStations)
+        
+    
+    def redLine_button(self):
+        self.RedLineButton.setStyleSheet("background-color: rgb(195, 16, 40)")     #Red
+        self.GreenLineButton.setStyleSheet("background-color : white")
+
+        self.DestinationSelect.addItems(self.TrackData.RedStations)
+        self.DepartureSationSelect.addItems(self.TrackData.RedStations)
 
     #function to update the clock display on the layout
     def displayClock(self, time):
@@ -142,7 +171,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
 
     #Define functionality for Upload File Button
-    def open_files(self):
+    def selectScheduleFile(self):
         # Open a file dialog to select a Excel File
         file_dialog = QFileDialog()
         file_path, _ = file_dialog.getOpenFileName(self, "Select Schedule File", "", "CSV FIle (*.csv);;All Files (*)")
@@ -150,7 +179,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Parse File
         self.trainSchedule.parseScheduleFile(file_path)
         #Update Table
-        self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
         #Disable Manual Mode and upload button
         self.selectAutoMode_button()
@@ -159,7 +188,22 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Disable Manual Mode button (because it's one use)
         self.ManualModeButton.setEnabled(False)
-        self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
+        self.ManualModeButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
+
+
+    #Indication that the system is in maintenance mode
+    #Same behavior will occur if a block is closed or a switch is sets
+    def enterMaintenanceMode(self):
+        print("You still need to write this")
+
+        self.MaintenanceModeButton.setStyleSheet("background-color : blue; color: black;")
+
+
+    #Will indicate that the system is no longer in maintenance mode
+    #Should work on the double press of the button
+    #or if the block closures/switch position are empty
+    def exitMaintenanceMode(self):
+        print("You still need to write this")
 
 
     #function to update block occupied table based on input from Wayside
@@ -178,16 +222,25 @@ class CTC_UI(QtWidgets.QMainWindow):
         ArrivalTime = ArrivalTime.toString("hh:mm")
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 =======
+=======
+
+>>>>>>> ce80de10b3d7ada7a6c9d521baec48893235b360
         self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 
-    #Function to add a block closure
+    #Function to add a block closure when in maintence mode
     def closeBlock_button(self):
-        BlockToClose = self.CloseBlockField.text()
+        BlockToClose = self.CloseBlockSelect.currentText()
         self.Maintence.BlocksClosed.append([BlockToClose])
-        self.MaintenanceTable.setModel(MaintenanceTableModel(self.Maintence.BlocksClosed))
+        self.BlockClosureTable.setModel(OccupiedBlocksTableModel(self.Maintence.BlocksClosed))
+
+
+    #Function to set switch positons when in maintenance mode
+    def setSwitch_button(self):
+        print("You didn't implement this yet")
 
 
     #Function to update the ticket sales based on information from Track Model
@@ -201,9 +254,12 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ThroughputGraphLabel.setPixmap(pixmap)
 
 
+<<<<<<< HEAD
         
 >>>>>>> e9643cf6f476747439fd07ba952ef02aad958ae1
 
+=======
+>>>>>>> ce80de10b3d7ada7a6c9d521baec48893235b360
 
 
 """

@@ -6,7 +6,7 @@ import re
 def readTrackFile(fileName, crossingTriples):
     totalBlocks = []
     lightBlocks = {}
-    fileName = "Wayside HW/" + fileName
+    #fileName = fileName
     with open(fileName, "r") as fileObject:
         readObj = csv.reader(fileObject, delimiter=",")
         for i, line in enumerate(readObj):
@@ -18,6 +18,8 @@ def readTrackFile(fileName, crossingTriples):
             switchState = None
             blockId = line[1] + line[2]
             if(i == 0):
+                continue
+            elif(35 < i < 105):
                 continue
             else:
                 if(line[6] == "RAILWAY CROSSING"):
@@ -49,39 +51,3 @@ def readTrackFile(fileName, crossingTriples):
                     block.lightState = None
 
     return totalBlocks #Return a list of all blocks within the file
-
-#Function that divides blocks on the red line depending on wayside:
-def splitRedBlocks(allRedBlocks):
-    secWaysideThree = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-
-    bothWayside = []
-    waysideThree = []
-    waysideFour = []
-
-    for block in allRedBlocks:
-        if(block.blockSection in secWaysideThree):
-            waysideThree.append(block)
-        else:
-            waysideFour.append(block)
-    
-    bothWayside.append(waysideThree)
-    bothWayside.append(waysideFour)
-    return bothWayside
-
-#Function that divides blocks on the red line depending on wayside:
-def splitGreenBlocks(allGreenBlocks):
-    secWaysideOne = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-
-    bothWayside = []
-    waysideOne = []
-    waysideTwo = []
-
-    for block in allGreenBlocks:
-        if(block.blockSection in secWaysideOne):
-            waysideOne.append(block)
-        else:
-            waysideTwo.append(block)
-    
-    bothWayside.append(waysideOne)
-    bothWayside.append(waysideTwo)
-    return bothWayside

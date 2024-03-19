@@ -9,3 +9,6 @@ LeftLIGHT
 
 not SwitchOcc and SwitchRightOcc
 RightLIGHT
+
+CrossingBlockOccupied
+crossingState

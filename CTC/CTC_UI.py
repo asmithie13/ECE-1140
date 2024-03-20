@@ -99,13 +99,13 @@ class CTC_UI(QtWidgets.QMainWindow):
         
         self.updateOccupiedBlocks(self, TempBlockList)
 
+    #TicketSales will be a list of two lists of ints, representing the sales at each station in 
+    #green line and red line respectively, from Track Model
     def recieveTicketSales(self, TicketSales):
         AverageSales = [0, 0]
 
         AverageSales[0] = sum(TicketSales[0])/len(TicketSales[0])
         AverageSales[1] = sum(TicketSales[1])/len(TicketSales[1])
-
-        #print(AverageSales)
 
         self.updateTicketSales(AverageSales)
 

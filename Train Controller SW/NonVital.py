@@ -1,7 +1,8 @@
-from TrainController import *
+from mainControl import Ui_MainWindow
+class NonVital():
+    def __init__(self,ui):
+        self.ui=ui
 
-class NonVital(TrainController):
-    def __init__(self):
 
         self.blocksTraveledCounter = 0
         self.blocksToUnderground = 0
@@ -9,8 +10,8 @@ class NonVital(TrainController):
     
     def Control_Headlights(self):
 
-        if(TrainController.ui.buttonHDon.isChecked()):
-            TrainController.ui.buttonHDoff.setChecked(False)
+        if(self.ui.buttonHDon.isChecked()):
+            self.ui.buttonHDoff.setChecked(False)
             #emit(1)
         if(TrainController.ui.buttonHDoff.isChecked()):
             TrainController.ui.buttonHDon.setChecked(False)

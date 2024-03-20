@@ -66,7 +66,7 @@ class TrainController :
         #connecting UI buttons to functions
         self.ui.Ebrake.clicked.connect(Vital_Failure.Control_Emergency_Brake())
         
-        self.ui.buttonMan.clicked.connect(self.Control_Manual)
+        self.ui.buttonMan.clicked.connect(self.Control_Manual())
         self.ui.buttonAuto.clicked.connect(self.Control_Automatic())
         
         self.ui.temp.valueChanged.connect(NonVital.Control_Temperature(self.ui.temp.value()))

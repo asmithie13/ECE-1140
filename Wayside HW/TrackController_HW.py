@@ -3,8 +3,15 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
 import sys
+import os
+import re
+
+#Using Block Class as a seperate file
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_root)
+
 from TrackController_HW_TB import *
-from Block import *
+from Track_Resources.Block import Block
 from readTrackFile import *
 
 #Main train controller class:
@@ -18,14 +25,14 @@ class TrackController_HW(QMainWindow):
     def __init__(self):
         #Upload UI file:
         super(TrackController_HW, self).__init__()
-        uic.loadUi("TrackController_HW.ui", self)
+        uic.loadUi("Wayside HW/TrackController_HW.ui", self)
 
         #Disable manual mode operations, as program begins in automatic operation:
         self.groupBoxManual.setEnabled(False)
 
         #Initialize an empty list to hold all blocks:
         self.allTripleIDs = []
-        self.allBlocks = readTrackFile("greenLine.csv", self.allTripleIDs)
+        self.allBlocks = readTrackFile("Wayside HW/greenLine.csv", self.allTripleIDs)
 
         #Initialize a flag integer to determine which mode the system is currently in:
         self.modeFlag = 0 #0 = Automatic, 1 = Manual, 2 = Maintenance
@@ -104,7 +111,8 @@ class TrackController_HW(QMainWindow):
         for block in self.occupiedBlocks:
             occupiedBlockIDs.append(block.ID)
         occupiedBlockIDs.sort()
-        print(occupiedBlockIDs)
+        
+        
         #Initialize serial communication with Raspberry Pi here
         #Produce a list of changed block states to emit to Track Model, as conducted in manual operation
     

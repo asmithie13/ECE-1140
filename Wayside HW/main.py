@@ -5,7 +5,6 @@ from PyQt5 import uic
 import sys
 from TrackController_HW import *
 from TrackController_HW_TB import *
-from Block import *
 from readTrackFile import *
 
 app = QApplication(sys.argv)

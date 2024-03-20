@@ -3,7 +3,14 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
 import sys
-from Block import *
+import os
+import re
+
+#Using Block Class as a seperate file
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_root)
+
+from Track_Resources.Block import Block
 from readTrackFile import *
 
 class TrackController_HW_TB(QMainWindow):
@@ -16,11 +23,11 @@ class TrackController_HW_TB(QMainWindow):
     def __init__(self):
         #Upload UI file:
         super(TrackController_HW_TB, self).__init__()
-        uic.loadUi("TrackController_HW_TB.ui", self)
+        uic.loadUi("Wayside HW/TrackController_HW_TB.ui", self)
 
         #Initialize an empty list to hold all blocks:
         self.allTripleIDs = [] #Don't need for TB
-        self.allBlocks = readTrackFile("greenLine.csv", self.allTripleIDs)
+        self.allBlocks = readTrackFile("Wayside HW/greenLine.csv", self.allTripleIDs)
 
         self.listBlockIDs = []
         for block in self.allBlocks:

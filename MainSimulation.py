@@ -1,7 +1,7 @@
 #File to run full train control system simulation
 
 import sys
-from PyQt5 import QtCore,uic
+from PyQt5 import QtCore
 from Main_UI import *
 #CTC Imports
 import CTC

@@ -21,7 +21,7 @@ def sort_by_number(block):
 def readTrackFile(fileName,crossingTriples):
     totalBlocks = []
     lightBlocks = {}
-    fileName = "Wayside SW/" + fileName
+    #fileName = "Wayside SW/" + fileName
     with open(fileName, "r") as fileObject:
         readObj = csv.reader(fileObject, delimiter=",")
         for i, line in enumerate(readObj):
@@ -78,7 +78,7 @@ class WaysideSW(QMainWindow):
 
         #Defines Green Line blocks
         self.greenCrossingTriplesIDS = [] #ids of red crossing blocks
-        self.allGreenBlocks = readTrackFile("Green_Line.csv",self.greenCrossingTriplesIDS)
+        self.allGreenBlocks = readTrackFile("Wayside_SW/Green_Line.csv",self.greenCrossingTriplesIDS)
         self.specialGreenBlocksW2 = []
 
         #SW in charge of W1, HW in charge of W2
@@ -93,7 +93,7 @@ class WaysideSW(QMainWindow):
 
         #Defines Red line blocks
         self.redCrossingTriplesIDS = [] #ids of red crossing blocks
-        self.allRedBlocks = readTrackFile("Red_Line.csv",self.redCrossingTriplesIDS)
+        self.allRedBlocks = readTrackFile("Wayside_SW/Red_Line.csv",self.redCrossingTriplesIDS)
         self.specialRedBlocksW1 = []
         self.specialRedBlocksW2 = []
 
@@ -133,7 +133,10 @@ class WaysideSW(QMainWindow):
         self.changeModeSend.emit(True)
 
         #Original Map Image
-        pixmap = QPixmap('Wayside SW\green_red_lines.png')
+        pixmap = QPixmap('Wayside_SW\green_red_lines.png')
+        width = 400
+        height = 400
+        pixmap = pixmap.scaled(width, height)
         self.label_17.setPixmap(pixmap)
 
         #Dropdown menu
@@ -447,7 +450,7 @@ class TestBench(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi("Wayside SW/Wayside_Testbench.ui", self)
+        uic.loadUi("Wayside_SW/Wayside_Testbench.ui", self)
 
         # Buttons
         self.speedInput.returnPressed.connect(self.sendSpeed)

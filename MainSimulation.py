@@ -36,6 +36,13 @@ MainWindow.CTC_tb.sendTicketSales.connect(MainWindow.CTCwindow.updateTicketSales
 #CTC Output Signals
 MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.CTC_tb.showDispatchInfo)
 
+"""Wayside SW Signals"""
+MainWindow.WaysideSWwindow.sendSpecialBlocks.connect(MainWindow.WaysideSW_tb.updateBlockStates)
+MainWindow.WaysideSWwindow.changeModeSend.connect(MainWindow.WaysideSW_tb.receiveMode)
+MainWindow.WaysideSW_tb.OccBlocksChanged.connect(MainWindow.WaysideSWwindow.updateBlocks)
+MainWindow.WaysideSW_tb.tbChangeMode.connect(MainWindow.WaysideSWwindow.changeMode)
+MainWindow.WaysideSW_tb.ctcSpeed.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
+MainWindow.WaysideSW_tb.ctcAuthority.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
 
 """Clock Initialization"""
 #Initializing Qtimer for clock

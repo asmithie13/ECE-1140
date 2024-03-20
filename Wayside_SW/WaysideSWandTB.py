@@ -84,7 +84,6 @@ class WaysideSW(QMainWindow):
         #SW in charge of W1, HW in charge of W2
 
         wayside1Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
-        #FIX FIX FIX FIX
         self.greenWayside2Blocks = [x for x in self.allGreenBlocks if x.blockSection not in wayside1Chars]
      
         #Defines special greenblocks in wayside 1     

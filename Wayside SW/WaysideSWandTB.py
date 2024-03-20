@@ -62,7 +62,7 @@ def readTrackFile(fileName,crossingTriples):
 
     return totalBlocks #Return a list of all blocks within the file
 
-class MyApp(QMainWindow):
+class WaysideSW(QMainWindow):
 
     #Signals
     sendSpecialBlocks = pyqtSignal(list)    #Send special blocks to testbench
@@ -560,7 +560,7 @@ class TestBench(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = MyApp()
+    window = WaysideSW()
     window2 = TestBench()
 
     #Signal: Window

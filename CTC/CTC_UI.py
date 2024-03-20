@@ -15,9 +15,6 @@ from CTC.CTC_Maintenance import *
 from CTC.Throughput import *
 from CTC.TempData import *
 
-#from UI_temp import MainWindow
-
-
 
 class CTC_UI(QtWidgets.QMainWindow):
     #Signals, for Wayside (and Testbench)
@@ -94,17 +91,16 @@ class CTC_UI(QtWidgets.QMainWindow):
         
     #defining manual mode add train button functionality
     def addTrain_button(self):
-        #Indicating manual mode is selected if it's not selected beforehand
-        self.ManualModeButton.setEnabled(False)
-        self.ManualModeButton.setStyleSheet("background-color: blue; color: black;")
-
+        #Grabbing values from the UI
         TrainID = self.TrainNameField.text()
         Departure = self.DepartureSationSelect.currentText()
-        DepartureTime = self.DepartureTimeEdit.time()
-        DepartureTime = DepartureTime.toString("hh:mm")
         Destination = self.DestinationSelect.currentText()
         ArrivalTime = self.ArrivalTimeEdit.time()
         ArrivalTime = ArrivalTime.toString("hh:mm")
+
+        #Calculatig the Departure Time
+        DepartureTime = ArrivalTime 
+        DepartureTime = DepartureTime.toString("hh:mm")
 
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))

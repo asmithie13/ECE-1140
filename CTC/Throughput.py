@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 
 class Throughput():
     def __init__(self, ScheduleData = []):
-        self.heights=[0]
-        self.bar_labels= ['blue']
-        self.colors = ['blue']
+        self.heights=[0, 0]
+        self.bar_labels= ['green', 'red']
+        self.colors = ['green', 'red']
         
         self.updateThroughputGraph()
 

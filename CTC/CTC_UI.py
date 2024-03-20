@@ -100,14 +100,14 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.updateOccupiedBlocks(self, TempBlockList)
 
     def recieveTicketSales(self, TicketSales):
-        AverageSales = []
+        AverageSales = [0, 0]
 
-        AverageSales.append((sum(TicketSales[0])/len(TicketSales[0])))
-        AverageSales.append((sum(TicketSales[1])/len(TicketSales[1])))
+        AverageSales[0] = sum(TicketSales[0])/len(TicketSales[0])
+        AverageSales[1] = sum(TicketSales[1])/len(TicketSales[1])
 
-        print(AverageSales)
+        #print(AverageSales)
 
-
+        self.updateTicketSales(AverageSales)
 
         
     #defining manual mode add train button functionality

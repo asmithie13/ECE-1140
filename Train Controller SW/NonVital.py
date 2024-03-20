@@ -13,27 +13,27 @@ class NonVital():
         if(self.ui.buttonHDon.isChecked()):
             self.ui.buttonHDoff.setChecked(False)
             #emit(1)
-        if(TrainController.ui.buttonHDoff.isChecked()):
-            TrainController.ui.buttonHDon.setChecked(False)
+        if(self.ui.buttonHDoff.isChecked()):
+            self.ui.buttonHDon.setChecked(False)
             #emit(0)
     
     
     #i want to change the int lights to a toggle button like the others
     def Control_interiorLights(self):
 
-        if(TrainController.ui.IntLightSld.value() == 1):
+        if(self.ui.IntLightSld.value() == 1):
             #emit(1)
             print("interior lights on")
-        if(TrainController.ui.IntLightSld.value() == 0):
+        if(self.ui.IntLightSld.value() == 0):
             #emit(0)
             print("interior lights off")
 
         # after converstion to toggle button
-        # if(TrainController.ui.buttonILon.isChecked()):
-        #     TrainController.ui.buttonILoff.setChecked(False)
+        # if(self.ui.buttonILon.isChecked()):
+        #     self.ui.buttonILoff.setChecked(False)
         #     #emit(1)
-        # if(TrainController.ui.buttonILoff.isChecked()):
-        #     TrainController.ui.buttonILon.setChecked(False)
+        # if(self.ui.buttonILoff.isChecked()):
+        #     self.ui.buttonILon.setChecked(False)
         #     #emit(0)
 
     def Control_Temperature(self, desiredTemp):
@@ -50,11 +50,11 @@ class NonVital():
         #turn off int lights
         #send announcement to next station
 
-        TrainController.ui.buttonDoorL.toggle()
-        TrainController.ui.announcement_sig.emit("Welcome to " + self.ui.lineEditAnn.text())
-        TrainController.ui.IntLightSld.setValue(1)
-        TrainController.stationTimer.start()
-        TrainController.stationTimer.timeout.connect(lambda: self.ui.buttonDoorL.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
+        self.ui.buttonDoorL.toggle()
+        self.ui.announcement_sig.emit("Welcome to " + self.ui.lineEditAnn.text())
+        self.ui.IntLightSld.setValue(1)
+        self.stationTimer.start()
+        self.stationTimer.timeout.connect(lambda: self.ui.buttonDoorL.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
 
     def RightStation(self):
         #open Right doors
@@ -65,11 +65,11 @@ class NonVital():
         #turn off int lights
         #send announcement to next station
 
-        TrainController.ui.buttonDoorR.toggle()
-        TrainController.ui.announcement_sig.emit("Welcome to " + self.ui.lineEditAnn.text())
-        TrainController.ui.IntLightSld.setValue(1)
-        TrainController.stationTimer.start()
-        TrainController.stationTimer.timeout.connect(lambda: self.ui.buttonDoorR.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
+        self.ui.buttonDoorR.toggle()
+        self.ui.announcement_sig.emit("Welcome to " + self.ui.lineEditAnn.text())
+        self.ui.IntLightSld.setValue(1)
+        self.stationTimer.start()
+        self.stationTimer.timeout.connect(lambda: self.ui.buttonDoorR.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
 
     def BothStation(self):
         #open both doors
@@ -80,12 +80,12 @@ class NonVital():
         #turn off int lights
         #send announcement to next station
 
-        TrainController.ui.buttonDoorL.toggle()
-        TrainController.ui.buttonDoorR.toggle()
-        TrainController.ui.announcement_sig.emit("Welcome to " + self.ui.lineEditAnn.text())
-        TrainController.ui.IntLightSld.setValue(1)
-        TrainController.stationTimer.start()
-        TrainController.stationTimer.timeout.connect(lambda: self.ui.buttonDoorL.toggle(), self.ui.buttonDoorR.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
+        self.ui.buttonDoorL.toggle()
+        self.ui.buttonDoorR.toggle()
+        self.ui.announcement_sig.emit("Welcome to " + self.ui.lineEditAnn.text())
+        self.ui.IntLightSld.setValue(1)
+        self.stationTimer.start()
+        self.stationTimer.timeout.connect(lambda: self.ui.buttonDoorL.toggle(), self.ui.buttonDoorR.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
 
     def Read_Beacon(self):
         #take in beacon info from tanvi
@@ -100,17 +100,17 @@ class NonVital():
         
         #enter underground -  we turn on the lights before going under because of safety :)
         if self.blocksTraveledCounter == self.blocksToUnderground-1:
-            TrainController.ui.underground.setChecked(True)
-            TrainController.ui.buttonHDon.setChecked(True)
-            TrainController.ui.buttonHDoff.setChecked(False)
+            self.ui.underground.setChecked(True)
+            self.ui.buttonHDon.setChecked(True)
+            self.ui.buttonHDoff.setChecked(False)
             self.blocksTraveledCounter = 0
         
         #when underground
-        if TrainController.ui.underground.isChecked():
+        if self.ui.underground.isChecked():
             if self.blocksTraveledCounter == self.undergroudBlocks+1:
-                TrainController.ui.underground.setChecked(False)
-                TrainController.ui.buttonHDon.setChecked(False)
-                TrainController.ui.buttonHDoff.setChecked(True)
+                self.ui.underground.setChecked(False)
+                self.ui.buttonHDon.setChecked(False)
+                self.ui.buttonHDoff.setChecked(True)
                 self.blocksTraveledCounter = 0
     
     

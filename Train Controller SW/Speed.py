@@ -1,6 +1,10 @@
-from TrainController import *
+from mainControl import Ui_MainWindow
 
-class Vital_Speed(TrainController):
+class Vital_Speed():
+    
+    def __init__(self,ui):
+        self.ui = ui
+
     def Speed_Monitor(self):
         #check current speed every time speed is updated or speed limit is updated
         #if speed is greater than speed limit, send command to brake
@@ -8,31 +12,31 @@ class Vital_Speed(TrainController):
 
         #our train is frictionless so it will maintain speed unless we tell it to do something else
 
-        current_speed = TrainController.ui.lcdCurSpd.value()
-        speed_limit = TrainController.ui.lcdSpdLim.value()
-        cmd_speed = TrainController.ui.lcdCmdSpd.value()
+        current_speed = self.ui.lcdCurSpd.value()
+        speed_limit = self.ui.lcdSpdLim.value()
+        cmd_speed = self.ui.lcdCmdSpd.value()
 
         #this case is vital, will override driver input
         if current_speed > speed_limit:
-            TrainController.ui.vertSliderBrk.setValue(1)
-            TrainController.ui.vertSliderPow.setValue(0)
+            self.ui.vertSliderBrk.setValue(1)
+            self.ui.vertSliderPow.setValue(0)
         
         #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
-        elif current_speed < ((speed_limit | cmd_speed) & (TrainController.ui.buttonAuto.isChecked() == True)):
-            TrainController.ui.vertSliderPow.setValue(1)
-            TrainController.ui.vertSliderBrk.setValue(0)
+        elif current_speed < ((speed_limit | cmd_speed) & (self.ui.buttonAuto.isChecked() == True)):
+            self.ui.vertSliderPow.setValue(1)
+            self.ui.vertSliderBrk.setValue(0)
         
         #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
         elif current_speed == (speed_limit | cmd_speed):
-            TrainController.ui.vertSliderPow.setValue(0)
-            TrainController.ui.vertSliderBrk.setValue(0) 
+            self.ui.vertSliderPow.setValue(0)
+            self.ui.vertSliderBrk.setValue(0) 
     
     def service_brake(self):
         #send signal to brake
-        if TrainController.ui.vertSliderBrk.value() == 1:
+        if self.ui.vertSliderBrk.value() == 1:
             #emit(1)
             print("Service Brake On")
-        if TrainController.ui.vertSliderBrk.value() == 0:
+        if self.ui.vertSliderBrk.value() == 0:
             #emit(0)
             print("Service Brake Off")
         

@@ -1,7 +1,8 @@
-from TrainController import *
+from mainControl import Ui_MainWindow
 
-class Vital_Power(TrainController):
-    def __init__(self):
+class Vital_Power():
+    def __init__(self,ui):
+        self.ui = ui
         self.Ki = 0
         self.Kp = 0
         self.power = 0
@@ -17,12 +18,12 @@ class Vital_Power(TrainController):
         self.prevTime = 0
 
     def Control_Ki(self):
-            TrainController.ui.lcdKi.display(TrainController.inputKi.value())
-            self.Ki = TrainController.ui.inputKi.value()
+            self.ui.lcdKi.display(self.inputKi.value())
+            self.Ki = self.ui.inputKi.value()
 
     def Control_Kp(self):
-            TrainController.ui.lcdKp.display(TrainController.inputKp.value())
-            self.Kp = TrainController.ui.inputKp.value()
+            self.ui.lcdKp.display(self.inputKp.value())
+            self.Kp = self.ui.inputKp.value()
     
     def calculate_power(self):
 
@@ -53,5 +54,5 @@ class Vital_Power(TrainController):
         elif self.power < 0:
             self.power = 0
         
-        TrainController.ui.lcdPwrOut.display(self.power)
-        TrainController.ui.curr_power_sig.emit(self.power)
+        self.ui.lcdPwrOut.display(self.power)
+        self.ui.curr_power_sig.emit(self.power)

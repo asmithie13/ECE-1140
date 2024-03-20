@@ -9,6 +9,20 @@ from PyQt5.QtCore import pyqtSignal
 
 class TrainController :
     def __init__(self):
+        
+        #opening UI
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+        #creating subclasses
+        self.Vital_Power = Vital_Power(self.ui)
+        self.Vital_Speed = Vital_Speed(self.ui)
+        self.Vital_Authority = Vital_Authority(self.ui)
+        self.Vital_Failure = Vital_Failure(self.ui)
+        self.NonVital = NonVital(self.ui)
+
 
         #update displays
         #signals that we take as inputs # I dont think we need these, I think this is on Tanvis side
@@ -41,14 +55,14 @@ class TrainController :
         #DNE in UI
         
         self.next_station_sig = pyqtSignal(str)
-        self.next_station_sig.connect(self.Control_Next_Station())
+        self.next_station_sig.connect(self.NonVital.Control_Next_Station())
 
         self.dist_to_next_station_sig = pyqtSignal(int)
-        self.dist_to_next_station_sig.connect(self.Control_Next_Station())
+        self.dist_to_next_station_sig.connect(self.NonVital.Control_Next_Station())
 
         #block 
         self.block_passed_sig = pyqtSignal(bool)
-        self.block_passed_sig.connect(NonVital.BlockCounter())
+        self.block_passed_sig.connect(self.NonVital.BlockCounter())
 
         self.block_length_sig = pyqtSignal(int)
 
@@ -64,57 +78,54 @@ class TrainController :
 
 
         #connecting UI buttons to functions
-        self.ui.Ebrake.clicked.connect(Vital_Failure.Control_Emergency_Brake())
+        self.ui.Ebrake.clicked.connect(self.Vital_Failure.Control_Emergency_Brake())
         
         self.ui.buttonMan.clicked.connect(self.Control_Manual())
         self.ui.buttonAuto.clicked.connect(self.Control_Automatic())
         
-        self.ui.temp.valueChanged.connect(NonVital.Control_Temperature(self.ui.temp.value()))
+        self.ui.temp.valueChanged.connect(self.NonVital.Control_Temperature(self.ui.temp.value()))
 
-        self.ui.buttonHDoff.clicked.connect(NonVital.Control_Headlights())
-        self.ui.buttonHDon.clicked.connect(NonVital.Control_Headlights())
+        self.ui.buttonHDoff.clicked.connect(self.NonVital.Control_Headlights())
+        self.ui.buttonHDon.clicked.connect(self.NonVital.Control_Headlights())
         
-        self.ui.lineEditAnn.editingFinished.connect(self.Control_Annoucement(self.ui.lineEditAnn.text()))
+        self.ui.lineEditAnn.editingFinished.connect(self.NonVital.Control_Annoucement(self.ui.lineEditAnn.text()))
         
         #power
-        self.ui.inputKp.valueChanged.connect(Vital_Power.Control_Ki())
-        self.ui.inputKi.valueChanged.connect(Vital_Power.Control_Kp())
-        self.ui.vertSliderPow.valueChanged.connect(Vital_Power.calculate_power())
+        self.ui.inputKp.valueChanged.connect(self.Vital_Power.Control_Ki())
+        self.ui.inputKi.valueChanged.connect(self.Vital_Power.Control_Kp())
+        self.ui.vertSliderPow.valueChanged.connect(self.Vital_Power.calculate_power())
 
         #speed
-        self.ui.lcdCurSpd.valueChanged.connect(Vital_Speed.Speed_Monitor())
-        self.ui.vertSliderBrk.valueChanged.connect(Vital_Speed.Control_Brake())
+        self.ui.lcdCurSpd.valueChanged.connect(self.Vital_Speed.Speed_Monitor())
+        self.ui.vertSliderBrk.valueChanged.connect(self.Vital_Speed.Control_Brake())
         #tanvi sends the control speed limit signal
         #tanvi sends control commanded speed signal
 
         #authority
-        self.ui.lcdAuth.valueChanged.connect(Vital_Authority.Authority_Monitor())
+        self.ui.lcdAuth.valueChanged.connect(self.Vital_Authority.Authority_Monitor())
         #tanvi sends the control authority signal
 
         #failure convert to indicator possibly
-        self.ui.BrkFail.stateChanged.connect(Vital_Failure.Control_Brake_Failure())
-        self.ui.PwrFail.stateChanged.connect(Vital_Failure.Control_Power_Failure())
-        self.ui.SigFail.stateChanged.connect(Vital_Failure.Control_Signal_Failure())
-        self.ui.Ebrake.stateChanged.connect(Vital_Failure.Control_Emergency_Brake())
-
-    def openUI(self):
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self.window)
-        self.window.show()
+        self.ui.BrkFail.stateChanged.connect(self.Vital_Failure.Control_Brake_Failure())
+        self.ui.PwrFail.stateChanged.connect(self.Vital_Failure.Control_Power_Failure())
+        self.ui.SigFail.stateChanged.connect(self.Vital_Failure.Control_Signal_Failure())
+        self.ui.Ebrake.stateChanged.connect(self.Vital_Failure.Control_Emergency_Brake())
+       
     
     def Control_Automatic(self):
-      self.buttonMan.toggle()
-      self.buttonDoorL.setDisabled(True)
-      self.buttonDoorR.setDisabled(True)
-      self.temp.setDisabled(True)
-      self.buttonHDoff.setDisabled(True)
-      self.buttonHDon.setDisabled(True)
-      self.IntLightSld.setDisabled(True)
-      self.lineEditAnn.setDisabled(True)
-      self.inputKi.setDisabled(True)
-      self.inputKp.setDisabled(True)
-      self.Speed_Montior()
+      self.ui.buttonMan.toggle()
+      self.ui.buttonDoorL.setDisabled(True)
+      self.ui.buttonDoorR.setDisabled(True)
+      self.ui.temp.setDisabled(True)
+      self.ui.buttonHDoff.setDisabled(True)
+      self.ui.buttonHDon.setDisabled(True)
+      self.ui.IntLightSld.setDisabled(True)
+      self.ui.lineEditAnn.setDisabled(True)
+      self.ui.inputKi.setDisabled(True)
+      self.ui.inputKp.setDisabled(True)
+      self.ui.Speed_Montior()
+      self.ui.vertSliderPow.setDisabled(True)
+      self.ui.vertSliderBrk.setDisabled(True)
 
 
     def Control_Manual(self):
@@ -128,5 +139,7 @@ class TrainController :
         self.ui.lineEditAnn.setDisabled(False)
         self.ui.inputKi.setDisabled(False)
         self.ui.inputKp.setDisabled(False)
+        self.ui.vertSliderPow.setDisabled(False)
+        self.ui.vertSliderBrk.setDisabled(False)
 
     

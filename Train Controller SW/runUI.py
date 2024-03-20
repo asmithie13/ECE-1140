@@ -1,10 +1,9 @@
 ##from TestBench import *
 from mainControl import *
 ##from TestBench import *
-from TrainController import trainController
+from TrainController import TrainController
 
 def __main__():
     val = TrainController()
-    val.openUI()
 
 

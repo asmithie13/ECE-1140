@@ -1,16 +1,19 @@
-from TrainController import *
+from mainControl import Ui_MainWindow
 
-class Vital_Authority(TrainController):
+class Vital_Authority():
+
+    def __init__(self,ui):
+        self.ui = ui
     
     #make sure we can stop in time for authority in ft
     #Put this on a timer every sec based on global
     def Authority_Monitor(self):
 
         #authority in m from ft
-        self.AuthM = TrainController.ui.lcdAuth.value()*0.3048
+        self.AuthM = self.ui.lcdAuth.value()*0.3048
 
         #current speed in m/s from mph
-        self.V_i = TrainController.ui.lcdCurSpd.value()*0.44704
+        self.V_i = self.ui.lcdCurSpd.value()*0.44704
 
         #this is wrong, we need to fix this -- units are screwed up 
         #from top speed (70kph) it takes 408.016388267 m to stop with the service brake
@@ -20,11 +23,11 @@ class Vital_Authority(TrainController):
         self.stoppubgdistanceEmergency = (self.V_i**2)/(2*2.73)
 
         if self.AuthM < self.stoppingdistanceService:
-            TrainController.ui.vertSliderBrk.setValue(1)
-            TrainController.ui.vertSliderPow.setValue(0)
-            TrainController.ui.vertSliderPow.setDisabled(True)
+            self.ui.vertSliderBrk.setValue(1)
+            self.ui.vertSliderPow.setValue(0)
+            self.ui.vertSliderPow.setDisabled(True)
             if self.AuthM < self.stoppubgdistanceEmergency:
-                TrainController.ui.Ebrake.setChecked(True)
+                self.ui.Ebrake.setChecked(True)
     
     #we need to deal with whatever this is
     def Authority_Monitor_Bool(self):
@@ -34,11 +37,11 @@ class Vital_Authority(TrainController):
 
     #I want to move this to nonvital
     def Control_Doors(self,door):
-        if TrainController.ui.lcdCurSpd.valu() == 0:
+        if self.ui.lcdCurSpd.valu() == 0:
             if door == "Left":
-                TrainController.ui.buttonDoorL.toggle()
+                self.ui.buttonDoorL.toggle()
             elif door == "Right":
-                TrainController.ui.buttonDoorR.toggle()
+                self.ui.buttonDoorR.toggle()
             elif door == "Both":
-                TrainController.ui.buttonDoorL.toggle()
-                TrainController.ui.buttonDoorR.toggle()
+                self.ui.buttonDoorL.toggle()
+                self.ui.buttonDoorR.toggle()

@@ -14,6 +14,8 @@ from CTC.OccupiedBlocks import *
 from CTC.CTC_Maintenance import *
 from CTC.Throughput import *
 from CTC.TempData import *
+#From other folders
+from Track_Resources import *
 
 
 class CTC_UI(QtWidgets.QMainWindow):
@@ -86,6 +88,25 @@ class CTC_UI(QtWidgets.QMainWindow):
         
         #Connecting signals for testbench
         #self.sendAuthority.emit(0)
+
+    """Slots to recieve Signals"""
+    #BlockList will be a list of occupied block objects from wayside controllers
+    def recieveOccupiedBlocks(self, BlockList):
+        TempBlockList = []
+
+        for i in BlockList:
+            TempBlockList.append(i.ID)
+        
+        self.updateOccupiedBlocks(self, TempBlockList)
+
+    def recieveTicketSales(self, TicketSales):
+        AverageSales = []
+
+        AverageSales.append((sum(TicketSales[0])/len(TicketSales[0])))
+        AverageSales.append((sum(TicketSales[1])/len(TicketSales[1])))
+
+        print(AverageSales)
+
 
 
         

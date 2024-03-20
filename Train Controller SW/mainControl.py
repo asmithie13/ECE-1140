@@ -528,8 +528,8 @@ class Ui_MainWindow(object):
         self.vertSliderPow.valueChanged.connect(lambda : self.calAccelOutput())  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.groupBox_3.setTitle("FOR TRAIN ENGINEER ONLY")
-        self.inputKp.valueChanged.connect(lambda : self.onKpValueChanged())
-        self.inputKi.valueChanged.connect(lambda : self.onKiValueChanged())
+        # self.inputKp.valueChanged.connect(lambda : self.onKpValueChanged())
+        # self.inputKi.valueChanged.connect(lambda : self.onKiValueChanged())
         self.temp.valueChanged.connect(self.tempControl)
         self.Ebrake.clicked.connect(lambda : self.ebrake_enable())
 
@@ -537,6 +537,8 @@ class Ui_MainWindow(object):
 
         #self.buttonDoorR.clicked.connect(chad function)
         #self.buttonDoorL.clicked.connect(chad function)
+
+
 
 
     def calBrakeOutput(self):
@@ -571,17 +573,7 @@ class Ui_MainWindow(object):
             self.vertSliderBrk.setValue(0)
         self.lcdCurSpd.display(self.lcdCurSpd.value() + 20 * self.vertSliderPow.value()/100)
 
-    def onKiValueChanged(self):
-        self.lcdKi.display(self.inputKi.value())
-        self.Ki = self.inputKi.value()
-        self.CalcPower()
 
-
-    def onKpValueChanged(self):
-        self.lcdKp.display(self.inputKp.value())
-        self.Kp = self.inputKp.value()
-        self.CalcPower()
-        # print(f"Kp set to: {self.Kp}")
 
 
     def CalcPower(self):
@@ -780,7 +772,6 @@ class Ui_MainWindow(object):
         self.Ebrake.setChecked(False)
         self.ebrake_enable()
 
-    def trainSelect(self):
         
         #################################################################################
 

@@ -14,9 +14,8 @@ from CTC.OccupiedBlocks import *
 from CTC.CTC_Maintenance import *
 from CTC.Throughput import *
 from CTC.TempData import *
-
-#from UI_temp import MainWindow
-
+#From other folders
+from Track_Resources import *
 
 
 class CTC_UI(QtWidgets.QMainWindow):
@@ -90,21 +89,39 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Connecting signals for testbench
         #self.sendAuthority.emit(0)
 
+    """Slots to recieve Signals"""
+    #BlockList will be a list of occupied block objects from wayside controllers
+    def recieveOccupiedBlocks(self, BlockList):
+        TempBlockList = []
+
+        for i in BlockList:
+            TempBlockList.append(i.ID)
+        
+        self.updateOccupiedBlocks(self, TempBlockList)
+
+    def recieveTicketSales(self, TicketSales):
+        AverageSales = []
+
+        AverageSales.append((sum(TicketSales[0])/len(TicketSales[0])))
+        AverageSales.append((sum(TicketSales[1])/len(TicketSales[1])))
+
+        print(AverageSales)
+
+
 
         
     #defining manual mode add train button functionality
     def addTrain_button(self):
-        #Indicating manual mode is selected if it's not selected beforehand
-        self.ManualModeButton.setEnabled(False)
-        self.ManualModeButton.setStyleSheet("background-color: blue; color: black;")
-
+        #Grabbing values from the UI
         TrainID = self.TrainNameField.text()
         Departure = self.DepartureSationSelect.currentText()
-        DepartureTime = self.DepartureTimeEdit.time()
-        DepartureTime = DepartureTime.toString("hh:mm")
         Destination = self.DestinationSelect.currentText()
         ArrivalTime = self.ArrivalTimeEdit.time()
         ArrivalTime = ArrivalTime.toString("hh:mm")
+
+        #Calculatig the Departure Time
+        DepartureTime = ArrivalTime 
+        DepartureTime = DepartureTime.toString("hh:mm")
 
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))

@@ -34,6 +34,7 @@ class Schedule():
 
 
 
+
         
 #Table class to initialize a Pyqt5 table object that will display the schedule
 class ScheduleTableModel(QtCore.QAbstractTableModel):

@@ -9,6 +9,9 @@ from PyQt5 import uic
 import CTC
 from CTC.CTC_UI import *
 from CTC.CTC_Testbench import *
+#Wayside SW imports
+import Wayside_SW
+from Wayside_SW.WaysideSWandTB import *
 
 class Main_UI(QtWidgets.QMainWindow):
     def __init__(self):
@@ -22,7 +25,9 @@ class Main_UI(QtWidgets.QMainWindow):
         self.CTC_Button.clicked.connect(self.open_CTC_UI)
 
         #Wayside SW Window
-
+        self.WaysideSWwindow = WaysideSW()
+        self.WaysideSW_tb = TestBench()
+        self.WaysideSW_Button.clicked.connect(self.open_waysideSW_UI)
 
         #Wayside HW Window
 
@@ -43,6 +48,10 @@ class Main_UI(QtWidgets.QMainWindow):
     def open_CTC_UI(self):
         self.CTCwindow.show()
         self.CTC_tb.show()
+
+    def open_waysideSW_UI(self):
+        self.WaysideSWwindow.show()
+        self.WaysideSW_tb.show() 
 
 
 """

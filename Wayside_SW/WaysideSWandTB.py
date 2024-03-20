@@ -70,7 +70,7 @@ class WaysideSW(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
+        uic.loadUi("Wayside_SW/Wayside_UI_Rough.ui",self)
 
         self.currentSpecialBlocks = None
         self.currentBlocks = None

@@ -1,12 +1,16 @@
 #File to run full train control system simulation
 
 import sys
-from PyQt5 import QtCore
+from PyQt5 import QtCore,uic
 from Main_UI import *
 #CTC Imports
 import CTC
 from CTC.CTC_UI import *
 from CTC.CTC_Testbench import *
+
+#Wayside SW imports
+import Wayside_SW
+from Wayside_SW.WaysideSWandTB import *
 
 #Utility function to initialize clock
 def clock():

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>766</width>
-    <height>625</height>
+    <width>748</width>
+    <height>478</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -154,7 +154,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="selectLine">
+             <widget class="QCheckBox" name="selectGreenLine">
               <property name="font">
                <font>
                 <family>Times New Roman</family>
@@ -162,7 +162,20 @@
                </font>
               </property>
               <property name="text">
-               <string>Blue</string>
+               <string>Green</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="selectRedLine">
+              <property name="font">
+               <font>
+                <family>Times New Roman</family>
+                <pointsize>18</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Red</string>
               </property>
              </widget>
             </item>
@@ -283,30 +296,9 @@
          </layout>
         </item>
         <item>
-         <widget class="QLabel" name="label_15">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QLabel" name="label_17">
           <property name="text">
            <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_14">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_13">
-          <property name="text">
-           <string/>
           </property>
          </widget>
         </item>
@@ -334,6 +326,8 @@
             <property name="font">
              <font>
               <family>Times New Roman</family>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="text">
@@ -346,6 +340,8 @@
             <property name="font">
              <font>
               <family>Times New Roman</family>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="text">
@@ -384,6 +380,8 @@
               <property name="font">
                <font>
                 <family>Times New Roman</family>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
               <property name="text">

@@ -1,7 +1,14 @@
-LIGHT ID    #Block is Green
-LIGHT !ID   #Block is Red
+SwitchOcc or not SwitchRightOcc #boolean condition for if a switch block is occupied or its block to the right is not occupied
+SWITCH  #boolean value for the switch: true is left, false is right
 
-CROSSING ID #Block is Up
-CROSSING !ID    #Block is Down
+SwitchOcc or SwitchRightOcc #boolean condition for if a switch block is occupied or its block to the right is occupied
+CurrentLIGHT    #boolean value for the current light: true is green, false is red
 
-SWITCH ID1 ID2  #Block SWITCH points to ID2 now
+SwitchOcc   #boolean condition for if a switch block is occupied
+LeftLIGHT   #boolean value for the left light: true is green, false is red
+
+not SwitchOcc and SwitchRightOcc    #boolean condition for if a switch block is not occupied and its block to the right is occupied
+RightLIGHT  #boolean value for the left light: true is green, false is red
+
+CrossingBlockOccupied
+crossingState

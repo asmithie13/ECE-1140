@@ -9,11 +9,9 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
 
+#Class to hold the data and manage the occupied blocks
 class OccupiedBlocks():
     def __init__(self, Blocks = []):
-        #Dummy data for testing
-        Blocks = [['T1', 'B2'], ['T1', 'B1']]
-
         self.BlockData = Blocks
 
     def addBlockOccupancy(self, TrainName, BlockNum):

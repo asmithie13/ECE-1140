@@ -8,29 +8,31 @@ sys.path.append(project_root)
 from Track_Resources.Block import Block
 
 class Parser():
-    def __init__(self, inputPLC, outPuttedBlocks):
+    def __init__(self, inputPLC, CrossingTriplesIDS, outPuttedBlocks):
         self.inputPLC = inputPLC
+        self.CrossingTriplesIDS = CrossingTriplesIDS
         self.outPuttedBlocks = outPuttedBlocks
 
     def parsePLC(self):
         lines = self.inputPLC.split('\n')
+        switchLogic, curLightLogic, leftLightLogic, rightLightLogic = lines[0], lines[3], lines[6], lines[9]
 
-        for line in lines:
-            tokens = line.strip().split()
-            command = tokens[0]
-            parameters = tokens[1:]
+        CrossingTripleBlocks = [
+            [block for row in self.CrossingTriplesIDS for element in row
+             for block in self.outPuttedBlocks if str(element) == str(block.ID[1:])][i:i + 3]
+            for i in range(0, len(self.CrossingTriplesIDS) * 3, 3)
+        ]
 
-            if command == "LIGHT" or command == "CROSSING":
-                if parameters[0][0] != '!':
-                    match = [block for block in self.outPuttedBlocks if block.ID == parameters[0]]
-                    match[0].state = True
-                else:
-                    match = [block for block in self.outPuttedBlocks if block.ID == parameters[0][1:]]
-                    match[0].state = False
+        for block in self.outPuttedBlocks:
+            if block.CROSSING:
+                setattr(block, str(lines[13]), not block.occupied)
+            
 
-            elif command == "SWITCH":
-                match = [block for block in self.outPuttedBlocks if block.ID == parameters[0]]
-                if int(parameters[1][1:]) - 1 == int(parameters[0][1:]): match[0].state = True
-                else : match[0].state = False
+        for data in CrossingTripleBlocks:
+            SwitchOcc = data[0].occupied
+            SwitchRightOcc = data[2].occupied
 
-
+            data[0].switchState = eval(switchLogic)
+            data[0].lightState = eval(curLightLogic)
+            data[1].lightState = eval(leftLightLogic)
+            data[2].lightState = eval(rightLightLogic)

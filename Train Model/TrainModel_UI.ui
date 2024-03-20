@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1008</width>
-    <height>657</height>
+    <height>651</height>
    </rect>
   </property>
   <property name="cursor">
@@ -702,7 +702,7 @@ selection-color: rgb(253, 253, 253);</string>
       <x>540</x>
       <y>340</y>
       <width>281</width>
-      <height>201</height>
+      <height>203</height>
      </rect>
     </property>
     <property name="font">
@@ -734,22 +734,36 @@ selection-color: rgb(253, 253, 253);</string>
      </item>
      <item>
       <widget class="QLabel" name="cabin_temp_value">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>9</pointsize>
+         <pointsize>18</pointsize>
          <weight>75</weight>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(192, 192, 192);</string>
+        <string notr="true">background-color: rgb(192, 192, 192);
+color: rgb(60, 60, 60)</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:18pt; color:#464646;&quot;&gt;68 F&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>68 F</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -1239,6 +1253,9 @@ selection-color: rgb(253, 253, 253);</string>
        <property name="autoRepeat">
         <bool>true</bool>
        </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -1286,9 +1303,9 @@ selection-color: rgb(253, 253, 253);</string>
     <property name="geometry">
      <rect>
       <x>678</x>
-      <y>280</y>
+      <y>284</y>
       <width>121</width>
-      <height>45</height>
+      <height>41</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_5">

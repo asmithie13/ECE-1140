@@ -1,4 +1,14 @@
-LIGHT B6
-LIGHT !B11
-CROSSING !B3
-SWITCH B5 B11
+SwitchOcc or not SwitchRightOcc
+SWITCH
+
+SwitchOcc or SwitchRightOcc
+CurrentLIGHT
+
+SwitchOcc
+LeftLIGHT
+
+not SwitchOcc and SwitchRightOcc
+RightLIGHT
+
+CrossingBlockOccupied
+crossingState

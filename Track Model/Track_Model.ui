@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>921</width>
-    <height>710</height>
+    <width>1010</width>
+    <height>1091</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,10 +26,10 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>10</y>
+      <x>670</x>
+      <y>40</y>
       <width>311</width>
-      <height>51</height>
+      <height>81</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -49,10 +49,10 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>480</y>
-      <width>521</width>
-      <height>171</height>
+      <x>10</x>
+      <y>870</y>
+      <width>631</width>
+      <height>161</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -62,526 +62,11 @@
 </string>
     </property>
     <property name="title">
-     <string>Failure Modes on Selected Block</string>
+     <string>Failure Modes</string>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>Track Circuit Failure</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>Broken Rail</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>Power Failure</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QPushButton" name="offButton_3">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="text">
-        <string>OFF</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QPushButton" name="offButton_2">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="text">
-        <string>OFF</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="offButton_1">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="text">
-        <string>OFF</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QLabel" name="label_5">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>70</y>
-      <width>521</width>
-      <height>291</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::Box</enum>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>../Blue Line Images/BlueLine.png</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_2">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>70</y>
-      <width>311</width>
-      <height>411</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QGroupBox {
-    background-color: white;
-}
-</string>
-    </property>
-    <property name="title">
-     <string>Block Data</string>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_3">
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Occupancy:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QLabel" name="heaters_out">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QLabel" name="elevation_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="1">
-      <widget class="QLabel" name="temp_out">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="section_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="occupancy_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_9">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Elevation (ft):</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_8">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Grade (%):</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Block Number:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QLabel" name="speed_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_10">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Block Length (ft):</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLabel" name="length_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_16">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Speed Limit (mph):</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLabel" name="grade_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_12">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Track Heaters:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_13">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Temperature (F):</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="block_num_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_18">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Section: </string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="1">
-      <widget class="QLabel" name="cross_out">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0">
-      <widget class="QLabel" name="label_33">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Railway Crossings:</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_3">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>500</y>
-      <width>311</width>
-      <height>151</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QGroupBox {
-    background-color: white;
-}
-</string>
-    </property>
-    <property name="title">
-     <string>Station Data</string>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_4">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_30">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Station:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="3">
-      <widget class="QLabel" name="label_32">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Passengers Disembarking:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QLabel" name="ticket_out">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QLabel" name="station_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_25">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Ticket Sales:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0" colspan="2">
-      <widget class="QLabel" name="label_31">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Passengers Boarding:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="3">
-      <widget class="QLabel" name="boarding_out">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="3">
-      <widget class="QLabel" name="disembarking_out">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>521</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="0">
-      <widget class="QComboBox" name="block_in_1">
+      <widget class="QComboBox" name="block_in_2">
        <property name="styleSheet">
         <string notr="true">background-color: white;
 </string>
@@ -593,27 +78,32 @@
        </item>
        <item>
         <property name="text">
-         <string>B1</string>
+         <string>F16</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B2</string>
+         <string>A1</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B3</string>
+         <string>A2</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B4</string>
+         <string>A3</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B5</string>
+         <string>A4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A5</string>
         </property>
        </item>
        <item>
@@ -643,33 +133,731 @@
        </item>
        <item>
         <property name="text">
-         <string>B11</string>
+         <string>C11</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B12</string>
+         <string>C12</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B13</string>
+         <string>C13</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B14</string>
+         <string>C14</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>B15</string>
+         <string>C15</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>Broken Rail</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="offButton_1">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>221</width>
+         <height>23</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="text">
+        <string>OFF</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>Track Circuit Failure</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="offButton_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>221</width>
+         <height>23</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="text">
+        <string>OFF</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>Power Failure</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QPushButton" name="offButton_3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>221</width>
+         <height>23</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="text">
+        <string>OFF</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>130</y>
+      <width>301</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QGroupBox {
+    background-color: white;
+}
+</string>
+    </property>
+    <property name="title">
+     <string>Block Data</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_3">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Block Number:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="block_num_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>16</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_18">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Section: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="section_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>F</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Occupied:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="occupancy_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>No</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Block Grade (%):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="grade_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>-0.5</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Elevation (ft):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLabel" name="elevation_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>-0.82021</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_11">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Cummulative Elevation (ft):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLabel" name="length_in_2">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>0.00</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_10">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Block Length (ft):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLabel" name="length_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>164.042</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_16">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Speed Limit (mph):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLabel" name="speed_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>24.8548</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_13">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Temperature (°F):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QLabel" name="temp_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>80</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="label_12">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Track Heaters:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QLabel" name="heaters_out">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>64</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>OFF</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="label_33">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Railway Crossings:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="QLabel" name="cross_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="0">
+      <widget class="QLabel" name="label_26">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Underground:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="1">
+      <widget class="QLabel" name="cross_out_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>64</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>No</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>660</y>
+      <width>301</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QGroupBox {
+    background-color: white;
+}
+</string>
+    </property>
+    <property name="title">
+     <string>Station Data</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_4">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_30">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Station Name:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="station_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>HERRON AVE</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_25">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Ticket Sales:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="ticket_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>43</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_31">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Passengers Boarding:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="boarding_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>22</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_32">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Passengers Disembarking:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="disembarking_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>10</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>70</y>
+      <width>621</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QComboBox" name="block_in_1">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Select Block</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>F16</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A5</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B6</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B7</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B8</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B9</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C11</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C12</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C13</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C14</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C15</string>
         </property>
        </item>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="comboBox_2">
+      <widget class="QComboBox" name="line_select">
        <property name="styleSheet">
         <string notr="true">background-color: white;</string>
        </property>
@@ -683,6 +871,16 @@
          <string>Blue Line</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>Red Line</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Green Line</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>
@@ -690,10 +888,10 @@
    <widget class="QGroupBox" name="groupBox_4">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>380</y>
-      <width>521</width>
-      <height>81</height>
+      <x>10</x>
+      <y>790</y>
+      <width>631</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -706,11 +904,27 @@
      <string>Status</string>
     </property>
     <layout class="QGridLayout" name="gridLayout_5">
-     <item row="0" column="1">
-      <widget class="QLabel" name="light_out">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_14">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
        </property>
+       <property name="text">
+        <string>Lights: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QLabel" name="switch_out">
        <property name="styleSheet">
         <string notr="true">background: white</string>
        </property>
@@ -725,8 +939,11 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="4">
-      <widget class="QLabel" name="switch_out">
+     <item row="0" column="1">
+      <widget class="QLabel" name="light_out">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
        <property name="styleSheet">
         <string notr="true">background: white</string>
        </property>
@@ -753,41 +970,2402 @@
        </property>
       </widget>
      </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_5">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>130</y>
+      <width>621</width>
+      <height>651</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>GroupBox</string>
+    </property>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>80</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>A</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_3">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>70</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>A</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_4">
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>50</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>A</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_5">
+     <property name="geometry">
+      <rect>
+       <x>440</x>
+       <y>30</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>B</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_6">
+     <property name="geometry">
+      <rect>
+       <x>460</x>
+       <y>10</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>B</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_7">
+     <property name="geometry">
+      <rect>
+       <x>480</x>
+       <y>10</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>B</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_8">
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>10</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>C</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_9">
+     <property name="geometry">
+      <rect>
+       <x>550</x>
+       <y>20</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>C</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_10">
+     <property name="geometry">
+      <rect>
+       <x>570</x>
+       <y>40</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>C</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_11">
+     <property name="geometry">
+      <rect>
+       <x>560</x>
+       <y>60</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>D</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_12">
+     <property name="geometry">
+      <rect>
+       <x>550</x>
+       <y>80</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>D</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_13">
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>100</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>D</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_14">
+     <property name="geometry">
+      <rect>
+       <x>490</x>
+       <y>100</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>E</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_15">
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>100</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>E</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_16">
+     <property name="geometry">
+      <rect>
+       <x>460</x>
+       <y>100</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>E</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_17">
+     <property name="geometry">
+      <rect>
+       <x>400</x>
+       <y>100</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>F</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_18">
+     <property name="geometry">
+      <rect>
+       <x>370</x>
+       <y>100</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>F</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_19">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>100</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>F</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_20">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>100</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>F</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_21">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>100</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>F</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_22">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>110</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>G</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_23">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>120</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>G</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_24">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>130</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>G</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_33">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>310</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_40">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>450</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_31">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>270</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_37">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>390</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_32">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>290</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_29">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>230</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_34">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>330</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_35">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>350</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_26">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>170</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_27">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>190</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_28">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>210</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_38">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>410</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_36">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>370</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_39">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>430</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_25">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>150</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_30">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>250</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_55">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>470</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_49">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>490</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::WheelFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_51">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>530</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_46">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>550</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_50">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>510</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_47">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>590</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>I</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_48">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>610</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>I</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_52">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>620</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>I</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_53">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>570</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_54">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>620</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>J</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_56">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>620</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>J</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_57">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>620</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>J</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_58">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>620</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>J</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_59">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>620</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>J</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_60">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>620</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>J</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_61">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>610</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>K</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_62">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>600</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>K</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_63">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>590</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>K</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_64">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>560</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>L</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_65">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>530</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>L</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_66">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>510</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>L</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_67">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>490</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>M</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_68">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>520</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>M</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_69">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>550</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>M</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_70">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>570</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>N</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_71">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>590</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>N</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_72">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>600</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>N</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_73">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>570</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>O</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_74">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>550</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>P</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_75">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>530</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>P</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_76">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>510</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>P</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_77">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>490</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>Q</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_78">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>310</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>R</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_79">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>290</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>S</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_80">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>270</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>S</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_81">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>250</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>S</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_82">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>230</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string>T</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_41">
+     <property name="geometry">
+      <rect>
+       <x>580</x>
+       <y>70</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_42">
+     <property name="geometry">
+      <rect>
+       <x>580</x>
+       <y>100</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_43">
+     <property name="geometry">
+      <rect>
+       <x>570</x>
+       <y>130</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: black;
+		 background-color: rgb(255,0,0)
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_44">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>480</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: rbg(233, 247, 255);
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>switch.png</normaloff>switch.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_45">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>600</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>switch.png</normaloff>switch.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_84">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>610</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: rbg(233, 247, 255);
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>crossing.png</normaloff>crossing.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_86">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>570</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>switch.png</normaloff>switch.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_87">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>310</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>switch.png</normaloff>switch.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_174">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>190</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>switch.png</normaloff>switch.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_175">
+     <property name="geometry">
+      <rect>
+       <x>400</x>
+       <y>120</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>switch.png</normaloff>switch.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_176">
+     <property name="geometry">
+      <rect>
+       <x>590</x>
+       <y>40</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>switch.png</normaloff>switch.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_177">
+     <property name="geometry">
+      <rect>
+       <x>530</x>
+       <y>80</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+        border-color: rbg(233, 247, 255);
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>crossing.png</normaloff>crossing.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_88">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>490</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+    }
+&quot;&quot;&quot;)
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>switch.png</normaloff>switch.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>23</width>
+       <height>23</height>
+      </size>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_6">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>880</y>
+      <width>301</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QGroupBox {
+    background-color: white;
+}
+</string>
+    </property>
+    <property name="title">
+     <string>Icons Guide</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_7">
      <item row="0" column="0">
-      <widget class="QLabel" name="label_14">
+      <widget class="QPushButton" name="pushButton_83">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="styleSheet">
-        <string notr="true">background-color: white;
-
+        <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+		 background-color: white;
+    }
+&quot;&quot;&quot;)
 </string>
        </property>
        <property name="text">
-        <string>Lights: </string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>switch.png</normaloff>switch.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>40</width>
+         <height>40</height>
+        </size>
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
-      <widget class="Line" name="line">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label">
+       <property name="styleSheet">
+        <string notr="true">background-color: white
+</string>
+       </property>
+       <property name="text">
+        <string>Railway Switch</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="pushButton_85">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+		 background-color: white;
+    }
+&quot;&quot;&quot;)
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>crossing.png</normaloff>crossing.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>40</width>
+         <height>40</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="label_5">
+       <property name="styleSheet">
+        <string notr="true">background-color: white
+</string>
+       </property>
+       <property name="text">
+        <string>Railway Crossing</string>
        </property>
       </widget>
      </item>
     </layout>
    </widget>
+   <widget class="QLCDNumber" name="clock_in">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
    <zorder>layoutWidget</zorder>
    <zorder>groupBox</zorder>
    <zorder>groupBox_2</zorder>
    <zorder>groupBox_3</zorder>
-   <zorder>label_5</zorder>
    <zorder>groupBox_4</zorder>
    <zorder>pushButton</zorder>
+   <zorder>groupBox_5</zorder>
+   <zorder>groupBox_6</zorder>
+   <zorder>clock_in</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>921</width>
+     <width>1010</width>
      <height>22</height>
     </rect>
    </property>

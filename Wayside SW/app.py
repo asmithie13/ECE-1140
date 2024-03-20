@@ -39,7 +39,7 @@ def readTrackFile(fileName,crossingTriples):
                     hasCrossingTemp = True
                     crossingState = True
 
-                elif(line[6][0:6] == "SWITCH"):
+                elif(line[6][0:6] == "SWITCH" and line[6].find("YARD") == -1):
                     hasSwitchTemp = True
                     switchState = True
 
@@ -79,16 +79,17 @@ class MyApp(QMainWindow):
         #Defines Green Line blocks
         self.greenCrossingTriplesIDS = [] #ids of red crossing blocks
         self.allGreenBlocks = readTrackFile("Green_Line.csv",self.greenCrossingTriplesIDS)
-        self.specialGreenBlocksW1 = []
+        self.specialGreenBlocksW2 = []
 
         #SW in charge of W1, HW in charge of W2
 
         wayside1Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
-        self.greenWayside1Blocks = [x for x in self.allGreenBlocks if x.blockSection in wayside1Chars]
+        #FIX FIX FIX FIX
+        self.greenWayside2Blocks = [x for x in self.allGreenBlocks if x.blockSection not in wayside1Chars]
      
         #Defines special greenblocks in wayside 1     
-        for block in self.greenWayside1Blocks:
-            if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocksW1.append(block)
+        for block in self.greenWayside2Blocks:
+            if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocksW2.append(block)
 
         #Defines Red line blocks
         self.redCrossingTriplesIDS = [] #ids of red crossing blocks
@@ -198,7 +199,7 @@ class MyApp(QMainWindow):
             self.selectRedLine.setDisabled(True)
             self.waysideMenu.clear()
             self.waysideMenu.setEnabled(True)
-            self.waysideMenu.addItems(['W1'])
+            self.waysideMenu.addItems(['W2'])
             self.selectWayside()
 
         elif checkRed:
@@ -232,16 +233,15 @@ class MyApp(QMainWindow):
         self.fileButton.setDisabled(False) 
 
         if selectedIndex == 0 and self.selectGreenLine.isChecked():
-            self.currentBlocks = self.greenWayside1Blocks
-            self.currentSpecialBlocks = self.specialGreenBlocksW1
+            self.currentBlocks = self.greenWayside2Blocks
+            self.currentSpecialBlocks = self.specialGreenBlocksW2
             self.blockMenu.setDisabled(False)
 
             self.blockMenu.clear()
+            self.currentSwitchBlocksNums = self.greenCrossingTriplesIDS
 
             for block in self.currentSpecialBlocks:
                 self.blockMenu.addItems([block.ID])
-
-            self.currentSwitchBlocksNums = self.greenCrossingTriplesIDS
 
             self.FileParser = Parser(None,self.greenCrossingTriplesIDS,self.allGreenBlocks)
 

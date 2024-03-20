@@ -11,10 +11,8 @@ class TrainController :
     def __init__(self):
         
         #opening UI
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self.window)
-        self.window.show()
+
+
 
         #creating subclasses
         self.Vital_Power = Vital_Power(self.ui)
@@ -141,5 +139,16 @@ class TrainController :
         self.ui.inputKp.setDisabled(False)
         self.ui.vertSliderPow.setDisabled(False)
         self.ui.vertSliderBrk.setDisabled(False)
+
+
+if __name__ == "__main__":
+    import sys
+
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
 
     

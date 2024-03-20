@@ -1,9 +1,10 @@
 ##from TestBench import *
 from mainControl import *
 ##from TestBench import *
-from TrainController import TrainController
+from TrainController import *
 
 def __main__():
-    val = TrainController()
+    TrainController()
 
 
+# if __name__ == "__main__":

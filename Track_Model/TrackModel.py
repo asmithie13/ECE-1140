@@ -42,7 +42,7 @@ class MyMainWindow(QMainWindow):
         
 
         # Load the track model straight from the UI file using uic
-        uic.loadUi("Track Model/Track_Model.ui", self)
+        uic.loadUi("Track_Model/Track_Model.ui", self)
         self.clock_in.display("09:22")
         # Connect Upload Track Layout button to make upload file
         self.pushButton.clicked.connect(self.upload_track_layout) 
@@ -317,7 +317,7 @@ class TestBench(QMainWindow):
         super().__init__()
 
         # Load the track model testbench straight from the UI file using uic
-        uic.loadUi("Track Model/testbench_trackmodel.ui", self)
+        uic.loadUi("Track_Model/testbench_trackmodel.ui", self)
 
 
         # Calling test input functions
@@ -649,7 +649,7 @@ if __name__ == "__main__":
     # Connect MyMainWindow's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)
 
-    window.SendTicketsales.connect("CTC/CTC_UI.py".MainWindow.update_grade_label)
+    #window.SendTicketsales.connect("CTC/CTC_UI.py".MainWindow.update_grade_label)
 
 
 

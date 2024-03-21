@@ -34,6 +34,8 @@ class MyMainWindow(QMainWindow):
     getSpecialBlocks = pyqtSignal(list)
     #sendOccupancies = pyqtSignal(list)
 
+    SendTicketsales = pyqtSignal(list)
+
     def __init__(self):
         super().__init__()
         self.blockStates = {}
@@ -76,6 +78,9 @@ class MyMainWindow(QMainWindow):
         random_number = random.randint(1, 74)
         #Output the random numberto ticket sales block info
         self.ticket_out.setText(str(random_number))
+        self.SendTicketsales.emit(random_number)
+
+
 
     #send to CTC
     def send_tickets(self):
@@ -643,6 +648,9 @@ if __name__ == "__main__":
 
     # Connect MyMainWindow's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)
+
+    window.SendTicketsales.connect("CTC/CTC_UI.py".MainWindow.update_grade_label)
+
 
 
     window.block_selected_signal.connect(window_2.update_on_block_selection)

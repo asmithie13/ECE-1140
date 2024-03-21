@@ -65,6 +65,18 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.trainSchedule = Schedule()
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
+        #Initializing Maintenance Mode functions before Mainenance Mode has been selected
+        self.CloseBlockSelect.setEnabled(False)
+        self.CloseBlockButton.setEnabled(False)
+        self.ChooseSwitchSelect.setEnabled(False)
+        self.SwitchPositionSelect.setEnabled(False)
+        self.SetSwitchPositionButton.setEnabled(False)
+        #Setting text to gray
+        self.CloseBlockPromptLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.ChooseSwitchLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.SwitchPositionLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.MaintenceBox.setStyleSheet("color: rgb(120, 120, 120);")
+        
         #Initializing Occupied Blocks Table
         self.occupiedBlocks = OccupiedBlocks()
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockData))
@@ -229,9 +241,20 @@ class CTC_UI(QtWidgets.QMainWindow):
     #Indication that the system is in maintenance mode
     #Same behavior will occur if a block is closed or a switch is sets
     def enterMaintenanceMode(self):
-        print("You still need to write this")
-
+        #Set button color to blue to indicate selection
         self.MaintenanceModeButton.setStyleSheet("background-color : blue; color: black;")
+
+        #Enable Maintenance Mode functions
+        self.CloseBlockSelect.setEnabled(True)
+        self.CloseBlockButton.setEnabled(True)
+        self.ChooseSwitchSelect.setEnabled(True)
+        self.SwitchPositionSelect.setEnabled(True)
+        self.SetSwitchPositionButton.setEnabled(True)
+        #Setting text to gray
+        self.CloseBlockPromptLabel.setStyleSheet("color: black;")
+        self.ChooseSwitchLabel.setStyleSheet("color: black;")
+        self.SwitchPositionLabel.setStyleSheet("color: black;")
+        self.MaintenceBox.setStyleSheet("color: black;")
 
 
     #Will indicate that the system is no longer in maintenance mode
@@ -267,24 +290,25 @@ class CTC_UI(QtWidgets.QMainWindow):
 
     #Function to add a block closure when in maintence mode
     def closeBlock_button(self):
+        #Read block selection from UI drop down
         BlockToClose = self.CloseBlockSelect.currentText()
         
+        #if green line blocks are being shown, find corresponding green line block
         if self.currentLine == 'green':
             for i in self.TrackData.GreenBlocks:
                 if i.ID == BlockToClose:
                     temp = i
-        else:
+        else:   #line selection is red, find corresponding red line block
             for i in self.TrackData.RedBlocks:
                 if i.ID == BlockToClose:
                     temp = i
 
+        #Add to list of strings for diplaying on CTC UI
         self.Maintence.BlocksClosedIDs.append([BlockToClose, temp.lineColor])
-
-        print(self.Maintence.BlocksClosedIDs)
-        self.Maintence.BlocksClosed.append(temp)
         self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintence.BlocksClosedIDs))
-
-
+        #Add to list of block objects for sending to wayside
+        self.Maintence.BlocksClosed.append(temp)
+        
     #Function to set switch positons when in maintenance mode
     def setSwitch_button(self):
         print("You didn't implement this yet")

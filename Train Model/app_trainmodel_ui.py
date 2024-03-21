@@ -6,6 +6,8 @@ from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLineEdit, QPush
 from PyQt5 import QtCore as qtc
 from PyQt5.QtCore import pyqtSignal, QTimer
 from PyQt5 import QtGui as qtg
+from PyQt5.QtCore import Qt
+
 
 
 class MyMainWindow(QMainWindow):
@@ -231,8 +233,11 @@ class MyMainWindow(QMainWindow):
             self.en_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
 
     def int_lights_tb(self,state):
+        message=state
         if state:
             self.int_lights_value.setFixedSize(109, 98)
+            # self.int_lights_value.setFont("Times New Roman",9)
+            self.int_lights_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
             self.int_lights_value.setText(state)
 
         else :
@@ -495,7 +500,8 @@ if __name__ == "__main__":
     window_tb.engine_fail_input_signal.connect(window.engine_fail_tb)
     #cabin_temp 
     window_tb.cabin_temp_input_signal.connect(window.set_cabin_temp)
-
+    #interior_light
+    window_tb.int_lights_input_signal.connect(window.int_lights_tb)
 
     window.show()
     window_tb.show()

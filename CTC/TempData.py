@@ -16,27 +16,24 @@ class TempData:
         self.GreenSwitches = []
         self.GreenBlockIDs = []
 
-        self.GreenBlocks = readTrackFile("Wayside_SW/Green_Line.csv", [])
+        self.GreenBlocks = readTrackFile("Wayside_SW/Green_Line.csv", self.GreenSwitches)
+        print(self.GreenSwitches)
 
         
         for i in self.GreenBlocks:
-            if i.SWITCH:
-                self.GreenSwitches.append(i.ID)
-            
             self.GreenBlockIDs.append(str(i.ID))
+
         
         #Repeating to get Red Block Info
         self.RedBlocks = []
         self.RedSwitches = []
         self.RedBlockIDs = []
 
-        self.RedBlocks = readTrackFile("Wayside_SW/Red_Line.csv", [])
+        self.RedBlocks = readTrackFile("Wayside_SW/Red_Line.csv", self.RedSwitches)
+        print(self.RedSwitches)
 
         
         for i in self.RedBlocks:
-            if i.SWITCH:
-                self.RedSwitches.append(i.ID)
-            
             self.RedBlockIDs.append(str(i.ID))        
 
         

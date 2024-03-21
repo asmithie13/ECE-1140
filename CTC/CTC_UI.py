@@ -76,6 +76,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ChooseSwitchLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.SwitchPositionLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.MaintenceBox.setStyleSheet("color: rgb(120, 120, 120);")
+        #Seting the Swith Position Drop Down
+        self.ChooseSwitchSelect.currentIndexChanged.connect(self.newSwitchSelected)
         
         #Initializing Occupied Blocks Table
         self.occupiedBlocks = OccupiedBlocks()
@@ -116,7 +118,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         self.updateTicketSales(AverageSales)
 
-        
+    """Function to Define Behavior of CTC UI"""    
     #defining manual mode add train button functionality
     def addTrain_button(self):
         #Grabbing values from the UI
@@ -171,6 +173,8 @@ class CTC_UI(QtWidgets.QMainWindow):
 
     #Sets drop down options if green line is selected
     def greenLine_button(self):
+        self.currentLine = 'green'
+        
         #Highlight green line button
         self.GreenLineButton.setStyleSheet("background-color : rgb(38, 207, 4)")     #Green
         self.RedLineButton.setStyleSheet("background-color : white")
@@ -185,11 +189,15 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.CloseBlockSelect.addItems(self.TrackData.GreenBlockIDs)
         #Setting Switch selctions to green line
         self.ChooseSwitchSelect.clear()
-        self.ChooseSwitchSelect.addItems(self.TrackData.GreenSwitches)
+        for i in self.TrackData.GreenSwitches:
+            self.ChooseSwitchSelect.addItem(i[0])
+        self.newSwitchSelected(0)
 
-        self.currentLine = 'green'
+        
     
     def redLine_button(self):
+        self.currentLine = 'red'
+        
         #Highlight red line button
         self.RedLineButton.setStyleSheet("background-color: rgb(195, 16, 40)")     #Red
         self.GreenLineButton.setStyleSheet("background-color : white")
@@ -204,9 +212,9 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.CloseBlockSelect.addItems(self.TrackData.RedBlockIDs)
         #Setting Switch selctions to red line
         self.ChooseSwitchSelect.clear()
-        self.ChooseSwitchSelect.addItems(self.TrackData.RedSwitches)
-
-        self.currentLine = 'red'
+        for i in self.TrackData.RedSwitches:
+            self.ChooseSwitchSelect.addItem(i[0])
+        self.newSwitchSelected(0)
 
     #function to update the clock display on the layout
     def displayClock(self, time):
@@ -312,7 +320,17 @@ class CTC_UI(QtWidgets.QMainWindow):
     #Function to set switch positons when in maintenance mode
     def setSwitch_button(self):
         print("You didn't implement this yet")
+    
+    #Funciton to sync switch position options to current selected switch
+    def newSwitchSelected(self, index):
+        self.SwitchPositionSelect.clear()
 
+        if self.currentLine == 'green':
+            self.SwitchPositionSelect.addItem(self.TrackData.GreenSwitches[index][1])
+            self.SwitchPositionSelect.addItem(self.TrackData.GreenSwitches[index][2])
+        if self.currentLine == 'red':
+            self.SwitchPositionSelect.addItem(self.TrackData.RedSwitches[index][1])
+            self.SwitchPositionSelect.addItem(self.TrackData.RedSwitches[index][2])
 
     #Function to update the ticket sales based on information from Track Model
     def updateTicketSales(self, Sales):

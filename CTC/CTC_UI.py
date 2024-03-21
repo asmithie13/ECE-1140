@@ -265,8 +265,14 @@ class CTC_UI(QtWidgets.QMainWindow):
     #Function to add a block closure when in maintence mode
     def closeBlock_button(self):
         BlockToClose = self.CloseBlockSelect.currentText()
-        self.Maintence.BlocksClosed.append([BlockToClose])
-        self.BlockClosureTable.setModel(OccupiedBlocksTableModel(self.Maintence.BlocksClosed))
+        
+        for i in self.TrackData.GreenBlocks:
+            if i.ID == BlockToClose:
+                temp = i
+
+        self.Maintence.BlocksClosedIDs.append(BlockToClose)
+        self.Maintence.BlocksClosed.append(temp)
+        self.BlockClosureTable.setModel(OccupiedBlocksTableModel(self.Maintence.BlocksClosedIDs))
 
 
     #Function to set switch positons when in maintenance mode

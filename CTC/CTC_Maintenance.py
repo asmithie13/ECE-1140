@@ -13,6 +13,7 @@ from PyQt5 import uic
 class CTC_Maintenance():
     def __init__(self, Blocks = [], switchPostions = []):
         self.BlocksClosed = Blocks
+        self.BlocksClosedIDs = []
         self.SwitchPositons = switchPostions
 
     def addBlockClosure(self, BlockID):

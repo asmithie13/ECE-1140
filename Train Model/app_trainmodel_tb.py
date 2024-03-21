@@ -32,6 +32,6 @@ class trainmodel_testbench(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setStyle("windows")
-    window = MyMainWindow()
+    window = QMainWindow()
     window.show()
     sys.exit(app.exec_())

@@ -293,7 +293,13 @@ class CTC_UI(QtWidgets.QMainWindow):
         ArrivalTime = self.ArrivalTimeEdit.time()
         ArrivalTime = ArrivalTime.toString("hh:mm")
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
+<<<<<<< HEAD
+<<<<<<< HEAD
+        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+=======
+=======
 
+>>>>>>> ce80de10b3d7ada7a6c9d521baec48893235b360
         self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 
@@ -370,6 +376,12 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ThroughputGraphLabel.setPixmap(pixmap)
 
 
+<<<<<<< HEAD
+        
+>>>>>>> e9643cf6f476747439fd07ba952ef02aad958ae1
+
+=======
+>>>>>>> ce80de10b3d7ada7a6c9d521baec48893235b360
 
 
 """

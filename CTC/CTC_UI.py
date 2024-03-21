@@ -105,7 +105,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         TempBlockList = []
 
         for i in BlockList:
-            TempBlockList.append(i.ID)
+            TempBlockList.append([i.ID, i.lineColor])
         
         self.updateOccupiedBlocks(TempBlockList)
 
@@ -276,9 +276,10 @@ class CTC_UI(QtWidgets.QMainWindow):
     #function to update block occupied table based on input from Wayside
     def updateOccupiedBlocks(self, arr):
         UpdatedBlocksWithTrain = []
-
+        
+        #Adding TrainID, Block ID, and line color to an array
         for i in arr:
-            UpdatedBlocksWithTrain.append(['X', i])
+            UpdatedBlocksWithTrain.append(['X', i[0], i[1]])
             
         self.OccupiedBlockTable.setModel(BlocksTableModel(UpdatedBlocksWithTrain))
 

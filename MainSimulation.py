@@ -8,6 +8,10 @@ import CTC
 from CTC.CTC_UI import *
 from CTC.CTC_Testbench import *
 
+#Wayside SW imports
+import Wayside_SW
+from Wayside_SW.WaysideSWandTB import *
+
 #Utility function to initialize clock
 def clock():
     global time
@@ -31,6 +35,19 @@ MainWindow.CTC_tb.sendOccupiedBlocks.connect(MainWindow.CTCwindow.updateOccupied
 MainWindow.CTC_tb.sendTicketSales.connect(MainWindow.CTCwindow.updateTicketSales)
 #CTC Output Signals
 MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.CTC_tb.showDispatchInfo)
+
+"""Wayside SW Signals"""
+MainWindow.WaysideSWwindow.sendSpecialBlocks.connect(MainWindow.WaysideSW_tb.updateBlockStates)
+MainWindow.WaysideSWwindow.changeModeSend.connect(MainWindow.WaysideSW_tb.receiveMode)
+MainWindow.WaysideSW_tb.OccBlocksChanged.connect(MainWindow.WaysideSWwindow.updateBlocks)
+MainWindow.WaysideSW_tb.tbChangeMode.connect(MainWindow.WaysideSWwindow.changeMode)
+MainWindow.WaysideSW_tb.ctcSpeed.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
+MainWindow.WaysideSW_tb.ctcAuthority.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
+
+#Wayside to CTC
+MainWindow.WaysideSWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocks)
+
+#Wayside to Track Model
 
 
 """Clock Initialization"""

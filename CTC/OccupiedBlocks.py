@@ -8,6 +8,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
+#From other folders
+from Track_Resources import *
 
 #Class to hold the data and manage the occupied blocks
 class OccupiedBlocks():
@@ -17,7 +19,6 @@ class OccupiedBlocks():
     def addBlockOccupancy(self, TrainName, BlockNum):
         newBlockOccupancy = [TrainName, BlockNum]
         self.BlockData.append(newBlockOccupancy)
-
 
 
 

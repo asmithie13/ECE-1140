@@ -28,13 +28,9 @@ class CTC_Testbench(QtWidgets.QMainWindow):
         self.UpdateOccupiedBlocksButton.setStyleSheet("background-color : rgb(38, 207, 4)") #Green
         self.UpdateTicketSalesButton.setStyleSheet("background-color : rgb(38, 207, 4)")    #Green
 
-        #Setting Combo box values
-        lines = ['blue']
-        self.LineSelect.addItems(lines)
-
         #Initializing signal values for communication with other UI windows
         self.sendOccupiedBlocks.emit([])
-        self.sendTicketSales.emit([0])
+        self.sendTicketSales.emit([0, 0])
 
 
     #Defines functionality of the update occupied blocks button on the Testbench
@@ -42,18 +38,20 @@ class CTC_Testbench(QtWidgets.QMainWindow):
         BlockText = self.OccupiedBlocksInput.text()
         UpdatedBlocks = list(map(str.strip, BlockText.split(',')))
 
-        UpdatedBlocksWithTrain = []
-        for i in UpdatedBlocks:
-            UpdatedBlocksWithTrain.append(['X', i])
+        print(UpdatedBlocks)
 
-        self.sendOccupiedBlocks.emit(UpdatedBlocksWithTrain)
+        self.sendOccupiedBlocks.emit(UpdatedBlocks)
 
     #Defines funtionality of the update ticket sales button on the testbench
     def updateTicketSales_button(self):
         SalesText = self.TicketSalesField.text()
-        line = self.LineSelect.currentText()
+        Sales = list(map(str.strip, SalesText.split(',')))
 
-        Sales = [int(SalesText)]
+        Sales[0] = int(Sales[0])
+        Sales[1] = int(Sales[1])
+
+        print(Sales)
+        
         self.sendTicketSales.emit(Sales)
 
     #Function to display CTC output

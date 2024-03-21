@@ -25,7 +25,7 @@ from PyQt5 import QtGui
 
 
 #My main window
-class MyMainWindow(QMainWindow):
+class TrackModelMain(QMainWindow):
     # Define a signal to emit the grade to testBench UI
     grade_signal = pyqtSignal(float)
     #Adding a signal to update information based on block selection:
@@ -296,7 +296,7 @@ class MyMainWindow(QMainWindow):
 
 
 #this is my testbench window
-class TestBench(QMainWindow):
+class TrackModel_tb(QMainWindow):
     #Change the signal to emit a string for buttons
     broken_rail_input_signal = pyqtSignal(str)
     track_input_signal = pyqtSignal(str)
@@ -627,8 +627,8 @@ class Data:
 # Call Main window
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = MyMainWindow()
-    window_2 = TestBench()
+    window = TrackModelMain()
+    window_2 = TrackModel_tb()
 
     #Create an instance of Communicate
     #communicator = Communicate()
@@ -646,7 +646,7 @@ if __name__ == "__main__":
     window_2.cross_input_signal.connect(window.toggle_cross_state_tb)
     window_2.switch_input_signal.connect(window.toggle_switch_tb)
 
-    # Connect MyMainWindow's method to emit the grade to TestBench's slot to update the grade label
+    # Connect TrackModelMain's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)
 
     #window.SendTicketsales.connect("CTC/CTC_UI.py".MainWindow.update_grade_label)

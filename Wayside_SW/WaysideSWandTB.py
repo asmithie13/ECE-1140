@@ -67,6 +67,7 @@ class WaysideSW(QMainWindow):
     #Signals
     sendSpecialBlocks = pyqtSignal(list)    #Send special blocks to testbench
     changeModeSend = pyqtSignal(bool)
+    sendOccupiedBlocks = pyqtSignal(list)   #Send list of occupied blocks to CTC
 
     def __init__(self):
         super().__init__()
@@ -75,6 +76,9 @@ class WaysideSW(QMainWindow):
         self.currentSpecialBlocks = None
         self.currentBlocks = None
         self.currentSwitchBlocks = None
+
+        #Occupied Block list ordered by ID
+        self.occupiedBlocks = []
 
         #Defines Green Line blocks
         self.greenCrossingTriplesIDS = [] #ids of red crossing blocks
@@ -420,6 +424,7 @@ class WaysideSW(QMainWindow):
 
     def updateBlocks(self,new_data):
         sentBlocks = new_data
+        self.occupiedBlocks.clear()
 
         for block in self.currentBlocks: block.occupied = False
 
@@ -427,11 +432,13 @@ class WaysideSW(QMainWindow):
             for block in self.currentBlocks:
                 if block_id == block.ID:
                     block.occupied = True
+                    self.occupiedBlocks.append(block)
 
         self.BlockOcc.setText(" ".join(sentBlocks))
         if self.label_7.text() == "AUTOMATIC" : self.FileParser.parsePLC()
         self.blockActions()
         self.sendSpecialBlocks.emit(self.currentBlocks)
+        self.sendOccupiedBlocks.emit(self.occupiedBlocks)
 
     def receiveSpeedAuth(self,changedBlock):
          for block in self.currentBlocks:

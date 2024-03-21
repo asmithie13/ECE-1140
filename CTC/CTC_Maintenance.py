@@ -11,10 +11,11 @@ from PyQt5 import uic
 
 #Class to manage maintenece mode for CTC
 class CTC_Maintenance():
-    def __init__(self, Blocks = [], switchPostions = []):
-        self.BlocksClosed = Blocks
+    def __init__(self):
+        self.BlocksClosed = []
         self.BlocksClosedIDs = []
-        self.SwitchPositons = switchPostions
+        self.SwitchText = []
+        self.SwitchesSet = []
 
     def addBlockClosure(self, BlockID):
         newBlockClosure = [BlockID]
@@ -81,7 +82,7 @@ class SwitchPositionTableModel(QtCore.QAbstractTableModel):
     
     #Adds the column header with the correct data
     def headerData(self, section, orientation, role):
-        headers = ['Switch', 'Position']
+        headers = ['Switch', 'Position', 'line']
 
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:

@@ -3,6 +3,7 @@ from Wayside_SW.WaysideSWandTB import readTrackFile
 
 class TempData:
     def __init__(self):
+        #Initializing Stations
         self.RedStations = ["Shadyside", "Herron Ave", "Swissville",
                             "Peen Station", "Steel Plaza", "First Ave",
                             "Station Square", "South Hills Junction"]
@@ -17,7 +18,6 @@ class TempData:
         self.GreenBlockIDs = []
 
         self.GreenBlocks = readTrackFile("Wayside_SW/Green_Line.csv", self.GreenSwitches)
-        print(self.GreenSwitches)
 
         
         for i in self.GreenBlocks:
@@ -30,8 +30,6 @@ class TempData:
         self.RedBlockIDs = []
 
         self.RedBlocks = readTrackFile("Wayside_SW/Red_Line.csv", self.RedSwitches)
-        print(self.RedSwitches)
-
         
         for i in self.RedBlocks:
             self.RedBlockIDs.append(str(i.ID))        

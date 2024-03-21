@@ -45,6 +45,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")     #Green
         self.UploadButton.setStyleSheet("background-color : rgb(38, 207, 4)")       #Green
         self.CloseBlockButton.setStyleSheet("background-color: rgb(195, 16, 40)")   #Red
+        self.SetSwitchPositionButton.setStyleSheet("background-color: rgb(195, 16, 40)")   #Red
 
         #Changing Background colors to section off UI, all light blue
         self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255);")
@@ -315,11 +316,37 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.Maintence.BlocksClosedIDs.append([BlockToClose, temp.lineColor])
         self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintence.BlocksClosedIDs))
         #Add to list of block objects for sending to wayside
+        temp.authority = 0
         self.Maintence.BlocksClosed.append(temp)
         
     #Function to set switch positons when in maintenance mode
     def setSwitch_button(self):
-        print("You didn't implement this yet")
+        #Read the current switch and position selected
+        switchToSet = self.ChooseSwitchSelect.currentText()
+        positionToSet = self.SwitchPositionSelect.currentText()
+        positionIndex = self.SwitchPositionSelect.currentIndex()
+
+        #if green line blocks are being shown, find corresponding green line block
+        if self.currentLine == 'green':
+            for i in self.TrackData.GreenBlocks:
+                if i.blockNum == switchToSet:
+                    temp = i
+        else:   #line selection is red, find corresponding red line block
+            for i in self.TrackData.RedBlocks:
+                if i.blockNum == switchToSet:
+                    temp = i
+
+        #Add to list of strings for displaying on CTC UI
+        self.Maintence.SwitchText.append([switchToSet, positionToSet, temp.lineColor])
+        self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintence.SwitchText))
+        #Add to list of block objects for sending to wayside
+        #If the position is the first one, switch state is left = true
+        if positionIndex == 0:
+            temp.switchState = True
+        else:   #Else the position is the second one, switch state is right = false
+            temp.switchState = False
+
+        self.Maintence.SwitchesSet.append(temp)
     
     #Funciton to sync switch position options to current selected switch
     def newSwitchSelected(self, index):

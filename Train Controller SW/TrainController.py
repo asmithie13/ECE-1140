@@ -8,11 +8,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 
 class TrainController :
-    def __init__(self):
-        
+    def __init__(self,ui):
+
+        self.ui = ui
         #opening UI
-
-
 
         #creating subclasses
         self.Vital_Power = Vital_Power(self.ui)
@@ -25,6 +24,8 @@ class TrainController :
         #update displays
         #signals that we take as inputs # I dont think we need these, I think this is on Tanvis side
         self.curr_spd_sig = pyqtSignal(int)
+
+
         self.curr_spd_sig.connect(self.ui.lcdCurSpd.display(self.curr_spd_sig))
         
         self.curr_auth_sig = pyqtSignal(int)
@@ -109,7 +110,8 @@ class TrainController :
         self.ui.SigFail.stateChanged.connect(self.Vital_Failure.Control_Signal_Failure())
         self.ui.Ebrake.stateChanged.connect(self.Vital_Failure.Control_Emergency_Brake())
        
-    
+
+
     def Control_Automatic(self):
       self.ui.buttonMan.toggle()
       self.ui.buttonDoorL.setDisabled(True)
@@ -140,15 +142,14 @@ class TrainController :
         self.ui.vertSliderPow.setDisabled(False)
         self.ui.vertSliderBrk.setDisabled(False)
 
-
 if __name__ == "__main__":
     import sys
-
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
+    TrainController(ui)
     MainWindow.show()
     sys.exit(app.exec_())
 
-    
+

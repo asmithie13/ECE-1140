@@ -4,7 +4,8 @@ from mainControl import *
 from TrainController import *
 
 def __main__():
-    TrainController()
+    val = TrainController()
 
 
-# if __name__ == "__main__":
+
+

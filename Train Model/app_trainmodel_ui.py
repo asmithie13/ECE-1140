@@ -26,23 +26,39 @@ class MyMainWindow(QMainWindow):
         self.calculate_acc_velocity()
 
         self.estop_locked=False
+        #changing state when sig_fail_enable/disable are clicked
+        self.sig_fail_enable.clicked.connect(self.sig_fail_enable_clicked)
+        self.sig_fail_disable.clicked.connect(self.sig_fail_disable_clicked) 
 
         #changing state when bf_enable/disable are clicked
         self.bf_enable.clicked.connect(self.bf_enable_clicked)
         self.bf_disable.clicked.connect(self.bf_disable_clicked)
+
+        #changing state when en_fail_enable/disable are clicked
+        self.en_fail_enable.clicked.connect(self.en_fail_enable_clicked)
+        self.en_fail_disable.clicked.connect(self.en_fail_disable_clicked)
         #self.brake_fail_input_tb.stateChanged.connect(self.brake_fail_tb)
 
         #Initially setting the default colors
         self.bf_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
         self.bf_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+        self.sig_fail_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
+        self.sig_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+        self.en_fail_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
+        self.en_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
 
+
+        #Initialising failure states
         self.brake_fail_state = False
+        self.sig_fail_state = False
+        self.en_fail_state = False
+        self.emergency_stop_state=False
+        
 
     def estop_button_clicked(self):
-        if not self.estop_locked:
-            self.ebrake.setEnabled(False)
-            self.ebrake.setStyleSheet('background-color: gray; color: white;')
-            self.estop_locked = True
+        if not self.emergency_stop_state:
+            self.ebrake.setStyleSheet('background-color: rgb(99, 99, 99);')
+            self.emergency_stop_state = True
 
     def change_ebrake_color(self,ebrake_state):
         if ebrake_state:
@@ -163,16 +179,68 @@ class MyMainWindow(QMainWindow):
             self.bf_enable.setStyleSheet('')
             self.bf_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
 
+     #sig_fail_enable_clicked
+    def sig_fail_enable_clicked(self):
+        if not self.sig_fail_state:
+            self.sig_fail_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.sig_fail_disable.setStyleSheet('background-color: rgb(233, 247, 255);')
+            self.sig_fail_state = True
+
+    #sig_fail_disable_clicked
+    def sig_fail_disable_clicked(self):
+        if self.sig_fail_state:
+            self.sig_fail_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
+            self.sig_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.sig_fail_state = False
+
     #signal_fail_tb
     def signal_fail_tb(self,state):
        
         self.brake_fail_state = state
         if state:
-            self.bf_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
-            self.bf_disable.setStyleSheet('')
+            self.sig_fail_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.sig_fail_disable.setStyleSheet('')
         else:
-            self.bf_enable.setStyleSheet('')
-            self.bf_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.sig_fail_enable.setStyleSheet('')
+            self.sig_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+
+    
+     #sig_fail_enable_clicked
+    def en_fail_enable_clicked(self):
+        if not self.en_fail_state:
+            self.en_fail_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.en_fail_disable.setStyleSheet('background-color: rgb(233, 247, 255);')
+            self.en_fail_state = True
+
+    #en_fail_disable_clicked
+    def en_fail_disable_clicked(self):
+        if self.en_fail_state:
+            self.en_fail_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
+            self.en_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.en_fail_state = False
+
+    #engine_fail_tb
+    def engine_fail_tb(self,state):
+       
+        self.en_fail_state = state
+        if state:
+            self.en_fail_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.en_fail_disable.setStyleSheet('')
+        else:
+            self.en_fail_enable.setStyleSheet('')
+            self.en_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+
+    def int_lights_tb(self,state):
+        if state:
+            self.int_lights_value.setFixedSize(109, 98)
+            self.int_lights_value.setText(state)
+
+        else :
+            self.int_lights_value.setFixedSize(109, 98)
+            self.int_lights_value.setText(state)
+
+
+
 
     
         
@@ -195,6 +263,10 @@ class trainmodel_testbench(QMainWindow):
     brake_fail_input_signal=qtc.pyqtSignal(int)
     signal_fail_input_signal=qtc.pyqtSignal(int)
     engine_fail_input_signal=qtc.pyqtSignal(int)
+    right_doors_input_signal=qtc.pyqtSignal(int)
+    left_doors_input_signal=qtc.pyqtSignal(int)
+    int_lights_input_signal=qtc.pyqtSignal(str)
+    ext_lights_input_signal=qtc.pyqtSignal(int)
     cabin_temp_input_signal=qtc.pyqtSignal(str)
 
 
@@ -236,9 +308,41 @@ class trainmodel_testbench(QMainWindow):
 
         self.brake_fail_input_tb.stateChanged.connect(self.brake_fail)
         self.sig_pick_input_tb.stateChanged.connect(self.sig_pick_fail)
+        self.engine_fail_input_tb.stateChanged.connect(self.en_fail)
 
         self.cabin_temp_input_tb.returnPressed.connect(self.get_cabin_temp)
         self.cabin_temp_input_tb.returnPressed.connect(self.display_cabin_temp)
+
+        self.int_lights_input_tb.stateChanged.connect(self.interior_lights)
+      
+        self.ext_lights_input_tb.stateChanged.connect(self.exterior_lights)
+       
+        self.right_doors_input_tb.stateChanged.connect(self.right_doors)
+        
+        self.left_doors_input_tb.stateChanged.connect(self.left_doors)
+
+        
+
+    def interior_lights(self,state):
+        if state:
+            self.int_lights_input_signal.emit("OFF")
+        else:
+            self.int_lights_input_signal.emit("ON")
+
+
+    def exterior_lights(self,state):
+        self.ext_lights_input_signal.emit(state)
+        
+
+    def right_doors(self,state):
+        self.right_doors_input_signal.emit(state)
+
+    def left_doors(self,state):
+        self.left_doors_input_signal.emit(state)
+
+
+    def en_fail(self,state):
+        self.engine_fail_input_signal.emit(state)
 
     def sig_pick_fail(self,state):
         self.signal_fail_input_signal.emit(state)
@@ -387,6 +491,8 @@ if __name__ == "__main__":
     window_tb.brake_fail_input_signal.connect(window.brake_fail_tb)
     #signal_fail
     window_tb.signal_fail_input_signal.connect(window.signal_fail_tb)
+    #engine_fail
+    window_tb.engine_fail_input_signal.connect(window.engine_fail_tb)
     #cabin_temp 
     window_tb.cabin_temp_input_signal.connect(window.set_cabin_temp)
 

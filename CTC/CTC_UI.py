@@ -295,7 +295,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         ArrivalTime = ArrivalTime.toString("hh:mm")
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
 
-        self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 
     #Function to add a block closure when in maintence mode

@@ -30,7 +30,7 @@ class TempData:
         self.RedSwitches = []
         self.RedBlockIDs = []
 
-        self.RedBlocks = readTrackFile("Wayside_SW/Green_Line.csv", [])
+        self.RedBlocks = readTrackFile("Wayside_SW/Red_Line.csv", [])
 
         
         for i in self.RedBlocks:

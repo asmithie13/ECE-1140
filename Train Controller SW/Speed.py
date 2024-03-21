@@ -5,6 +5,8 @@ class Vital_Speed():
     def __init__(self,ui):
         self.ui = ui
 
+    def change_Speed(self,newspeed):
+        self.ui.lcdCurSpd.setValue(newspeed)
     def Speed_Monitor(self):
         #check current speed every time speed is updated or speed limit is updated
         #if speed is greater than speed limit, send command to brake

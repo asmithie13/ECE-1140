@@ -7,9 +7,11 @@ from NonVital import NonVital
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 
-class TrainController :
-    def __init__(self,ui):
 
+class TrainController :
+    curr_spd_sig = pyqtSignal(int, name='curr_spd_sig')
+    def __init__(self,ui):
+        super(TrainController,self).__init__(None)
         self.ui = ui
         #opening UI
 
@@ -23,16 +25,19 @@ class TrainController :
 
         #update displays
         #signals that we take as inputs # I dont think we need these, I think this is on Tanvis side
-        self.curr_spd_sig = pyqtSignal(int)
 
 
-        self.curr_spd_sig.connect(self.ui.lcdCurSpd.display(self.curr_spd_sig))
+        # THIS IS WRONG
+
+
+        #self.curr_spd_sig.connect(self.ui.lcdCurSpd.display(self.curr_spd_sig))
+        self.curr_spd_sig.connect(self.Vital_Speed.change_Speed)
         
         self.curr_auth_sig = pyqtSignal(int)
-        self.curr_auth_sig.connect(self.ui.lcdAuth.display(self.curr_auth_sig))
+        #self.curr_auth_sig.connect(self.ui.lcdAuth.display(self.curr_auth_sig))
 
         self.curr_spd_lim_sig = pyqtSignal(int)
-        self.curr_spd_lim_sig.connect(self.ui.lcdSpdLim.display(self.curr_spd_lim_sig))
+        #self.curr_spd_lim_sig.connect(self.ui.lcdSpdLim.display(self.curr_spd_lim_sig))
 
         self.curr_temp_sig = pyqtSignal(int)
         self.curr_temp_sig.connect(self.ui.lcdCurTemp.display(self.curr_temp_sig))
@@ -55,21 +60,18 @@ class TrainController :
         
         self.next_station_sig = pyqtSignal(str)
         self.next_station_sig.connect(self.NonVital.Control_Next_Station())
-
         self.dist_to_next_station_sig = pyqtSignal(int)
         self.dist_to_next_station_sig.connect(self.NonVital.Control_Next_Station())
 
         #block 
         self.block_passed_sig = pyqtSignal(bool)
         self.block_passed_sig.connect(self.NonVital.BlockCounter())
-
         self.block_length_sig = pyqtSignal(int)
 
         #signals we use as outputs
         self.service_brake_sig = pyqtSignal(bool)
         self.curr_power_sig = pyqtSignal(int)
         #connect all of these to power calc function
-        
         self.door_control_sig = pyqtSignal(int)
         self.announcement_sig = pyqtSignal(str)
         self.temp_control_sig = pyqtSignal(int)

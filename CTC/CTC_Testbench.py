@@ -38,8 +38,6 @@ class CTC_Testbench(QtWidgets.QMainWindow):
         BlockText = self.OccupiedBlocksInput.text()
         UpdatedBlocks = list(map(str.strip, BlockText.split(',')))
 
-        print(UpdatedBlocks)
-
         self.sendOccupiedBlocks.emit(UpdatedBlocks)
 
     #Defines funtionality of the update ticket sales button on the testbench
@@ -49,8 +47,6 @@ class CTC_Testbench(QtWidgets.QMainWindow):
 
         Sales[0] = int(Sales[0])
         Sales[1] = int(Sales[1])
-
-        print(Sales)
         
         self.sendTicketSales.emit(Sales)
 

@@ -23,9 +23,9 @@ class CTC_Maintenance():
 
 
 #Table class to initialize a Pyqt5 table object that will display the Blocks that are shut down for maintenance
-class OccupiedBlocksTableModel(QtCore.QAbstractTableModel):
+class ClosedBlocksTableModel(QtCore.QAbstractTableModel):
     def __init__(self, data):
-        super(OccupiedBlocksTableModel, self).__init__()
+        super(ClosedBlocksTableModel, self).__init__()
         self._data = data
 
     #Displays the data to the table
@@ -48,7 +48,7 @@ class OccupiedBlocksTableModel(QtCore.QAbstractTableModel):
     
     #Adds the column header with the correct data
     def headerData(self, section, orientation, role):
-        headers = ['Closed Blocks']
+        headers = ['Closed Blocks', 'Line']
 
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:

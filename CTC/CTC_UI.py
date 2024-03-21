@@ -58,6 +58,9 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Importing Track Data
         self.TrackData = TempData()
 
+        #Data to hold the current line selected
+        self.currentLine = ''
+
         #Initializing Schedule
         self.trainSchedule = Schedule()
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
@@ -68,7 +71,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Initializing Maintance Tables
         self.Maintence = CTC_Maintenance()
-        self.BlockClosureTable.setModel(OccupiedBlocksTableModel(self.Maintence.BlocksClosed))
+        self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintence.BlocksClosed))
         self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintence.BlocksClosed))
 
         #Initializing Throughput    
@@ -88,8 +91,6 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         for i in BlockList:
             TempBlockList.append(i.ID)
-
-        #print(TempBlockList)
         
         self.updateOccupiedBlocks(TempBlockList)
 
@@ -174,7 +175,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ChooseSwitchSelect.clear()
         self.ChooseSwitchSelect.addItems(self.TrackData.GreenSwitches)
 
-        
+        self.currentLine = 'green'
     
     def redLine_button(self):
         #Highlight red line button
@@ -192,6 +193,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Setting Switch selctions to red line
         self.ChooseSwitchSelect.clear()
         self.ChooseSwitchSelect.addItems(self.TrackData.RedSwitches)
+
+        self.currentLine = 'red'
 
     #function to update the clock display on the layout
     def displayClock(self, time):
@@ -266,13 +269,20 @@ class CTC_UI(QtWidgets.QMainWindow):
     def closeBlock_button(self):
         BlockToClose = self.CloseBlockSelect.currentText()
         
-        for i in self.TrackData.GreenBlocks:
-            if i.ID == BlockToClose:
-                temp = i
+        if self.currentLine == 'green':
+            for i in self.TrackData.GreenBlocks:
+                if i.ID == BlockToClose:
+                    temp = i
+        else:
+            for i in self.TrackData.RedBlocks:
+                if i.ID == BlockToClose:
+                    temp = i
 
-        self.Maintence.BlocksClosedIDs.append(BlockToClose)
+        self.Maintence.BlocksClosedIDs.append([BlockToClose, temp.lineColor])
+
+        print(self.Maintence.BlocksClosedIDs)
         self.Maintence.BlocksClosed.append(temp)
-        self.BlockClosureTable.setModel(OccupiedBlocksTableModel(self.Maintence.BlocksClosedIDs))
+        self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintence.BlocksClosedIDs))
 
 
     #Function to set switch positons when in maintenance mode

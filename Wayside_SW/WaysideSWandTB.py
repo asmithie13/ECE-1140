@@ -68,6 +68,7 @@ class WaysideSW(QMainWindow):
     sendSpecialBlocks = pyqtSignal(list)    #Send special blocks to testbench
     changeModeSend = pyqtSignal(bool)
     sendOccupiedBlocks = pyqtSignal(list)   #Send list of occupied blocks to CTC
+    sendCommandedSpeed = pyqtSignal(float)
 
     def __init__(self):
         super().__init__()

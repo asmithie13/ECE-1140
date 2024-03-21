@@ -12,6 +12,9 @@ from CTC.CTC_Testbench import *
 #Wayside SW imports
 import Wayside_SW
 from Wayside_SW.WaysideSWandTB import *
+#Track Model Imports
+import Track_Model
+from Track_Model.TrackModel import * 
 
 class Main_UI(QtWidgets.QMainWindow):
     def __init__(self):
@@ -33,7 +36,9 @@ class Main_UI(QtWidgets.QMainWindow):
 
 
         #Track Model Window
-
+        self.TrackModelWindow = TrackModelMain()
+        self.TrackModel_tb = TrackModel_tb()
+        self.TrackModelButton.clicked.connect(self.open_track_model_UI)
 
         #Train Model (Might need initialized per train)
 
@@ -52,6 +57,10 @@ class Main_UI(QtWidgets.QMainWindow):
     def open_waysideSW_UI(self):
         self.WaysideSWwindow.show()
         self.WaysideSW_tb.show() 
+
+    def open_track_model_UI(self):
+        self.TrackModelWindow.show()
+        self.TrackModel_tb.show()
 
 
 """

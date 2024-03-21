@@ -96,8 +96,10 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         for i in BlockList:
             TempBlockList.append(i.ID)
+
+        #print(TempBlockList)
         
-        self.updateOccupiedBlocks(self, TempBlockList)
+        self.updateOccupiedBlocks(TempBlockList)
 
     #TicketSales will be a list of two lists of ints, representing the sales at each station in 
     #green line and red line respectively, from Track Model
@@ -225,7 +227,12 @@ class CTC_UI(QtWidgets.QMainWindow):
 
     #function to update block occupied table based on input from Wayside
     def updateOccupiedBlocks(self, arr):
-        self.OccupiedBlockTable.setModel(BlocksTableModel(arr))
+        UpdatedBlocksWithTrain = []
+
+        for i in arr:
+            UpdatedBlocksWithTrain.append(['X', i])\
+            
+        self.OccupiedBlockTable.setModel(BlocksTableModel(UpdatedBlocksWithTrain))
 
 
     #defining manual mode add train button functionality

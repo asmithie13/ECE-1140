@@ -38,11 +38,9 @@ class CTC_Testbench(QtWidgets.QMainWindow):
         BlockText = self.OccupiedBlocksInput.text()
         UpdatedBlocks = list(map(str.strip, BlockText.split(',')))
 
-        UpdatedBlocksWithTrain = []
-        for i in UpdatedBlocks:
-            UpdatedBlocksWithTrain.append(['X', i])
+        print(UpdatedBlocks)
 
-        self.sendOccupiedBlocks.emit(UpdatedBlocksWithTrain)
+        self.sendOccupiedBlocks.emit(UpdatedBlocks)
 
     #Defines funtionality of the update ticket sales button on the testbench
     def updateTicketSales_button(self):

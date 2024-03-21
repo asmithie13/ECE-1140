@@ -30,11 +30,12 @@ MainWindow = Main_UI()
 MainWindow.show()
 
 """CTC Signals"""
-#CTC Input Signals
 MainWindow.CTC_tb.sendOccupiedBlocks.connect(MainWindow.CTCwindow.updateOccupiedBlocks)
 MainWindow.CTC_tb.sendTicketSales.connect(MainWindow.CTCwindow.updateTicketSales)
-#CTC Output Signals
 MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.CTC_tb.showDispatchInfo)
+
+#CTC to Wayside
+
 
 """Wayside SW Signals"""
 MainWindow.WaysideSWwindow.sendSpecialBlocks.connect(MainWindow.WaysideSW_tb.updateBlockStates)

@@ -58,14 +58,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Importing Track Data
         self.TrackData = TempData()
 
-        #Setting Combo box values
-        #stations = ['Yard', 'Station1', 'Station2']
-        #self.DepartureSationSelect.addItems(stations)
-        #self.DestinationSelect.addItems(stations)
-
-        AllBlocks = ['2']
-        self.CloseBlockSelect.addItems(AllBlocks)
-
         #Initializing Schedule
         self.trainSchedule = Schedule()
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
@@ -166,19 +158,40 @@ class CTC_UI(QtWidgets.QMainWindow):
 
     #Sets drop down options if green line is selected
     def greenLine_button(self):
+        #Highlight green line button
         self.GreenLineButton.setStyleSheet("background-color : rgb(38, 207, 4)")     #Green
         self.RedLineButton.setStyleSheet("background-color : white")
 
+        #Set stations selctions to green line
+        self.DestinationSelect.clear()
         self.DestinationSelect.addItems(self.TrackData.GreenStations)
+        self.DepartureSationSelect.clear()
         self.DepartureSationSelect.addItems(self.TrackData.GreenStations)
+        #Setting Block selections to green line
+        self.CloseBlockSelect.clear()
+        self.CloseBlockSelect.addItems(self.TrackData.GreenBlockIDs)
+        #Setting Switch selctions to green line
+        self.ChooseSwitchSelect.clear()
+        self.ChooseSwitchSelect.addItems(self.TrackData.GreenSwitches)
+
         
     
     def redLine_button(self):
+        #Highlight red line button
         self.RedLineButton.setStyleSheet("background-color: rgb(195, 16, 40)")     #Red
         self.GreenLineButton.setStyleSheet("background-color : white")
 
+        #Set stations selctions to red line
+        self.DestinationSelect.clear()
         self.DestinationSelect.addItems(self.TrackData.RedStations)
+        self.DepartureSationSelect.clear()
         self.DepartureSationSelect.addItems(self.TrackData.RedStations)
+        #Setting Block selections to red line
+        self.CloseBlockSelect.clear()
+        self.CloseBlockSelect.addItems(self.TrackData.RedBlockIDs)
+        #Setting Switch selctions to red line
+        self.ChooseSwitchSelect.clear()
+        self.ChooseSwitchSelect.addItems(self.TrackData.RedSwitches)
 
     #function to update the clock display on the layout
     def displayClock(self, time):
@@ -230,7 +243,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         UpdatedBlocksWithTrain = []
 
         for i in arr:
-            UpdatedBlocksWithTrain.append(['X', i])\
+            UpdatedBlocksWithTrain.append(['X', i])
             
         self.OccupiedBlockTable.setModel(BlocksTableModel(UpdatedBlocksWithTrain))
 

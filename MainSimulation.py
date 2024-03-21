@@ -39,6 +39,7 @@ MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.CTC_tb.showDispatchInfo
 #CTC to Wayside
 
 
+
 """Wayside SW Signals"""
 MainWindow.WaysideSWwindow.sendSpecialBlocks.connect(MainWindow.WaysideSW_tb.updateBlockStates)
 MainWindow.WaysideSWwindow.changeModeSend.connect(MainWindow.WaysideSW_tb.receiveMode)
@@ -47,11 +48,16 @@ MainWindow.WaysideSW_tb.tbChangeMode.connect(MainWindow.WaysideSWwindow.changeMo
 MainWindow.WaysideSW_tb.ctcSpeed.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
 MainWindow.WaysideSW_tb.ctcAuthority.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
 
-#Wayside to CTC
+#Wayside SW to CTC
 MainWindow.WaysideSWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocks)
 
 #Wayside to Track Model
 
+"""Wayside HW Signals"""
+MainWindow.WaysideHW_tb.occupiedBlocksSignal.connect(MainWindow.WaysideHWwindow.modeHandler)
+
+#Wayside HW to CTC:
+MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocks)
 
 """Clock Initialization"""
 #Initializing Qtimer for clock

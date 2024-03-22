@@ -10,9 +10,9 @@ import re
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
-from Wayside_HW.TrackController_HW_TB import *
+from TrackController_HW_TB import *
 from Track_Resources.Block import Block
-from Wayside_HW.readTrackFile import *
+from readTrackFile import *
 
 #Main train controller class:
 class TrackController_HW(QMainWindow):
@@ -25,14 +25,14 @@ class TrackController_HW(QMainWindow):
     def __init__(self):
         #Upload UI file:
         super(TrackController_HW, self).__init__()
-        uic.loadUi("Wayside_HW/TrackController_HW.ui", self)
+        uic.loadUi("Wayside HW/TrackController_HW.ui", self)
 
         #Disable manual mode operations, as program begins in automatic operation:
         self.groupBoxManual.setEnabled(False)
 
         #Initialize an empty list to hold all blocks:
         self.allTripleIDs = []
-        self.allBlocks = readTrackFile("Wayside_HW/greenLine.csv", self.allTripleIDs)
+        self.allBlocks = readTrackFile("Wayside HW/greenLine.csv", self.allTripleIDs)
 
         #Initialize a flag integer to determine which mode the system is currently in:
         self.modeFlag = 0 #0 = Automatic, 1 = Manual, 2 = Maintenance
@@ -112,6 +112,7 @@ class TrackController_HW(QMainWindow):
             occupiedBlockIDs.append(block.ID)
         occupiedBlockIDs.sort()
         
+        
         #Initialize serial communication with Raspberry Pi here
         #Produce a list of changed block states to emit to Track Model, as conducted in manual operation
     
@@ -134,9 +135,6 @@ class TrackController_HW(QMainWindow):
         self.pushButtonUp.setFont(QFont("Times New Roman", 12))
         self.pushButtonDown.setFont(QFont("Times New Roman", 12))
 
-        self.pushButtonLeft.setText("")
-        self.pushButtonRight.setText("")
-
         self.comboBoxBlock.clear()
         listBlockNum = []
         for block in self.allBlocks:
@@ -145,16 +143,6 @@ class TrackController_HW(QMainWindow):
         self.comboBoxBlock.addItems(listBlockNum)
 
     def initialBlockConditions(self):
-        self.pushButtonRed.setStyleSheet("background-color: white")
-        self.pushButtonGreen.setStyleSheet("background-color: white")
-        self.pushButtonLeft.setStyleSheet("background-color: white")
-        self.pushButtonRight.setStyleSheet("background-color: white")
-        self.pushButtonUp.setStyleSheet("background-color: white")
-        self.pushButtonDown.setStyleSheet("background-color: white")
-
-        self.pushButtonLeft.setText("")
-        self.pushButtonRight.setText("")
-        
         for block in self.allBlocks:
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
                 selectedBlock = block
@@ -173,17 +161,6 @@ class TrackController_HW(QMainWindow):
             self.frameSwitch.setEnabled(False)
         else:
             self.frameSwitch.setEnabled(True)
-            for triple in self.allTripleIDs:
-                if selectedBlock.blockNum in triple:
-                    leftBlockNum = triple[1]
-                    rightBlockNum = triple[2]
-                    break
-            for block in self.allBlocks:
-                if block.blockNum == leftBlockNum:
-                    self.pushButtonLeft.setText(block.ID)
-                elif block.blockNum == rightBlockNum:
-                    self.pushButtonRight.setText(block.ID)
-
             if selectedBlock.switchState == False:
                 self.setSwitchRight()
             else:
@@ -231,7 +208,6 @@ class TrackController_HW(QMainWindow):
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
                 block.switchState = True
                 break
-
         self.sendUpdatedBlocks.emit(self.allBlocks)
 
         self.pushButtonRight.setEnabled(True)
@@ -246,7 +222,6 @@ class TrackController_HW(QMainWindow):
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
                 block.switchState = False
                 break
-        
         self.sendUpdatedBlocks.emit(self.allBlocks)
 
         self.pushButtonLeft.setEnabled(True)

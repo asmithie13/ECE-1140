@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>702</width>
-    <height>560</height>
+    <width>1200</width>
+    <height>1000</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -186,6 +186,12 @@
        <layout class="QVBoxLayout" name="verticalLayout_9">
         <item>
          <widget class="QFrame" name="frameMode">
+          <property name="minimumSize">
+           <size>
+            <width>480</width>
+            <height>95</height>
+           </size>
+          </property>
           <property name="frameShape">
            <enum>QFrame::Panel</enum>
           </property>

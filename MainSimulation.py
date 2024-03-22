@@ -1,4 +1,5 @@
 #File to run full train control system simulation
+
 import sys
 from PyQt5 import QtCore
 from Main_UI import *
@@ -6,13 +7,15 @@ from Main_UI import *
 import CTC
 from CTC.CTC_UI import *
 from CTC.CTC_Testbench import *
+
 #Wayside SW imports
 import Wayside_SW
 from Wayside_SW.WaysideSWandTB import *
-#Wayside HW imports
-import Wayside_HW
-from Wayside_HW.TrackController_HW import *
-from Wayside_HW.TrackController_HW_TB import *
+
+#Track Model imports
+import Track_Model
+from Track_Model.TrackModel import *
+
 
 #Utility function to initialize clock
 def clock():
@@ -39,7 +42,6 @@ MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.CTC_tb.showDispatchInfo
 #CTC to Wayside
 
 
-
 """Wayside SW Signals"""
 MainWindow.WaysideSWwindow.sendSpecialBlocks.connect(MainWindow.WaysideSW_tb.updateBlockStates)
 MainWindow.WaysideSWwindow.changeModeSend.connect(MainWindow.WaysideSW_tb.receiveMode)
@@ -48,16 +50,13 @@ MainWindow.WaysideSW_tb.tbChangeMode.connect(MainWindow.WaysideSWwindow.changeMo
 MainWindow.WaysideSW_tb.ctcSpeed.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
 MainWindow.WaysideSW_tb.ctcAuthority.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
 
-#Wayside SW to CTC
+
+
+#Wayside to CTC
 MainWindow.WaysideSWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocks)
 
 #Wayside to Track Model
 
-"""Wayside HW Signals"""
-MainWindow.WaysideHW_tb.occupiedBlocksSignal.connect(MainWindow.WaysideHWwindow.modeHandler)
-
-#Wayside HW to CTC:
-MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocks)
 
 """Clock Initialization"""
 #Initializing Qtimer for clock

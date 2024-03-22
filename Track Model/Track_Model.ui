@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1017</width>
+    <width>1010</width>
     <height>1091</height>
    </rect>
   </property>
@@ -26,10 +26,10 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>20</y>
-      <width>191</width>
-      <height>41</height>
+      <x>670</x>
+      <y>40</y>
+      <width>311</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -276,7 +276,7 @@
      <rect>
       <x>670</x>
       <y>130</y>
-      <width>311</width>
+      <width>301</width>
       <height>511</height>
      </rect>
     </property>
@@ -290,6 +290,253 @@
      <string>Block Data</string>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Block Number:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="block_num_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>16</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_18">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Section: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="section_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>F</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Occupied:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="occupancy_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>No</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Block Grade (%):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="grade_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>-0.5</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Elevation (ft):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLabel" name="elevation_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>-0.82021</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_11">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Cummulative Elevation (ft):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLabel" name="length_in_2">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>0.00</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_10">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Block Length (ft):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLabel" name="length_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>164.042</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_16">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Speed Limit (mph):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLabel" name="speed_in">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>24.8548</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_13">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Temperature (°F):</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QLabel" name="temp_out">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string>80</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="label_12">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(white);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="text">
+        <string>Track Heaters:</string>
+       </property>
+      </widget>
+     </item>
      <item row="9" column="1">
       <widget class="QLabel" name="heaters_out">
        <property name="sizePolicy">
@@ -315,84 +562,6 @@
        </property>
       </widget>
      </item>
-     <item row="11" column="0">
-      <widget class="QLabel" name="label_26">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Underground:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="occupancy_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>No</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QLabel" name="elevation_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>-0.82021</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Occupied:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QLabel" name="length_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>164.042</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="1">
-      <widget class="QLabel" name="temp_out">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>80</string>
-       </property>
-      </widget>
-     </item>
      <item row="10" column="0">
       <widget class="QLabel" name="label_33">
        <property name="styleSheet">
@@ -406,21 +575,8 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_8">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Block Grade (%):</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="section_in">
+     <item row="10" column="1">
+      <widget class="QLabel" name="cross_out">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(white);</string>
        </property>
@@ -428,12 +584,12 @@
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-        <string>F</string>
+        <string/>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_9">
+     <item row="11" column="0">
+      <widget class="QLabel" name="label_26">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(white);</string>
        </property>
@@ -441,46 +597,7 @@
         <enum>QFrame::NoFrame</enum>
        </property>
        <property name="text">
-        <string>Elevation (ft):</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_13">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Temperature (°F):</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLabel" name="grade_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>-0.5</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLabel" name="length_in_2">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>0.00</string>
+        <string>Underground:</string>
        </property>
       </widget>
      </item>
@@ -509,123 +626,6 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Block Number:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_18">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Section: </string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="block_num_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>16</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1">
-      <widget class="QLabel" name="cross_out">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_10">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Block Length (ft):</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QLabel" name="speed_in">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string>24.8548</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_16">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Speed Limit (mph):</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0">
-      <widget class="QLabel" name="label_12">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Track Heaters:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_11">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="text">
-        <string>Cummulative Elevation (ft):</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
    <widget class="QGroupBox" name="groupBox_3">
@@ -633,7 +633,7 @@
      <rect>
       <x>670</x>
       <y>660</y>
-      <width>311</width>
+      <width>301</width>
       <height>201</height>
      </rect>
     </property>
@@ -669,7 +669,7 @@
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-        <string/>
+        <string>HERRON AVE</string>
        </property>
       </widget>
      </item>
@@ -695,7 +695,7 @@
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-        <string/>
+        <string>43</string>
        </property>
       </widget>
      </item>
@@ -721,7 +721,7 @@
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-        <string/>
+        <string>22</string>
        </property>
       </widget>
      </item>
@@ -747,7 +747,7 @@
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-        <string/>
+        <string>10</string>
        </property>
       </widget>
      </item>
@@ -904,8 +904,46 @@
      <string>Status</string>
     </property>
     <layout class="QGridLayout" name="gridLayout_5">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_14">
+       <property name="styleSheet">
+        <string notr="true">background-color: white;
+
+</string>
+       </property>
+       <property name="text">
+        <string>Lights: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="4">
       <widget class="QLabel" name="switch_out">
+       <property name="styleSheet">
+        <string notr="true">background: white</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="light_out">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
        <property name="styleSheet">
         <string notr="true">background: white</string>
        </property>
@@ -932,47 +970,9 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
-      <widget class="Line" name="line">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_14">
-       <property name="styleSheet">
-        <string notr="true">background-color: white;
-
-</string>
-       </property>
-       <property name="text">
-        <string>Lights: </string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="light_out">
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background: white</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
-   <widget class="QGroupBox" name="red_line">
+   <widget class="QGroupBox" name="groupBox_5">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -982,7 +982,7 @@
      </rect>
     </property>
     <property name="title">
-     <string/>
+     <string>GroupBox</string>
     </property>
     <widget class="QPushButton" name="pushButton_2">
      <property name="geometry">
@@ -3236,26 +3236,13 @@
       </size>
      </property>
     </widget>
-    <widget class="QGroupBox" name="groupBox_7">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>621</width>
-       <height>651</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string/>
-     </property>
-    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_6">
     <property name="geometry">
      <rect>
       <x>670</x>
       <y>880</y>
-      <width>311</width>
+      <width>301</width>
       <height>151</height>
      </rect>
     </property>
@@ -3268,7 +3255,7 @@
     <property name="title">
      <string>Icons Guide</string>
     </property>
-    <layout class="QGridLayout" name="gridLayout_6">
+    <layout class="QGridLayout" name="gridLayout_7">
      <item row="0" column="0">
       <widget class="QPushButton" name="pushButton_83">
        <property name="focusPolicy">
@@ -3293,8 +3280,8 @@
        </property>
        <property name="iconSize">
         <size>
-         <width>30</width>
-         <height>30</height>
+         <width>40</width>
+         <height>40</height>
         </size>
        </property>
       </widget>
@@ -3334,8 +3321,8 @@
        </property>
        <property name="iconSize">
         <size>
-         <width>30</width>
-         <height>30</height>
+         <width>40</width>
+         <height>40</height>
         </size>
        </property>
       </widget>
@@ -3351,47 +3338,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QPushButton" name="pushButton_126">
-       <property name="focusPolicy">
-        <enum>Qt::NoFocus</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">
-    QPushButton {
-        border-style: solid;
-        border-width: 2px;
-		 background-color: rbg(233, 247, 255);
-    }
-&quot;&quot;&quot;)
-</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>light.png</normaloff>light.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>40</width>
-         <height>30</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="label_17">
-       <property name="styleSheet">
-        <string notr="true">background-color: white
-</string>
-       </property>
-       <property name="text">
-        <string>Track Lights</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
    <widget class="QLCDNumber" name="clock_in">
@@ -3404,61 +3350,22 @@
      </rect>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox_8">
-    <property name="geometry">
-     <rect>
-      <x>670</x>
-      <y>20</y>
-      <width>311</width>
-      <height>91</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QGroupBox {
-    background-color: white;
-}
-</string>
-    </property>
-    <property name="title">
-     <string>Temperature</string>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_7">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_19">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-       <property name="text">
-        <string>Set Temperature (°F):</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QSpinBox" name="spinBox">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(white);</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <zorder>layoutWidget</zorder>
    <zorder>groupBox</zorder>
    <zorder>groupBox_2</zorder>
    <zorder>groupBox_3</zorder>
    <zorder>groupBox_4</zorder>
    <zorder>pushButton</zorder>
-   <zorder>red_line</zorder>
+   <zorder>groupBox_5</zorder>
    <zorder>groupBox_6</zorder>
    <zorder>clock_in</zorder>
-   <zorder>groupBox_8</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1017</width>
+     <width>1010</width>
      <height>22</height>
     </rect>
    </property>

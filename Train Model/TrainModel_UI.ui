@@ -497,21 +497,19 @@ selection-color: rgb(253, 253, 253);</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>12</pointsize>
-         <weight>9</weight>
-         <italic>false</italic>
-         <bold>false</bold>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(192, 192, 192);
-font: 75 12pt &quot;Times New Roman&quot;;</string>
+        <string notr="true">background-color: rgb(192, 192, 192);</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#464646;&quot;&gt;OFF&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#464646;&quot;&gt;ON&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -868,7 +866,7 @@ color: rgb(60, 60, 60)</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../../../.designer/backup/bk_ad.png</pixmap>
+     <pixmap>bk_ad.png</pixmap>
     </property>
    </widget>
    <widget class="Line" name="line_2">
@@ -1243,9 +1241,6 @@ color: rgb(60, 60, 60)</string>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="bf_enable">
-       <property name="autoFillBackground">
-        <bool>false</bool>
-       </property>
        <property name="styleSheet">
         <string notr="true"/>
        </property>
@@ -1253,29 +1248,23 @@ color: rgb(60, 60, 60)</string>
         <string>Enable</string>
        </property>
        <property name="checkable">
-        <bool>false</bool>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="autoRepeat">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="default">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="bf_disable">
        <property name="styleSheet">
-        <string notr="true">background-color : rgb(38, 207, 4)</string>
+        <string notr="true">background-color: rgb(255, 170, 0);</string>
        </property>
        <property name="text">
         <string>Disable</string>
-       </property>
-       <property name="checkable">
-        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -1301,7 +1290,7 @@ color: rgb(60, 60, 60)</string>
      <item>
       <widget class="QPushButton" name="sig_fail_disable">
        <property name="styleSheet">
-        <string notr="true">background-color : rgb(38, 207, 4)</string>
+        <string notr="true">background-color: rgb(255, 170, 0);</string>
        </property>
        <property name="text">
         <string>Disable</string>
@@ -1330,7 +1319,7 @@ color: rgb(60, 60, 60)</string>
      <item>
       <widget class="QPushButton" name="en_fail_disable">
        <property name="styleSheet">
-        <string notr="true">background-color : rgb(38, 207, 4)</string>
+        <string notr="true">background-color: rgb(255, 170, 0);</string>
        </property>
        <property name="text">
         <string>Disable</string>
@@ -1401,7 +1390,7 @@ selection-color: rgb(99, 99, 99);
      <string>EMERGENCY STOP</string>
     </property>
     <property name="checkable">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="autoRepeat">
      <bool>true</bool>

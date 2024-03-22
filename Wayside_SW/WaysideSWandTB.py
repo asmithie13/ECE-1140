@@ -68,7 +68,6 @@ class WaysideSW(QMainWindow):
     sendSpecialBlocks = pyqtSignal(list)    #Send special blocks to testbench
     changeModeSend = pyqtSignal(bool)
     sendOccupiedBlocks = pyqtSignal(list)   #Send list of occupied blocks to CTC
-    sendCommandedSpeed = pyqtSignal(float)
 
     def __init__(self):
         super().__init__()
@@ -94,8 +93,6 @@ class WaysideSW(QMainWindow):
         #Defines special greenblocks in wayside 1     
         for block in self.greenWayside2Blocks:
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocksW2.append(block)
-            block.Wayside = "W2"
-
 
         #Defines Red line blocks
         self.redCrossingTriplesIDS = [] #ids of red crossing blocks
@@ -109,11 +106,9 @@ class WaysideSW(QMainWindow):
 
         for block in self.redWayside1Blocks:
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialRedBlocksW1.append(block)
-            block.Wayside = "W1"
 
         for block in self.redWayside2Blocks:
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialRedBlocksW2.append(block)
-            block.Wayside = "W2"
 
         #Create Parser Object
         self.currentSwitchBlocksNums = [['5','6','11']]

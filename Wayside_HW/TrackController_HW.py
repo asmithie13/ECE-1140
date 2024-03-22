@@ -25,14 +25,14 @@ class TrackController_HW(QMainWindow):
     def __init__(self):
         #Upload UI file:
         super(TrackController_HW, self).__init__()
-        uic.loadUi("Wayside HW/TrackController_HW.ui", self)
+        uic.loadUi("Wayside_HW/TrackController_HW.ui", self)
 
         #Disable manual mode operations, as program begins in automatic operation:
         self.groupBoxManual.setEnabled(False)
 
         #Initialize an empty list to hold all blocks:
         self.allTripleIDs = []
-        self.allBlocks = readTrackFile("Wayside HW/greenLine.csv", self.allTripleIDs)
+        self.allBlocks = readTrackFile("Wayside_HW/greenLine.csv", self.allTripleIDs)
 
         #Initialize a flag integer to determine which mode the system is currently in:
         self.modeFlag = 0 #0 = Automatic, 1 = Manual, 2 = Maintenance

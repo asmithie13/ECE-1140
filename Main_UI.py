@@ -67,6 +67,10 @@ class Main_UI(QtWidgets.QMainWindow):
     def open_waysideSW_UI(self):
         self.WaysideSWwindow.show()
         self.WaysideSW_tb.show() 
+    
+    def open_waysideHW_UI(self):
+        self.WaysideHWwindow.show()
+        self.WaysideHW_tb.show()
 
     def open_track_model_UI(self):
         self.TrackModelWindow.show()

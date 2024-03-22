@@ -17,7 +17,7 @@ class Schedule():
 
     #Function to add a single train to the schedule
     def addTrain(self, TrainID, Destination, ArrivalTime, Departure, DepartureTime):
-        newTrain = [TrainID, Departure, DepartureTime, Destination, ArrivalTime]
+        newTrain = [TrainID, Destination, ArrivalTime, Departure, DepartureTime]
         self.Scheduledata.append(newTrain)
 
     #function to parse a schedule file for automatic mode
@@ -62,7 +62,7 @@ class ScheduleTableModel(QtCore.QAbstractTableModel):
     
     #Adds the column header with the correct data
     def headerData(self, section, orientation, role):
-        headers = ['Train ID', 'Departure Station', 'Departure Time', 'Destination', 'Arrival Time']
+        headers = ['Train ID', 'Destination', 'Arrival Time', 'Departure Station', 'Departure Time']
 
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:

@@ -536,27 +536,7 @@
                 </layout>
                </item>
                <item>
-                <layout class="QHBoxLayout" name="ManualDispatchRow2" stretch="2,2">
-                 <item>
-                  <widget class="QLabel" name="DepartureStationLabel">
-                   <property name="text">
-                    <string>Departure Station</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QComboBox" name="DepartureSationSelect">
-                   <item>
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </item>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="ManualDispatchRow3" stretch="1,2,2,2">
+                <layout class="QHBoxLayout" name="ManualDispatchRow2" stretch="1,2,2,2">
                  <property name="sizeConstraint">
                   <enum>QLayout::SetFixedSize</enum>
                  </property>

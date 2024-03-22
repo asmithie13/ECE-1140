@@ -183,8 +183,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Set stations selctions to green line
         self.DestinationSelect.clear()
         self.DestinationSelect.addItems(self.TrackData.GreenStations)
-        self.DepartureSationSelect.clear()
-        self.DepartureSationSelect.addItems(self.TrackData.GreenStations)
         #Setting Block selections to green line
         self.CloseBlockSelect.clear()
         self.CloseBlockSelect.addItems(self.TrackData.GreenBlockIDs)
@@ -206,8 +204,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Set stations selctions to red line
         self.DestinationSelect.clear()
         self.DestinationSelect.addItems(self.TrackData.RedStations)
-        self.DepartureSationSelect.clear()
-        self.DepartureSationSelect.addItems(self.TrackData.RedStations)
         #Setting Block selections to red line
         self.CloseBlockSelect.clear()
         self.CloseBlockSelect.addItems(self.TrackData.RedBlockIDs)
@@ -287,12 +283,12 @@ class CTC_UI(QtWidgets.QMainWindow):
     #defining manual mode add train button functionality
     def addTrain_button(self):
         TrainID = self.TrainNameField.text()
-        Departure = self.DepartureSationSelect.currentText()
-        DepartureTime = self.DepartureTimeEdit.time()
-        DepartureTime = DepartureTime.toString("hh:mm")
         Destination = self.DestinationSelect.currentText()
         ArrivalTime = self.ArrivalTimeEdit.time()
         ArrivalTime = ArrivalTime.toString("hh:mm")
+
+        Departure = "X"
+        DepartureTime = "00:00"
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
 
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))

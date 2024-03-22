@@ -66,6 +66,23 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.trainSchedule = Schedule()
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
+        #Initializing Manual Mode Functions before Manual Mode has been selected
+        self.TrainNameField.clear()
+        self.TrainNameField.setEnabled(False)
+        self.DestinationSelect.setEnabled(False)
+        self.ArrivalTimeEdit.setEnabled(False)
+        #Disable the add train button
+        self.AddTrainButton.setEnabled(False)
+        #Changing label text to gray
+        self.TrainNameLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.DestinationLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.ArrivalTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.MaualDispatchBox.setStyleSheet("color: rgb(120, 120, 120);")
+
+        #Disabling Auto Mode select schedule button until auto mode is selected
+        self.UploadButton.setEnabled(False)
+        self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
+        
         #Initializing Maintenance Mode functions before Mainenance Mode has been selected
         self.CloseBlockSelect.setEnabled(False)
         self.CloseBlockButton.setEnabled(False)
@@ -143,17 +160,27 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ManualModeButton.setEnabled(False)
         self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
 
+        self.TrainNameField.setEnabled(True)
+        self.DestinationSelect.setEnabled(True)
+        self.ArrivalTimeEdit.setEnabled(True)
+        #Disable the add train button
+        self.AddTrainButton.setEnabled(True)
+        #Changing label text to gray
+        self.TrainNameLabel.setStyleSheet("color: black;")
+        self.DestinationLabel.setStyleSheet("color: black;")
+        self.ArrivalTimeLabel.setStyleSheet("color: black;")
+        self.MaualDispatchBox.setStyleSheet("color: black;")
+
     #Define mutually exclusive auto/manual mode when automatic mode is selected.
-    #Same behavior will occur when a schedule is uploaded, even if the mode was not explicitly selected. 
     def selectAutoMode_button(self):
-        #Disable The train name box
+        #Enable Schedule Upload Button
+        self.UploadButton.setEnabled(True)
+        self.UploadButton.setStyleSheet("background-color : rgb(38, 207, 4)")       #Green
+        
+        #Disable Manual Mode Functions
         self.TrainNameField.clear()
         self.TrainNameField.setEnabled(False)
-        #Disable the Departure Station and Destination Drop Downs
-        self.DepartureSationSelect.setEnabled(False)
         self.DestinationSelect.setEnabled(False)
-        #Disable the time edits
-        self.DepartureTimeEdit.setEnabled(False)
         self.ArrivalTimeEdit.setEnabled(False)
         #Disable the add train button
         self.AddTrainButton.setEnabled(False)
@@ -167,10 +194,9 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Changing label text to gray
         self.TrainNameLabel.setStyleSheet("color: rgb(120, 120, 120);")
-        self.DepartureStationLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.DestinationLabel.setStyleSheet("color: rgb(120, 120, 120);")
-        self.DepartureTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ArrivalTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.MaualDispatchBox.setStyleSheet("color: rgb(120, 120, 120);")
 
     #Sets drop down options if green line is selected
     def greenLine_button(self):
@@ -234,13 +260,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
         #Disable Manual Mode and upload button
-        self.selectAutoMode_button()
         self.UploadButton.setEnabled(False)
         self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
-
-        #Disable Manual Mode button (because it's one use)
-        self.ManualModeButton.setEnabled(False)
-        self.ManualModeButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
 
 
     #Indication that the system is in maintenance mode

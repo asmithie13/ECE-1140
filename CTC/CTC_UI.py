@@ -293,7 +293,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         ArrivalTime = self.ArrivalTimeEdit.time()
         ArrivalTime = ArrivalTime.toString("hh:mm")
         self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
-        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+
         self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 

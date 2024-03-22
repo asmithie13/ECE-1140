@@ -25,7 +25,7 @@ from PyQt5 import QtGui
 
 
 #My main window
-class TrackModelMain(QMainWindow):
+class MyMainWindow(QMainWindow):
     # Define a signal to emit the grade to testBench UI
     grade_signal = pyqtSignal(float)
     #Adding a signal to update information based on block selection:
@@ -34,16 +34,13 @@ class TrackModelMain(QMainWindow):
     getSpecialBlocks = pyqtSignal(list)
     #sendOccupancies = pyqtSignal(list)
 
-    SendTicketsales = pyqtSignal(list)
-
     def __init__(self):
         super().__init__()
         self.blockStates = {}
         
-
         # Load the track model straight from the UI file using uic
-        uic.loadUi("Track_Model/Track_Model.ui", self)
-        self.clock_in.display("09:22")
+        uic.loadUi("Track Model/Track_Model.ui", self)
+        
         # Connect Upload Track Layout button to make upload file
         self.pushButton.clicked.connect(self.upload_track_layout) 
 
@@ -52,7 +49,7 @@ class TrackModelMain(QMainWindow):
         self.block_in_2.setEnabled(False)
 
 
-        #self.generateTickets()
+        self.generateTickets()
 
         # Connect button to method
         # If clicked, then connect to UI
@@ -78,23 +75,12 @@ class TrackModelMain(QMainWindow):
         random_number = random.randint(1, 74)
         #Output the random numberto ticket sales block info
         self.ticket_out.setText(str(random_number))
-        self.SendTicketsales.emit(random_number)
-
-
 
     #send to CTC
     def send_tickets(self):
         pass
 
     def send_boarding(self):
-        pass
-    
-    #set temperature
-    def set_temp(self, temp):
-        pass
-
-    #use global clock
-    def clock(self):
         pass
 
     #failures:
@@ -218,14 +204,14 @@ class TrackModelMain(QMainWindow):
             # Instantiate the Data class and pull
             self.data = Data()
             
-        #current_selection = self.line_select.currentText()
+        current_selection = self.line_select.currentText()
 
-        #if current_selection == "Blue Line":
-        self.data.read_excel(uploaded_track)
-        #elif current_selection == "Red Line":
-            #self.data.read_excel(uploaded_track ,2)
-        #else:
-            #pass
+        if current_selection == "Blue Line":
+            self.data.read_excel(uploaded_track ,1)
+        elif current_selection == "Red Line":
+            self.data.read_excel(uploaded_track ,2)
+        else:
+            pass
             
             #self.data.read_excel(uploaded_track ,1)
  
@@ -273,9 +259,9 @@ class TrackModelMain(QMainWindow):
         self.block_selected_signal.emit(block_text)
     
         # After updating the UI, restore the state of toggle buttons for the selected block
-        #self.restore_block_state(block_text)
+        self.restore_block_state(block_text)
 
-    #Updates block in failure based on block selection
+
     def update_block_in_2_based_on_block_in_1(self):
     #Get the currently selected text in block_in_1
         selected_text = self.block_in_1.currentText()
@@ -296,7 +282,7 @@ class TrackModelMain(QMainWindow):
 
 
 #this is my testbench window
-class TrackModel_tb(QMainWindow):
+class TestBench(QMainWindow):
     #Change the signal to emit a string for buttons
     broken_rail_input_signal = pyqtSignal(str)
     track_input_signal = pyqtSignal(str)
@@ -317,7 +303,7 @@ class TrackModel_tb(QMainWindow):
         super().__init__()
 
         # Load the track model testbench straight from the UI file using uic
-        uic.loadUi("Track_Model/testbench_trackmodel.ui", self)
+        uic.loadUi("Track Model/testbench_trackmodel.ui", self)
 
 
         # Calling test input functions
@@ -472,20 +458,19 @@ class Data:
         self.infra = None
         self.cumm_elevation = None
 
-    def set_heater(self):
-        pass
+
     
     # read Excel files from DataFrame
-    def read_excel(self, filename):
+    def read_excel(self, filename, num):
 
-        #current_selection = self.line_select.currentText()
+        current_selection = self.line_select.currentText()
         # Use an if statement to check the current selection and set the filename accordingly
-        #if num == 1:
-        self.df = pd.read_excel("Track_Resources/Blue_Line_Block_Info.xlsx")
-        #elif num == 2:
-        #   self.df = pd.read_excel("Track_Resources/red_line.xlsx")
-        #else:
-           # pass
+        if num == 1:
+            self.df = pd.read_excel("Track_Resources/Blue_Line_Block_Info.xlsx")
+        elif num == 2:
+            self.df = pd.read_excel("Track_Resources/red_line.xlsx")
+        else:
+            pass
 
         #extract data from DataFrame of the Excel and assign to variables
         self.elevation_data = self.df.set_index('Block Number')['ELEVATION (M)'].to_dict()
@@ -627,11 +612,11 @@ class Data:
 # Call Main window
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = TrackModelMain()
-    window_2 = TrackModel_tb()
+    window = MyMainWindow()
+    window_2 = TestBench()
 
     #Create an instance of Communicate
-    #communicator = Communicate()
+    communicator = Communicate()
 
     # connect the signal from window_2 to the slot in window
     window_2.broken_rail_input_signal.connect(window.toggle_button_state_tb)
@@ -646,11 +631,8 @@ if __name__ == "__main__":
     window_2.cross_input_signal.connect(window.toggle_cross_state_tb)
     window_2.switch_input_signal.connect(window.toggle_switch_tb)
 
-    # Connect TrackModelMain's method to emit the grade to TestBench's slot to update the grade label
+    # Connect MyMainWindow's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)
-
-    #window.SendTicketsales.connect("CTC/CTC_UI.py".MainWindow.update_grade_label)
-
 
 
     window.block_selected_signal.connect(window_2.update_on_block_selection)

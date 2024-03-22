@@ -15,5 +15,4 @@ class Block:
         self.speedLimit = None
         self.authority = None
         self.blockLength = None
-        self.Wayside = None
 

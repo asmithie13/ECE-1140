@@ -772,20 +772,7 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QCheckBox" name="int_lights_on_input_tb">
-           <property name="text">
-            <string>ON</string>
-           </property>
-           <property name="autoRepeat">
-            <bool>false</bool>
-           </property>
-           <property name="autoExclusive">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="int_lights_off_input_tb">
+          <widget class="QCheckBox" name="int_lights_input_tb">
            <property name="text">
             <string>OFF</string>
            </property>
@@ -837,9 +824,9 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QCheckBox" name="ext_lights_on_input_tb">
+          <widget class="QCheckBox" name="ext_lights_input_tb">
            <property name="text">
-            <string>ON</string>
+            <string>OFF</string>
            </property>
            <property name="autoRepeat">
             <bool>false</bool>
@@ -849,19 +836,6 @@
            </property>
            <property name="tristate">
             <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_8">
-           <property name="text">
-            <string>OFF</string>
-           </property>
-           <property name="autoRepeat">
-            <bool>false</bool>
-           </property>
-           <property name="autoExclusive">
-            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -1122,22 +1096,9 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QCheckBox" name="right_doors_open_input_tb">
+          <widget class="QCheckBox" name="right_doors_input_tb">
            <property name="text">
             <string>OPEN</string>
-           </property>
-           <property name="autoRepeat">
-            <bool>false</bool>
-           </property>
-           <property name="autoExclusive">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="right_doors_closed_input_tb">
-           <property name="text">
-            <string>CLOSED</string>
            </property>
            <property name="autoRepeat">
             <bool>false</bool>
@@ -1167,22 +1128,9 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QCheckBox" name="left_doors_closed_input_tb">
+          <widget class="QCheckBox" name="left_doors_input_tb">
            <property name="text">
             <string>OPEN</string>
-           </property>
-           <property name="autoRepeat">
-            <bool>false</bool>
-           </property>
-           <property name="autoExclusive">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_12">
-           <property name="text">
-            <string>CLOSED</string>
            </property>
            <property name="autoRepeat">
             <bool>false</bool>

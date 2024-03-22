@@ -11,7 +11,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 from Track_Resources.Block import Block
-from Wayside_HW.readTrackFile import *
+from readTrackFile import *
 
 class TrackController_HW_TB(QMainWindow):
     #Signals:
@@ -23,11 +23,11 @@ class TrackController_HW_TB(QMainWindow):
     def __init__(self):
         #Upload UI file:
         super(TrackController_HW_TB, self).__init__()
-        uic.loadUi("Wayside_HW/TrackController_HW_TB.ui", self)
+        uic.loadUi("Wayside HW/TrackController_HW_TB.ui", self)
 
         #Initialize an empty list to hold all blocks:
         self.allTripleIDs = [] #Don't need for TB
-        self.allBlocks = readTrackFile("Wayside_HW/greenLine.csv", self.allTripleIDs)
+        self.allBlocks = readTrackFile("Wayside HW/greenLine.csv", self.allTripleIDs)
 
         self.listBlockIDs = []
         for block in self.allBlocks:

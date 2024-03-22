@@ -7,6 +7,7 @@ class NonVital():
         self.blocksTraveledCounter = 0
         self.blocksToUnderground = 0
         self.undergroundBlocks = 0
+        self.dist_next_station= 0;
     
     def Control_Headlights(self):
 
@@ -16,7 +17,12 @@ class NonVital():
         if(self.ui.buttonHDoff.isChecked()):
             self.ui.buttonHDon.setChecked(False)
             #emit(0)
-    
+
+    def Control_Name_Next_Station(self,string):
+        self.ui.CurStatOut.setText(string)
+
+    def Control_Dist_Next_Station(self,dist):
+        self.dist_next_station = dist
     
     #i want to change the int lights to a toggle button like the others
     def Control_interiorLights(self):
@@ -106,17 +112,20 @@ class NonVital():
             self.blocksTraveledCounter = 0
         
         #when underground
+        """
         if self.ui.underground.isChecked():
             if self.blocksTraveledCounter == self.undergroudBlocks+1:
                 self.ui.underground.setChecked(False)
                 self.ui.buttonHDon.setChecked(False)
                 self.ui.buttonHDoff.setChecked(True)
                 self.blocksTraveledCounter = 0
+        """
     
     
     def BlockCounter(self):
         self.blocksTraveledCounter += 1
         self.Control_Underground()
+
 
             
 

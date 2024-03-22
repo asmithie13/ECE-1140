@@ -161,6 +161,7 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addWidget(self.BrkAcelBox, 1, 1, 2, 2)
 
         ### TRAIN SELECTION
+
         self.Train_Select_Box = QtWidgets.QGroupBox(self.centralwidget)
         self.Train_Select_Box.setMaximumSize(QtCore.QSize(400, 16777215))
         self.Train_Select_Box.setStyleSheet("background-color: rgb(233, 247, 255);")
@@ -190,11 +191,14 @@ class Ui_MainWindow(object):
         self.trainSel.addItem("")
         self.trainSel.addItem("")
         self.trainSel.addItem("")
+        
         self.verticalLayout_6.addWidget(self.trainSel)
         self.gridLayout_2.addWidget(self.Train_Select_Box, 1, 0, 1, 1)
+
         self.Ebrake = QtWidgets.QPushButton(self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(25)
+
 
         ####EBRAKE
         self.Ebrake.setFont(font)

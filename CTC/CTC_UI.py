@@ -63,7 +63,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.currentLine = ''
 
         #Initializing Schedule
-        self.trainSchedule = Schedule()
+        self.trainSchedule = Schedule() 
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
         #Initializing Manual Mode Functions before Manual Mode has been selected
@@ -141,16 +141,16 @@ class CTC_UI(QtWidgets.QMainWindow):
     def addTrain_button(self):
         #Grabbing values from the UI
         TrainID = self.TrainNameField.text()
-        Departure = self.DepartureSationSelect.currentText()
         Destination = self.DestinationSelect.currentText()
         ArrivalTime = self.ArrivalTimeEdit.time()
         ArrivalTime = ArrivalTime.toString("hh:mm")
 
-        #Calculatig the Departure Time
-        DepartureTime = ArrivalTime 
-        DepartureTime = DepartureTime.toString("hh:mm")
+        #Calculatig the Departure Station and time
+        Departure = []
+        self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure)
 
-        self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
+        #Adding the train to the schedule
+        self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure[0], Departure[1])
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 
@@ -310,7 +310,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         Departure = "X"
         DepartureTime = "00:00"
-        self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
+        self.trainSchedule.addTrain(self.currentLine, TrainID, Destination, ArrivalTime, Departure, DepartureTime)
 
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 

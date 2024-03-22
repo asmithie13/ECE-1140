@@ -32,5 +32,5 @@ windowOne.sendUpdatedBlocks.connect(windowTwo.receiveUpdatedBlocks)
 windowOne.sendOccupiedBlocks.connect(windowTwo.receiveOccupiedBlocks)
 
 windowOne.show()
-#windowTwo.show()
+windowTwo.show()
 sys.exit(app.exec_())

@@ -10,9 +10,9 @@ import re
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
-from TrackController_HW_TB import *
+from Wayside_HW.TrackController_HW_TB import *
+from Wayside_HW.readTrackFile import *
 from Track_Resources.Block import Block
-from readTrackFile import *
 
 #Main train controller class:
 class TrackController_HW(QMainWindow):

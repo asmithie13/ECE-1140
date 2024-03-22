@@ -11,7 +11,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 from Track_Resources.Block import Block
-from readTrackFile import *
+from Wayside_HW.readTrackFile import *
 
 class TrackController_HW_TB(QMainWindow):
     #Signals:

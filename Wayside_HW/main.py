@@ -3,8 +3,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
 import sys
-from TrackController_HW import *
-from TrackController_HW_TB import *
+from Wayside_HW.TrackController_HW import *
+from Wayside_HW.TrackController_HW_TB import *
 from readTrackFile import *
 
 app = QApplication(sys.argv)

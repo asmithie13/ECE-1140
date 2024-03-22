@@ -85,9 +85,9 @@ class TrainController(QMainWindow):
         self.ui.inputKp.valueChanged.connect(self.Vital_Power.Control_Ki)
         self.ui.inputKi.valueChanged.connect(self.Vital_Power.Control_Kp)
         self.ui.vertSliderPow.valueChanged.connect(self.Vital_Power.calculate_power)
-        self.ui.lcdCurSpd.valueChanged.connect(self.Vital_Speed.Speed_Monitor)
+        #self.ui.lcdCurSpd.valueChanged.connect(self.Vital_Speed.Speed_Monitor)
         #self.ui.vertSliderBrk.valueChanged.connect(self.Vital_Speed.Control_Brake())
-        self.ui.lcdAuth.valueChanged.connect(self.Vital_Authority.Authority_Monitor())
+        #self.ui.lcdAuth.valueChanged.connect(self.Vital_Authority.Authority_Monitor())
 
         #these probably don't work
         #self.ui.BrkFail.stateChanged.connect(self.Vital_Failure.Control_Brake_Failure())

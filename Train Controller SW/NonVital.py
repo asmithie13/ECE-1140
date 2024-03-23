@@ -23,6 +23,9 @@ class NonVital():
 
     def Control_Dist_Next_Station(self,dist):
         self.dist_next_station = dist
+
+    def Cabin_Temperature(self,cabinTemp):
+        self.ui.temp.setValue(cabinTemp)
     
     #i want to change the int lights to a toggle button like the others
     def Control_interiorLights(self):

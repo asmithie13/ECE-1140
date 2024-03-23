@@ -5,8 +5,10 @@ class Vital_Speed():
     def __init__(self,ui):
         self.ui = ui
 
-    def change_Speed(self,newspeed):
-        self.ui.lcdCurSpd.setValue(newspeed)
+    def Control_Current_Speed(self,newSpeed):
+        self.ui.lcdCurSpd.setValue(newSpeed)
+        self.Speed_Monitor()
+    
     def Speed_Monitor(self):
         #check current speed every time speed is updated or speed limit is updated
         #if speed is greater than speed limit, send command to brake
@@ -35,16 +37,21 @@ class Vital_Speed():
     
     def service_brake(self):
         #send signal to brake
+        #turn down acceltor
         if self.ui.vertSliderBrk.value() == 1:
+            self.ui.vertSliderPow.setValue(0)
             #emit(1)
             print("Service Brake On")
         if self.ui.vertSliderBrk.value() == 0:
             #emit(0)
             print("Service Brake Off")
         
-    ## i kinda have these both done in TC but we can put them in here so its not a class with two function but these will have literally one line in them
-    #def Control_Speed_Limit():
+    def Control_Speed_Limit(self,spdLim):
         #update speed limit for current block
-
-    #def Control_Commanded_Speed(self):
+        self.ui.lcdSpdLim.setValue(spdLim)
+        self.Speed_Monitor()
+        
+    def Control_Commanded_Speed(self,cmdSpd):
         #update commanded speed for from signal
+        self.ui.lcdCmdSpd.setValue(cmdSpd)
+        self.Speed_Monitor()

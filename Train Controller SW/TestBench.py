@@ -1,32 +1,29 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from abstraction_signals import *
-from Test_Bench_UI import *
+from TrainController import TrainController
+from Test_Bench_UI import TC_TestBench_UI
 
 class TC_TestBench(object):
-
     def __init__(self):
         #where all the connections will go
         #where we will initalizw the TestBenchUI varible
         self.window = QtWidgets.QMainWindow()
-        self.tb_ui = Ui_MainWindow()
+        self.tb_ui = TC_TestBench_UI()
         self.tb_ui.setupUi(self.window)
         self.window.show()
-
-        self.TC = Train_Controller_Signals
-
+        self.TC = TrainController()
         #also need the Train Controller object to access it
 
     def Set_Automatic_Manual(self):
        self.tb_ui.buttonAuto.toggle()
        self.tb_ui.buttonMan.toggle()
+    
     def Set_Annoucement(self):
         text_output = self.tb_ui.Announcement.text()
-        self.TC.ui.SpkrOut.setText(text_output)
 
     def Set_Beacon_Information(self):
         text_output = self.Station.text()
-        self.ui.CurStatOut.setText(text_output)
+        self.TC.beacon_info_sig.emit(self.Station.text())
 
     def Set_Left_Door(self):
         self.ui.buttonDoorL.toggle()
@@ -35,21 +32,24 @@ class TC_TestBench(object):
     def Set_Headlights(self):
         self.ui.buttonHDon.toggle()
         self.ui.buttonHDoff.toggle()
+    
     def Set_Power_Failure(self):
         if(not(self.PowerFailure.isChecked())):
-            self.ui.Power_Failure_Disable()
+            self.TC.pwr_fail_sig.emit(0)
         else:
-            self.ui.Power_Failure_Enable()
+            self.TC.pwr_fail_sig.emit(1)
+    
     def Set_Brake_Failure(self):
         if(not(self.BrakeFailure.isChecked())):
-            self.ui.Brake_Failure_Disable()
+            self.TC.brk_fail_sig.emit(0)
         else:
-            self.ui.Brake_Failure_Enable()
+            self.TC.brk_fail_sig.emit(1)
+   
     def Set_Signal_Failure(self):
         if(not(self.SignalFailure.isChecked())):
-            self.ui.Signal_Failure_Disable()
+            self.TC.sig_fail_sig.emit(0)
         else:
-            self.ui.Signal_Failure_Enable()
+            self.TC.sig_fail_sig.emit(1)
 
     def set_interior_lights(self):
         if self.CabinLights.value() == 2:
@@ -77,26 +77,22 @@ class TC_TestBench(object):
 
     def Set_Commanded_Speed(self):
         value = int(self.CSpeed.value())
-        self.ui.lcdCmdSpd.display(value)
-        self.ui.calSpeed()
+        self.TC.curr_cmd_spd_sig.emit(value)
 
     def Set_Speed_Limit(self):
         value = int(self.SpeedLimit.value())
-        self.ui.lcdSpdLim.display(value)
-        self.ui.calSpeed()
+        self.TC.curr_spd_lim_sig.emit(value)
 
     def Set_Current_Speed(self):
         # in future iterations, move this to the UI function
-        if (self.ui.lcdAuth.value() == 0):
-            self.ui.lcdCurSpd.display(0)
-        else:
-            self.ui.lcdCurSpd.display(self.CurSpeed.value())
+        value = int(self.CurSpeed.value())
+        self.TC.curr_spd_sig.emit(value)
 
     def Set_Authority(self):
         value = int(self.Authority.value())
         self.ui.lcdAuth.display(value)
 
-    def Set_Cabin_Temperature(self):
+    def Set_Cabin_Temperature(self): 
         value = int(self.CabinTemp.value())
         self.ui.temp.setValue(value)
 

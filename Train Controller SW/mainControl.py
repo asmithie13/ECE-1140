@@ -195,12 +195,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.addWidget(self.trainSel)
         self.gridLayout_2.addWidget(self.Train_Select_Box, 1, 0, 1, 1)
 
+
+        ####EBRAKE
         self.Ebrake = QtWidgets.QPushButton(self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(25)
-
-
-        ####EBRAKE
         self.Ebrake.setFont(font)
         self.Ebrake.setAutoFillBackground(False)
         self.Ebrake.setStyleSheet("background-color: rgb(255, 55, 62);\n"

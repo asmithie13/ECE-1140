@@ -17,6 +17,8 @@ class TrainController(QMainWindow):
     #vital signals we recieve
     curr_spd_sig = pyqtSignal(int)
     curr_auth_sig = pyqtSignal(int)
+    curr_bool_auth_sig  = pyqtSignal(bool)
+    curr_cmd_spd_sig = pyqtSignal(int)
     curr_temp_sig = pyqtSignal(int)
     curr_spd_lim_sig = pyqtSignal(int)
     ebrake_sig = pyqtSignal(bool)
@@ -24,13 +26,16 @@ class TrainController(QMainWindow):
     brk_fail_sig = pyqtSignal(bool)
     sig_fail_sig = pyqtSignal(bool)
 
+
+    beacon_info_sig = pyqtSignal(str)
+
     #non vital we recieve
-    next_station_sig = pyqtSignal(str)
+    #next_station_sig = pyqtSignal(str)
     underground_sig = pyqtSignal(bool)
     block_passed_sig = pyqtSignal(bool)
-    underground_sig = pyqtSignal(bool)
-    dist_to_next_station_sig = pyqtSignal(int)
-    block_length_sig = pyqtSignal(int)
+    
+    #dist_to_next_station_sig = pyqtSignal(int)
+    #block_length_sig = pyqtSignal(int)
     # signals we use as outputs
 
     #signals we send
@@ -40,6 +45,8 @@ class TrainController(QMainWindow):
     door_control_sig = pyqtSignal(int)
     announcement_sig = pyqtSignal(str)
     temp_control_sig = pyqtSignal(int)
+    int_light_sig = pyqtSignal(int)
+    ext_light_sig = pyqtSignal(int)
 
 
     def __init__(self,ui):
@@ -55,16 +62,15 @@ class TrainController(QMainWindow):
         self.NonVital = NonVital(self.ui)
 
         #slotting siganls
-        self.curr_spd_sig.connect(self.Vital_Speed.change_Speed)
-        self.curr_spd_sig.connect(self.ui.lcdCurSpd.display)
-        self.curr_auth_sig.connect(self.ui.lcdAuth.display)
-        self.curr_spd_lim_sig.connect(self.ui.lcdSpdLim.display)
-        self.curr_temp_sig.connect(self.ui.lcdCurTemp.display)
+        self.curr_spd_sig.connect(self.Vital_Speed.Control_Current_Speed)
+        self.curr_cmd_spd_sig.connect(self.Vital_Speed.Control_Commanded_Speed)
+        self.curr_spd_lim_sig.connect(self.Vital_Speed.Control_Speed_Limit)
+        self.curr_auth_sig.connect(self.Vital_Authority.Control_Authority)
+        self.curr_temp_sig.connect(self.NonVital.Cabin_Temperature)
         self.ebrake_sig.connect(self.ui.Ebrake.setChecked)
-        #need to fix these
         self.pwr_fail_sig.connect(self.Vital_Failure.Control_Power_Failure)
         self.brk_fail_sig.connect(self.Vital_Failure.Control_Brake_Failure)
-        #self.sig_fail_sig.connect(self.SigFail.setChecked(self.sig_fail_sig))
+        self.sig_fail_sig.connect(self.Vital_Failure.Control_Signal_Failure)
         #Need to do in UI
         #self.underground_sig.connect(self.underground_sig.setChecked(self.underground_sig))
         self.next_station_sig.connect(self.NonVital.Control_Name_Next_Station)
@@ -73,21 +79,24 @@ class TrainController(QMainWindow):
         self.block_passed_sig.connect(self.NonVital.BlockCounter)
 
 
+        #bool authority
+        self.curr_bool_auth_sig.connect(self.Vital_Authority.Authority_Monitor_Bool)
+
         #connecting UI buttons to functions
-        self.ui.Ebrake.clicked.connect(self.Vital_Failure.Control_Emergency_Brake)
-        self.ui.buttonMan.clicked.connect(self.Control_Manual)
-        self.ui.buttonAuto.clicked.connect(self.Control_Automatic)
-        self.ui.temp.valueChanged.connect(self.NonVital.Control_Temperature)
-        self.ui.buttonHDoff.clicked.connect(self.NonVital.Control_Headlights)
-        self.ui.buttonHDon.clicked.connect(self.NonVital.Control_Headlights)
+        self.ui.Ebrake.clicked.connect(lambda : self.Vital_Failure.Control_Emergency_Brake())
+        self.ui.buttonMan.clicked.connect(lambda : self.Control_Manual())
+        self.ui.buttonAuto.clicked.connect(lambda : self.Control_Automatic())
+        self.ui.temp.valueChanged.connect(lambda : self.NonVital.Control_Temperature())
+        self.ui.buttonHDoff.clicked.connect(lambda : self.NonVital.Control_Headlights())
+        self.ui.buttonHDon.clicked.connect(lambda : self.NonVital.Control_Headlights())
         #I dont think we need this because if the user changes the annoucement we dont really care
         #self.ui.lineEditAnn.editingFinished.connect(self.NonVital.Control_Annoucement)
-        self.ui.inputKp.valueChanged.connect(self.Vital_Power.Control_Ki)
-        self.ui.inputKi.valueChanged.connect(self.Vital_Power.Control_Kp)
-        self.ui.vertSliderPow.valueChanged.connect(self.Vital_Power.calculate_power)
-        #self.ui.lcdCurSpd.valueChanged.connect(self.Vital_Speed.Speed_Monitor)
-        #self.ui.vertSliderBrk.valueChanged.connect(self.Vital_Speed.Control_Brake())
-        #self.ui.lcdAuth.valueChanged.connect(self.Vital_Authority.Authority_Monitor())
+        self.ui.inputKp.valueChanged.connect(lambda : self.Vital_Power.Control_Ki())
+        self.ui.inputKi.valueChanged.connect(lambda : self.Vital_Power.Control_Kp())
+        self.ui.vertSliderPow.valueChanged.connect(lambda : self.Vital_Power.calculate_power())
+        #self.ui.lcdCurSpd.connect(self.Vital_Speed.Speed_Monitor)
+        self.ui.vertSliderBrk.change.connect(self.Vital_Speed.Control_Brake())
+        #self.ui.lcdAuth.valueChanged.connect(lambda :self.Vital_Authority.authTimerStart())
 
         #these probably don't work
         #self.ui.BrkFail.stateChanged.connect(self.Vital_Failure.Control_Brake_Failure())
@@ -109,7 +118,6 @@ class TrainController(QMainWindow):
       self.ui.Speed_Montior()
       self.ui.vertSliderPow.setDisabled(True)
       self.ui.vertSliderBrk.setDisabled(True)
-
 
     def Control_Manual(self):
         self.ui.buttonAuto.toggle()

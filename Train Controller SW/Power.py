@@ -27,32 +27,37 @@ class Vital_Power():
     
     def calculate_power(self):
 
-        self.time = self.globalClock
-        self.dt = self.time - self.prevTime
-        self.prevTime = self.time
-        self.error = self.lcdCmdSpd.value() - self.lcdCurSpd.value()
-        self.uk = self.prevUk + (self.error + self.prevError) * self.dt / 2
-        self.prevError = self.error
-        self.prevUk = self.uk
-        
-        self.power0 = self.lcdKp.value() * self.error + self.lcdKi.value() * self.uk
-        self.power1 = self.lcdKp.value() * self.error + self.lcdKi.value() * self.uk
-        self.power2 = self.lcdKp.value() * self.error + self.lcdKi.value() * self.uk
+        if self.ui.vertSliderPow.value() == 0:
+            self.ui.vertSliderBrk.setValue(1)
+            self.power = 0
 
-        if(self.power0 == self.power1 or self.power1 == self.power2 or self.power0 == self.power2):
-            if(self.power0 == self.power1):
-                self.power = self.power0
-            elif(self.power1 == self.power2):
-                self.power = self.power1
-            elif(self.power0 == self.power2):
-                self.power = self.power0
-        else: 
-            self.power = 0
-        
-        if self.power > 120000:
-            self.power = 120000
-        elif self.power < 0:
-            self.power = 0
+        else:
+            self.time = self.globalClock
+            self.dt = self.time - self.prevTime
+            self.prevTime = self.time
+            self.error = self.lcdCmdSpd.value() - self.lcdCurSpd.value()
+            self.uk = self.prevUk + (self.error + self.prevError) * self.dt / 2
+            self.prevError = self.error
+            self.prevUk = self.uk
+            
+            self.power0 = (self.ui.lcdKp.value() * self.error + self.ui.lcdKi.value() * self.uk) * (self.ui.lcdPwrOut.value() / 100)
+            self.power1 = (self.ui.lcdKp.value() * self.error + self.ui.lcdKi.value() * self.uk) * (self.ui.lcdPwrOut.value() / 100)
+            self.power2 = (self.ui.lcdKp.value() * self.error + self.ui.lcdKi.value() * self.uk) * (self.ui.lcdPwrOut.value() / 100)
+
+            if(self.power0 == self.power1 or self.power1 == self.power2 or self.power0 == self.power2):
+                if(self.power0 == self.power1):
+                    self.power = self.power0
+                elif(self.power1 == self.power2):
+                    self.power = self.power1
+                elif(self.power0 == self.power2):
+                    self.power = self.power0
+            else: 
+                self.power = 0
+            
+            if self.power > 120000:
+                self.power = 120000
+            elif self.power < 0:
+                self.power = 0
         
         self.ui.lcdPwrOut.display(self.power)
-        self.ui.curr_power_sig.emit(self.power)
+        #emit singla to tanvi

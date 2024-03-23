@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-class TC_TestBench_UI:
 
+class TC_TestBench_UI:
     def setupUi(self, TestBench):
         TestBench.setObjectName("TestBench")
         TestBench.resize(571, 665)

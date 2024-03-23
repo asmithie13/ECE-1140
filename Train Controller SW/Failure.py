@@ -11,7 +11,6 @@ class Vital_Failure():
                 #emit(1) brake signal to tanvi
             else:
                 enable = False
-            
             self.ui.buttonMan.setDisabled(enable)
             self.ui.buttonMan.setDisabled(enable)
             self.ui.buttonDoorL.setDisabled(enable)
@@ -27,6 +26,7 @@ class Vital_Failure():
             self.ui.vertSliderPow.setDisabled(enable)
             self.ui.inputKi.setDisabled(enable)
             self.ui.inputKp.setDisabled(enable)
+            print("Emergency Brake: ")
 
 
     def Control_Signal_Failure(self,sig_fail):

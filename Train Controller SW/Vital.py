@@ -161,8 +161,6 @@ class Vital(TrainController):
             TrainController.ui.buttonDoorL.setEnabled(True)
             TrainController.ui.buttonDoorR.setEnabled(True)
         
-        
-
 
     ## we need to call this when auth is entered from TB and we have a speed
     def Control_Authority(self):

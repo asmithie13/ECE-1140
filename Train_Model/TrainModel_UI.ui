@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1008</width>
+    <width>1010</width>
     <height>651</height>
    </rect>
   </property>
@@ -874,7 +874,7 @@ color: rgb(60, 60, 60)</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../../../.designer/backup/bk_ad.png</pixmap>
+     <pixmap>../../Tanvi's Tr Mod/bk_ad.png</pixmap>
     </property>
    </widget>
    <widget class="Line" name="line_2">

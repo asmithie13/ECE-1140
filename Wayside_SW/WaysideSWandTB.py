@@ -68,7 +68,7 @@ class WaysideSW(QMainWindow):
     sendSpecialBlocks = pyqtSignal(list)    #Send special blocks to testbench
     changeModeSend = pyqtSignal(bool)
     sendOccupiedBlocks = pyqtSignal(list)   #Send list of occupied blocks to CTC
-    sendCommandedSpeed = pyqtSignal(float)
+    sendTrainSpeedAuth = pyqtSignal(list) #Send commanded speed to track model
 
     def __init__(self):
         super().__init__()
@@ -80,6 +80,9 @@ class WaysideSW(QMainWindow):
 
         #Occupied Block list ordered by ID
         self.occupiedBlocks = []
+
+        #List of train ID, inital speed, inital authority sent by CTC
+        self.initialTrainSpeedAuthority = []
 
         #Defines Green Line blocks
         self.greenCrossingTriplesIDS = [] #ids of red crossing blocks
@@ -445,11 +448,9 @@ class WaysideSW(QMainWindow):
         self.sendSpecialBlocks.emit(self.currentBlocks)
         self.sendOccupiedBlocks.emit(self.occupiedBlocks)
 
-    def receiveSpeedAuth(self,changedBlock):
-         for block in self.currentBlocks:
-            if block.lineColor == changedBlock.lineColor and block.ID == changedBlock.ID:
-                block = changedBlock
-                break
+    def receiveSpeedAuth(self,initialTrainSpeedAuthority):
+         self.initialTrainSpeedAuthority.append(initialTrainSpeedAuthority)
+         self.sendTrainSpeedAuth.emit(initialTrainSpeedAuthority)
         
 class TestBench(QMainWindow):
 

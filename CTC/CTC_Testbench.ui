@@ -54,21 +54,12 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="TicketSaleLayout" stretch="1,2,2,0">
+         <layout class="QHBoxLayout" name="TicketSaleLayout" stretch="1,2,0">
           <item>
            <widget class="QLabel" name="TicketSalesLabel">
             <property name="text">
-             <string>Ticket Sales:</string>
+             <string>Ticket Sales (green, red):</string>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="LineSelect">
-            <item>
-             <property name="text">
-              <string>Select Line</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item>

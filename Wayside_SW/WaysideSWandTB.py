@@ -21,7 +21,7 @@ def sort_by_number(block):
 def readTrackFile(fileName,crossingTriples):
     totalBlocks = []
     lightBlocks = {}
-    fileName = "Wayside SW/" + fileName
+    #fileName = "Wayside SW/" + fileName
     with open(fileName, "r") as fileObject:
         readObj = csv.reader(fileObject, delimiter=",")
         for i, line in enumerate(readObj):
@@ -39,7 +39,7 @@ def readTrackFile(fileName,crossingTriples):
                     hasCrossingTemp = True
                     crossingState = True
 
-                elif(line[6][0:6] == "SWITCH"):
+                elif(line[6][0:6] == "SWITCH" and line[6].find("YARD") == -1):
                     hasSwitchTemp = True
                     switchState = True
 
@@ -62,37 +62,47 @@ def readTrackFile(fileName,crossingTriples):
 
     return totalBlocks #Return a list of all blocks within the file
 
-class MyApp(QMainWindow):
+class WaysideSW(QMainWindow):
 
     #Signals
     sendSpecialBlocks = pyqtSignal(list)    #Send special blocks to testbench
     changeModeSend = pyqtSignal(bool)
+    sendOccupiedBlocks = pyqtSignal(list)   #Send list of occupied blocks to CTC
+    sendTrainSpeedAuth = pyqtSignal(list) #Send commanded speed to track model
 
     def __init__(self):
         super().__init__()
-        uic.loadUi("Wayside SW/Wayside_UI_Rough.ui",self)
+        uic.loadUi("Wayside_SW/Wayside_UI_Rough.ui",self)
 
         self.currentSpecialBlocks = None
         self.currentBlocks = None
         self.currentSwitchBlocks = None
 
+        #Occupied Block list ordered by ID
+        self.occupiedBlocks = []
+
+        #List of train ID, inital speed, inital authority sent by CTC
+        self.initialTrainSpeedAuthority = []
+
         #Defines Green Line blocks
         self.greenCrossingTriplesIDS = [] #ids of red crossing blocks
-        self.allGreenBlocks = readTrackFile("Green_Line.csv",self.greenCrossingTriplesIDS)
-        self.specialGreenBlocksW1 = []
+        self.allGreenBlocks = readTrackFile("Wayside_SW/Green_Line.csv",self.greenCrossingTriplesIDS)
+        self.specialGreenBlocksW2 = []
 
         #SW in charge of W1, HW in charge of W2
 
         wayside1Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
-        self.greenWayside1Blocks = [x for x in self.allGreenBlocks if x.blockSection in wayside1Chars]
+        self.greenWayside2Blocks = [x for x in self.allGreenBlocks if x.blockSection not in wayside1Chars]
      
         #Defines special greenblocks in wayside 1     
-        for block in self.greenWayside1Blocks:
-            if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocksW1.append(block)
+        for block in self.greenWayside2Blocks:
+            if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocksW2.append(block)
+            block.Wayside = "W2"
+
 
         #Defines Red line blocks
         self.redCrossingTriplesIDS = [] #ids of red crossing blocks
-        self.allRedBlocks = readTrackFile("Red_Line.csv",self.redCrossingTriplesIDS)
+        self.allRedBlocks = readTrackFile("Wayside_SW/Red_Line.csv",self.redCrossingTriplesIDS)
         self.specialRedBlocksW1 = []
         self.specialRedBlocksW2 = []
 
@@ -102,9 +112,11 @@ class MyApp(QMainWindow):
 
         for block in self.redWayside1Blocks:
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialRedBlocksW1.append(block)
+            block.Wayside = "W1"
 
         for block in self.redWayside2Blocks:
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialRedBlocksW2.append(block)
+            block.Wayside = "W2"
 
         #Create Parser Object
         self.currentSwitchBlocksNums = [['5','6','11']]
@@ -132,7 +144,10 @@ class MyApp(QMainWindow):
         self.changeModeSend.emit(True)
 
         #Original Map Image
-        pixmap = QPixmap('Wayside SW\green_red_lines.png')
+        pixmap = QPixmap('Wayside_SW\green_red_lines.png')
+        width = 400
+        height = 400
+        pixmap = pixmap.scaled(width, height)
         self.label_17.setPixmap(pixmap)
 
         #Dropdown menu
@@ -198,7 +213,7 @@ class MyApp(QMainWindow):
             self.selectRedLine.setDisabled(True)
             self.waysideMenu.clear()
             self.waysideMenu.setEnabled(True)
-            self.waysideMenu.addItems(['W1'])
+            self.waysideMenu.addItems(['W2'])
             self.selectWayside()
 
         elif checkRed:
@@ -232,16 +247,15 @@ class MyApp(QMainWindow):
         self.fileButton.setDisabled(False) 
 
         if selectedIndex == 0 and self.selectGreenLine.isChecked():
-            self.currentBlocks = self.greenWayside1Blocks
-            self.currentSpecialBlocks = self.specialGreenBlocksW1
+            self.currentBlocks = self.greenWayside2Blocks
+            self.currentSpecialBlocks = self.specialGreenBlocksW2
             self.blockMenu.setDisabled(False)
 
             self.blockMenu.clear()
+            self.currentSwitchBlocksNums = self.greenCrossingTriplesIDS
 
             for block in self.currentSpecialBlocks:
                 self.blockMenu.addItems([block.ID])
-
-            self.currentSwitchBlocksNums = self.greenCrossingTriplesIDS
 
             self.FileParser = Parser(None,self.greenCrossingTriplesIDS,self.allGreenBlocks)
 
@@ -418,6 +432,7 @@ class MyApp(QMainWindow):
 
     def updateBlocks(self,new_data):
         sentBlocks = new_data
+        self.occupiedBlocks.clear()
 
         for block in self.currentBlocks: block.occupied = False
 
@@ -425,17 +440,17 @@ class MyApp(QMainWindow):
             for block in self.currentBlocks:
                 if block_id == block.ID:
                     block.occupied = True
+                    self.occupiedBlocks.append(block)
 
         self.BlockOcc.setText(" ".join(sentBlocks))
         if self.label_7.text() == "AUTOMATIC" : self.FileParser.parsePLC()
         self.blockActions()
         self.sendSpecialBlocks.emit(self.currentBlocks)
+        self.sendOccupiedBlocks.emit(self.occupiedBlocks)
 
-    def receiveSpeedAuth(self,changedBlock):
-         for block in self.currentBlocks:
-            if block.lineColor == changedBlock.lineColor and block.ID == changedBlock.ID:
-                block = changedBlock
-                break
+    def receiveSpeedAuth(self,initialTrainSpeedAuthority):
+         self.initialTrainSpeedAuthority.append(initialTrainSpeedAuthority)
+         self.sendTrainSpeedAuth.emit(initialTrainSpeedAuthority)
         
 class TestBench(QMainWindow):
 
@@ -447,7 +462,7 @@ class TestBench(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi("Wayside SW/Wayside_Testbench.ui", self)
+        uic.loadUi("Wayside_SW/Wayside_Testbench.ui", self)
 
         # Buttons
         self.speedInput.returnPressed.connect(self.sendSpeed)
@@ -560,7 +575,7 @@ class TestBench(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = MyApp()
+    window = WaysideSW()
     window2 = TestBench()
 
     #Signal: Window

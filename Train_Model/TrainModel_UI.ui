@@ -520,13 +520,15 @@ font: 75 12pt &quot;Times New Roman&quot;;</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>12</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(192, 192, 192);</string>
+        <string notr="true">background-color: rgb(192, 192, 192);
+font: 75 12pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
@@ -659,13 +661,15 @@ font: 75 12pt &quot;Times New Roman&quot;;</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>10</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(192, 192, 192);</string>
+        <string notr="true">background-color: rgb(192, 192, 192);
+font: 75 10pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
@@ -680,13 +684,15 @@ font: 75 12pt &quot;Times New Roman&quot;;</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>10</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(192, 192, 192);</string>
+        <string notr="true">background-color: rgb(192, 192, 192);
+font: 75 10pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>

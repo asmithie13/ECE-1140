@@ -20,6 +20,7 @@ class TC_TestBench(object):
     
     def Set_Annoucement(self):
         text_output = self.tb_ui.Announcement.text()
+        self.TC.ui.lineEditAnn.setText(text_output)
 
     def Set_Beacon_Information(self):
         text_output = self.Station.text()
@@ -27,6 +28,7 @@ class TC_TestBench(object):
 
     def Set_Left_Door(self):
         self.ui.buttonDoorL.toggle()
+        #should autocall in main file
     def Set_Right_Door(self):
         self.ui.buttonDoorR.toggle()
     def Set_Headlights(self):

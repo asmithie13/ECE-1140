@@ -1,8 +1,18 @@
 from mainControl import Ui_MainWindow
 class NonVital():
-    def __init__(self,ui):
+    def __init__(self,ui, door_control_sig,announcement_sig,
+    temp_control_sig,int_light_sig,ext_light_sig):
+
+
         self.ui=ui
 
+        #does this actually create si
+        self.door_control_sig=door_control_sig
+        self.announcement_sig=announcement_sig
+        self.temp_control_sig=temp_control_sig
+        self.int_light_sig=int_light_sig
+        self.ext_light_sig=ext_light_sig
+        #inherited signalsd
 
         self.blocksTraveledCounter = 0
         self.blocksToUnderground = 0
@@ -45,9 +55,11 @@ class NonVital():
         #     self.ui.buttonILon.setChecked(False)
         #     #emit(0)
 
-    def Control_Temperature(self, desiredTemp):
-        #emit(desiredTemp)
-        print("Temperature set to " + str(desiredTemp) + " degrees")
+
+    #might not need this function, may be able to connect directly
+   # def Control_Temperature(self):
+
+
 
     
     def LeftStation(self):
@@ -60,7 +72,9 @@ class NonVital():
         #send announcement to next station
 
         self.ui.buttonDoorL.toggle()
-        self.ui.announcement_sig.emit("Welcome to " + self.ui.lineEditAnn.text())
+        self.door_control_sig.emit(2)
+        self.announcement_sig.emit("Welcome to " + self.ui.lineEditAnn.text())
+
         self.ui.IntLightSld.setValue(1)
         self.stationTimer.start()
         self.stationTimer.timeout.connect(lambda: self.ui.buttonDoorL.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
@@ -75,9 +89,14 @@ class NonVital():
         #send announcement to next station
 
         self.ui.buttonDoorR.toggle()
-        self.ui.announcement_sig.emit("Welcome to " + self.ui.lineEditAnn.text())
+        self.door_control_sig.emit(1)
+        self.ui.SpkrOut.setText("Welcome to " + self.ui.lineEditAnn.text())
+        self.announcement_sig.emit("Welcome to " + self.ui.lineEditAnn.text())
         self.ui.IntLightSld.setValue(1)
+        self.int_light_sig.emit(1)
         self.stationTimer.start()
+
+        #need to fix this  --- needs to include emit signals
         self.stationTimer.timeout.connect(lambda: self.ui.buttonDoorR.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
 
     def BothStation(self):
@@ -91,6 +110,7 @@ class NonVital():
 
         self.ui.buttonDoorL.toggle()
         self.ui.buttonDoorR.toggle()
+        self.door_control_sig.emit(2)
         self.ui.announcement_sig.emit("Welcome to " + self.ui.lineEditAnn.text())
         self.ui.IntLightSld.setValue(1)
         self.stationTimer.start()
@@ -113,7 +133,10 @@ class NonVital():
             self.ui.buttonHDon.setChecked(True)
             self.ui.buttonHDoff.setChecked(False)
             self.blocksTraveledCounter = 0
-        
+            self.ext_light_sig.emit(1)
+        else:
+            self.ext_light_sig.emit(0)
+
         #when underground
         """
         if self.ui.underground.isChecked():
@@ -128,6 +151,19 @@ class NonVital():
     def BlockCounter(self):
         self.blocksTraveledCounter += 1
         self.Control_Underground()
+
+    def Door(self):
+        if(self.ui.buttonDoorR.isChecked() and self.ui.buttonDoorL.isChecked()):
+            door_control_sig.emit(3) #check these
+        elif(self.ui.buttonDoorR.isChecked() and not(self.ui.buttonDoorL.isChecked())):
+            door_control_sig.emit(1) #check these
+        elif(not(self.ui.buttonDoorR.isChecked()) and self.ui.buttonDoorL.isChecked()):
+            door_control_sig.emit(2)  #check these
+        else:
+            door_control_sig.emit(0)
+
+
+
 
 
             

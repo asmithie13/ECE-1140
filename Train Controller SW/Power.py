@@ -18,11 +18,11 @@ class Vital_Power():
         self.prevTime = 0
 
     def Control_Ki(self):
-            self.ui.lcdKi.display(self.inputKi.value())
+            self.ui.lcdKi.display(self.ui.inputKi.value())
             self.Ki = self.ui.inputKi.value()
 
     def Control_Kp(self):
-            self.ui.lcdKp.display(self.inputKp.value())
+            self.ui.lcdKp.display(self.ui.inputKp.value())
             self.Kp = self.ui.inputKp.value()
     
     def calculate_power(self):

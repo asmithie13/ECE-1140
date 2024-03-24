@@ -486,9 +486,6 @@ class WaysideSW(QMainWindow):
             for x in (self.green5blocks[blockNum - 1]):
                 if self.allGreenBlocks[x - 1].occupied:
                     self.sendTrainSpeedAuth.emit(0,0,0)
-
-            
-
         
         self.BlockOcc.setText(" ".join(sentBlocks))
         if self.label_7.text() == "AUTOMATIC" : self.FileParser.parsePLC()

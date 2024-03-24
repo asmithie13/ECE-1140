@@ -217,8 +217,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         for i in self.TrackData.GreenSwitches:
             self.ChooseSwitchSelect.addItem(i[0])
         self.newSwitchSelected(0)
-
-        
     
     def redLine_button(self):
         self.currentLine = 'red'
@@ -245,7 +243,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         for i in self.trainSchedule.Scheduledata:
             if time == i[2]:
-                self.sendDispatchInfo.emit([500, 50])
+                self.sendDispatchInfo.emit(["T1", 50, 500])
 
 
     #Define functionality for Upload File Button

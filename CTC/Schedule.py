@@ -39,7 +39,7 @@ class Schedule():
         Departure.append(DepartureStation)
 
         #Calculating Departure Time
-        DepartureTime = ArrivalTime 
+        DepartureTime = ArrivalTime
         DepartureTime = DepartureTime.toString("hh:mm")
 
         Departure.append(DepartureTime)

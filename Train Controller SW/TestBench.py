@@ -33,6 +33,13 @@ class Ui_TestBench(object):
         self.sigfail.toggled.connect(lambda : self.Sig_Fail_Emit())
         self.blockpass.toggled.connect(lambda : self.Block_Paseed_Emit())
         self.currtempin.valueChanged.connect(lambda : self.Temp_Emit())
+        self.boolauth.toggled.connect(lambda : self.Bool_Auth_Emit())
+
+    def Bool_Auth_Emit(self):
+        if self.boolauth.isChecked() :
+            self.TC.curr_bool_auth_sig.emit(1)
+        else :
+            self.TC.curr_bool_auth_sig.emit(0)
     def Cur_Spd_Emit(self):
         self.TC.curr_spd_sig.emit(self.currspdin.value())
     def Com_Spd_Emit(self):

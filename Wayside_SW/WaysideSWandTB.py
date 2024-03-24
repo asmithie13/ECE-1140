@@ -480,6 +480,13 @@ class WaysideSW(QMainWindow):
                 if block_id == block.ID:
                     block.occupied = True
                     self.occupiedBlocks.append(block)
+
+        for block in sentBlocks:
+            blockNum = int(block[1:])
+            for x in (self.green5blocks[blockNum - 1]):
+                if self.allGreenBlocks[x - 1].occupied:
+                    self.sendTrainSpeedAuth.emit(0,0,0)
+
             
 
         

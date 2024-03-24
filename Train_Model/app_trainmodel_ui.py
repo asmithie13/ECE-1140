@@ -21,7 +21,7 @@ class MyMainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi("Train Model/TrainModel_UI.ui", self)
+        uic.loadUi("Train_Model/TrainModel_UI.ui", self)
         self.Calculate_acceleration()
         self.calculate_force()
         self.get_acceleration()
@@ -232,20 +232,53 @@ class MyMainWindow(QMainWindow):
             self.en_fail_enable.setStyleSheet('')
             self.en_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
 
-    def int_lights_tb(self,state):
-        message=state
-        if state:
+    #SETTING INTERIOR LIGHTS TO ON/DIM/OFF STATUS
+    def interior_lights(self,state):
+        if state==0:
             self.int_lights_value.setFixedSize(109, 98)
-            # self.int_lights_value.setFont("Times New Roman",9)
             self.int_lights_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-            self.int_lights_value.setText(state)
+            self.int_lights_value.setText('OFF')
 
-        else :
+        elif state==1:
             self.int_lights_value.setFixedSize(109, 98)
-            self.int_lights_value.setText(state)
+            self.int_lights_value.setText('ON')
+        elif state==2:
+            self.int_lights_value.setFixedSize(109, 98)
+            self.int_lights_value.setText('DIM')
 
+    #SETTING EXTERIOR LIGHTS TO ON/DIM/OFF STATUS
+    def exterior_lights(self,state):
+        if state==0:
+            self.ext_lights_value.setFixedSize(109, 97)
+            self.ext_lights_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.ext_lights_value.setText('OFF')
 
+        elif state==1:
+            self.ext_lights_value.setFixedSize(109, 97)
+            self.ext_lights_value.setText('ON')
 
+    #SETTING RIGHT DOORS
+    def right_doors(self,state):
+        if state==0:
+            self.right_doors_value.setFixedSize(109, 98)
+            self.right_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.right_doors_value.setText('CLOSED')
+
+        elif state==1:
+            self.right_doors_value.setFixedSize(109, 98)
+            self.right_doors_value.setText('OPEN')
+    
+    #SETTING LEFT DOORS
+    def left_doors(self,state):
+        if state==0:
+            self.left_doors_value.setFixedSize(109, 97)
+            self.left_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.left_doors_value.setText('CLOSED')
+
+        elif state==1:
+            self.left_doors_value.setFixedSize(109, 97)
+            self.left_doors_value.setText('OPEN')
+            
 
     
         
@@ -270,14 +303,14 @@ class trainmodel_testbench(QMainWindow):
     engine_fail_input_signal=qtc.pyqtSignal(int)
     right_doors_input_signal=qtc.pyqtSignal(int)
     left_doors_input_signal=qtc.pyqtSignal(int)
-    int_lights_input_signal=qtc.pyqtSignal(str)
+    int_lights_input_signal=qtc.pyqtSignal(int)
     ext_lights_input_signal=qtc.pyqtSignal(int)
     cabin_temp_input_signal=qtc.pyqtSignal(str)
 
 
     def __init__(self):
         super().__init__()
-        uic.loadUi("Train Model/TrainModel_testbench.ui", self)
+        uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
         self.train_sel_combo_tb.activated[str].connect(self.get_train_selection)
 
         self.power_input_tb.returnPressed.connect(self.receive_power)
@@ -318,31 +351,32 @@ class trainmodel_testbench(QMainWindow):
         self.cabin_temp_input_tb.returnPressed.connect(self.get_cabin_temp)
         self.cabin_temp_input_tb.returnPressed.connect(self.display_cabin_temp)
 
-        self.int_lights_input_tb.stateChanged.connect(self.interior_lights)
+        self.int_lights_input_tb.returnPressed.connect(self.interior_lights_tb)
       
-        self.ext_lights_input_tb.stateChanged.connect(self.exterior_lights)
+        self.ext_lights_input_tb.returnPressed.connect(self.exterior_lights_tb)
        
-        self.right_doors_input_tb.stateChanged.connect(self.right_doors)
+        self.right_doors_input_tb.returnPressed.connect(self.right_doors_tb)
         
-        self.left_doors_input_tb.stateChanged.connect(self.left_doors)
+        self.left_doors_input_tb.returnPressed.connect(self.left_doors_tb)
 
         
 
-    def interior_lights(self,state):
-        if state:
-            self.int_lights_input_signal.emit("OFF")
-        else:
-            self.int_lights_input_signal.emit("ON")
+    def interior_lights_tb(self):
+        state=int(self.int_lights_input_tb.text())
+        self.int_lights_input_signal.emit(state)
 
 
-    def exterior_lights(self,state):
+    def exterior_lights_tb(self):
+        state=int(self.ext_lights_input_tb.text())
         self.ext_lights_input_signal.emit(state)
         
 
-    def right_doors(self,state):
+    def right_doors_tb(self):
+        state=int(self.right_doors_input_tb.text())
         self.right_doors_input_signal.emit(state)
 
-    def left_doors(self,state):
+    def left_doors_tb(self):
+        state=int(self.left_doors_input_tb.text())
         self.left_doors_input_signal.emit(state)
 
 
@@ -500,8 +534,14 @@ if __name__ == "__main__":
     window_tb.engine_fail_input_signal.connect(window.engine_fail_tb)
     #cabin_temp 
     window_tb.cabin_temp_input_signal.connect(window.set_cabin_temp)
-    #interior_light
-    window_tb.int_lights_input_signal.connect(window.int_lights_tb)
+    #interior_lights
+    window_tb.int_lights_input_signal.connect(window.interior_lights)
+    #exterior_lights
+    window_tb.ext_lights_input_signal.connect(window.exterior_lights)
+    #right_doors
+    window_tb.right_doors_input_signal.connect(window.right_doors)
+    #left_doors
+    window_tb.left_doors_input_signal.connect(window.left_doors)
 
     window.show()
     window_tb.show()

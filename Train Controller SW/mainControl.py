@@ -15,36 +15,6 @@ from PyQt5.QtCore import QTimer
 
 class Ui_MainWindow(object):
 
-    def __init__(self):
-
-        #internal power calculation
-        self.power = 0
-
-        self.lastSliderMoved = None
-
-        self.Ki = 0
-        self.Kp = 0
-        self.integral_error = 0
-
-        self.power = 0
-        self.v_cmd = 10
-        self.v_current = 8
-        self.v_error = 0
-        self.dt = 0.1
-        self.control_output = 0
-
-        self.tempTimer = QTimer()
-        self.tempTimer.setInterval(1000)
-        self.tempTimer.timeout.connect(self.updateTemperature)
-
-        self.authTimer = QTimer()
-        self.authTimer.setInterval(1000)
-        self.authTimer.timeout.connect(self.updateAuth)
-
-        self.speedTimer = QTimer()
-        self.speedTimer.setInterval(1000)
-        self.speedTimer.timeout.connect(self.speedControl)
-
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1146, 857)
@@ -191,6 +161,7 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addWidget(self.BrkAcelBox, 1, 1, 2, 2)
 
         ### TRAIN SELECTION
+
         self.Train_Select_Box = QtWidgets.QGroupBox(self.centralwidget)
         self.Train_Select_Box.setMaximumSize(QtCore.QSize(400, 16777215))
         self.Train_Select_Box.setStyleSheet("background-color: rgb(233, 247, 255);")
@@ -220,13 +191,15 @@ class Ui_MainWindow(object):
         self.trainSel.addItem("")
         self.trainSel.addItem("")
         self.trainSel.addItem("")
+        
         self.verticalLayout_6.addWidget(self.trainSel)
         self.gridLayout_2.addWidget(self.Train_Select_Box, 1, 0, 1, 1)
+
+
+        ####EBRAKE
         self.Ebrake = QtWidgets.QPushButton(self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(25)
-
-        ####EBRAKE
         self.Ebrake.setFont(font)
         self.Ebrake.setAutoFillBackground(False)
         self.Ebrake.setStyleSheet("background-color: rgb(255, 55, 62);\n"
@@ -457,13 +430,16 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.addWidget(self.lcdCurSpd)
         self.gridLayout_5.addLayout(self.horizontalLayout_6, 1, 0, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox_8, 4, 0, 1, 4)
+
         self.groupBox_3 = QtWidgets.QGroupBox(self.centralwidget)
+
         font = QtGui.QFont()
         font.setPointSize(20)
         self.groupBox_3.setFont(font)
-        self.groupBox_3.setStyleSheet("background-color: rgb(233, 247, 255);")
+        self.groupBox_3.setStyleSheet("background-color: rgb(229, 255, 204);")
         self.groupBox_3.setAlignment(QtCore.Qt.AlignCenter)
         self.groupBox_3.setObjectName("groupBox_3")
+
         self.gridLayout_3 = QtWidgets.QGridLayout(self.groupBox_3)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.lcdKi = QtWidgets.QLCDNumber(self.groupBox_3)
@@ -499,7 +475,6 @@ class Ui_MainWindow(object):
         self.inputKi.setObjectName("inputKi")
         self.inputKi.setValue(70)
         self.inputKp.setValue(30)
-        self.CalcPower()
         self.horizontalLayout_3.addWidget(self.inputKi)
         self.gridLayout_3.addLayout(self.horizontalLayout_3, 2, 0, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox_3, 0, 1, 1, 2)
@@ -508,32 +483,88 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
+        self.vertSliderPow.setDisabled(True)
+
+
 
 
         self.retranslateUi(MainWindow)
-
-        self.buttonMan.clicked['bool'].connect(self.set_man)  # type: ignore
+        """
+        self.buttonMan.clicked['bool'].connect(self.TrainController)  # type: ignore
         self.buttonAuto.clicked['bool'].connect(self.set_auto)  # type: ignore
-        #self.inputKi.valueChanged['double'].connect(self.lcdKi.display()) # type: ignore
-        #self.inputKp.valueChanged['double'].connect(self.lcdKp.display()) # type: ignore
+        self.inputKi.valueChanged['double'].connect(self.lcdKi.display()) # type: ignore
+        self.inputKp.valueChanged['double'].connect(self.lcdKp.display()) # type: ignore
         self.buttonHDon.clicked['bool'].connect(self.buttonHDoff.toggle)  # type: ignore
         self.buttonHDoff.clicked['bool'].connect(self.buttonHDon.toggle)  # type: ignore
         self.lineEditAnn.textChanged['QString'].connect(self.SpkrOut.setText)  # type: ignore
         self.CurStatOut.windowIconTextChanged['QString'].connect(self.SpkrOut.setText)  # type: ignore
-        self.vertSliderBrk.valueChanged.connect(lambda : self.calBrakeOutput())
-        self.vertSliderPow.valueChanged.connect(lambda : self.calAccelOutput())  # type: ignore
+        #self.vertSliderBrk.valueChanged.connect(lambda : self.calBrakeOutput())
+        #self.vertSliderPow.valueChanged.connect(lambda : self.calAccelOutput())  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-        self.inputKp.valueChanged.connect(lambda : self.onKpValueChanged())
-        self.inputKi.valueChanged.connect(lambda : self.onKiValueChanged())
-        self.temp.valueChanged.connect(self.tempControl)
-        self.Ebrake.clicked.connect(lambda : self.ebrake_enable())
+        self.groupBox_3.setTitle("FOR TRAIN ENGINEER ONLY")
+        # self.inputKp.valueChanged.connect(lambda : self.onKpValueChanged())
+        # self.inputKi.valueChanged.connect(lambda : self.onKiValueChanged())
+        #self.temp.valueChanged.connect(self.tempControl)
+        #self.Ebrake.clicked.connect(lambda : self.ebrake_enable())
 
         #if the button is checked, it will call HARDWARE FUCNTION ONLY
 
         #self.buttonDoorR.clicked.connect(chad function)
         #self.buttonDoorL.clicked.connect(chad function)
+    """
 
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.label_10.setText(_translate("MainWindow", "Brake"))
+        self.groupBox_2.setTitle(_translate("MainWindow", "POWER"))
+        self.label_20.setText(_translate("MainWindow", "FAILURES"))
+        self.PwrFail.setText(_translate("MainWindow", "Power (kW)"))
+        self.BrkFail.setText(_translate("MainWindow", "Brake %"))
+        self.SigFail.setText(_translate("MainWindow", "Signal"))
+        self.label_11.setText(_translate("MainWindow", "Accelerate %"))
+        self.label_2.setText(_translate("MainWindow", "Train Select"))
+        self.trainSel.setItemText(0, _translate("MainWindow", "Train 1"))
+        self.trainSel.setItemText(1, _translate("MainWindow", "Train 2"))
+        self.trainSel.setItemText(2, _translate("MainWindow", "Train 3"))
+        self.Ebrake.setText(_translate("MainWindow", "Emergency Brake"))
+        self.CabinConditionsBox.setTitle(_translate("MainWindow", "Cabin Conditions"))
+        self.buttonDoorR.setText(_translate("MainWindow", "Right"))
+        self.label_13.setText(_translate("MainWindow", "Doors"))
+        self.IntLights.setText(_translate("MainWindow", "Int Litghs"))
+        self.buttonHDon.setText(_translate("MainWindow", "On"))
+        self.buttonDoorL.setText(_translate("MainWindow", "Left"))
+        self.buttonHDoff.setText(_translate("MainWindow", "Off"))
+        self.label.setText(_translate("MainWindow", "Headlights"))
+        self.label_14.setText(_translate("MainWindow", "Cabin Temp °F"))
+        self.Announcement.setText(_translate("MainWindow", "Annoucement :"))
+        self.lineEditAnn.setPlaceholderText(_translate("MainWindow", "Annoucement"))
+        self.CurrentOutput.setText(_translate("MainWindow", "Current Output : "))
+        self.CurrentStation.setText(_translate("MainWindow", "Current Station : "))
+        self.SpeakerOuputs.setText(_translate("MainWindow", "Speaker Outputs"))
+        self.CurStatOut.setText(_translate("MainWindow", "Yard"))
+        self.DistanceTillStop.setText(_translate("MainWindow", "Distance until Stop (ft)"))
+        self.Mode_Box.setTitle(_translate("MainWindow", "Mode"))
+        self.buttonMan.setText(_translate("MainWindow", "Manual"))
+        self.buttonAuto.setText(_translate("MainWindow", "Auto"))
+        self.Speed_Limit.setText(_translate("MainWindow", "Speed Limit (mph)"))
+        self.Commanded_Speed.setText(_translate("MainWindow", "Commanded Speed (mph)"))
+        self.Current_Speed.setText(_translate("MainWindow", "Current Speed (mph)"))
+        self.groupBox_3.setTitle(_translate("MainWindow", "Power"))
+        self.label_4.setText(_translate("MainWindow", "Kp"))
+        self.label_3.setText(_translate("MainWindow", "Ki"))
+
+# if __name__ == "__main__":
+#     import sys
+#
+#     app = QtWidgets.QApplication(sys.argv)
+#     MainWindow = QtWidgets.QMainWindow()
+#     ui = Ui_MainWindow()
+#     ui.setupUi(MainWindow)
+#     MainWindow.show()
+#     sys.exit(app.exec_())
+
+"""
 
     def calBrakeOutput(self):
         self.lcdBrk.display(self.vertSliderBrk.value())
@@ -567,17 +598,7 @@ class Ui_MainWindow(object):
             self.vertSliderBrk.setValue(0)
         self.lcdCurSpd.display(self.lcdCurSpd.value() + 20 * self.vertSliderPow.value()/100)
 
-    def onKiValueChanged(self):
-        self.lcdKi.display(self.inputKi.value())
-        self.Ki = self.inputKi.value()
-        self.CalcPower()
 
-
-    def onKpValueChanged(self):
-        self.lcdKp.display(self.inputKp.value())
-        self.Kp = self.inputKp.value()
-        self.CalcPower()
-        # print(f"Kp set to: {self.Kp}")
 
 
     def CalcPower(self):
@@ -775,56 +796,7 @@ class Ui_MainWindow(object):
                                    "background-color: rgb(255, 255, 255);")
         self.Ebrake.setChecked(False)
         self.ebrake_enable()
+
+        
         #################################################################################
-
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label_10.setText(_translate("MainWindow", "Brake"))
-        self.groupBox_2.setTitle(_translate("MainWindow", "POWER"))
-        self.label_20.setText(_translate("MainWindow", "FAILURES"))
-        self.PwrFail.setText(_translate("MainWindow", "Power (kW)"))
-        self.BrkFail.setText(_translate("MainWindow", "Brake %"))
-        self.SigFail.setText(_translate("MainWindow", "Signal"))
-        self.label_11.setText(_translate("MainWindow", "Accelerate %"))
-        self.label_2.setText(_translate("MainWindow", "Train Select"))
-        self.trainSel.setItemText(0, _translate("MainWindow", "Train 1"))
-        self.trainSel.setItemText(1, _translate("MainWindow", "Train 2"))
-        self.trainSel.setItemText(2, _translate("MainWindow", "Train 3"))
-        self.Ebrake.setText(_translate("MainWindow", "Emergency Brake"))
-        self.CabinConditionsBox.setTitle(_translate("MainWindow", "Cabin Conditions"))
-        self.buttonDoorR.setText(_translate("MainWindow", "Right"))
-        self.label_13.setText(_translate("MainWindow", "Doors"))
-        self.IntLights.setText(_translate("MainWindow", "Int Litghs"))
-        self.buttonHDon.setText(_translate("MainWindow", "On"))
-        self.buttonDoorL.setText(_translate("MainWindow", "Left"))
-        self.buttonHDoff.setText(_translate("MainWindow", "Off"))
-        self.label.setText(_translate("MainWindow", "Headlights"))
-        self.label_14.setText(_translate("MainWindow", "Cabin Temp °F"))
-        self.Announcement.setText(_translate("MainWindow", "Annoucement :"))
-        self.lineEditAnn.setPlaceholderText(_translate("MainWindow", "Annoucement"))
-        self.CurrentOutput.setText(_translate("MainWindow", "Current Output : "))
-        self.CurrentStation.setText(_translate("MainWindow", "Current Station : "))
-        self.SpeakerOuputs.setText(_translate("MainWindow", "Speaker Outputs"))
-        self.CurStatOut.setText(_translate("MainWindow", "Yard"))
-        self.DistanceTillStop.setText(_translate("MainWindow", "Distance until Stop (ft)"))
-        self.Mode_Box.setTitle(_translate("MainWindow", "Mode"))
-        self.buttonMan.setText(_translate("MainWindow", "Manual"))
-        self.buttonAuto.setText(_translate("MainWindow", "Auto"))
-        self.Speed_Limit.setText(_translate("MainWindow", "Speed Limit (mph)"))
-        self.Commanded_Speed.setText(_translate("MainWindow", "Commanded Speed (mph)"))
-        self.Current_Speed.setText(_translate("MainWindow", "Current Speed (mph)"))
-        self.groupBox_3.setTitle(_translate("MainWindow", "Power"))
-        self.label_4.setText(_translate("MainWindow", "Kp"))
-        self.label_3.setText(_translate("MainWindow", "Ki"))
-
-
-if __name__ == "__main__":
-    import sys
-
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+"""

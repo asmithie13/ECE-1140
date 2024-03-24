@@ -32,7 +32,7 @@ class Vital_Power():
             self.power = 0
 
         else:
-            self.time = self.globalClock
+            #self.time = self.globalClock
             self.dt = self.time - self.prevTime
             self.prevTime = self.time
             self.error = self.lcdCmdSpd.value() - self.lcdCurSpd.value()

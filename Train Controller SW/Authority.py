@@ -65,4 +65,4 @@ class Vital_Authority():
                 self.ui.buttonDoorR.toggle()
 
     def Control_Authority(self,auth):
-        self.ui.lcdAuth.setValue(auth)
+        self.ui.lcdAuth.display(auth)

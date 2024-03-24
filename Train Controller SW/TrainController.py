@@ -26,8 +26,9 @@ class TrainController(QMainWindow):
     sig_fail_sig = pyqtSignal(bool)
     beacon_info_sig = pyqtSignal(str)
     #non vital we recieve
-    underground_sig = pyqtSignal(bool)
+    #underground_sig = pyqtSignal(bool)
     block_passed_sig = pyqtSignal(bool)
+    time_sig = pyqtSignal(int)
     # signals we use as outputs
 
     #signals we send
@@ -56,7 +57,7 @@ class TrainController(QMainWindow):
         self.Vital_Power = Vital_Power(self.ui, self.curr_power_sig)
         self.Vital_Speed = Vital_Speed(self.ui, self.service_brake_sig)
         self.Vital_Authority = Vital_Authority(self.ui,self.curr_auth_sig)
-        self.Vital_Failure = Vital_Failure(self.ui, self.ebrake_sig)
+        self.Vital_Failure = Vital_Failure(self.ui, self.ebrake_sig, self.ebrake_disable_sig)
         self.NonVital = NonVital(self.ui,self.door_control_sig,self.announcement_sig,
         self.temp_control_sig,self.int_light_sig,self.ext_light_sig)
 
@@ -70,18 +71,13 @@ class TrainController(QMainWindow):
         self.pwr_fail_sig.connect(self.Vital_Failure.Control_Power_Failure)
         self.brk_fail_sig.connect(self.Vital_Failure.Control_Brake_Failure)
         self.sig_fail_sig.connect(self.Vital_Failure.Control_Signal_Failure)
-        #Need to do in UI
-        #self.underground_sig.connect(self.underground_sig.setChecked(self.underground_sig))
-
-        #THis signals ia obsolute, needs to be included in beacon stuff
-        #self.next_station_sig.connect(self.NonVital.Control_Name_Next_Station)
-        #self.dist_to_next_station_sig.connect(self.NonVital.Control_Dist_Next_Station)
-        #block
-        self.block_passed_sig.connect(self.NonVital.BlockCounter)
-
-
-        #bool authority
+        self.beacon_info_sig.connect(self.NonVital.Read_Beacon)    
         self.curr_bool_auth_sig.connect(self.Vital_Authority.Authority_Monitor_Bool)
+        self.block_passed_sig.connect(self.NonVital.BlockCounter)
+        self.curr_bool_auth_sig.connect(self.Vital_Authority.Authority_Monitor_Bool)
+        
+        #CHAD FIX ME
+        #self.time_sig.connect()
 
         #connecting UI buttons to functions
         self.ui.Ebrake.clicked.connect(lambda : self.Vital_Failure.Control_Emergency_Brake())
@@ -98,7 +94,6 @@ class TrainController(QMainWindow):
         #self.ui.lcdCurSpd.connect(self.Vital_Speed.Speed_Monitor)
         self.ui.vertSliderBrk.valueChanged.connect(lambda : self.Vital_Speed.service_brake())
         #self.ui.lcdAuth.valueChanged.connect(lambda :self.Vital_Authority.authTimerStart())
-
 
         #sending off signals in manual mode
         self.ui.buttonDoorL.clicked.connect(lambda : self.NonVital.Control_DoorL())
@@ -145,7 +140,11 @@ class TrainController(QMainWindow):
         self.ui.lineEditAnn.setDisabled(False)
         self.ui.inputKi.setDisabled(False)
         self.ui.inputKp.setDisabled(False)
-        self.ui.vertSliderPow.setDisabled(False)
+        
+        if(self.ui.lcdAuth.value() == 0):
+            self.ui.vertSliderPow.setDisabled(True)
+        else:
+            self.ui.vertSliderPow.setDisabled(False)
         self.ui.vertSliderBrk.setDisabled(False)
 
     def Open_Main_UI(self):

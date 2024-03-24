@@ -44,6 +44,7 @@ class Vital_Speed():
             self.service_brake_sig.emit(True)
         if self.ui.vertSliderBrk.value() == 0:
             self.service_brake_sig.emit(False)
+        self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
         
     def Control_Speed_Limit(self,spdLim):
         #update speed limit for current block

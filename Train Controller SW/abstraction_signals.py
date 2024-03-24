@@ -92,7 +92,7 @@ class Train_Controller_Signals :
     #     # at this point in development, since we do not have time integration, dt will be static
     #     self.dt = 1
     #     self.power = (self.ui.inputKp.value() * self.ui.inputKp.value() / self.dt) * (self.ui.vertSliderPow.value()/100)
-    #     self.ui.lcdPwrOut.display(self.power)
+    #     self.ui.lcdAcel.display(self.power)
     #     self.curr_power_sig.emit(self.power)
         
 

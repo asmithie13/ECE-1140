@@ -34,17 +34,18 @@ class Vital_Power():
             self.power = 0
 
         else:
+            self.ui.vertSliderBrk.setValue(0)
             #self.time = self.globalClock
             self.dt = self.time - self.prevTime
             self.prevTime = self.time
-            self.error = self.lcdCmdSpd.value() - self.lcdCurSpd.value()
+            self.error = self.ui.lcdCmdSpd.value() - self.ui.lcdCurSpd.value()
             self.uk = self.prevUk + (self.error + self.prevError) * self.dt / 2
             self.prevError = self.error
             self.prevUk = self.uk
             
-            self.power0 = (self.ui.lcdKp.value() * self.error + self.ui.lcdKi.value() * self.uk) * (self.ui.lcdPwrOut.value() / 100)
-            self.power1 = (self.ui.lcdKp.value() * self.error + self.ui.lcdKi.value() * self.uk) * (self.ui.lcdPwrOut.value() / 100)
-            self.power2 = (self.ui.lcdKp.value() * self.error + self.ui.lcdKi.value() * self.uk) * (self.ui.lcdPwrOut.value() / 100)
+            self.power0 = (self.ui.lcdKp.value() * self.error + self.ui.lcdKi.value() * self.uk) * (self.ui.lcdAcel.value() / 100)
+            self.power1 = (self.ui.lcdKp.value() * self.error + self.ui.lcdKi.value() * self.uk) * (self.ui.lcdAcel.value() / 100)
+            self.power2 = (self.ui.lcdKp.value() * self.error + self.ui.lcdKi.value() * self.uk) * (self.ui.lcdAcel.value() / 100)
 
             if(self.power0 == self.power1 or self.power1 == self.power2 or self.power0 == self.power2):
                 if(self.power0 == self.power1):
@@ -61,6 +62,8 @@ class Vital_Power():
             elif self.power < 0:
                 self.power = 0
         
-        self.ui.lcdPwrOut.display(self.power)
+        self.ui.lcdPowOut.display(self.ui.vertSliderPow.value())
+        self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
+        self.ui.lcdAcel.display(self.power)
         self.curr_power_sig.emit(self.power)
         

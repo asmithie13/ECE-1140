@@ -36,7 +36,7 @@ class Vital(TrainController):
             self.Control_Power()
         #as long as authority is not equal to zero
         else if(TrainController.ui.lcdAuth > 0):
-            TrainController.ui.lcdPow_2.display(TrainController.ui.vertSliderPow.value())
+            TrainController.ui.lcdPowOut.display(TrainController.ui.vertSliderPow.value())
             TrainController.ui.vertSliderBrk.setValue(0)
             #call power function
             self.Control_Power()
@@ -55,7 +55,7 @@ class Vital(TrainController):
         # at this point in development, since we do not have time integration, dt will be static
         # TrainController.dt = 1
         # TrainController.power = (TrainController.ui.inputKp.value() * TrainController.ui.inputKp.value() / TrainController.dt) * (TrainController.ui.vertSliderPow.value()/100)
-        # TrainController.ui.lcdPwrOut.display(TrainController.power)
+        # TrainController.ui.lcdAcel.display(TrainController.power)
         # TrainController.curr_power_sig.emit(TrainController.power)
 
         #get current time from global clock called
@@ -80,7 +80,7 @@ class Vital(TrainController):
            self.power = 120000
         elif self.power < 0:
            self.power = 0
-        self.lcdPwrOut.display(self.power)
+        self.lcdAcel.display(self.power)
         self.curr_power_sig.emit(self.power)
 
         

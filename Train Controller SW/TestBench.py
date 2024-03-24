@@ -129,10 +129,32 @@ class Ui_TestBench(object):
         self.spinBox.setMaximum(9999)
         self.spinBox.setObjectName("spinBox")
         self.verticalLayout_2.addWidget(self.spinBox)
+
+
+        ####Timer added
+        self.label_17.setObjectName("label_17")
+        self.label_17 = QtWidgets.QLabel(self.layoutWidget)
+        self.verticalLayout_2.addWidget(self.label_17)
+        self.timer = QtWidgets.QSpinBox(self.layoutWidget)
+        self.timer.setMaximum(9999)
+        self.timer.setObjectName("spinBox")
+        self.verticalLayout_2.addWidget(self.timer)
+
+        self.label_18 = QtWidgets.QLabel(self.layoutWidget)
+        self.label_18.setObjectName("label_8")
+        self.verticalLayout_2.addWidget(self.label_18)
+        self.boolauth = QtWidgets.QCheckBox(self.layoutWidget)
+        self.boolauth.setObjectName("boolauth")
+        self.verticalLayout_2.addWidget(self.boolauth)
+        
+        
+
+
+        ###
         self.label_8 = QtWidgets.QLabel(self.layoutWidget)
         self.label_8.setObjectName("label_8")
         self.verticalLayout_2.addWidget(self.label_8)
-        self.ebrakein = QtWidgets.QRadioButton(self.layoutWidget)
+        self.ebrakein = QtWidgets.QCheckBox(self.layoutWidget)
         self.ebrakein.setObjectName("ebrakein")
         self.verticalLayout_2.addWidget(self.ebrakein)
         self.label_9 = QtWidgets.QLabel(self.layoutWidget)
@@ -150,25 +172,25 @@ class Ui_TestBench(object):
         self.label_10 = QtWidgets.QLabel(self.layoutWidget)
         self.label_10.setObjectName("label_10")
         self.verticalLayout_2.addWidget(self.label_10)
-        self.underground = QtWidgets.QRadioButton(self.layoutWidget)
+        self.underground = QtWidgets.QCheckBox(self.layoutWidget)
         self.underground.setObjectName("underground")
         self.verticalLayout_2.addWidget(self.underground)
         self.label_11 = QtWidgets.QLabel(self.layoutWidget)
         self.label_11.setObjectName("label_11")
         self.verticalLayout_2.addWidget(self.label_11)
-        self.pwrfailin = QtWidgets.QRadioButton(self.layoutWidget)
+        self.pwrfailin = QtWidgets.QCheckBox(self.layoutWidget)
         self.pwrfailin.setObjectName("pwrfailin")
         self.verticalLayout_2.addWidget(self.pwrfailin)
-        self.brkfail = QtWidgets.QRadioButton(self.layoutWidget)
+        self.brkfail = QtWidgets.QCheckBox(self.layoutWidget)
         self.brkfail.setObjectName("brkfail")
         self.verticalLayout_2.addWidget(self.brkfail)
-        self.sigfail = QtWidgets.QRadioButton(self.layoutWidget)
+        self.sigfail = QtWidgets.QCheckBox(self.layoutWidget)
         self.sigfail.setObjectName("sigfail")
         self.verticalLayout_2.addWidget(self.sigfail)
         self.label_12 = QtWidgets.QLabel(self.layoutWidget)
         self.label_12.setObjectName("label_12")
         self.verticalLayout_2.addWidget(self.label_12)
-        self.blockpass = QtWidgets.QRadioButton(self.layoutWidget)
+        self.blockpass = QtWidgets.QCheckBox(self.layoutWidget)
         self.blockpass.setObjectName("blockpass")
         self.verticalLayout_2.addWidget(self.blockpass)
         self.layoutWidget1 = QtWidgets.QWidget(self.centralwidget)
@@ -228,7 +250,9 @@ class Ui_TestBench(object):
         self.label_16 = QtWidgets.QLabel(self.layoutWidget1)
         self.label_16.setObjectName("label_16")
         self.verticalLayout.addWidget(self.label_16)
-        self.brakeen = QtWidgets.QRadioButton(self.layoutWidget1)
+
+        self.brakeen = QtWidgets.QCheckBox(self.layoutWidget1)
+        
         self.brakeen.setObjectName("brakeen")
         self.verticalLayout.addWidget(self.brakeen)
         self.verticalLayout_3.addLayout(self.verticalLayout)
@@ -254,7 +278,7 @@ class Ui_TestBench(object):
         self.label_7.setText(_translate("MainWindow", "SPEED LIM"))
         self.label_15.setText(_translate("MainWindow", "Authority"))
         self.label_8.setText(_translate("MainWindow", "Pass Ebrake"))
-        self.ebrakein.setText(_translate("MainWindow", "RadioButton"))
+        self.ebrakein.setText(_translate("MainWindow", "Pass Ebrak toggle"))
         self.label_9.setText(_translate("MainWindow", "Beacon"))
         self.label_14.setText(_translate("MainWindow", "Curr Temp"))
         self.label_10.setText(_translate("MainWindow", "Underground"))
@@ -277,6 +301,8 @@ class Ui_TestBench(object):
         self.Anon_Out.setText(_translate("MainWindow", "TextLabel"))
         self.label_16.setText(_translate("MainWindow", "Service Brake"))
         self.brakeen.setText(_translate("MainWindow", "enabled"))
+        self.label_17.setText(_translate("MainWindow", "Timer"))
+        self.label_18.setText(_translate("MainWindow", "boolauth"))
 
 if __name__ == "__main__":
     import sys

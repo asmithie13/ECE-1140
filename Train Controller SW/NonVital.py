@@ -53,8 +53,6 @@ class NonVital():
     #might not need this function, may be able to connect directly
    # def Control_Temperature(self):
 
-
-
     
     def LeftStation(self):
         #open Left doors
@@ -110,20 +108,20 @@ class NonVital():
         self.stationTimer.start()
         self.stationTimer.timeout.connect(lambda: self.ui.buttonDoorL.toggle(), self.ui.buttonDoorR.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
 
-    def Read_Beacon(self):
+    def Read_Beacon(self,beacon_info):
         #take in beacon info from tanvi
         #call station function depending on beacon info
-        print("beacon info")
+        print(beacon_info)
         
     
-    def Control_Underground(self):
+    def Control_Underground(self,underground):
         #calc distance from beacon to underground block using d=rt
         #when distance traveled is equal to distance to underground block, turn on beacan indicator
         #this logic should work but if we go in and out of underground multiple times without passing a beacon, it will not work
-        
         #enter underground -  we turn on the lights before going under because of safety :)
         if self.blocksTraveledCounter == self.blocksToUnderground-1:
-            self.ui.underground.setChecked(True)
+            self.ui.undergrnd_ind.setStyleSheet("color: red;\n"
+                                            "background-color: rgb(255, 255, 255);")
             self.ui.buttonHDon.setChecked(True)
             self.ui.buttonHDoff.setChecked(False)
             self.blocksTraveledCounter = 0
@@ -132,14 +130,15 @@ class NonVital():
             self.ext_light_sig.emit(0)
 
         #when underground
-        """
+        
         if self.ui.underground.isChecked():
             if self.blocksTraveledCounter == self.undergroudBlocks+1:
-                self.ui.underground.setChecked(False)
+                self.ui.undergrnd_ind.setStyleSheet("color: rgb(225, 225, 225);\n"
+                                        "background-color: rgb(255, 255, 255);")
                 self.ui.buttonHDon.setChecked(False)
                 self.ui.buttonHDoff.setChecked(True)
                 self.blocksTraveledCounter = 0
-        """
+        
     
     
     def BlockCounter(self):

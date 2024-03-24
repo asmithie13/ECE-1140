@@ -7,6 +7,7 @@ from PyQt5 import QtCore as qtc
 from PyQt5.QtCore import pyqtSignal, QTimer
 from PyQt5 import QtGui as qtg
 from PyQt5.QtCore import Qt
+from clock_test import Clock
 import subprocess
 
 
@@ -24,6 +25,10 @@ class MyMainWindow(QMainWindow):
         uic.loadUi("Train_Model/TrainModel_UI.ui", self)
         # Instantiate TrainCalculations and pass self (MyMainWindow instance) as an argument
         self.train_calculations = TrainCalculations(self)
+        #CLOCK
+        self.clock = Clock()
+        self.clock.current_time_changed.connect(self.update_time)
+
         self.train_calculations.Calculate_acceleration()
         self.train_calculations.calculate_force()
         self.train_calculations.get_acceleration()
@@ -57,6 +62,10 @@ class MyMainWindow(QMainWindow):
         self.sig_fail_state = False
         self.en_fail_state = False
         self.emergency_stop_state=False
+
+    #CLOCK
+    def update_time(Self, current_time):
+        print("Current Time:", current_time)
         
     #function to set Power LCD
     def get_power(self, power_input):
@@ -549,8 +558,5 @@ if __name__ == "__main__":
     window.show()
     window_tb.show()
 
-    # Run mainControl.py as a separate process
-    main_control_path = "Train Controller SW/mainControl.py"
-    subprocess.Popen(["python", main_control_path])
-
+    
     sys.exit(app.exec_())

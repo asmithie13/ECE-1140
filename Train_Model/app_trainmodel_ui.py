@@ -7,7 +7,7 @@ from PyQt5 import QtCore as qtc
 from PyQt5.QtCore import pyqtSignal, QTimer
 from PyQt5 import QtGui as qtg
 from PyQt5.QtCore import Qt
-
+import subprocess
 
 
 class MyMainWindow(QMainWindow):
@@ -282,7 +282,7 @@ class TrainCalculations:
         velocity = initial_velocity + (acceleration * time)
         self.main_window.Acc_Velo_value_lcd.display(velocity)
 
-    
+
         
 
 class trainmodel_testbench(QMainWindow):
@@ -548,4 +548,9 @@ if __name__ == "__main__":
 
     window.show()
     window_tb.show()
+
+    # Run mainControl.py as a separate process
+    main_control_path = "Train Controller SW/mainControl.py"
+    subprocess.Popen(["python", main_control_path])
+
     sys.exit(app.exec_())

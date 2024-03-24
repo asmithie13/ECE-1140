@@ -17,16 +17,16 @@ class NonVital():
         self.blocksTraveledCounter = 0
         self.blocksToUnderground = 0
         self.undergroundBlocks = 0
-        self.dist_next_station= 0;
+        self.dist_next_station= 0
     
     def Control_Headlights(self):
 
         if(self.ui.buttonHDon.isChecked()):
             self.ui.buttonHDoff.setChecked(False)
-            #emit(1)
+            self.ext_light_sig.emit(1)
         if(self.ui.buttonHDoff.isChecked()):
             self.ui.buttonHDon.setChecked(False)
-            #emit(0)
+            self.ext_light_sig.emit(0)
 
     def Control_Name_Next_Station(self,string):
         self.ui.CurStatOut.setText(string)
@@ -37,23 +37,17 @@ class NonVital():
     def Cabin_Temperature(self,cabinTemp):
         self.ui.temp.setValue(cabinTemp)
     
-    #i want to change the int lights to a toggle button like the others
     def Control_interiorLights(self):
 
         if(self.ui.IntLightSld.value() == 1):
-            #emit(1)
+            self.int_light_sig.emit(1)
             print("interior lights on")
-        if(self.ui.IntLightSld.value() == 0):
-            #emit(0)
+        elif(self.ui.IntLightSld.value() == 0):
+            self.int_light_sig.emit(0)
             print("interior lights off")
-
-        # after converstion to toggle button
-        # if(self.ui.buttonILon.isChecked()):
-        #     self.ui.buttonILoff.setChecked(False)
-        #     #emit(1)
-        # if(self.ui.buttonILoff.isChecked()):
-        #     self.ui.buttonILon.setChecked(False)
-        #     #emit(0)
+        elif(self.ui.IntLightSld.value() == 2):
+            self.int_light_sig.emit(2)
+            print("interior lights dimmed")
 
 
     #might not need this function, may be able to connect directly
@@ -154,13 +148,13 @@ class NonVital():
 
     def Door(self):
         if(self.ui.buttonDoorR.isChecked() and self.ui.buttonDoorL.isChecked()):
-            door_control_sig.emit(3) #check these
+            self.door_control_sig.emit(3) #check these
         elif(self.ui.buttonDoorR.isChecked() and not(self.ui.buttonDoorL.isChecked())):
-            door_control_sig.emit(1) #check these
+            self.door_control_sig.emit(1) #check these
         elif(not(self.ui.buttonDoorR.isChecked()) and self.ui.buttonDoorL.isChecked()):
-            door_control_sig.emit(2)  #check these
+            self.door_control_sig.emit(2)  #check these
         else:
-            door_control_sig.emit(0)
+            self.door_control_sig.emit(0)
 
 
 

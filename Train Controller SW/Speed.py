@@ -2,8 +2,9 @@ from mainControl import Ui_MainWindow
 
 class Vital_Speed():
     
-    def __init__(self,ui):
+    def __init__(self,ui, service_brake_sig):
         self.ui = ui
+        self.service_brake_sig = service_brake_sig
 
     def Control_Current_Speed(self,newSpeed):
         self.ui.lcdCurSpd.display(newSpeed)
@@ -40,11 +41,9 @@ class Vital_Speed():
         #turn down acceltor
         if self.ui.vertSliderBrk.value() == 1:
             self.ui.vertSliderPow.setValue(0)
-            #emit(1)
-            print("Service Brake On")
+            self.service_brake_sig.emit(True)
         if self.ui.vertSliderBrk.value() == 0:
-            #emit(0)
-            print("Service Brake Off")
+            self.service_brake_sig.emit(False)
         
     def Control_Speed_Limit(self,spdLim):
         #update speed limit for current block

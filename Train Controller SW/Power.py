@@ -1,7 +1,7 @@
 from mainControl import Ui_MainWindow
 
 class Vital_Power():
-    def __init__(self,ui):
+    def __init__(self,ui, curr_power_sig):
         self.ui = ui
         self.Ki = 0
         self.Kp = 0
@@ -16,6 +16,8 @@ class Vital_Power():
         self.prevError = 0
         self.prevUk = 0
         self.prevTime = 0
+        
+        self.curr_power_sig = curr_power_sig
 
     def Control_Ki(self):
             self.ui.lcdKi.display(self.ui.inputKi.value())
@@ -60,4 +62,5 @@ class Vital_Power():
                 self.power = 0
         
         self.ui.lcdPwrOut.display(self.power)
-        #emit singla to tanvi
+        self.curr_power_sig.emit(self.power)
+        

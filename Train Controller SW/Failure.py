@@ -2,15 +2,19 @@ from mainControl import Ui_MainWindow
 
 class Vital_Failure():
     
-    def __init__(self,ui):
+    def __init__(self,ui, ebrake_sig):
+
         self.ui = ui
+        self.ebrake_sig = ebrake_sig
+
 
     def Control_Emergency_Brake(self):
             if self.ui.Ebrake.isChecked() == True:
                 enable = True
-                #emit(1) brake signal to tanvi
             else:
                 enable = False
+            
+            self.ebrake_sig.emit(enable)
             self.ui.buttonMan.setDisabled(enable)
             self.ui.buttonMan.setDisabled(enable)
             self.ui.buttonDoorL.setDisabled(enable)

@@ -3,14 +3,15 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import QtWidgets
+from PyQt5 import Timer
 
 class Vital_Authority():
 
     def __init__(self,ui):
         self.ui = ui
-        self.authTimer = QTimer()
-        self.authTimer.setInterval(1000)
-        self.authTimer.timeout.connect(self.Authority_Monitor)
+        # self.authTimer = QTimer()
+        # self.authTimer.setInterval(1000)
+        # self.authTimer.timeout.connect(self.Authority_Monitor)
 
 
     def authTimerStart(self):

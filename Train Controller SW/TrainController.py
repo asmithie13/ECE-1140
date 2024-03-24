@@ -53,10 +53,10 @@ class TrainController(QMainWindow):
 
 
         #creating subclasses
-        self.Vital_Power = Vital_Power(self.ui)
-        self.Vital_Speed = Vital_Speed(self.ui)
-        self.Vital_Authority = Vital_Authority(self.ui)
-        self.Vital_Failure = Vital_Failure(self.ui)
+        self.Vital_Power = Vital_Power(self.ui, self.curr_power_sig)
+        self.Vital_Speed = Vital_Speed(self.ui, self.service_brake_sig)
+        self.Vital_Authority = Vital_Authority(self.ui,self.curr_auth_sig)
+        self.Vital_Failure = Vital_Failure(self.ui, self.ebrake_sig)
         self.NonVital = NonVital(self.ui,self.door_control_sig,self.announcement_sig,
         self.temp_control_sig,self.int_light_sig,self.ext_light_sig)
 

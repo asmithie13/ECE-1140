@@ -34,8 +34,7 @@ class Schedule():
 
     def calculateDeparture(self, Destination, ArrivalTime, Departure):
         #Setting Departure Station
-        DepartureStation = "X"
-
+        DepartureStation = "Yard"
         Departure.append(DepartureStation)
 
         #Calculating Departure Time

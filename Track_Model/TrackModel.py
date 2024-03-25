@@ -10,9 +10,9 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 # import libraries
-from PyQt5.QtWidgets import QApplication, QLCDNumber, QMainWindow, QFileDialog, QVBoxLayout, QComboBox, QHBoxLayout, QWidget, QLabel, QPushButton, QSizePolicy
-from PyQt5 import uic
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication,QLCDNumber, QGroupBox,QMainWindow, QFileDialog, QVBoxLayout, QComboBox, QHBoxLayout, QWidget, QLabel, QPushButton, QSizePolicy
+from PyQt5 import uic,QtCore
+from PyQt5.QtCore import Qt,QAbstractTableModel
 from PyQt5.QtCore import QTimer, QTime
 from Track_Resources.Block import Block
 from PyQt5 import QtCore as qtc
@@ -29,21 +29,22 @@ class TrackModelMain(QMainWindow):
     # Define a signal to emit the grade to testBench UI
     grade_signal = pyqtSignal(float)
     #Adding a signal to update information based on block selection:
-    block_selected_signal = pyqtSignal(str)  # Add this at the beginning of the class
+    block_selected_signal = pyqtSignal(str)  
 
     getSpecialBlocks = pyqtSignal(list)
     #sendOccupancies = pyqtSignal(list)
 
+    #send ticket sales to ctc
     SendTicketsales = pyqtSignal(list)
 
     def __init__(self):
         super().__init__()
         self.blockStates = {}
-        
 
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track_Model/Track_Model.ui", self)
-        self.clock_in.display("09:22")
+
+        
         # Connect Upload Track Layout button to make upload file
         self.pushButton.clicked.connect(self.upload_track_layout) 
 
@@ -52,42 +53,37 @@ class TrackModelMain(QMainWindow):
         self.block_in_2.setEnabled(False)
 
 
-        #self.generateTickets()
-
-        # Connect button to method
-        # If clicked, then connect to UI
-        self.offButton_1.clicked.connect(self.toggle_button_state)
-        self.offButton_2.clicked.connect(self.toggle_button_state_2)
-        self.offButton_3.clicked.connect(self.toggle_button_state_3)
-
-        # Set default state for toggle button (default color should be red and "OFF") on all 3 buttons
-        self.offButton_1.setText("OFF")
-        self.offButton_1.setStyleSheet("background-color: rgb(195, 16, 40);")
-
-        self.offButton_2.setText("OFF")
-        self.offButton_2.setStyleSheet("background-color: rgb(195, 16, 40);")
-
-        self.offButton_3.setText("OFF")
-        self.offButton_3.setStyleSheet("background-color: rgb(195, 16, 40);")
+        self.generateTickets()
 
         # Instantiate the Data class
         self.data = Data()
+
+        # Connect the comboBox to the function
+        self.green_line.hide()
+        self.green_fault.hide()
+        #self.red_line.hide()
+        self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
+
+    def on_line_select_changed(self):
+        # Check the selected option and show the corresponding group box
+        selected_option = self.line_select.currentText()
+        if selected_option == "Green Line":
+            self.green_line.show()
+            self.green_fault.show()
+        elif selected_option == "Select Line":
+            self.green_line.hide()    
+       # elif selected_option == "Red Line":
+        #    self.red_line.show()
+        #    self.green.hide()
+            
 
     def generateTickets(self):
         # Generate a random number between 1 and 74 for ticket sales
         random_number = random.randint(1, 74)
         #Output the random numberto ticket sales block info
         self.ticket_out.setText(str(random_number))
-        self.SendTicketsales.emit(random_number)
-
-
-
-    #send to CTC
-    def send_tickets(self):
-        pass
-
-    def send_boarding(self):
-        pass
+        self.SendTicketsales.emit([random_number])
+        
     
     #set temperature
     def set_temp(self, temp):
@@ -131,61 +127,6 @@ class TrackModelMain(QMainWindow):
     def update_main_dropdown(self, selected_text):
         # update the dropdown in your main UI 
         self.block_in_1.setCurrentText(selected_text)
-
-    #This toggles the button of the failures
-    def toggle_button_state(self):
-        # Toggle button state and color button for broken rail
-        if self.offButton_1.text() == "OFF":
-            self.offButton_1.setText("ON")
-            self.offButton_1.setStyleSheet("background-color: green;")
-        else:
-            self.offButton_1.setText("OFF")
-            self.offButton_1.setStyleSheet("background-color: rgb(195, 16, 40);")
-            
-    def toggle_button_state_tb(self, bool1):
-        # Toggle button state and color button for block broken rail but used from tb to main
-        if bool1.lower() in ["yes", "true", "on", "1"]:
-            self.offButton_1.setText("ON")
-            self.offButton_1.setStyleSheet("background-color: green;")
-        elif bool1.lower() in ["no", "false", "off", "0"]:
-            self.offButton_1.setText("OFF")
-            self.offButton_1.setStyleSheet("background-color: rgb(195, 16, 40);")
-
-    def toggle_button_state_2(self):
-        # Toggle button state and color button for track circuit failure
-        if self.offButton_2.text() == "OFF":
-            self.offButton_2.setText("ON")
-            self.offButton_2.setStyleSheet("background-color: green;")
-        else:
-            self.offButton_2.setText("OFF")
-            self.offButton_2.setStyleSheet("background-color: rgb(195, 16, 40);")
-
-    def toggle_button_state_2_tb(self, bool1):
-        # Toggle button state and color button for block track circuit failure but used from tb to main
-        if bool1.lower() in ["yes", "true", "on", "1"]:
-            self.offButton_2.setText("ON")
-            self.offButton_2.setStyleSheet("background-color: green;")
-        elif bool1.lower() in ["no", "false", "off", "0"]:
-            self.offButton_2.setText("OFF")
-            self.offButton_2.setStyleSheet("background-color: rgb(195, 16, 40);")
-
-    def toggle_button_state_3(self):
-        # toggle button state and color button for power failure
-        if self.offButton_3.text() == "OFF":
-            self.offButton_3.setText("ON")
-            self.offButton_3.setStyleSheet("background-color: green;")
-        else:
-            self.offButton_3.setText("OFF")
-            self.offButton_3.setStyleSheet("background-color: rgb(195, 16, 40);")
-
-    def toggle_button_state_3_tb(self, bool1):
-        # Toggle button state and color button for power_failure but used from tb to main
-        if bool1.lower() in ["yes", "true", "on", "1"]:
-            self.offButton_3.setText("ON")
-            self.offButton_3.setStyleSheet("background-color: green;")
-        elif bool1.lower() in ["no", "false", "off", "0"]:
-            self.offButton_3.setText("OFF")
-            self.offButton_3.setStyleSheet("background-color: rgb(195, 16, 40);")
 
     def toggle_light_state_tb(self, bool1):
             # Toggle the state and color of the light button
@@ -271,9 +212,6 @@ class TrackModelMain(QMainWindow):
 
         # Emit screen change based on block selection
         self.block_selected_signal.emit(block_text)
-    
-        # After updating the UI, restore the state of toggle buttons for the selected block
-        #self.restore_block_state(block_text)
 
     #Updates block in failure based on block selection
     def update_block_in_2_based_on_block_in_1(self):
@@ -312,6 +250,10 @@ class TrackModel_tb(QMainWindow):
 
     # Change signal to emit an int for ticket sales
     ticket_sales_signal = pyqtSignal(int)
+
+    #signal to from get speed
+    Wayside_speed = pyqtSignal(Block)
+    Wayside_authority = pyqtSignal(Block)
     
     def __init__(self):
         super().__init__()
@@ -472,20 +414,14 @@ class Data:
         self.infra = None
         self.cumm_elevation = None
 
-    def set_heater(self):
+    def set_heater(self): #based on set temp
         pass
     
     # read Excel files from DataFrame
     def read_excel(self, filename):
 
-        #current_selection = self.line_select.currentText()
-        # Use an if statement to check the current selection and set the filename accordingly
-        #if num == 1:
         self.df = pd.read_excel("Track_Resources/Blue_Line_Block_Info.xlsx")
-        #elif num == 2:
-        #   self.df = pd.read_excel("Track_Resources/red_line.xlsx")
-        #else:
-           # pass
+        self.df = pd.read_csv("Track_Resources/Blue_Line_Block_Info.csv")
 
         #extract data from DataFrame of the Excel and assign to variables
         self.elevation_data = self.df.set_index('Block Number')['ELEVATION (M)'].to_dict()
@@ -612,31 +548,22 @@ class Data:
     def send_occupancies(self):
         pass
 
-    
-# class Communicate(QObject):
-#     #object signals (mainly for failures inputs button)
-#     broken_rail_input_signal = pyqtSignal(str)
-#     track_input_signal = pyqtSignal(str)
-#     power_input_signal = pyqtSignal(str)
-#     ticket_sales_signal = pyqtSignal(int)
-#     light_input_signal = pyqtSignal(str)
-#     switch_input_signal = pyqtSignal(str)
-#     cross_input_signal = pyqtSignal(str)
-#     dropdown_broken_signal = pyqtSignal(str)
+# class for fault table per block
+class TrackFaultTable(QAbstractTableModel):
+    def __init__(self, data=None):
+        super().__init__()
+        self._data = []
 
+        
+    
 # Call Main window
 if __name__ == "__main__":
+
     app = QApplication(sys.argv)
+    
     window = TrackModelMain()
     window_2 = TrackModel_tb()
 
-    #Create an instance of Communicate
-    #communicator = Communicate()
-
-    # connect the signal from window_2 to the slot in window
-    window_2.broken_rail_input_signal.connect(window.toggle_button_state_tb)
-    window_2.track_input_signal.connect(window.toggle_button_state_2_tb)
-    window_2.power_input_signal.connect(window.toggle_button_state_3_tb)
 
     window_2.dropdown_broken_signal.connect(window.update_main_dropdown) 
 
@@ -648,10 +575,6 @@ if __name__ == "__main__":
 
     # Connect TrackModelMain's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)
-
-    #window.SendTicketsales.connect("CTC/CTC_UI.py".MainWindow.update_grade_label)
-
-
 
     window.block_selected_signal.connect(window_2.update_on_block_selection)
     window.show()

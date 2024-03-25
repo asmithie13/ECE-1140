@@ -559,10 +559,10 @@ if __name__ == "__main__":
     window.show()
     window_tb.show()
 
-    # # Define the path to the mainControl.py file
+    # # # Define the path to the mainControl.py file
     # main_control_path = "Train Controller SW/mainControl.py"
 
-    # # Run mainControl.py as a separate process
+    # # # Run mainControl.py as a separate process
     # subprocess.Popen(["python", main_control_path])
     
     sys.exit(app.exec_())

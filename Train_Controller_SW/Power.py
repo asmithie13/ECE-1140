@@ -3,6 +3,9 @@ from Train_Controller_SW.mainControl import Ui_MainWindow
 class Vital_Power():
     def __init__(self,ui, curr_power_sig):
         self.ui = ui
+
+        self.globalClock = 0
+
         self.Ki = 0
         self.Kp = 0
         self.power = 0
@@ -26,6 +29,9 @@ class Vital_Power():
     def Control_Kp(self):
             self.ui.lcdKp.display(self.ui.inputKp.value())
             self.Kp = self.ui.inputKp.value()
+
+    def Set_Clock(self, time):
+         self.globalClock = time
     
     def calculate_power(self):
 
@@ -35,7 +41,8 @@ class Vital_Power():
 
         else:
             self.ui.vertSliderBrk.setValue(0)
-            #self.time = self.globalClock
+            self.time = self.globalClock
+            print(self.time)
             self.dt = self.time - self.prevTime
             self.prevTime = self.time
             self.error = self.ui.lcdCmdSpd.value() - self.ui.lcdCurSpd.value()

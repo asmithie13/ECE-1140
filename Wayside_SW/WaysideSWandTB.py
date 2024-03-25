@@ -70,6 +70,9 @@ class WaysideSW(QMainWindow):
     sendOccupiedBlocks = pyqtSignal(list)   #Send list of occupied blocks to CTC
     sendTrainSpeedAuth = pyqtSignal(list) #Send commanded speed to track model
 
+    #signal to send all blocks to testbench
+    sendAllBlocks = pyqtSignal(list)
+
     def __init__(self):
         super().__init__()
         uic.loadUi("Wayside_SW/Wayside_UI_Rough.ui",self)
@@ -98,7 +101,7 @@ class WaysideSW(QMainWindow):
         for block in self.greenWayside2Blocks:
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocksW2.append(block)
             block.Wayside = "W2"
-
+            
         #2D array of blocks within 5 blocks of each other
         self.green5blocks = []
 
@@ -247,6 +250,10 @@ class WaysideSW(QMainWindow):
         #checkStatus = self.selectLine.isChecked()
         checkGreen = self.selectGreenLine.isChecked()
         checkRed = self.selectRedLine.isChecked()
+
+        self.sendAllBlocks.emit(self.greenWayside2Blocks)
+        self.sendAllBlocks.emit(self.redWayside1Blocks)
+        self.sendAllBlocks.emit(self.redWayside2Blocks)
 
         if checkGreen:
             self.selectRedLine.setDisabled(True)
@@ -523,6 +530,11 @@ class TestBench(QMainWindow):
         self.OccupiedBlocks = []    #Is sent to the UI
         self.specialBlocks = []     #Is sent from the UI
 
+        #blocks per wayside
+        self.greenW2Blocks = []
+        self.redW1Blocks = []
+        self.redW2Blocks = []
+
     def sendSpeed(self):
         speed = self.speedInput.text()
         self.comSpeed.setText(speed)
@@ -615,6 +627,14 @@ class TestBench(QMainWindow):
             self.label_16.setText("MANUAL")
         else:
             self.label_16.setText("AUTOMATIC")
+
+    def receiveBlocks(self,blocks):
+        if blocks[0].Wayside == "W2" and blocks[0].lineColor == "Green":
+            self.greenW2Blocks = blocks
+        elif blocks[0].Wayside == "W1" and blocks[0].lineColor == "Red":
+            self.redW1Blocks = blocks
+        elif blocks[0].Wayside == "W2" and blocks[0].lineColor == "Red":
+            self.redW2Blocks = blocks
         
 
 if __name__ == "__main__":
@@ -625,6 +645,7 @@ if __name__ == "__main__":
     #Signal: Window
     window.sendSpecialBlocks.connect(window2.updateBlockStates)
     window.changeModeSend.connect(window2.receiveMode)
+    window.sendAllBlocks.connect(window2.receiveBlocks)
 
     #Signal: Window 2
     window2.OccBlocksChanged.connect(window.updateBlocks)

@@ -5,13 +5,21 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
+
 #CTC Imports
 import CTC
 from CTC.CTC_UI import *
 from CTC.CTC_Testbench import *
+
 #Wayside SW imports
 import Wayside_SW
 from Wayside_SW.WaysideSWandTB import *
+
+#Wayside HW imports
+import Wayside_HW
+from Wayside_HW.TrackController_HW import *
+from Wayside_HW.TrackController_HW_TB import *
+
 #Track Model Imports
 import Track_Model
 from Track_Model.TrackModel import * 
@@ -33,7 +41,9 @@ class Main_UI(QtWidgets.QMainWindow):
         self.WaysideSW_Button.clicked.connect(self.open_waysideSW_UI)
 
         #Wayside HW Window
-
+        self.WaysideHWwindow = TrackController_HW()
+        self.WaysideHW_tb = TrackController_HW_TB()
+        self.WaysideHW_Button.clicked.connect(self.open_waysideHW_UI)
 
         #Track Model Window
         self.TrackModelWindow = TrackModelMain()
@@ -57,6 +67,10 @@ class Main_UI(QtWidgets.QMainWindow):
     def open_waysideSW_UI(self):
         self.WaysideSWwindow.show()
         self.WaysideSW_tb.show() 
+    
+    def open_waysideHW_UI(self):
+        self.WaysideHWwindow.show()
+        self.WaysideHW_tb.show()
 
     def open_track_model_UI(self):
         self.TrackModelWindow.show()

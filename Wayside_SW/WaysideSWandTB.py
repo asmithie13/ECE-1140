@@ -68,7 +68,7 @@ class WaysideSW(QMainWindow):
     sendSpecialBlocks = pyqtSignal(list)    #Send special blocks to testbench
     changeModeSend = pyqtSignal(bool)
     sendOccupiedBlocks = pyqtSignal(list)   #Send list of occupied blocks to CTC
-    sendCommandedSpeed = pyqtSignal(float)
+    sendTrainSpeedAuth = pyqtSignal(list) #Send commanded speed to track model
 
     def __init__(self):
         super().__init__()
@@ -80,6 +80,9 @@ class WaysideSW(QMainWindow):
 
         #Occupied Block list ordered by ID
         self.occupiedBlocks = []
+
+        #List of train ID, inital speed, inital authority sent by CTC
+        self.initialTrainSpeedAuthority = []
 
         #Defines Green Line blocks
         self.greenCrossingTriplesIDS = [] #ids of red crossing blocks
@@ -96,6 +99,45 @@ class WaysideSW(QMainWindow):
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocksW2.append(block)
             block.Wayside = "W2"
 
+        #2D array of blocks within 5 blocks of each other
+        self.green5blocks = []
+
+        for block in self.allGreenBlocks:
+            tempList = []
+            for x in range(5,-1,-1): 
+                temp1 = int(block.blockNum) - x - 1
+                if temp1 < 1: continue
+                tempList.append(temp1)
+            for x in range(5): 
+                temp2 = int(block.blockNum) + x + 1
+                if temp2 > len(self.allGreenBlocks): continue
+                tempList.append(temp2)
+            self.green5blocks.append(tempList)
+
+        switch1 = [5,4,3,2,1,12,13,14,15,16]
+        switch2 = [24,25,26,27,28,150,149,148,147,146]
+        switch3 = [72,73,74,75,76,101,102,103,104,105]
+        switch4 = [81,82,83,84,85,100,101,102,103,104]
+
+        # Define the pattern
+        pattern = [slice(i, i + 5) for i in range(1,6)]
+
+        # Apply the pattern to each switch
+        new_switch1 = [switch1[s] for s in pattern]
+        new_switch2 = [switch2[s] for s in pattern]
+        new_switch3 = [switch3[s] for s in pattern]
+        new_switch4 = [switch4[s] for s in pattern]
+
+        # Apply the pattern to each switch
+        switches = [switch1, switch2, switch3, switch4]
+
+        for switch, pattern in zip(switches, [new_switch1, new_switch2, new_switch3, new_switch4]):
+            for index, arr in zip(switch, pattern):
+                for x in arr:
+                    if x not in self.green5blocks[index - 1]:
+                        self.green5blocks[index - 1].append(x)
+
+       
 
         #Defines Red line blocks
         self.redCrossingTriplesIDS = [] #ids of red crossing blocks
@@ -439,17 +481,20 @@ class WaysideSW(QMainWindow):
                     block.occupied = True
                     self.occupiedBlocks.append(block)
 
+        for block in sentBlocks:
+            blockNum = int(block[1:])
+            for x in (self.green5blocks[blockNum - 1]):
+                if self.allGreenBlocks[x - 1].occupied:
+                    self.sendTrainSpeedAuth.emit(0,0,0)
+        
         self.BlockOcc.setText(" ".join(sentBlocks))
         if self.label_7.text() == "AUTOMATIC" : self.FileParser.parsePLC()
         self.blockActions()
         self.sendSpecialBlocks.emit(self.currentBlocks)
         self.sendOccupiedBlocks.emit(self.occupiedBlocks)
 
-    def receiveSpeedAuth(self,changedBlock):
-         for block in self.currentBlocks:
-            if block.lineColor == changedBlock.lineColor and block.ID == changedBlock.ID:
-                block = changedBlock
-                break
+    def receiveSpeedAuth(self,initialTrainSpeedAuthority):
+        self.sendTrainSpeedAuth.emit(initialTrainSpeedAuthority)
         
 class TestBench(QMainWindow):
 

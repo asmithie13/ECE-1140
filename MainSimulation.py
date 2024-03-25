@@ -1,8 +1,8 @@
 #File to run full train control system simulation
-
 import sys
 from PyQt5 import QtCore
 from Main_UI import *
+
 #CTC Imports
 import CTC
 from CTC.CTC_UI import *
@@ -11,6 +11,11 @@ from CTC.CTC_Testbench import *
 #Wayside SW imports
 import Wayside_SW
 from Wayside_SW.WaysideSWandTB import *
+
+#Wayside HW imports
+import Wayside_HW
+from Wayside_HW.TrackController_HW import *
+from Wayside_HW.TrackController_HW_TB import *
 
 #Track Model imports
 import Track_Model

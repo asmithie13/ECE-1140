@@ -7,6 +7,8 @@ from PyQt5 import QtCore as qtc
 from PyQt5.QtCore import pyqtSignal, QTimer
 from PyQt5 import QtGui as qtg
 from PyQt5.QtCore import Qt
+from clock_test import Clock
+import subprocess
 
 
 
@@ -21,11 +23,17 @@ class MyMainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi("Train Model/TrainModel_UI.ui", self)
-        self.Calculate_acceleration()
-        self.calculate_force()
-        self.get_acceleration()
-        self.calculate_acc_velocity()
+        uic.loadUi("Train_Model/TrainModel_UI.ui", self)
+        # Instantiate TrainCalculations and pass self (MyMainWindow instance) as an argument
+        self.train_calculations = TrainCalculations(self)
+        #CLOCK
+        self.clock = Clock()
+        self.clock.current_time_changed.connect(self.update_time)
+
+        self.train_calculations.Calculate_acceleration()
+        self.train_calculations.calculate_force()
+        self.train_calculations.get_acceleration()
+        self.train_calculations.calculate_acc_velocity()
 
         self.estop_locked=False
         #changing state when sig_fail_enable/disable are clicked
@@ -55,7 +63,17 @@ class MyMainWindow(QMainWindow):
         self.sig_fail_state = False
         self.en_fail_state = False
         self.emergency_stop_state=False
+
+    #CLOCK
+    def update_time(Self, current_time):
+        print("Current Time:", current_time)
         
+    #function to set Power LCD
+    def get_power(self, power_input):
+        self.Power_value_lcd.display(power_input)
+        self.train_calculations.Calculate_acceleration()
+        self.train_calculations.calculate_force()
+        #return power_input
 
     def estop_button_clicked(self):
         if not self.emergency_stop_state:
@@ -90,64 +108,7 @@ class MyMainWindow(QMainWindow):
 
     def get_train_selection(self,seltext):
         self.Train_dropdown.setCurrentText(seltext)
-
-    #function to set Power LCD
-    def get_power(self, power_input):
-        self.Power_value_lcd.display(power_input)
-        self.Calculate_acceleration()
-        self.calculate_force()
-        #return power_input
-
-    
-
-    #function to calculate the acceleration in ft/s^2 using the power command
-    def Calculate_acceleration(self):
-       force=self.calculate_force() #newtons
-       mass=self.mass_def
-       #1m=3.28084ft
-       acceleration = (force/mass)*((1/3.28084)*(1/3.28084))
-       self.Acceleration_value_lcd.display(acceleration)
-       return acceleration
-    
-    def get_acceleration(self):
-        acceleration=self.Calculate_acceleration()
-        self.Acceleration_value_lcd.display(acceleration)
-
-    def get_commanded_speed(self,commanded_speed):
-        self.commanded_speed_def=commanded_speed
-        self.cspeed_display.setText(str(commanded_speed))
-        self.calculate_force()
-        self.Calculate_acceleration()
-        self.calculate_acc_velocity()
-       # return self.commanded_speed_def
-        
-    def calculate_force(self):
-        power=1000*(self.Power_value_lcd.value())
-        commanded_speed=self.commanded_speed_def
-        #input commanded speed was in mph
-        speed_fts=commanded_speed*(5280/3600) 
-        #Using P=F*v so F= P/v
-        force=power/speed_fts #in newtons
-        return force
-       
-    
-    def get_mass(self, mass):
-        self.mass_display.setText(str(mass))
-        #self.mass_display.setAlignment(Qt.AlignRight)
-        mass=mass/2.205 #lbs to kgs
-        self.mass_def=mass
-        self.calculate_force()
-        self.Calculate_acceleration()
-        self.calculate_acc_velocity()
-        
-    def calculate_acc_velocity(self):
-        #in ft/sec^2
-        acceleration = (3600*3600/5280)*self.Calculate_acceleration()
-        #in seconds
-        time = self.time_def  
-        initial_velocity = 0  
-        velocity = initial_velocity + (acceleration * time)
-        self.Acc_Velo_value_lcd.display(velocity)
+      
 
     def set_announcements(self, ann_text):
         self.ann_out_label.setText(ann_text)
@@ -232,22 +193,106 @@ class MyMainWindow(QMainWindow):
             self.en_fail_enable.setStyleSheet('')
             self.en_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
 
-    def int_lights_tb(self,state):
-        message=state
-        if state:
+    #SETTING INTERIOR LIGHTS TO ON/DIM/OFF STATUS
+    def interior_lights(self,state):
+        if state==0:
             self.int_lights_value.setFixedSize(109, 98)
-            # self.int_lights_value.setFont("Times New Roman",9)
             self.int_lights_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-            self.int_lights_value.setText(state)
+            self.int_lights_value.setText('OFF')
 
-        else :
+        elif state==1:
             self.int_lights_value.setFixedSize(109, 98)
-            self.int_lights_value.setText(state)
+            self.int_lights_value.setText('ON')
+        elif state==2:
+            self.int_lights_value.setFixedSize(109, 98)
+            self.int_lights_value.setText('DIM')
 
+    #SETTING EXTERIOR LIGHTS TO ON/DIM/OFF STATUS
+    def exterior_lights(self,state):
+        if state==0:
+            self.ext_lights_value.setFixedSize(109, 97)
+            self.ext_lights_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.ext_lights_value.setText('OFF')
 
+        elif state==1:
+            self.ext_lights_value.setFixedSize(109, 97)
+            self.ext_lights_value.setText('ON')
 
+    #SETTING RIGHT DOORS
+    def right_doors(self,state):
+        if state==0:
+            self.right_doors_value.setFixedSize(109, 98)
+            self.right_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.right_doors_value.setText('CLOSED')
 
+        elif state==1:
+            self.right_doors_value.setFixedSize(109, 98)
+            self.right_doors_value.setText('OPEN')
     
+    #SETTING LEFT DOORS
+    def left_doors(self,state):
+        if state==0:
+            self.left_doors_value.setFixedSize(109, 97)
+            self.left_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.left_doors_value.setText('CLOSED')
+
+        elif state==1:
+            self.left_doors_value.setFixedSize(109, 97)
+            self.left_doors_value.setText('OPEN')
+
+#CLASS CONTAINING ALL TRAIN CALCULATIONS
+class TrainCalculations:
+
+
+    def __init__(self, main_window):
+        self.main_window = main_window
+    
+    
+
+    def get_power(self, power_input):
+        self.main_window.get_power(power_input)
+
+    def Calculate_acceleration(self):
+        force = self.calculate_force()
+        mass = self.main_window.mass_def
+        acceleration = (force / mass) * ((1 / 3.28084) * (1 / 3.28084))
+        self.main_window.Acceleration_value_lcd.display(acceleration)
+        return acceleration
+
+    def get_acceleration(self):
+        acceleration = self.Calculate_acceleration()
+        self.main_window.Acceleration_value_lcd.display(acceleration)
+
+    def get_commanded_speed(self, commanded_speed):
+        self.main_window.commanded_speed_def = commanded_speed
+        self.main_window.cspeed_display.setText(str(commanded_speed))
+        self.calculate_force()
+        self.Calculate_acceleration()
+        self.calculate_acc_velocity()
+
+    def calculate_force(self):
+        power = 1000 * (self.main_window.Power_value_lcd.value())
+        commanded_speed = self.main_window.commanded_speed_def
+        speed_fts = commanded_speed * (5280 / 3600)
+        force = power / speed_fts
+        return force
+
+    def get_mass(self, mass):
+        self.main_window.mass_display.setText(str(mass))
+        mass = mass / 2.205
+        self.main_window.mass_def = mass
+        self.calculate_force()
+        self.Calculate_acceleration()
+        self.calculate_acc_velocity()
+
+    def calculate_acc_velocity(self):
+        acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration()
+        time = self.main_window.time_def
+        initial_velocity = 0
+        velocity = initial_velocity + (acceleration * time)
+        self.main_window.Acc_Velo_value_lcd.display(velocity)
+
+
         
 
 class trainmodel_testbench(QMainWindow):
@@ -270,14 +315,15 @@ class trainmodel_testbench(QMainWindow):
     engine_fail_input_signal=qtc.pyqtSignal(int)
     right_doors_input_signal=qtc.pyqtSignal(int)
     left_doors_input_signal=qtc.pyqtSignal(int)
-    int_lights_input_signal=qtc.pyqtSignal(str)
+    int_lights_input_signal=qtc.pyqtSignal(int)
     ext_lights_input_signal=qtc.pyqtSignal(int)
     cabin_temp_input_signal=qtc.pyqtSignal(str)
 
 
     def __init__(self):
         super().__init__()
-        uic.loadUi("Train Model/TrainModel_testbench.ui", self)
+        uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
+
         self.train_sel_combo_tb.activated[str].connect(self.get_train_selection)
 
         self.power_input_tb.returnPressed.connect(self.receive_power)
@@ -318,31 +364,32 @@ class trainmodel_testbench(QMainWindow):
         self.cabin_temp_input_tb.returnPressed.connect(self.get_cabin_temp)
         self.cabin_temp_input_tb.returnPressed.connect(self.display_cabin_temp)
 
-        self.int_lights_input_tb.stateChanged.connect(self.interior_lights)
+        self.int_lights_input_tb.returnPressed.connect(self.interior_lights_tb)
       
-        self.ext_lights_input_tb.stateChanged.connect(self.exterior_lights)
+        self.ext_lights_input_tb.returnPressed.connect(self.exterior_lights_tb)
        
-        self.right_doors_input_tb.stateChanged.connect(self.right_doors)
+        self.right_doors_input_tb.returnPressed.connect(self.right_doors_tb)
         
-        self.left_doors_input_tb.stateChanged.connect(self.left_doors)
+        self.left_doors_input_tb.returnPressed.connect(self.left_doors_tb)
 
         
 
-    def interior_lights(self,state):
-        if state:
-            self.int_lights_input_signal.emit("OFF")
-        else:
-            self.int_lights_input_signal.emit("ON")
+    def interior_lights_tb(self):
+        state=int(self.int_lights_input_tb.text())
+        self.int_lights_input_signal.emit(state)
 
 
-    def exterior_lights(self,state):
+    def exterior_lights_tb(self):
+        state=int(self.ext_lights_input_tb.text())
         self.ext_lights_input_signal.emit(state)
         
 
-    def right_doors(self,state):
+    def right_doors_tb(self):
+        state=int(self.right_doors_input_tb.text())
         self.right_doors_input_signal.emit(state)
 
-    def left_doors(self,state):
+    def left_doors_tb(self):
+        state=int(self.left_doors_input_tb.text())
         self.left_doors_input_signal.emit(state)
 
 
@@ -467,11 +514,11 @@ if __name__ == "__main__":
 
     # Connect the signal from MyMainWindow to trainmodel_testbench
     #sending power input signal from tb to main
-    window_tb.power_input_signal.connect(window.get_power)
+    window_tb.power_input_signal.connect(window.train_calculations.get_power)
     #sending commanded speed from tb to main
-    window_tb.commanded_speed_input_signal.connect(window.get_commanded_speed)
+    window_tb.commanded_speed_input_signal.connect(window.train_calculations.get_commanded_speed)
     #mass signal
-    window_tb.mass_input_signal.connect(window.get_mass)
+    window_tb.mass_input_signal.connect(window.train_calculations.get_mass)
     #announcement signal
     window_tb.announcement_input_signal.connect(window.set_announcements)
     #train selection
@@ -500,9 +547,22 @@ if __name__ == "__main__":
     window_tb.engine_fail_input_signal.connect(window.engine_fail_tb)
     #cabin_temp 
     window_tb.cabin_temp_input_signal.connect(window.set_cabin_temp)
-    #interior_light
-    window_tb.int_lights_input_signal.connect(window.int_lights_tb)
+    #interior_lights
+    window_tb.int_lights_input_signal.connect(window.interior_lights)
+    #exterior_lights
+    window_tb.ext_lights_input_signal.connect(window.exterior_lights)
+    #right_doors
+    window_tb.right_doors_input_signal.connect(window.right_doors)
+    #left_doors
+    window_tb.left_doors_input_signal.connect(window.left_doors)
 
     window.show()
     window_tb.show()
+
+    # # # Define the path to the mainControl.py file
+    # main_control_path = "Train Controller SW/mainControl.py"
+
+    # # # Run mainControl.py as a separate process
+    # subprocess.Popen(["python", main_control_path])
+    
     sys.exit(app.exec_())

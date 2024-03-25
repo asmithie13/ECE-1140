@@ -164,6 +164,7 @@ class MyMainWindow(QMainWindow):
         if not self.sig_fail_state:
             self.sig_fail_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
             self.sig_fail_disable.setStyleSheet('background-color: rgb(233, 247, 255);')
+            self.signal_fail_tb(self.sig_fail_state)
             self.sig_fail_state = True
 
     #sig_fail_disable_clicked
@@ -171,6 +172,7 @@ class MyMainWindow(QMainWindow):
         if self.sig_fail_state:
             self.sig_fail_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
             self.sig_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.signal_fail_tb(self.sig_fail_state)
             self.sig_fail_state = False
 
     #signal_fail_tb
@@ -191,6 +193,7 @@ class MyMainWindow(QMainWindow):
         if not self.en_fail_state:
             self.en_fail_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
             self.en_fail_disable.setStyleSheet('background-color: rgb(233, 247, 255);')
+
             self.en_fail_state = True
 
     #en_fail_disable_clicked

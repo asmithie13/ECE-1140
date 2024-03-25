@@ -9,7 +9,8 @@ from PyQt5 import QtGui as qtg
 from PyQt5.QtCore import Qt
 from clock_test import Clock
 import subprocess
-
+import Train_Controller_SW
+from Train_Controller_SW.TrainController import *
 
 
 class MyMainWindow(QMainWindow):
@@ -323,6 +324,9 @@ class trainmodel_testbench(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
+
+        #TRAIN CONTROLLER INSTANCE CREATED
+        self.TC = TrainController()
 
         self.train_sel_combo_tb.activated[str].connect(self.get_train_selection)
 

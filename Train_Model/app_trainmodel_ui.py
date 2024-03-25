@@ -8,7 +8,6 @@ from PyQt5.QtCore import pyqtSignal, QTimer
 from PyQt5 import QtGui as qtg
 from PyQt5.QtCore import Qt
 from clock_test import Clock
-#import Train_Controller_SW.TrainController
 from Train_Controller_SW.TrainController import TrainController
 import subprocess
 

@@ -115,7 +115,7 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
               <item>
-               <widget class="QLCDNumber" name="lcdPwrOut"/>
+               <widget class="QLCDNumber" name="lcdAcel"/>
               </item>
               <item>
                <widget class="QLabel" name="label_20">
@@ -212,7 +212,7 @@ background-color: rgb(255, 255, 255);</string>
             </widget>
            </item>
            <item>
-            <widget class="QLCDNumber" name="lcdPow_2">
+            <widget class="QLCDNumber" name="lcdPowOut">
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -1003,7 +1003,7 @@ selection-color: rgb(255, 159, 154);</string>
   <connection>
    <sender>vertSliderPow</sender>
    <signal>sliderMoved(int)</signal>
-   <receiver>lcdPow_2</receiver>
+   <receiver>lcdPowOut</receiver>
    <slot>display(int)</slot>
    <hints>
     <hint type="sourcelabel">

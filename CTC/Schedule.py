@@ -3,7 +3,7 @@
 #Also includes a table model class for diplaying schedule on the CTC UI
 
 import sys
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -16,8 +16,8 @@ class Schedule():
         self.Scheduledata = ScheduleData
 
     #Function to add a single train to the schedule
-    def addTrain(self, TrainID, Destination, ArrivalTime, Departure, DepartureTime):
-        newTrain = [TrainID, Departure, DepartureTime, Destination, ArrivalTime]
+    def addTrain(self, line, TrainID, Destination, ArrivalTime, Departure, DepartureTime):
+        newTrain = [line, TrainID, Destination, ArrivalTime, Departure, DepartureTime]
         self.Scheduledata.append(newTrain)
 
     #function to parse a schedule file for automatic mode
@@ -31,6 +31,17 @@ class Schedule():
 
         for row in reader:
             self.Scheduledata.append(row)
+
+    def calculateDeparture(self, Destination, ArrivalTime, Departure):
+        #Setting Departure Station
+        DepartureStation = "Yard"
+        Departure.append(DepartureStation)
+
+        #Calculating Departure Time
+        DepartureTime = ArrivalTime
+        DepartureTime = DepartureTime.toString("hh:mm")
+
+        Departure.append(DepartureTime)
 
 
 
@@ -46,6 +57,12 @@ class ScheduleTableModel(QtCore.QAbstractTableModel):
     def data(self, index, role):
         if role == Qt.DisplayRole:
             return self._data[index.row()][index.column()]
+        
+        if role == Qt.BackgroundRole and index.column() == 0 and self._data[index.row()][index.column()] == 'green':
+            # See below for the data structure.
+            return QtGui.QColor('#26cf04')
+        elif role == Qt.BackgroundRole and index.column() == 0 and self._data[index.row()][index.column()] == 'red':
+            return QtGui.QColor('#c31028')
     
     #Returns the row count of the table
     def rowCount(self, index):
@@ -62,7 +79,7 @@ class ScheduleTableModel(QtCore.QAbstractTableModel):
     
     #Adds the column header with the correct data
     def headerData(self, section, orientation, role):
-        headers = ['Train ID', 'Departure Station', 'Departure Time', 'Destination', 'Arrival Time']
+        headers = ['Line', 'Train ID', 'Destination', 'Arrival Time', 'Departure Station', 'Departure Time']
 
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:

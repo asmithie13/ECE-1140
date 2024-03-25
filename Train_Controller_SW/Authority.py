@@ -1,12 +1,18 @@
 from mainControl import Ui_MainWindow
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5 import QtWidgets
+#from PyQt5 import Timer
 
 class Vital_Authority():
 
-    def __init__(self,ui):
+    def __init__(self,ui,curr_auth_signal):
         self.ui = ui
-        self.authTimer = QTimer()
-        self.authTimer.setInterval(1000)
-        self.authTimer.timeout.connect(self.Authority_Monitor)
+        self.curr_auth_signal = curr_auth_signal
+        # self.authTimer = QTimer()
+        # self.authTimer.setInterval(1000)
+        # self.authTimer.timeout.connect(self.Authority_Monitor)
 
 
     def authTimerStart(self):
@@ -61,4 +67,4 @@ class Vital_Authority():
                 self.ui.buttonDoorR.toggle()
 
     def Control_Authority(self,auth):
-        self.ui.lcdAuth.setValue(auth)
+        self.ui.lcdAuth.display(auth)

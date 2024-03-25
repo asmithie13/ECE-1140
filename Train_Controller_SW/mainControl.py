@@ -79,9 +79,9 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName("verticalLayout")
 
         #### ACCELERATION PERCENT OUT
-        self.lcdPwrOut = QtWidgets.QLCDNumber(self.groupBox_2)
-        self.lcdPwrOut.setObjectName("lcdPwrOut")
-        self.verticalLayout.addWidget(self.lcdPwrOut)
+        self.lcdAcel = QtWidgets.QLCDNumber(self.groupBox_2)
+        self.lcdAcel.setObjectName("lcdAcel")
+        self.verticalLayout.addWidget(self.lcdAcel)
         self.label_20 = QtWidgets.QLabel(self.groupBox_2)
         font = QtGui.QFont()
         font.setPointSize(20)
@@ -136,13 +136,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.label_11)
 
         ### POWER OUTPUT DISPLAY
-        self.lcdPow_2 = QtWidgets.QLCDNumber(self.BrkAcelBox)
-        self.lcdPow_2.setMaximumSize(QtCore.QSize(16777215, 400))
-        self.lcdPow_2.setFrameShape(QtWidgets.QFrame.Box)
-        self.lcdPow_2.setSmallDecimalPoint(False)
-        self.lcdPow_2.setDigitCount(3)
-        self.lcdPow_2.setObjectName("lcdPow_2")
-        self.verticalLayout_3.addWidget(self.lcdPow_2)
+        self.lcdPowOut = QtWidgets.QLCDNumber(self.BrkAcelBox)
+        self.lcdPowOut.setMaximumSize(QtCore.QSize(16777215, 400))
+        self.lcdPowOut.setFrameShape(QtWidgets.QFrame.Box)
+        self.lcdPowOut.setSmallDecimalPoint(False)
+        self.lcdPowOut.setDigitCount(3)
+        self.lcdPowOut.setObjectName("lcdPowOut")
+        self.verticalLayout_3.addWidget(self.lcdPowOut)
 
         ### ACELLERATE INPUT
         self.vertSliderPow = QtWidgets.QSlider(self.BrkAcelBox)
@@ -169,30 +169,34 @@ class Ui_MainWindow(object):
         self.Train_Select_Box.setObjectName("Train_Select_Box")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.Train_Select_Box)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
-        self.label_2 = QtWidgets.QLabel(self.Train_Select_Box)
+        self.undergrnd_ind = QtWidgets.QLabel(self.Train_Select_Box)
         font = QtGui.QFont()
         font.setPointSize(20)
-        self.label_2.setFont(font)
-        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_2.setObjectName("label_2")
-        self.verticalLayout_6.addWidget(self.label_2)
+        self.undergrnd_ind.setFont(font)
+        self.undergrnd_ind.setAlignment(QtCore.Qt.AlignCenter)
+        self.undergrnd_ind.setObjectName("undergrnd_ind")
+        self.verticalLayout_6.addWidget(self.undergrnd_ind)
         spacerItem = QtWidgets.QSpacerItem(20, 30, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout_6.addItem(spacerItem)
-        self.trainSel = QtWidgets.QComboBox(self.Train_Select_Box)
+        self.undergrnd_ind.setStyleSheet("color: rgb(225, 225, 225);\n"
+                                      "background-color: rgb(255, 255, 255);")
+    
+
+        #self.trainSel = QtWidgets.QComboBox(self.Train_Select_Box)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(10)
         sizePolicy.setVerticalStretch(10)
-        sizePolicy.setHeightForWidth(self.trainSel.sizePolicy().hasHeightForWidth())
-        self.trainSel.setSizePolicy(sizePolicy)
-        self.trainSel.setMaximumSize(QtCore.QSize(500, 45))
-        self.trainSel.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.trainSel.setIconSize(QtCore.QSize(4, 4))
-        self.trainSel.setObjectName("trainSel")
-        self.trainSel.addItem("")
-        self.trainSel.addItem("")
-        self.trainSel.addItem("")
+        #sizePolicy.setHeightForWidth(self.trainSel.sizePolicy().hasHeightForWidth())
+        #self.trainSel.setSizePolicy(sizePolicy)
+        #self.trainSel.setMaximumSize(QtCore.QSize(500, 45))
+        #self.trainSel.setStyleSheet("background-color: rgb(255, 255, 255);")
+        #self.trainSel.setIconSize(QtCore.QSize(4, 4))
+        #self.trainSel.setObjectName("trainSel")
+        #self.trainSel.addItem("")
+        #self.trainSel.addItem("")
+        #self.trainSel.addItem("")
         
-        self.verticalLayout_6.addWidget(self.trainSel)
+        #self.verticalLayout_6.addWidget(self.trainSel)
         self.gridLayout_2.addWidget(self.Train_Select_Box, 1, 0, 1, 1)
 
 
@@ -232,11 +236,13 @@ class Ui_MainWindow(object):
         self.label_13.setObjectName("label_13")
         self.gridLayout.addWidget(self.label_13, 2, 0, 1, 1)
 
+
         self.IntLights = QtWidgets.QLabel(self.CabinConditionsBox)
         self.IntLights.setObjectName("IntLights")
         self.gridLayout.addWidget(self.IntLights, 1, 0, 1, 1)
 
         ### TEMEPERATURE INPUT
+
         self.temp = QtWidgets.QSpinBox(self.CabinConditionsBox)
         self.temp.setProperty("minimum", 60)
         self.temp.setProperty("maximum", 90)
@@ -371,6 +377,7 @@ class Ui_MainWindow(object):
         self.Mode_Box.setObjectName("Mode_Box")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.Mode_Box)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+
         ## MANUAL MODE BUTTON
         self.buttonMan = QtWidgets.QPushButton(self.Mode_Box)
         self.buttonMan.setCheckable(True)
@@ -463,6 +470,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.label_4)
         self.inputKp = QtWidgets.QDoubleSpinBox(self.groupBox_3)
         self.inputKp.setObjectName("inputKp")
+        self.inputKp.setMaximum(9999)
         self.horizontalLayout_4.addWidget(self.inputKp)
         self.gridLayout_3.addLayout(self.horizontalLayout_4, 2, 1, 1, 1)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
@@ -473,6 +481,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.label_3)
         self.inputKi = QtWidgets.QDoubleSpinBox(self.groupBox_3)
         self.inputKi.setObjectName("inputKi")
+        self.inputKi.setMaximum(9999)
         self.inputKi.setValue(70)
         self.inputKp.setValue(30)
         self.horizontalLayout_3.addWidget(self.inputKi)
@@ -519,14 +528,14 @@ class Ui_MainWindow(object):
         self.label_10.setText(_translate("MainWindow", "Brake"))
         self.groupBox_2.setTitle(_translate("MainWindow", "POWER"))
         self.label_20.setText(_translate("MainWindow", "FAILURES"))
-        self.PwrFail.setText(_translate("MainWindow", "Power (kW)"))
-        self.BrkFail.setText(_translate("MainWindow", "Brake %"))
-        self.SigFail.setText(_translate("MainWindow", "Signal"))
+        self.PwrFail.setText(_translate("MainWindow", "Power"))
+        self.BrkFail.setText(_translate("MainWindow", "Brakes"))
+        self.SigFail.setText(_translate("MainWindow", "Signal Pickup"))
         self.label_11.setText(_translate("MainWindow", "Accelerate %"))
-        self.label_2.setText(_translate("MainWindow", "Train Select"))
-        self.trainSel.setItemText(0, _translate("MainWindow", "Train 1"))
-        self.trainSel.setItemText(1, _translate("MainWindow", "Train 2"))
-        self.trainSel.setItemText(2, _translate("MainWindow", "Train 3"))
+        self.undergrnd_ind.setText(_translate("MainWindow", "Underground"))
+        #self.trainSel.setItemText(0, _translate("MainWindow", "Train 1"))
+        #self.trainSel.setItemText(1, _translate("MainWindow", "Train 2"))
+        #self.trainSel.setItemText(2, _translate("MainWindow", "Train 3"))
         self.Ebrake.setText(_translate("MainWindow", "Emergency Brake"))
         self.CabinConditionsBox.setTitle(_translate("MainWindow", "Cabin Conditions"))
         self.buttonDoorR.setText(_translate("MainWindow", "Right"))
@@ -581,7 +590,7 @@ class Ui_MainWindow(object):
             # print(f"brake value changed to: {value}")
             self.vertSliderPow.setValue(0);
         #if self.lastSliderMoved != 'brk':
-         #   self.lcdPow_2.display(0)
+         #   self.lcdPowOut.display(0)
           #  self.vertSliderPow.setValue(0)
            # self.lastSliderMoved = 'brk'
 
@@ -591,7 +600,7 @@ class Ui_MainWindow(object):
             self.vertSliderPow.setValue(0)
             self.lcdPowOut.display(0)
 
-        self.lcdPow_2.display(self.vertSliderPow.value())
+        self.lcdPowOut.display(self.vertSliderPow.value())
 
         self.CalcPower()
         if self.vertSliderPow.value() > 1:
@@ -605,7 +614,7 @@ class Ui_MainWindow(object):
         # at this point in development, since we do not have time integration, dt will be static
         self.dt = 1
         self.power = (self.inputKp.value() * self.inputKp.value() / self.dt) * (self.vertSliderPow.value()/100)
-        self.lcdPwrOut.display(self.power)
+        self.lcdAcel.display(self.power)
 
     # need to fix this
     def tempControl(self):
@@ -635,7 +644,7 @@ class Ui_MainWindow(object):
         #     elif self.control_output < 0:
         #         self.control_output = 0
         #
-        #     self.lcdPwrOut.display(self.control_output)
+        #     self.lcdAcel.display(self.control_output)
         #     print(f"Control output set to: {self.control_output}")
 
     ################################################################################ vital stff

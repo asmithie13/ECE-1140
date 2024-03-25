@@ -8,8 +8,9 @@ from PyQt5.QtCore import pyqtSignal, QTimer
 from PyQt5 import QtGui as qtg
 from PyQt5.QtCore import Qt
 from clock_test import Clock
+#import Train_Controller_SW.TrainController
+from Train_Controller_SW.TrainController import TrainController
 import subprocess
-
 
 
 class MyMainWindow(QMainWindow):
@@ -24,12 +25,18 @@ class MyMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("Train_Model/TrainModel_UI.ui", self)
+        
+        #this is added stuff for the TC
+        self.TC = TrainController()
+    
         # Instantiate TrainCalculations and pass self (MyMainWindow instance) as an argument
-        self.train_calculations = TrainCalculations(self)
+        self.train_calculations = TrainCalculations(self,TC=self.TC)
         #CLOCK
         self.clock = Clock()
         self.clock.current_time_changed.connect(self.update_time)
 
+
+        
         self.train_calculations.Calculate_acceleration()
         self.train_calculations.calculate_force()
         self.train_calculations.get_acceleration()
@@ -64,9 +71,13 @@ class MyMainWindow(QMainWindow):
         self.en_fail_state = False
         self.emergency_stop_state=False
 
+    def Return_TrainController(self):
+        return self.TC
+
     #CLOCK
-    def update_time(Self, current_time):
+    def update_time(self, current_time):
         print("Current Time:", current_time)
+        self.TC.time_sig.emit(current_time)
         
     #function to set Power LCD
     def get_power(self, power_input):
@@ -86,6 +97,9 @@ class MyMainWindow(QMainWindow):
         
         else: 
             self.ebrake.setStyleSheet('background-color: rgb(195, 16, 40);')
+        
+
+        self.TC.ebrake_sig.emit(ebrake_state)
 
     def set_length(self, input_txt):
         self.length_of_vehicle_display.setText(input_txt)
@@ -116,6 +130,7 @@ class MyMainWindow(QMainWindow):
     def set_cabin_temp(self,cabin_temp):
        self.cabin_temp_value.setFixedSize(279, 98)
        self.cabin_temp_value.setText(cabin_temp+' F')
+       self.TC.curr_temp_sig.emit(cabin_temp)
 
     #bf_enable_clicked
     def bf_enable_clicked(self):
@@ -142,6 +157,8 @@ class MyMainWindow(QMainWindow):
             self.bf_enable.setStyleSheet('')
             self.bf_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
 
+        self.TC.brk_fail_sig.emit(state)
+
      #sig_fail_enable_clicked
     def sig_fail_enable_clicked(self):
         if not self.sig_fail_state:
@@ -167,7 +184,8 @@ class MyMainWindow(QMainWindow):
             self.sig_fail_enable.setStyleSheet('')
             self.sig_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
 
-    
+        self.TC.sig_fail_sig.emit(state)
+
      #sig_fail_enable_clicked
     def en_fail_enable_clicked(self):
         if not self.en_fail_state:
@@ -193,6 +211,7 @@ class MyMainWindow(QMainWindow):
             self.en_fail_enable.setStyleSheet('')
             self.en_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
 
+        self.TC.pwr_fail_sig.emit(state)
     #SETTING INTERIOR LIGHTS TO ON/DIM/OFF STATUS
     def interior_lights(self,state):
         if state==0:
@@ -244,8 +263,9 @@ class MyMainWindow(QMainWindow):
 class TrainCalculations:
 
 
-    def __init__(self, main_window):
+    def __init__(self, main_window,TC):
         self.main_window = main_window
+        self.TC = TC
     
     
 
@@ -269,6 +289,7 @@ class TrainCalculations:
         self.calculate_force()
         self.Calculate_acceleration()
         self.calculate_acc_velocity()
+        self.TC.curr_cmd_spd_sig.emit(commanded_speed)
 
     def calculate_force(self):
         power = 1000 * (self.main_window.Power_value_lcd.value())
@@ -291,12 +312,15 @@ class TrainCalculations:
         initial_velocity = 0
         velocity = initial_velocity + (acceleration * time)
         self.main_window.Acc_Velo_value_lcd.display(velocity)
+        self.TC.curr_spd_sig.emit(int(velocity))
+        
+
 
 
         
 
 class trainmodel_testbench(QMainWindow):
-
+                          
     #initializing all signals that the testbench is gonna be sending to the main window
     power_input_signal = qtc.pyqtSignal(float)
     commanded_speed_input_signal=qtc.pyqtSignal(float)
@@ -320,13 +344,24 @@ class trainmodel_testbench(QMainWindow):
     cabin_temp_input_signal=qtc.pyqtSignal(str)
 
 
-    def __init__(self):
+    def __init__(self,TC):
         super().__init__()
+
+        self.TC = TC
         uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
 
+        #TC.service_brake_sig.connect(self.)
+        self.TC.curr_power_sig.connect(self.receive_power)
+        
+        #TC.door_control_sig.connect(self.
+        self.TC.announcement_sig.connect(self.get_announcement)
+        self.TC.temp_control_sig.connect(self.get_cabin_temp)
+        self.TC.int_light_sig.connect(self.interior_lights_tb)    
+        self.TC.ext_light_sig.connect(self.exterior_lights_tb)
+        self.TC.ebrake_disable_sig.connect(self.emit_ebrake_state)
         self.train_sel_combo_tb.activated[str].connect(self.get_train_selection)
 
-        self.power_input_tb.returnPressed.connect(self.receive_power)
+        #self.power_input_tb.returnPressed.connect(self.receive_power)
         self.power_input_tb.returnPressed.connect(self.display_power)
 
         self.mass_input_tb.returnPressed.connect(self.get_mass)
@@ -334,7 +369,7 @@ class trainmodel_testbench(QMainWindow):
 
         self.commanded_speed_input_tb.returnPressed.connect(self.get_commanded_speed)
 
-        self.announcement_input_tb.returnPressed.connect(self.get_announcement)
+        #self.announcement_input_tb.returnPressed.connect(self.get_announcement)
         self.announcement_input_tb.returnPressed.connect(self.display_announcement)
 
         self.length_of_vehicle_input_tb.returnPressed.connect(self.get_length)
@@ -361,12 +396,12 @@ class trainmodel_testbench(QMainWindow):
         self.sig_pick_input_tb.stateChanged.connect(self.sig_pick_fail)
         self.engine_fail_input_tb.stateChanged.connect(self.en_fail)
 
-        self.cabin_temp_input_tb.returnPressed.connect(self.get_cabin_temp)
+       # self.cabin_temp_input_tb.returnPressed.connect(self.get_cabin_temp)
         self.cabin_temp_input_tb.returnPressed.connect(self.display_cabin_temp)
 
-        self.int_lights_input_tb.returnPressed.connect(self.interior_lights_tb)
+       # self.int_lights_input_tb.returnPressed.connect(self.interior_lights_tb)
       
-        self.ext_lights_input_tb.returnPressed.connect(self.exterior_lights_tb)
+    #self.ext_lights_input_tb.returnPressed.connect(self.exterior_lights_tb)
        
         self.right_doors_input_tb.returnPressed.connect(self.right_doors_tb)
         
@@ -392,15 +427,17 @@ class trainmodel_testbench(QMainWindow):
         state=int(self.left_doors_input_tb.text())
         self.left_doors_input_signal.emit(state)
 
-
     def en_fail(self,state):
         self.engine_fail_input_signal.emit(state)
 
+
     def sig_pick_fail(self,state):
         self.signal_fail_input_signal.emit(state)
+      
 
     def brake_fail(self,state):
        self.brake_fail_input_signal.emit(state)
+
         
     def get_cabin_temp(self):
         cabin_temp=str(self.cabin_temp_input_tb.text())
@@ -507,10 +544,13 @@ class trainmodel_testbench(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    
     app.setStyle("windows")
     
+    #add functionality to take in Train Controller Varible
     window = MyMainWindow()
-    window_tb = trainmodel_testbench()
+    TC = window.Return_TrainController()
+    window_tb = trainmodel_testbench(TC)
 
     # Connect the signal from MyMainWindow to trainmodel_testbench
     #sending power input signal from tb to main

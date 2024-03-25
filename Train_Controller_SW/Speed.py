@@ -1,4 +1,4 @@
-from mainControl import Ui_MainWindow
+from Train_Controller_SW.mainControl import Ui_MainWindow
 
 class Vital_Speed():
     

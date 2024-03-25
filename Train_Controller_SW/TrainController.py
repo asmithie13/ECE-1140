@@ -1,9 +1,9 @@
-from mainControl import Ui_MainWindow
-from Power import Vital_Power
-from Speed import Vital_Speed
-from Authority import Vital_Authority
-from Failure import Vital_Failure
-from NonVital import NonVital
+from Train_Controller_SW.mainControl import Ui_MainWindow
+from Train_Controller_SW.Power import Vital_Power
+from Train_Controller_SW.Speed import Vital_Speed
+from Train_Controller_SW.Authority import Vital_Authority
+from Train_Controller_SW.Failure import Vital_Failure
+from Train_Controller_SW.NonVital import NonVital
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -28,7 +28,7 @@ class TrainController(QMainWindow):
     #non vital we recieve
     #underground_sig = pyqtSignal(bool)
     block_passed_sig = pyqtSignal(bool)
-    time_sig = pyqtSignal(int)
+    time_sig = pyqtSignal(str)
     # signals we use as outputs
 
     #signals we send
@@ -51,7 +51,6 @@ class TrainController(QMainWindow):
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self.window)
-
 
         #creating subclasses
         self.Vital_Power = Vital_Power(self.ui, self.curr_power_sig)
@@ -77,7 +76,7 @@ class TrainController(QMainWindow):
         self.curr_bool_auth_sig.connect(self.Vital_Authority.Authority_Monitor_Bool)
         
         #CHAD FIX ME
-        #self.time_sig.connect()
+        self.time_sig.connect(self.Timer)
 
         #connecting UI buttons to functions
         self.ui.Ebrake.clicked.connect(lambda : self.Vital_Failure.Control_Emergency_Brake())
@@ -146,6 +145,9 @@ class TrainController(QMainWindow):
         else:
             self.ui.vertSliderPow.setDisabled(False)
         self.ui.vertSliderBrk.setDisabled(False)
+
+    def Timer(self, time):
+         print(time)
 
     def Open_Main_UI(self):
         self.window = QtWidgets.QMainWindow()

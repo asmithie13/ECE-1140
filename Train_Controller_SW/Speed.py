@@ -2,11 +2,12 @@ from mainControl import Ui_MainWindow
 
 class Vital_Speed():
     
-    def __init__(self,ui):
+    def __init__(self,ui, service_brake_sig):
         self.ui = ui
+        self.service_brake_sig = service_brake_sig
 
     def Control_Current_Speed(self,newSpeed):
-        self.ui.lcdCurSpd.setValue(newSpeed)
+        self.ui.lcdCurSpd.display(newSpeed)
         self.Speed_Monitor()
     
     def Speed_Monitor(self):
@@ -26,12 +27,12 @@ class Vital_Speed():
             self.ui.vertSliderPow.setValue(0)
         
         #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
-        elif current_speed < ((speed_limit | cmd_speed) & (self.ui.buttonAuto.isChecked() == True)):
+        elif current_speed < ((speed_limit or cmd_speed) and (self.ui.buttonAuto.isChecked() == True)):
             self.ui.vertSliderPow.setValue(1)
             self.ui.vertSliderBrk.setValue(0)
         
         #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
-        elif current_speed == (speed_limit | cmd_speed):
+        elif current_speed == (speed_limit or cmd_speed):
             self.ui.vertSliderPow.setValue(0)
             self.ui.vertSliderBrk.setValue(0) 
     
@@ -40,18 +41,17 @@ class Vital_Speed():
         #turn down acceltor
         if self.ui.vertSliderBrk.value() == 1:
             self.ui.vertSliderPow.setValue(0)
-            #emit(1)
-            print("Service Brake On")
+            self.service_brake_sig.emit(True)
         if self.ui.vertSliderBrk.value() == 0:
-            #emit(0)
-            print("Service Brake Off")
+            self.service_brake_sig.emit(False)
+        self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
         
     def Control_Speed_Limit(self,spdLim):
         #update speed limit for current block
-        self.ui.lcdSpdLim.setValue(spdLim)
+        self.ui.lcdSpdLim.display(spdLim)
         self.Speed_Monitor()
         
     def Control_Commanded_Speed(self,cmdSpd):
         #update commanded speed for from signal
-        self.ui.lcdCmdSpd.setValue(cmdSpd)
+        self.ui.lcdCmdSpd.display(cmdSpd)
         self.Speed_Monitor()

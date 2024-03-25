@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1008</width>
-    <height>651</height>
+    <width>1186</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="cursor">
@@ -26,9 +26,9 @@
    <widget class="QWidget" name="verticalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>600</x>
       <y>0</y>
-      <width>421</width>
+      <width>411</width>
       <height>41</height>
      </rect>
     </property>
@@ -63,10 +63,10 @@
    <widget class="QWidget" name="verticalLayoutWidget_3">
     <property name="geometry">
      <rect>
-      <x>620</x>
+      <x>820</x>
       <y>40</y>
-      <width>201</width>
-      <height>211</height>
+      <width>181</width>
+      <height>261</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -261,7 +261,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>401</width>
+      <width>581</width>
       <height>31</height>
      </rect>
     </property>
@@ -301,8 +301,8 @@ selection-color: rgb(253, 253, 253);</string>
      <rect>
       <x>0</x>
       <y>30</y>
-      <width>291</width>
-      <height>231</height>
+      <width>451</width>
+      <height>281</height>
      </rect>
     </property>
     <property name="font">
@@ -337,7 +337,7 @@ selection-color: rgb(253, 253, 253);</string>
         <enum>QFrame::Panel</enum>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Power (kW)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;POWER (kW)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -346,19 +346,21 @@ selection-color: rgb(253, 253, 253);</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>12</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>10</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(197, 197, 197);</string>
+        <string notr="true">background-color: rgb(197, 197, 197);
+font: 75 10pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::Panel</enum>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Acceleration (ft/s&lt;/span&gt;&lt;span style=&quot; font-size:11pt; vertical-align:super;&quot;&gt;2&lt;/span&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:16pt; font-weight:600;&quot;&gt;ACCELERATION (ft/s&lt;/span&gt;&lt;span style=&quot; font-size:16pt; font-weight:600; vertical-align:super;&quot;&gt;2&lt;/span&gt;&lt;span style=&quot; font-size:16pt; font-weight:600;&quot;&gt;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -379,7 +381,7 @@ selection-color: rgb(253, 253, 253);</string>
         <enum>QFrame::Panel</enum>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Actual Velocity (mph)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;ACTUAL VELOCITY (mph)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -388,10 +390,10 @@ selection-color: rgb(253, 253, 253);</string>
    <widget class="QWidget" name="verticalLayoutWidget_5">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>450</x>
       <y>30</y>
-      <width>111</width>
-      <height>231</height>
+      <width>121</width>
+      <height>281</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -421,9 +423,9 @@ selection-color: rgb(253, 253, 253);</string>
    <widget class="QWidget" name="verticalLayoutWidget_6">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>340</y>
-      <width>121</width>
+      <x>10</x>
+      <y>410</y>
+      <width>181</width>
       <height>201</height>
      </rect>
     </property>
@@ -477,8 +479,8 @@ selection-color: rgb(253, 253, 253);</string>
    <widget class="QWidget" name="verticalLayoutWidget_7">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>340</y>
+      <x>210</x>
+      <y>410</y>
       <width>111</width>
       <height>201</height>
      </rect>
@@ -543,8 +545,8 @@ font: 75 12pt &quot;Times New Roman&quot;;</string>
    <widget class="Line" name="line_4">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>340</y>
+      <x>320</x>
+      <y>400</y>
       <width>21</width>
       <height>211</height>
      </rect>
@@ -564,8 +566,8 @@ font: 75 12pt &quot;Times New Roman&quot;;</string>
    <widget class="Line" name="line_5">
     <property name="geometry">
      <rect>
-      <x>525</x>
-      <y>340</y>
+      <x>660</x>
+      <y>400</y>
       <width>21</width>
       <height>211</height>
      </rect>
@@ -585,9 +587,9 @@ font: 75 12pt &quot;Times New Roman&quot;;</string>
    <widget class="QWidget" name="verticalLayoutWidget_10">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>340</y>
-      <width>121</width>
+      <x>350</x>
+      <y>410</y>
+      <width>181</width>
       <height>201</height>
      </rect>
     </property>
@@ -641,8 +643,8 @@ font: 75 12pt &quot;Times New Roman&quot;;</string>
    <widget class="QWidget" name="verticalLayoutWidget_11">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>340</y>
+      <x>550</x>
+      <y>410</y>
       <width>111</width>
       <height>201</height>
      </rect>
@@ -707,9 +709,9 @@ font: 75 10pt &quot;Times New Roman&quot;;</string>
    <widget class="QWidget" name="verticalLayoutWidget_12">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>340</y>
-      <width>281</width>
+      <x>690</x>
+      <y>410</y>
+      <width>311</width>
       <height>203</height>
      </rect>
     </property>
@@ -780,9 +782,9 @@ color: rgb(60, 60, 60)</string>
    <widget class="QLabel" name="brake_fail_label">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>267</y>
-      <width>119</width>
+      <x>10</x>
+      <y>320</y>
+      <width>151</width>
       <height>71</height>
      </rect>
     </property>
@@ -807,9 +809,9 @@ color: rgb(60, 60, 60)</string>
    <widget class="QLabel" name="signal_fail_label">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>267</y>
-      <width>119</width>
+      <x>350</x>
+      <y>320</y>
+      <width>151</width>
       <height>71</height>
      </rect>
     </property>
@@ -834,9 +836,9 @@ color: rgb(60, 60, 60)</string>
    <widget class="QLabel" name="engine_fail_label">
     <property name="geometry">
      <rect>
-      <x>538</x>
-      <y>267</y>
-      <width>121</width>
+      <x>690</x>
+      <y>320</y>
+      <width>141</width>
       <height>71</height>
      </rect>
     </property>
@@ -861,10 +863,10 @@ color: rgb(60, 60, 60)</string>
    <widget class="QLabel" name="ad_label">
     <property name="geometry">
      <rect>
-      <x>830</x>
+      <x>1010</x>
       <y>150</y>
-      <width>201</width>
-      <height>411</height>
+      <width>181</width>
+      <height>471</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -874,14 +876,14 @@ color: rgb(60, 60, 60)</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../../../.designer/backup/bk_ad.png</pixmap>
+     <pixmap>../../Tanvi's Tr Mod/bk_ad.png</pixmap>
     </property>
    </widget>
    <widget class="Line" name="line_2">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>270</y>
+      <x>320</x>
+      <y>320</y>
       <width>21</width>
       <height>71</height>
      </rect>
@@ -899,9 +901,9 @@ color: rgb(60, 60, 60)</string>
    <widget class="Line" name="line_3">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>270</y>
-      <width>31</width>
+      <x>660</x>
+      <y>320</y>
+      <width>21</width>
       <height>71</height>
      </rect>
     </property>
@@ -918,10 +920,10 @@ color: rgb(60, 60, 60)</string>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>600</x>
       <y>40</y>
-      <width>211</width>
-      <height>221</height>
+      <width>221</width>
+      <height>271</height>
      </rect>
     </property>
     <property name="font">
@@ -952,19 +954,20 @@ color: rgb(60, 60, 60)</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>12</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true"/>
+        <string notr="true">font: 75 12pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Length of Vehicle (feet) :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Length of Vehicle (ft) :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -992,19 +995,20 @@ color: rgb(60, 60, 60)</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>12</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true"/>
+        <string notr="true">font: 75 12pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Height (feet) :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Height (ft) :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -1029,19 +1033,20 @@ color: rgb(60, 60, 60)</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>12</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true"/>
+        <string notr="true">font: 75 12pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Width (feet) :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Width (ft) :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -1066,8 +1071,14 @@ color: rgb(60, 60, 60)</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>9</pointsize>
+         <pointsize>12</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 75 12pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="text">
         <string>Commanded Speed (mph)</string>
@@ -1092,13 +1103,14 @@ color: rgb(60, 60, 60)</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>12</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true"/>
+        <string notr="true">font: 75 12pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
@@ -1129,13 +1141,14 @@ color: rgb(60, 60, 60)</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>12</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true"/>
+        <string notr="true">font: 75 12pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
@@ -1166,13 +1179,14 @@ color: rgb(60, 60, 60)</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>12</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true"/>
+        <string notr="true">font: 75 12pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
@@ -1203,13 +1217,14 @@ color: rgb(60, 60, 60)</string>
        <property name="font">
         <font>
          <family>Times New Roman</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
+         <pointsize>12</pointsize>
+         <weight>9</weight>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true"/>
+        <string notr="true">font: 75 12pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
@@ -1240,10 +1255,10 @@ color: rgb(60, 60, 60)</string>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>290</y>
-      <width>121</width>
-      <height>31</height>
+      <x>180</x>
+      <y>340</y>
+      <width>131</width>
+      <height>41</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -1290,10 +1305,10 @@ color: rgb(60, 60, 60)</string>
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>290</y>
-      <width>121</width>
-      <height>31</height>
+      <x>520</x>
+      <y>340</y>
+      <width>131</width>
+      <height>41</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -1319,9 +1334,9 @@ color: rgb(60, 60, 60)</string>
    <widget class="QWidget" name="horizontalLayoutWidget_5">
     <property name="geometry">
      <rect>
-      <x>678</x>
-      <y>284</y>
-      <width>121</width>
+      <x>860</x>
+      <y>340</y>
+      <width>131</width>
       <height>41</height>
      </rect>
     </property>
@@ -1348,10 +1363,10 @@ color: rgb(60, 60, 60)</string>
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>391</x>
+      <x>580</x>
       <y>0</y>
-      <width>31</width>
-      <height>261</height>
+      <width>16</width>
+      <height>311</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -1365,7 +1380,7 @@ font: 22pt &quot;MS Shell Dlg 2&quot;;</string>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>860</x>
+      <x>1050</x>
       <y>240</y>
       <width>111</width>
       <height>20</height>
@@ -1381,9 +1396,9 @@ font: 22pt &quot;MS Shell Dlg 2&quot;;</string>
    <widget class="QPushButton" name="ebrake">
     <property name="geometry">
      <rect>
-      <x>-5</x>
-      <y>556</y>
-      <width>1041</width>
+      <x>0</x>
+      <y>620</y>
+      <width>1191</width>
       <height>71</height>
      </rect>
     </property>
@@ -1416,7 +1431,7 @@ selection-color: rgb(99, 99, 99);
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>830</x>
+      <x>1010</x>
       <y>0</y>
       <width>181</width>
       <height>151</height>
@@ -1426,23 +1441,24 @@ selection-color: rgb(99, 99, 99);
      <item>
       <widget class="QLabel" name="ann_label">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(197, 197, 197);</string>
+        <string notr="true">background-color: rgb(197, 197, 197);
+font: 75 10pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:7pt; font-weight:600;&quot;&gt;ANNOUNCEMENTS&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;ANNOUNCEMENTS&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="ann_out_label">
        <property name="styleSheet">
-        <string notr="true">font: 8pt &quot;Times New Roman&quot;;</string>
+        <string notr="true">font: 12pt &quot;Times New Roman&quot;;</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;The Train will depart from Herron Station at 10am&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;The Train will depart from Herron Station at 10am&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>

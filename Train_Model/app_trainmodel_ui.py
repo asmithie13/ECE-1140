@@ -137,6 +137,7 @@ class MyMainWindow(QMainWindow):
         if not self.brake_fail_state:
             self.bf_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
             self.bf_disable.setStyleSheet('background-color: rgb(233, 247, 255);')
+            self.brake_fail_tb(True)
             self.brake_fail_state = True
 
     #bf_disable_clicked
@@ -144,6 +145,7 @@ class MyMainWindow(QMainWindow):
         if self.brake_fail_state:
             self.bf_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
             self.bf_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.brake_fail_tb(False)
             self.brake_fail_state = False
        
     #brake_fail_tb
@@ -164,7 +166,7 @@ class MyMainWindow(QMainWindow):
         if not self.sig_fail_state:
             self.sig_fail_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
             self.sig_fail_disable.setStyleSheet('background-color: rgb(233, 247, 255);')
-            self.signal_fail_tb(self.sig_fail_state)
+            self.signal_fail_tb(True)
             self.sig_fail_state = True
 
     #sig_fail_disable_clicked
@@ -172,7 +174,7 @@ class MyMainWindow(QMainWindow):
         if self.sig_fail_state:
             self.sig_fail_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
             self.sig_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
-            self.signal_fail_tb(self.sig_fail_state)
+            self.signal_fail_tb(False)
             self.sig_fail_state = False
 
     #signal_fail_tb
@@ -193,7 +195,7 @@ class MyMainWindow(QMainWindow):
         if not self.en_fail_state:
             self.en_fail_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
             self.en_fail_disable.setStyleSheet('background-color: rgb(233, 247, 255);')
-
+            self.engine_fail_tb(True)
             self.en_fail_state = True
 
     #en_fail_disable_clicked
@@ -201,6 +203,7 @@ class MyMainWindow(QMainWindow):
         if self.en_fail_state:
             self.en_fail_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
             self.en_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.engine_fail_tb(False)
             self.en_fail_state = False
 
     #engine_fail_tb

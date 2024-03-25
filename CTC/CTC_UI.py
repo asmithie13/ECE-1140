@@ -129,7 +129,10 @@ class CTC_UI(QtWidgets.QMainWindow):
     #TicketSales will be a list of two lists of ints, representing the sales at each station in 
     #green line and red line respectively, from Track Model
     def recieveTicketSales(self, TicketSales):
+        print("Hello")
+        
         AverageSales = [0, 0]
+        print(TicketSales)
 
         AverageSales[0] = sum(TicketSales[0])/len(TicketSales[0])
         AverageSales[1] = sum(TicketSales[1])/len(TicketSales[1])
@@ -143,10 +146,10 @@ class CTC_UI(QtWidgets.QMainWindow):
         TrainID = self.TrainNameField.text()
         Destination = self.DestinationSelect.currentText()
         ArrivalTime = self.ArrivalTimeEdit.time()
-        ArrivalTime = ArrivalTime.toString("hh:mm")
 
         #Calculatig the Departure Station and time
         Departure = []
+        print(type(ArrivalTime))
         self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure)
 
         #Adding the train to the schedule
@@ -301,13 +304,17 @@ class CTC_UI(QtWidgets.QMainWindow):
 
     #defining manual mode add train button functionality
     def addTrain_button(self):
+        #Getting User entered Info
         TrainID = self.TrainNameField.text()
         Destination = self.DestinationSelect.currentText()
         ArrivalTime = self.ArrivalTimeEdit.time()
-        ArrivalTime = ArrivalTime.toString("hh:mm")
 
+        #Calculating Departure Info
         Departure = []
         self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure)
+
+        #Adding all schedule info to the schedule
+        ArrivalTime = ArrivalTime.toString("hh:mm")
         self.trainSchedule.addTrain(self.currentLine, TrainID, Destination, ArrivalTime, Departure[0], Departure[1])
 
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))

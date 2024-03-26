@@ -356,18 +356,14 @@ class trainmodel_testbench(QMainWindow):
         self.TC = TC
         uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         #TRAIN CONTROLLER INSTANCE CREATED
         self.TC = TrainController()
 
-=======
-=======
         #TRAIN CONTROLLER INSTANCE CREATED
         self.TC = TrainController()
 
 
->>>>>>> c28f62749f7edc7e293ed9c5bda8e02f565faa16
+
         #TC.service_brake_sig.connect(self.)
         self.TC.curr_power_sig.connect(self.receive_power)
         
@@ -377,11 +373,7 @@ class trainmodel_testbench(QMainWindow):
         self.TC.int_light_sig.connect(self.interior_lights_tb)    
         self.TC.ext_light_sig.connect(self.exterior_lights_tb)
         self.TC.ebrake_disable_sig.connect(self.emit_ebrake_state)
-<<<<<<< HEAD
->>>>>>> 2a0207bf9e5392ddd1f1257cb6b6835cf1e5e46d
-=======
 
->>>>>>> c28f62749f7edc7e293ed9c5bda8e02f565faa16
         self.train_sel_combo_tb.activated[str].connect(self.get_train_selection)
 
         #self.power_input_tb.returnPressed.connect(self.receive_power)

@@ -53,12 +53,22 @@ class Schedule():
         TravelTime = 0
 
         if line == 'green':
-            for i in range(0, len(self.TrackData.GreenRouteInfo)):
-                if(self.TrackData.GreenRouteInfo[i][0] == DepartureStation):
+            for i in range(len(self.TrackData.GreenRouteInfo)):
+                if self.TrackData.GreenRouteInfo[i][0] == DepartureStation:
                     for j in range(i + 1, len(self.TrackData.GreenRouteInfo)):
                         TravelTime += float(self.TrackData.GreenRouteInfo[j][1])
 
                         if self.TrackData.GreenRouteInfo[j][0] == Destination:
+                            break
+
+                    break
+        elif line == 'red':
+            for i in range(len(self.TrackData.RedRouteInfo)):
+                if self.TrackData.RedRouteInfo[i][0] == DepartureStation:
+                    for j in range(i + 1, len(self.TrackData.RedRouteInfo)):
+                        TravelTime += float(self.TrackData.RedRouteInfo[j][1])
+
+                        if self.TrackData.RedRouteInfo[j][0] == Destination:
                             break
 
                     break

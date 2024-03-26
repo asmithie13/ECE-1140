@@ -4,13 +4,15 @@ from Wayside_SW.WaysideSWandTB import readTrackFile
 class TempData:
     def __init__(self):
         #Initializing Stations
-        self.RedStations = ["Shadyside", "Herron Ave", "Swissville",
-                            "Penn Station", "Steel Plaza", "First Ave",
-                            "Station Square", "South Hills Junction"]
-        self.GreenStations = ["Pioneer", "Edgebrook", "Station", "Whited",
-                              "South Bank", "Central", "Inglewood", "Overbrook",
-                              "Glenbury", "Dormont", "Mt Lebonon", "Popular",
-                              "Castle Shannon"]
+        self.RedStations = []
+        self.GreenStations = []
+        #self.RedStations = ["Shadyside", "Herron Ave", "Swissville",
+        #                    "Penn Station", "Steel Plaza", "First Ave",
+        #                    "Station Square", "South Hills Junction"]
+        #self.GreenStations = ["Pioneer", "Edgebrook", "Station", "Whited",
+        #                      "South Bank", "Central", "Inglewood", "Overbrook",
+        #                      "Glenbury", "Dormont", "Mt Lebonon", "Popular",
+        #                      "Castle Shannon"]
         
 
         #Dispatch Info has Station, Time to Station, Distance to station from the station before it
@@ -46,6 +48,7 @@ class TempData:
         csv_file.close
 
         for row in GreenRouteReader:
+            self.GreenStations.append(row[0])
             self.GreenRouteInfo.append(row)
 
         #Repeat to get Red Line Route Info
@@ -56,5 +59,6 @@ class TempData:
         csv_file.close
 
         for row in RedRouteReader:
+            self.RedStations.append(row[0])
             self.RedRouteInfo.append(row)
         

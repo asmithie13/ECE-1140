@@ -5,13 +5,16 @@ class TempData:
     def __init__(self):
         #Initializing Stations
         self.RedStations = ["Shadyside", "Herron Ave", "Swissville",
-                            "Peen Station", "Steel Plaza", "First Ave",
+                            "Penn Station", "Steel Plaza", "First Ave",
                             "Station Square", "South Hills Junction"]
         self.GreenStations = ["Pioneer", "Edgebrook", "Station", "Whited",
                               "South Bank", "Central", "Inglewood", "Overbrook",
                               "Glenbury", "Dormont", "Mt Lebonon", "Popular",
                               "Castle Shannon"]
         
+
+        #Dispatch Info has Station, Time to Station, Distance to station from the station before it
+
         #Getting Green Block Info
         self.GreenBlocks = []
         self.GreenSwitches = []

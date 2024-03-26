@@ -63,9 +63,26 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.currentLine = ''
 
         #Initializing Schedule
-        self.trainSchedule = Schedule()
+        self.trainSchedule = Schedule() 
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
+        #Initializing Manual Mode Functions before Manual Mode has been selected
+        self.TrainNameField.clear()
+        self.TrainNameField.setEnabled(False)
+        self.DestinationSelect.setEnabled(False)
+        self.ArrivalTimeEdit.setEnabled(False)
+        #Disable the add train button
+        self.AddTrainButton.setEnabled(False)
+        #Changing label text to gray
+        self.TrainNameLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.DestinationLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.ArrivalTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.MaualDispatchBox.setStyleSheet("color: rgb(120, 120, 120);")
+
+        #Disabling Auto Mode select schedule button until auto mode is selected
+        self.UploadButton.setEnabled(False)
+        self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
+        
         #Initializing Maintenance Mode functions before Mainenance Mode has been selected
         self.CloseBlockSelect.setEnabled(False)
         self.CloseBlockButton.setEnabled(False)
@@ -105,14 +122,17 @@ class CTC_UI(QtWidgets.QMainWindow):
         TempBlockList = []
 
         for i in BlockList:
-            TempBlockList.append(i.ID)
+            TempBlockList.append([i.ID, i.lineColor])
         
         self.updateOccupiedBlocks(TempBlockList)
 
     #TicketSales will be a list of two lists of ints, representing the sales at each station in 
     #green line and red line respectively, from Track Model
     def recieveTicketSales(self, TicketSales):
+        print("Hello")
+        
         AverageSales = [0, 0]
+        print(TicketSales)
 
         AverageSales[0] = sum(TicketSales[0])/len(TicketSales[0])
         AverageSales[1] = sum(TicketSales[1])/len(TicketSales[1])
@@ -124,16 +144,16 @@ class CTC_UI(QtWidgets.QMainWindow):
     def addTrain_button(self):
         #Grabbing values from the UI
         TrainID = self.TrainNameField.text()
-        Departure = self.DepartureSationSelect.currentText()
         Destination = self.DestinationSelect.currentText()
         ArrivalTime = self.ArrivalTimeEdit.time()
-        ArrivalTime = ArrivalTime.toString("hh:mm")
 
-        #Calculatig the Departure Time
-        DepartureTime = ArrivalTime 
-        DepartureTime = DepartureTime.toString("hh:mm")
+        #Calculatig the Departure Station and time
+        Departure = []
+        print(type(ArrivalTime))
+        self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure)
 
-        self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
+        #Adding the train to the schedule
+        self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure[0], Departure[1])
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 
@@ -143,17 +163,27 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ManualModeButton.setEnabled(False)
         self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
 
+        self.TrainNameField.setEnabled(True)
+        self.DestinationSelect.setEnabled(True)
+        self.ArrivalTimeEdit.setEnabled(True)
+        #Disable the add train button
+        self.AddTrainButton.setEnabled(True)
+        #Changing label text to gray
+        self.TrainNameLabel.setStyleSheet("color: black;")
+        self.DestinationLabel.setStyleSheet("color: black;")
+        self.ArrivalTimeLabel.setStyleSheet("color: black;")
+        self.MaualDispatchBox.setStyleSheet("color: black;")
+
     #Define mutually exclusive auto/manual mode when automatic mode is selected.
-    #Same behavior will occur when a schedule is uploaded, even if the mode was not explicitly selected. 
     def selectAutoMode_button(self):
-        #Disable The train name box
+        #Enable Schedule Upload Button
+        self.UploadButton.setEnabled(True)
+        self.UploadButton.setStyleSheet("background-color : rgb(38, 207, 4)")       #Green
+        
+        #Disable Manual Mode Functions
         self.TrainNameField.clear()
         self.TrainNameField.setEnabled(False)
-        #Disable the Departure Station and Destination Drop Downs
-        self.DepartureSationSelect.setEnabled(False)
         self.DestinationSelect.setEnabled(False)
-        #Disable the time edits
-        self.DepartureTimeEdit.setEnabled(False)
         self.ArrivalTimeEdit.setEnabled(False)
         #Disable the add train button
         self.AddTrainButton.setEnabled(False)
@@ -167,10 +197,9 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Changing label text to gray
         self.TrainNameLabel.setStyleSheet("color: rgb(120, 120, 120);")
-        self.DepartureStationLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.DestinationLabel.setStyleSheet("color: rgb(120, 120, 120);")
-        self.DepartureTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ArrivalTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
+        self.MaualDispatchBox.setStyleSheet("color: rgb(120, 120, 120);")
 
     #Sets drop down options if green line is selected
     def greenLine_button(self):
@@ -183,8 +212,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Set stations selctions to green line
         self.DestinationSelect.clear()
         self.DestinationSelect.addItems(self.TrackData.GreenStations)
-        self.DepartureSationSelect.clear()
-        self.DepartureSationSelect.addItems(self.TrackData.GreenStations)
         #Setting Block selections to green line
         self.CloseBlockSelect.clear()
         self.CloseBlockSelect.addItems(self.TrackData.GreenBlockIDs)
@@ -193,8 +220,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         for i in self.TrackData.GreenSwitches:
             self.ChooseSwitchSelect.addItem(i[0])
         self.newSwitchSelected(0)
-
-        
     
     def redLine_button(self):
         self.currentLine = 'red'
@@ -206,8 +231,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Set stations selctions to red line
         self.DestinationSelect.clear()
         self.DestinationSelect.addItems(self.TrackData.RedStations)
-        self.DepartureSationSelect.clear()
-        self.DepartureSationSelect.addItems(self.TrackData.RedStations)
         #Setting Block selections to red line
         self.CloseBlockSelect.clear()
         self.CloseBlockSelect.addItems(self.TrackData.RedBlockIDs)
@@ -222,8 +245,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.CTC_clock.display(time)
 
         for i in self.trainSchedule.Scheduledata:
-            if time == i[2]:
-                self.sendDispatchInfo.emit([500, 50])
+            if time == i[5]:
+                self.sendDispatchInfo.emit([i[1], 50, 500])
 
 
     #Define functionality for Upload File Button
@@ -238,13 +261,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
         #Disable Manual Mode and upload button
-        self.selectAutoMode_button()
         self.UploadButton.setEnabled(False)
         self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
-
-        #Disable Manual Mode button (because it's one use)
-        self.ManualModeButton.setEnabled(False)
-        self.ManualModeButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
 
 
     #Indication that the system is in maintenance mode
@@ -276,25 +294,30 @@ class CTC_UI(QtWidgets.QMainWindow):
     #function to update block occupied table based on input from Wayside
     def updateOccupiedBlocks(self, arr):
         UpdatedBlocksWithTrain = []
-
+        
+        #Adding TrainID, Block ID, and line color to an array
         for i in arr:
-            UpdatedBlocksWithTrain.append(['X', i])
+            UpdatedBlocksWithTrain.append(['X', i[0], i[1]])
             
         self.OccupiedBlockTable.setModel(BlocksTableModel(UpdatedBlocksWithTrain))
 
 
     #defining manual mode add train button functionality
     def addTrain_button(self):
+        #Getting User entered Info
         TrainID = self.TrainNameField.text()
-        Departure = self.DepartureSationSelect.currentText()
-        DepartureTime = self.DepartureTimeEdit.time()
-        DepartureTime = DepartureTime.toString("hh:mm")
         Destination = self.DestinationSelect.currentText()
         ArrivalTime = self.ArrivalTimeEdit.time()
+
+        #Calculating Departure Info
+        Departure = []
+        self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure)
+
+        #Adding all schedule info to the schedule
         ArrivalTime = ArrivalTime.toString("hh:mm")
-        self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure, DepartureTime)
+        self.trainSchedule.addTrain(self.currentLine, TrainID, Destination, ArrivalTime, Departure[0], Departure[1])
+
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
-        self.ScheduleTableView.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 
     #Function to add a block closure when in maintence mode

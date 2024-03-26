@@ -37,6 +37,9 @@ class TrackModelMain(QMainWindow):
     #send ticket sales to ctc
     SendTicketsales = pyqtSignal(list)
 
+    #send train model train id, speed, and authority
+    sendSpeedAuth = pyqtSignal(list)
+
     def __init__(self):
         super().__init__()
         self.blockStates = {}
@@ -67,6 +70,9 @@ class TrackModelMain(QMainWindow):
         self.green_line.hide()
         #self.red_line.hide()
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
+
+    def receiveSpeedAuth(self,speedAuth):
+        self.sendSpeedAuth.emit(speedAuth)
 
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box

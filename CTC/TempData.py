@@ -45,6 +45,4 @@ class TempData:
         for row in GreenRouteReader:
             self.GreenRouteInfo.append(row)
 
-        print(self.GreenRouteInfo)  
-
         

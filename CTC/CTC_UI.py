@@ -247,7 +247,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         for i in self.trainSchedule.Scheduledata:
             if time == i[5]:
                 #Train ID, speed, Authority
-                self.sendDispatchInfo.emit([i[1], 50, 900])
+                self.sendDispatchInfo.emit([i[1], 70, 900])
+                print([i[1], 70, 900])
 
 
     #Define functionality for Upload File Button
@@ -312,7 +313,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Calculating Departure Info
         Departure = []
-        self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure)
+        self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure, self.currentLine)
 
         #Adding all schedule info to the schedule
         ArrivalTime = ArrivalTime.toString("hh:mm")

@@ -9,12 +9,14 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
 import csv
+from CTC.TempData import *
 
 #Schedule class, holds schedule data and defines methods for editing the schedule
 class Schedule():
     def __init__(self):
         self.Scheduledata = []
         self.departureInfo = []
+        self.TrackData = TempData()
 
     #Function to add a single train to the schedule
     def addTrain(self, line, TrainID, Destination, ArrivalTime, Departure, DepartureTime):
@@ -33,13 +35,26 @@ class Schedule():
         for row in reader:
             self.Scheduledata.append(row)
 
-    def calculateDeparture(self, Destination, ArrivalTime, Departure):
+    def calculateDeparture(self, Destination, ArrivalTime, Departure, line):
         #Setting Departure Station
         DepartureStation = "Yard"
         Departure.append(DepartureStation)
 
         #Calculating Departure Time
-        DepartureTime = ArrivalTime.addSecs(-15 * 60)
+        TravelTime = 0
+
+        if line == 'green':
+            for i in range(0, len(self.TrackData.GreenRouteInfo)):
+                if(self.TrackData.GreenRouteInfo[i][0] == DepartureStation):
+                    for j in range(i + 1, len(self.TrackData.GreenRouteInfo)):
+                        TravelTime += float(self.TrackData.GreenRouteInfo[j][1])
+
+                        if self.TrackData.GreenRouteInfo[j][0] == Destination:
+                            break
+
+                    break
+
+        DepartureTime = ArrivalTime.addSecs(int(-1 * 60 * TravelTime))
         DepartureTime = DepartureTime.toString("hh:mm")
 
         Departure.append(DepartureTime)

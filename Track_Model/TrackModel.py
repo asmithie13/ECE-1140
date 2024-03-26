@@ -656,7 +656,6 @@ class TrackFaultTable(QAbstractTableModel):
 if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
-    print("helloooo")
     window = TrackModelMain()
     window_2 = TrackModel_tb()
 

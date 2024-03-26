@@ -37,8 +37,15 @@ class CTC_Testbench(QtWidgets.QMainWindow):
     def updateBlocks_button(self):
         BlockText = self.OccupiedBlocksInput.text()
         UpdatedBlocks = list(map(str.strip, BlockText.split(',')))
+        BlocksWithLineColor = []
 
-        self.sendOccupiedBlocks.emit(UpdatedBlocks)
+        for i in range(len(UpdatedBlocks)):
+            temp = []
+            temp.append(UpdatedBlocks[i])
+            temp.append('green')
+            BlocksWithLineColor.append(temp)
+
+        self.sendOccupiedBlocks.emit(BlocksWithLineColor)
 
     #Defines funtionality of the update ticket sales button on the testbench
     def updateTicketSales_button(self):

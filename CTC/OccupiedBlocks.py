@@ -46,7 +46,7 @@ class BlocksTableModel(QtCore.QAbstractTableModel):
     
     #Adds the column header with the correct data
     def headerData(self, section, orientation, role):
-        headers = ['Train', 'Block #']
+        headers = ['Train', 'Block #', 'Line']
 
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:

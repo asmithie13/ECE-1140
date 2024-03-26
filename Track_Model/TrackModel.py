@@ -72,7 +72,13 @@ class TrackModelMain(QMainWindow):
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
     def receiveSpeedAuth(self,speedAuth):
+        trainID=speedAuth[0]
+        Comm_Speed=int(speedAuth[1])
+        Authority=int(speedAuth[2])
         self.sendSpeedAuth.emit(speedAuth)
+        
+
+        
 
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box

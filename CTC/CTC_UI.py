@@ -246,7 +246,8 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         for i in self.trainSchedule.Scheduledata:
             if time == i[5]:
-                self.sendDispatchInfo.emit([i[1], 50, 500])
+                #Train ID, speed, Authority
+                self.sendDispatchInfo.emit([i[1], 50, 900])
 
 
     #Define functionality for Upload File Button

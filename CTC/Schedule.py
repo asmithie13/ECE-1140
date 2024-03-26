@@ -12,8 +12,9 @@ import csv
 
 #Schedule class, holds schedule data and defines methods for editing the schedule
 class Schedule():
-    def __init__(self, ScheduleData = []):
-        self.Scheduledata = ScheduleData
+    def __init__(self):
+        self.Scheduledata = []
+        self.departureInfo = []
 
     #Function to add a single train to the schedule
     def addTrain(self, line, TrainID, Destination, ArrivalTime, Departure, DepartureTime):

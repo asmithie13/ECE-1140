@@ -35,6 +35,16 @@ class TempData:
         self.RedBlocks = readTrackFile("Wayside_SW/Red_Line.csv", self.RedSwitches)
         
         for i in self.RedBlocks:
-            self.RedBlockIDs.append(str(i.ID))        
+            self.RedBlockIDs.append(str(i.ID))      
+
+        self.GreenRouteInfo = []
+        csv_file = open("CTC/RouteGreenLine.csv","r")
+        GreenRouteReader = csv.reader(csv_file)
+        csv_file.close
+
+        for row in GreenRouteReader:
+            self.GreenRouteInfo.append(row)
+
+        print(self.GreenRouteInfo)  
 
         

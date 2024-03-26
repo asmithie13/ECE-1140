@@ -1,4 +1,4 @@
-from mainControl import Ui_MainWindow
+from Train_Controller_SW.mainControl import Ui_MainWindow
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -10,14 +10,14 @@ class Vital_Authority():
     def __init__(self,ui,curr_auth_signal):
         self.ui = ui
         self.curr_auth_signal = curr_auth_signal
-        # self.authTimer = QTimer()
-        # self.authTimer.setInterval(1000)
-        # self.authTimer.timeout.connect(self.Authority_Monitor)
+    #     self.authTimer = QTimer()
+    #     self.authTimer.setInterval(1000)
+    #     self.authTimer.timeout.connect(self.Authority_Monitor)
 
 
-    def authTimerStart(self):
-        if not self.authTimer.isActive():
-            self.authTimer.start()
+    # def authTimerStart(self):
+    #     if not self.authTimer.isActive():
+    #         self.authTimer.start()
 
     
     #make sure we can stop in time for authority in ft

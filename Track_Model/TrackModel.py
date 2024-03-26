@@ -657,12 +657,12 @@ class TrackFaultTable(QAbstractTableModel):
         self._data = []
 
         
-    
+
 # Call Main window
 if __name__ == "__main__":
 
-    app = QApplication(sys.argv)
-    
+    app = QtWidgets.QApplication(sys.argv)
+    print("helloooo")
     window = TrackModelMain()
     window_2 = TrackModel_tb()
 
@@ -679,6 +679,7 @@ if __name__ == "__main__":
     window.grade_signal.connect(window_2.update_grade_label)
 
     window.block_selected_signal.connect(window_2.update_on_block_selection)
+    QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     window.show()
     window_2.show()
 

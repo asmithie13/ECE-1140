@@ -10,7 +10,8 @@ from PyQt5.QtCore import Qt
 from clock_test import Clock
 from Train_Controller_SW.TrainController import TrainController
 import subprocess
-
+import Train_Controller_SW
+from Train_Controller_SW.TrainController import *
 
 class MyMainWindow(QMainWindow):
     
@@ -355,6 +356,10 @@ class trainmodel_testbench(QMainWindow):
         self.TC = TC
         uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
 
+        #TRAIN CONTROLLER INSTANCE CREATED
+        self.TC = TrainController()
+
+
         #TC.service_brake_sig.connect(self.)
         self.TC.curr_power_sig.connect(self.receive_power)
         
@@ -364,6 +369,7 @@ class trainmodel_testbench(QMainWindow):
         self.TC.int_light_sig.connect(self.interior_lights_tb)    
         self.TC.ext_light_sig.connect(self.exterior_lights_tb)
         self.TC.ebrake_disable_sig.connect(self.emit_ebrake_state)
+
         self.train_sel_combo_tb.activated[str].connect(self.get_train_selection)
 
         #self.power_input_tb.returnPressed.connect(self.receive_power)

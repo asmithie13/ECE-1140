@@ -21,6 +21,11 @@ from Wayside_HW.TrackController_HW_TB import *
 import Track_Model
 from Track_Model.TrackModel import *
 
+# #Train Model Imports
+# import Train_Model
+# from Train_Model.app_trainmodel_ui import *
+# from Train_Model.app_trainmodel_tb import *
+
 
 #Utility function to initialize clock
 def clock():
@@ -62,6 +67,10 @@ MainWindow.WaysideSWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recie
 
 #Wayside to Track Model
 
+"""Track Model Signals"""
+
+#Track Model to CTC
+MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieveTicketSales)
 
 """Clock Initialization"""
 #Initializing Qtimer for clock
@@ -70,6 +79,7 @@ time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
 timer0.setInterval(100)         #Interval in ms
 timer0.timeout.connect(clock)
 timer0.start()
+QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 
 
 sys.exit(UI_window.exec_())

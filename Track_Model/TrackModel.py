@@ -41,10 +41,10 @@ class TrackModelMain(QMainWindow):
     sendSpeedAuth = pyqtSignal(list)
 
     #send com speed to testbench
-    send_com_speed_tb = pyqtSignal(int)
+    send_com_speed_tb = pyqtSignal(str)
 
     #send authority to ttestbench
-    send_authority_tb = pyqtSignal(int)
+    send_authority_tb = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -78,13 +78,15 @@ class TrackModelMain(QMainWindow):
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
     def receiveSpeedAuth_tm(self,speedAuth):
+        print("I am at receive speed auth for track model")
         trainID=speedAuth[0]
-        Comm_Speed=int(speedAuth[1])
-        Authority=int(speedAuth[2])
-
+        Comm_Speed=speedAuth[1]
+        Authority=speedAuth[2]
+        print("comm",Comm_Speed)
+        print("auth",Authority)
         self.sendSpeedAuth.emit(speedAuth)
-        self.send_com_speed_tb.emit(Comm_Speed)
-        self.send_authority_tb.emit(Authority)
+        self.send_com_speed_tb.emit(str(Comm_Speed))
+        self.send_authority_tb.emit(str(Authority))
 
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box
@@ -334,6 +336,7 @@ class TrackModelMain(QMainWindow):
 
 #this is my testbench window
 class TrackModel_tb(QMainWindow):
+    print("im in tb")
     #Change the signal to emit a string for buttons
     broken_rail_input_signal = pyqtSignal(str)
     track_input_signal = pyqtSignal(str)
@@ -390,10 +393,12 @@ class TrackModel_tb(QMainWindow):
         self.grade_out.setText(str(grade))
 
     def update_commanded_speed(self, commanded_speed):
-        self.com_speed_out_1.setText(commanded_speed)
+        print("up com speed")
+        self.com_speed_out_1.setText(str(commanded_speed))
 
     def update_authority(self, authority1):
-        self.authority_out.setText(authority1)
+        print("up auth")
+        self.authority_out.setText(str(authority1))
 
 
     #Function for inputs/outputs for textboxes
@@ -694,8 +699,8 @@ if __name__ == "__main__":
     window_2.cross_input_signal.connect(window.toggle_cross_state_tb)
     window_2.switch_input_signal.connect(window.toggle_switch_tb)
 
-    window.send_com_speed_tb.connect(window_2.update_commanded_speed)
-    window.send_authority_tb.connect(window_2.update_authority)
+    # window.send_com_speed_tb.connect(window_2.update_commanded_speed)
+    # window.send_authority_tb.connect(window_2.update_authority)
 
     # Connect TrackModelMain's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)

@@ -81,12 +81,12 @@ class Main_UI(QtWidgets.QMainWindow):
 
     def open_track_model_UI(self):
         # Define the path to the mainControl.py file
-        track_model_path = "Track_Model/TrackModel.py"
+        #track_model_path = "Track_Model/TrackModel.py"
 
         # Run mainControl.py as a separate process
-        subprocess.Popen(["python", track_model_path])
-        # self.TrackModelWindow.show()
-        # self.TrackModel_tb.show()
+        #subprocess.Popen(["python", track_model_path])
+        self.TrackModelWindow.show()
+        self.TrackModel_tb.show()
 
     def create_new_train(self, TrainID):
         print("Temp, attempt to add train")

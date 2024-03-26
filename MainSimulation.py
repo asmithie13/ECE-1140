@@ -22,9 +22,9 @@ import Track_Model
 from Track_Model.TrackModel import *
 
 #Train Model Imports
-import Train_Model
-from Train_Model.app_trainmodel_ui import *
-from Train_Model.app_trainmodel_tb import *
+#import Train_Model
+#from Train_Model.app_trainmodel_ui import *
+#from Train_Model.app_trainmodel_tb import *
 
 
 #Utility function to initialize clock
@@ -42,6 +42,14 @@ UI_window = QtWidgets.QApplication(sys.argv)
 #Initializing Main Window
 global MainWindow
 MainWindow = Main_UI()
+
+MainWindow.TrackModelWindow.setGeometry(0, 0, 400, 300)  # Set the geometry to half of the original size
+
+# Scale down fonts
+font = MainWindow.TrackModelWindow.font()
+font.setPointSize(font.pointSize() // 2)
+MainWindow.TrackModelWindow.setFont(font)
+
 MainWindow.show()
 
 """CTC Signals"""

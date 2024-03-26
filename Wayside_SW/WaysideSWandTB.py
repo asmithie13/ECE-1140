@@ -492,7 +492,8 @@ class WaysideSW(QMainWindow):
             blockNum = int(block[1:])
             for x in (self.green5blocks[blockNum - 1]):
                 if self.allGreenBlocks[x - 1].occupied:
-                    self.sendTrainSpeedAuth.emit(0,0,0)
+                    self.sendTrainSpeedAuth.emit([0,0,0])
+                    self.allGreenBlocks[x - 1].authority = False
         
         self.BlockOcc.setText(" ".join(sentBlocks))
         if self.label_7.text() == "AUTOMATIC" : self.FileParser.parsePLC()
@@ -510,6 +511,7 @@ class TestBench(QMainWindow):
     tbChangeMode = pyqtSignal() #Fliping mode
     ctcSpeed = pyqtSignal(Block) #sending updated block with speed
     ctcAuthority = pyqtSignal(Block) #sending updated block with authority
+    ctcIDSpeedAuthority = pyqtSignal(list)
 
     def __init__(self):
         super().__init__()
@@ -522,6 +524,7 @@ class TestBench(QMainWindow):
         self.addBlock.returnPressed.connect(self.addBlockOcc)
         self.removeBlock.returnPressed.connect(self.remBlockOcc)
         self.tbBlockMenu.currentIndexChanged.connect(self.updateBlockStates)
+        self.lineEdit.returnPressed.connect(self.receiveInitialIDSpeedAuth)
 
         #Backend vars
         self.OccupiedBlocks = []    #Is sent to the UI
@@ -532,6 +535,9 @@ class TestBench(QMainWindow):
         self.redW1Blocks = []
         self.redW2Blocks = []
 
+        #train id, speed, authority to send
+        self.idSpeedAuthority = []
+ 
     def sendSpeed(self):
         speed = self.speedInput.text()
         self.comSpeed.setText(speed)
@@ -613,11 +619,11 @@ class TestBench(QMainWindow):
             if selectedBlock.switchState:
                 self.label_19.setText("")
                 self.label_22.setText("")
-                self.label_24.setText("B6")
+                self.label_24.setText("LEFT")
             else:
                 self.label_19.setText("")
                 self.label_22.setText("")
-                self.label_24.setText("C11")
+                self.label_24.setText("RIGHT")
 
     def receiveMode(self,mode):
         if mode == True:
@@ -636,7 +642,14 @@ class TestBench(QMainWindow):
         elif blocks[0].Wayside == "W2" and blocks[0].lineColor == "Red":
             self.redW2Blocks = blocks
             for block in self.redW2Blocks: self.tbBlockMenu.addItems([block.ID])
-        
+
+    def receiveInitialIDSpeedAuth(self):
+        text = self.lineEdit.text()
+        splits = text.split(", ")
+        self.comSpeed.setText(splits[1])
+        self.authOut.setText(splits[2])
+        self.ctcIDSpeedAuthority.emit(splits)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -651,8 +664,7 @@ if __name__ == "__main__":
     #Signal: Window 2
     window2.OccBlocksChanged.connect(window.updateBlocks)
     window2.tbChangeMode.connect(window.changeMode)
-    window2.ctcSpeed.connect(window.receiveSpeedAuth)
-    window2.ctcAuthority.connect(window.receiveSpeedAuth)
+    window2.ctcIDSpeedAuthority.connect(window.receiveSpeedAuth)
 
     window.show()
     window2.show()

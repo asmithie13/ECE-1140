@@ -25,9 +25,9 @@ import Track_Model
 from Track_Model.TrackModel import *
 
 #Train Model Imports
-import Train_Model
-from Train_Model.app_trainmodel_ui import *
-from Train_Model.app_trainmodel_tb import *
+#import Train_Model
+#from Train_Model.app_trainmodel_ui import *
+#from Train_Model.app_trainmodel_tb import *
 
 
 class Main_UI(QtWidgets.QMainWindow):

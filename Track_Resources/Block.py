@@ -13,7 +13,7 @@ class Block:
         self.occupied = False
         self.ID = id
         self.speedLimit = None
-        self.authority = None
+        self.authority = True
         self.blockLength = None
         self.Wayside = None
 

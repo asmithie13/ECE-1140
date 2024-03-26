@@ -25,14 +25,23 @@ class Schedule():
 
     #function to parse a schedule file for automatic mode
     def parseScheduleFile(self, filepath):
-        #print(filepath)
-        
+        #Parse file using csv library
         if filepath:
             csv_file = open(filepath,"r")
             reader = csv.reader(csv_file)
+            headers = next(reader)      #Skip header row
             csv_file.close
 
+        #For each row besides the header row, calculate departure data and add to schedule
         for row in reader:
+            DepartureData = []
+            tempArrivalTime = QTime()   #Converting ArrivalTime to QTime for easier math
+            self.calculateDeparture(row[2], tempArrivalTime.fromString(row[3]), DepartureData, row[0])
+            #Adding departure Data to the row data
+            row.append(DepartureData[0])
+            row.append(DepartureData[1])
+            #Adding to Schedule
+            #Line, TrainID, Destination, Arrival Time, Departure Station, Departure Time
             self.Scheduledata.append(row)
 
     def calculateDeparture(self, Destination, ArrivalTime, Departure, line):

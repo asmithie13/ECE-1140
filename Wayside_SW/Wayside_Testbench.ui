@@ -77,6 +77,24 @@
        </layout>
       </item>
       <item>
+       <widget class="QLabel" name="label_7">
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>13</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Train ID, Speed, Authority.</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit"/>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
          <widget class="QLabel" name="label_6">

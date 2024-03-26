@@ -44,7 +44,11 @@ class TrackModelMain(QMainWindow):
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track_Model/Track_Model.ui", self)
 
-        
+        self.set_broken_rail.clicked.connect(self.set_broken_rail_failure)
+        self.set_track_failure.clicked.connect(self.set_track_circuit_failure)
+        self.set_power_failure.clicked.connect(self.set_power_failure_func)
+        self.reset_button.clicked.connect(self.reset_block_colors)
+
         # Connect Upload Track Layout button to make upload file
         self.pushButton.clicked.connect(self.upload_track_layout) 
 
@@ -75,8 +79,43 @@ class TrackModelMain(QMainWindow):
         #    self.red_line.show()
         #    self.green.hide()
             
+    def set_broken_rail_failure(self):
+        selected_block = self.block_in_1.currentText()
+        if selected_block:
+            button = self.findChild(QPushButton, selected_block)
+            if button:
+                button.setStyleSheet("background-color: grey")
+
+    def set_track_circuit_failure(self):
+        selected_block = self.block_in_1.currentText()
+        if selected_block:
+            button = self.findChild(QPushButton, selected_block)
+            if button:
+                button.setStyleSheet("background-color: yellow")
+    
+    def set_power_failure_func(self):
+        selected_block = self.block_in_1.currentText()
+        if selected_block:
+            button = self.findChild(QPushButton, selected_block)
+            if button:
+                button.setStyleSheet("background-color: tan")
+
+    def reset_block_colors(self):
+        # Defaull stylesheet of buttons for the Track Layout
+        default_color = """
+            QPushButton {
+                border-style: solid;
+                border-width: 2px;
+                border-color: black;
+                background-color: rgb(50, 205, 50);
+            }
+        """
+        #iterate through all buttons to reset them
+        for block_id, button in self.block_buttons.items():
+            button.setStyleSheet(default_color)
+
     def setup_block_buttons(self):
-        # Use the manually typed list of block IDs
+        #list of block IDs
         block_ids = [
         'A1', 'A2', 'A3', 'B4', 'B5', 'B6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12',
         'D13', 'D14', 'D15', 'D16', 'E17', 'E18', 'E19', 'E20', 'F21', 'F22', 'F23', 'F24',
@@ -94,25 +133,23 @@ class TrackModelMain(QMainWindow):
         'Y148', 'Y149', 'Z150'
         ]
 
-        # Create a dictionary to store references to buttons if needed
         self.block_buttons = {}
 
         for block_id in block_ids:
                 button = self.findChild(QPushButton, block_id)
                 if button:
                     self.block_buttons[block_id] = button
-                    # Correctly pass the block_id to the lambda function to avoid late binding issue
+                    #pass block_id
                     button.clicked.connect(lambda checked, b_id=block_id: self.block_clicked(b_id))
 
     def block_clicked(self, block_id):
-    # Update both dropdowns to show the selected block_id
         self.block_in_1.setCurrentText(block_id)
-        self.block_in_2.setCurrentText(block_id)  # If you want to update block_in_2 as well
+        self.block_in_2.setCurrentText(block_id) 
 
-        # Call the update_block_info to fetch and update the UI with block data
+        #Call the update_block_info to fetch and update the UI with block data
         self.update_block_info(block_id)
 
-        # Emit a signal or perform actions needed when a block is selected
+        #Emit a signal or perform actions needed when a block is selected
         self.block_selected_signal.emit(block_id)
 
     def generateTickets(self):
@@ -226,10 +263,14 @@ class TrackModelMain(QMainWindow):
         block_num = self.data.get_block_for_block(block_num)
         section = self.data.get_section_for_block(block_num)
         speed_limit_km = self.data.get_speed_for_block(block_num)
+        cumm_elevation_m = self.data.get_cumm_ele_for_block(block_num)
 
         # Math conversion from metric to imperial for track length, speed limit, and elevation.
         elevation_ft = elevation_m * 3.28084
         elevation_str = "{:.4f}".format(elevation_ft).rstrip('0').rstrip('.')
+
+        cumm_elevation_ft = cumm_elevation_m * 3.28084
+        cumm_elevation_str = "{:.4f}".format(cumm_elevation_ft).rstrip('0').rstrip('.')
 
         length_ft = length1_m * 3.28084
         length_str = "{:.4f}".format(length_ft).rstrip('0').rstrip('.')
@@ -239,6 +280,7 @@ class TrackModelMain(QMainWindow):
 
         # Update the labels with the block data and output it.
         self.elevation_in.setText(elevation_str)
+        self.cumm_elevation_in.setText(cumm_elevation_str)
         self.grade_in.setText(str(grade))
         self.length_in.setText(length_str)
         self.block_num_in.setText(str(block_num))
@@ -268,6 +310,7 @@ class TrackModelMain(QMainWindow):
             self.grade_in.setText(str(block_data['grade']))
             self.length_in.setText(str(block_data['length1_m']))
             self.elevation_in.setText(str(block_data['elevation_m']))
+            self.cumm_elevation_in.setText(str(block_data['cumm_elevation_m']))
 
 
 
@@ -490,6 +533,7 @@ class Data:
                     'grade': block_row.iloc[0]['Block Grade (%)'],
                     'length1_m': block_row.iloc[0]['Block Length (m)'],
                     'elevation_m': block_row.iloc[0]['ELEVATION (M)'],
+                    'cumm_elevation_m': block_row.iloc[0]['CUMALTIVE ELEVATION (M)'],
                     # Add more fields as needed
                 }
         return None 
@@ -558,6 +602,17 @@ class Data:
                 if row['Block Number'] == block_num:
                     # Return the corresponding section value of that row
                     return row['Speed Limit (Km/Hr)']
+        return None  # Return None if block number is not found or there is nothing in the Dataframe
+    
+    def get_cumm_ele_for_block(self, block_num):
+        # iterate through the DataFrame of the Ecel file
+        if self.df is not None:
+            #  iterate through the DataFrame
+            for index, row in self.df.iterrows():
+                #check if the block number matches and if so...
+                if row['Block Number'] == block_num:
+                    # Return the corresponding section value of that row
+                    return row['CUMALTIVE ELEVATION (M)']
         return None  # Return None if block number is not found or there is nothing in the Dataframe
     
     #receive speed

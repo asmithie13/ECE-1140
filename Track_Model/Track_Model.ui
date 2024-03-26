@@ -4843,7 +4843,7 @@
       </widget>
      </item>
      <item row="5" column="1">
-      <widget class="QLabel" name="cumm_elevation">
+      <widget class="QLabel" name="cumm_elevation_in">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(white);</string>
        </property>
@@ -5963,7 +5963,7 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QPushButton" name="offButton_3">
+      <widget class="QPushButton" name="set_power_failure">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -6004,7 +6004,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="reset_button">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(white);</string>
        </property>
@@ -6014,7 +6014,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QPushButton" name="offButton_2">
+      <widget class="QPushButton" name="set_track_failure">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -6036,7 +6036,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QPushButton" name="offButton_1">
+      <widget class="QPushButton" name="set_broken_rail">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
          <horstretch>0</horstretch>

@@ -40,6 +40,12 @@ class TrackModelMain(QMainWindow):
     #send train model train id, speed, and authority
     sendSpeedAuth = pyqtSignal(list)
 
+    #send com speed to testbench
+    send_com_speed_tb = pyqtSignal(int)
+
+    #send authority to ttestbench
+    send_authority_tb = pyqtSignal(int)
+
     def __init__(self):
         super().__init__()
         self.blockStates = {}
@@ -75,10 +81,10 @@ class TrackModelMain(QMainWindow):
         trainID=speedAuth[0]
         Comm_Speed=int(speedAuth[1])
         Authority=int(speedAuth[2])
-        self.sendSpeedAuth.emit(speedAuth)
-        
 
-        
+        self.sendSpeedAuth.emit(speedAuth)
+        self.send_com_speed_tb.emit(Comm_Speed)
+        self.send_authority_tb.emit(Authority)
 
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box
@@ -383,6 +389,13 @@ class TrackModel_tb(QMainWindow):
         # Update the grade_out label with the received grade
         self.grade_out.setText(str(grade))
 
+    def update_commanded_speed(self, commanded_speed):
+        self.com_speed_out_1.setText(commanded_speed)
+
+    def update_authority(self, authority1):
+        self.authority_out.setText(authority1)
+
+
     #Function for inputs/outputs for textboxes
     def test_input(self):
         # Get text from the test inputs for broken rail
@@ -681,6 +694,9 @@ if __name__ == "__main__":
     window_2.cross_input_signal.connect(window.toggle_cross_state_tb)
     window_2.switch_input_signal.connect(window.toggle_switch_tb)
 
+    window.send_com_speed_tb.connect(window_2.update_commanded_speed)
+    window.send_authority_tb.connect(window_2.update_authority)
+    
     # Connect TrackModelMain's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)
 

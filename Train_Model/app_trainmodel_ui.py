@@ -91,7 +91,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.Power_value_lcd.display(power_input)
         self.train_calculations.Calculate_acceleration()
         self.train_calculations.calculate_force()
-        #return power_input
+        return power_input
 
 
 
@@ -284,9 +284,32 @@ class TrainCalculations:
         self.TC = TC
     
     
-
     def get_power(self, power_input):
         self.main_window.get_power_input(power_input)
+
+    def get_commanded_speed(self, commanded_speed):
+        self.main_window.commanded_speed_def = commanded_speed
+        self.main_window.cspeed_display.setText(str(commanded_speed))
+        self.calculate_force()
+        self.Calculate_acceleration()
+        self.calculate_acc_velocity()
+        self.TC.curr_cmd_spd_sig.emit(int(commanded_speed))
+
+    def get_mass(self, mass):
+        self.main_window.mass_display.setText(str(mass))
+        mass = mass / 2.205
+        self.main_window.mass_def = mass
+        self.calculate_force()
+        self.Calculate_acceleration()
+        self.calculate_acc_velocity()
+
+    def calculate_force(self):
+        power = 1000 * (self.main_window.Power_value_lcd.value())
+        commanded_speed = self.main_window.commanded_speed_def
+        print(commanded_speed)
+        speed_fts = commanded_speed * (5280 / 3600)
+        force = power / speed_fts
+        return force
 
     def Calculate_acceleration(self):
         force = self.calculate_force()
@@ -299,28 +322,6 @@ class TrainCalculations:
         acceleration = self.Calculate_acceleration()
         self.main_window.Acceleration_value_lcd.display(acceleration)
 
-    def get_commanded_speed(self, commanded_speed):
-        self.main_window.commanded_speed_def = commanded_speed
-        self.main_window.cspeed_display.setText(str(commanded_speed))
-        self.calculate_force()
-        self.Calculate_acceleration()
-        self.calculate_acc_velocity()
-        self.TC.curr_cmd_spd_sig.emit(commanded_speed)
-
-    def calculate_force(self):
-        power = 1000 * (self.main_window.Power_value_lcd.value())
-        commanded_speed = self.main_window.commanded_speed_def
-        speed_fts = commanded_speed * (5280 / 3600)
-        force = power / speed_fts
-        return force
-
-    def get_mass(self, mass):
-        self.main_window.mass_display.setText(str(mass))
-        mass = mass / 2.205
-        self.main_window.mass_def = mass
-        self.calculate_force()
-        self.Calculate_acceleration()
-        self.calculate_acc_velocity()
 
     def calculate_acc_velocity(self):
         acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration()

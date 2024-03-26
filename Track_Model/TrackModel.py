@@ -77,7 +77,7 @@ class TrackModelMain(QMainWindow):
         #self.red_line.hide()
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
-    def receiveSpeedAuth(self,speedAuth):
+    def receiveSpeedAuth_tm(self,speedAuth):
         trainID=speedAuth[0]
         Comm_Speed=int(speedAuth[1])
         Authority=int(speedAuth[2])
@@ -696,12 +696,11 @@ if __name__ == "__main__":
 
     window.send_com_speed_tb.connect(window_2.update_commanded_speed)
     window.send_authority_tb.connect(window_2.update_authority)
-    
+
     # Connect TrackModelMain's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)
 
     window.block_selected_signal.connect(window_2.update_on_block_selection)
-    QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     window.show()
     window_2.show()
 

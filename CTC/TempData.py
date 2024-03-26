@@ -37,12 +37,24 @@ class TempData:
         for i in self.RedBlocks:
             self.RedBlockIDs.append(str(i.ID))      
 
+
+        #Get Green Line Route Info
         self.GreenRouteInfo = []
         csv_file = open("CTC/RouteGreenLine.csv","r")
         GreenRouteReader = csv.reader(csv_file)
+        headers = next(GreenRouteReader)    #Skip Header Row
         csv_file.close
 
         for row in GreenRouteReader:
             self.GreenRouteInfo.append(row)
 
+        #Repeat to get Red Line Route Info
+        self.RedRouteInfo = []
+        csv_file = open("CTC/RouteRedLine.csv","r")
+        RedRouteReader = csv.reader(csv_file)
+        headers = next(RedRouteReader)    #Skip Header Row
+        csv_file.close
+
+        for row in RedRouteReader:
+            self.RedRouteInfo.append(row)
         

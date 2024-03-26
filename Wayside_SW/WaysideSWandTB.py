@@ -70,6 +70,9 @@ class WaysideSW(QMainWindow):
     sendOccupiedBlocks = pyqtSignal(list)   #Send list of occupied blocks to CTC
     sendTrainSpeedAuth = pyqtSignal(list) #Send commanded speed to track model
 
+    #signal to send all blocks to testbench
+    sendAllBlocks = pyqtSignal(list)
+
     def __init__(self):
         super().__init__()
         uic.loadUi("Wayside_SW/Wayside_UI_Rough.ui",self)
@@ -98,7 +101,7 @@ class WaysideSW(QMainWindow):
         for block in self.greenWayside2Blocks:
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocksW2.append(block)
             block.Wayside = "W2"
-
+            
         #2D array of blocks within 5 blocks of each other
         self.green5blocks = []
 
@@ -297,6 +300,8 @@ class WaysideSW(QMainWindow):
                 self.blockMenu.addItems([block.ID])
 
             self.FileParser = Parser(None,self.greenCrossingTriplesIDS,self.allGreenBlocks)
+            self.sendAllBlocks.emit(self.greenWayside2Blocks)
+            
 
         if selectedIndex == 0 and self.selectRedLine.isChecked():
             self.currentBlocks = self.redWayside1Blocks
@@ -311,6 +316,7 @@ class WaysideSW(QMainWindow):
             self.currentSwitchBlocksNums = self.redCrossingTriplesIDS
 
             self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)
+            self.sendAllBlocks.emit(self.redWayside1Blocks)
 
         if selectedIndex == 1 and self.selectRedLine.isChecked():
             self.currentBlocks = self.redWayside2Blocks
@@ -325,6 +331,7 @@ class WaysideSW(QMainWindow):
             self.currentSwitchBlocksNums = self.redCrossingTriplesIDS
 
             self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)
+            self.sendAllBlocks.emit(self.redWayside2Blocks)
 
     def blockActions(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -485,7 +492,8 @@ class WaysideSW(QMainWindow):
             blockNum = int(block[1:])
             for x in (self.green5blocks[blockNum - 1]):
                 if self.allGreenBlocks[x - 1].occupied:
-                    self.sendTrainSpeedAuth.emit(0,0,0)
+                    self.sendTrainSpeedAuth.emit([0,0,0])
+                    self.allGreenBlocks[x - 1].authority = False
         
         self.BlockOcc.setText(" ".join(sentBlocks))
         if self.label_7.text() == "AUTOMATIC" : self.FileParser.parsePLC()
@@ -503,6 +511,7 @@ class TestBench(QMainWindow):
     tbChangeMode = pyqtSignal() #Fliping mode
     ctcSpeed = pyqtSignal(Block) #sending updated block with speed
     ctcAuthority = pyqtSignal(Block) #sending updated block with authority
+    ctcIDSpeedAuthority = pyqtSignal(list)
 
     def __init__(self):
         super().__init__()
@@ -515,14 +524,20 @@ class TestBench(QMainWindow):
         self.addBlock.returnPressed.connect(self.addBlockOcc)
         self.removeBlock.returnPressed.connect(self.remBlockOcc)
         self.tbBlockMenu.currentIndexChanged.connect(self.updateBlockStates)
-
-        #Menu
-        self.tbBlockMenu.addItems(['A1','A2','A3','A4','A5','B6','B7','B8','B9','B10','C11','C12','C13','C14','C15'])
+        self.lineEdit.returnPressed.connect(self.receiveInitialIDSpeedAuth)
 
         #Backend vars
         self.OccupiedBlocks = []    #Is sent to the UI
         self.specialBlocks = []     #Is sent from the UI
 
+        #blocks per wayside
+        self.greenW2Blocks = []
+        self.redW1Blocks = []
+        self.redW2Blocks = []
+
+        #train id, speed, authority to send
+        self.idSpeedAuthority = []
+ 
     def sendSpeed(self):
         speed = self.speedInput.text()
         self.comSpeed.setText(speed)
@@ -574,7 +589,7 @@ class TestBench(QMainWindow):
             
 
         else:  
-            if arr > len(self.specialBlocks) - 1: return 
+            if arr > len(self.specialBlocks) - 1 or arr == -1: return 
             selectedBlock = self.specialBlocks[arr]
             
         self.comSpeed.setText(str(selectedBlock.speedLimit))
@@ -604,18 +619,37 @@ class TestBench(QMainWindow):
             if selectedBlock.switchState:
                 self.label_19.setText("")
                 self.label_22.setText("")
-                self.label_24.setText("B6")
+                self.label_24.setText("LEFT")
             else:
                 self.label_19.setText("")
                 self.label_22.setText("")
-                self.label_24.setText("C11")
+                self.label_24.setText("RIGHT")
 
     def receiveMode(self,mode):
         if mode == True:
             self.label_16.setText("MANUAL")
         else:
             self.label_16.setText("AUTOMATIC")
-        
+
+    def receiveBlocks(self,blocks):
+        self.tbBlockMenu.clear()
+        if blocks[0].Wayside == "W2" and blocks[0].lineColor == "Green":
+            self.greenW2Blocks = blocks
+            for block in self.greenW2Blocks: self.tbBlockMenu.addItems([block.ID])
+        elif blocks[0].Wayside == "W1" and blocks[0].lineColor == "Red":
+            self.redW1Blocks = blocks
+            for block in self.redW1Blocks: self.tbBlockMenu.addItems([block.ID])
+        elif blocks[0].Wayside == "W2" and blocks[0].lineColor == "Red":
+            self.redW2Blocks = blocks
+            for block in self.redW2Blocks: self.tbBlockMenu.addItems([block.ID])
+
+    def receiveInitialIDSpeedAuth(self):
+        text = self.lineEdit.text()
+        splits = text.split(", ")
+        self.comSpeed.setText(splits[1])
+        self.authOut.setText(splits[2])
+        self.ctcIDSpeedAuthority.emit(splits)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -625,12 +659,12 @@ if __name__ == "__main__":
     #Signal: Window
     window.sendSpecialBlocks.connect(window2.updateBlockStates)
     window.changeModeSend.connect(window2.receiveMode)
+    window.sendAllBlocks.connect(window2.receiveBlocks)
 
     #Signal: Window 2
     window2.OccBlocksChanged.connect(window.updateBlocks)
     window2.tbChangeMode.connect(window.changeMode)
-    window2.ctcSpeed.connect(window.receiveSpeedAuth)
-    window2.ctcAuthority.connect(window.receiveSpeedAuth)
+    window2.ctcIDSpeedAuthority.connect(window.receiveSpeedAuth)
 
     window.show()
     window2.show()

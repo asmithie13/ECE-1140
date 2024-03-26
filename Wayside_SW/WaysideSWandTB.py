@@ -251,10 +251,6 @@ class WaysideSW(QMainWindow):
         checkGreen = self.selectGreenLine.isChecked()
         checkRed = self.selectRedLine.isChecked()
 
-        self.sendAllBlocks.emit(self.greenWayside2Blocks)
-        self.sendAllBlocks.emit(self.redWayside1Blocks)
-        self.sendAllBlocks.emit(self.redWayside2Blocks)
-
         if checkGreen:
             self.selectRedLine.setDisabled(True)
             self.waysideMenu.clear()
@@ -304,6 +300,8 @@ class WaysideSW(QMainWindow):
                 self.blockMenu.addItems([block.ID])
 
             self.FileParser = Parser(None,self.greenCrossingTriplesIDS,self.allGreenBlocks)
+            self.sendAllBlocks.emit(self.greenWayside2Blocks)
+            
 
         if selectedIndex == 0 and self.selectRedLine.isChecked():
             self.currentBlocks = self.redWayside1Blocks
@@ -318,6 +316,7 @@ class WaysideSW(QMainWindow):
             self.currentSwitchBlocksNums = self.redCrossingTriplesIDS
 
             self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)
+            self.sendAllBlocks.emit(self.redWayside1Blocks)
 
         if selectedIndex == 1 and self.selectRedLine.isChecked():
             self.currentBlocks = self.redWayside2Blocks
@@ -332,6 +331,7 @@ class WaysideSW(QMainWindow):
             self.currentSwitchBlocksNums = self.redCrossingTriplesIDS
 
             self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)
+            self.sendAllBlocks.emit(self.redWayside2Blocks)
 
     def blockActions(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -523,9 +523,6 @@ class TestBench(QMainWindow):
         self.removeBlock.returnPressed.connect(self.remBlockOcc)
         self.tbBlockMenu.currentIndexChanged.connect(self.updateBlockStates)
 
-        #Menu
-        self.tbBlockMenu.addItems(['A1','A2','A3','A4','A5','B6','B7','B8','B9','B10','C11','C12','C13','C14','C15'])
-
         #Backend vars
         self.OccupiedBlocks = []    #Is sent to the UI
         self.specialBlocks = []     #Is sent from the UI
@@ -586,7 +583,7 @@ class TestBench(QMainWindow):
             
 
         else:  
-            if arr > len(self.specialBlocks) - 1: return 
+            if arr > len(self.specialBlocks) - 1 or arr == -1: return 
             selectedBlock = self.specialBlocks[arr]
             
         self.comSpeed.setText(str(selectedBlock.speedLimit))
@@ -629,12 +626,16 @@ class TestBench(QMainWindow):
             self.label_16.setText("AUTOMATIC")
 
     def receiveBlocks(self,blocks):
+        self.tbBlockMenu.clear()
         if blocks[0].Wayside == "W2" and blocks[0].lineColor == "Green":
             self.greenW2Blocks = blocks
+            for block in self.greenW2Blocks: self.tbBlockMenu.addItems([block.ID])
         elif blocks[0].Wayside == "W1" and blocks[0].lineColor == "Red":
             self.redW1Blocks = blocks
+            for block in self.redW1Blocks: self.tbBlockMenu.addItems([block.ID])
         elif blocks[0].Wayside == "W2" and blocks[0].lineColor == "Red":
             self.redW2Blocks = blocks
+            for block in self.redW2Blocks: self.tbBlockMenu.addItems([block.ID])
         
 
 if __name__ == "__main__":

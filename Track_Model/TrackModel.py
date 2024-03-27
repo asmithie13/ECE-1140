@@ -89,7 +89,11 @@ class TrackModelMain(QMainWindow):
             print("")
 
     def set_clock(self, time):
-        pass            
+        self.clock_in.display(time)
+
+    def get_time(self,time):
+        pass
+
     def receiveSpeedAuth_tm(self,speedAuth):
         trainID=speedAuth[0]
         Comm_Speed=speedAuth[1]

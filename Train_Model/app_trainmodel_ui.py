@@ -93,7 +93,14 @@ class TrainModel_mainwindow(QMainWindow):
         self.train_calculations.calculate_force()
         return power_input
 
-
+    #sending authority to train controller [ASK LAUREN AND CHAD]
+    def receiveSpeedAuth_tm(self,speedAuth):
+        trainID=speedAuth[0]
+        Comm_Speed=speedAuth[1]
+        Authority=speedAuth[2]
+        self.sendSpeedAuth.emit(speedAuth)
+        self.send_com_speed_tb.emit(str(Comm_Speed))
+        self.send_authority_tb.emit(str(Authority))
 
 
     def estop_button_clicked(self):

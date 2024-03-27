@@ -9,7 +9,7 @@ class trainmodel_testbench(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi("Train Model/TrainModel_testbench.ui", self)
+        uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
         
         #self.run_button_tb.clicked.connect(self.get_train_selection)
         self.train_sel_combo_tb.activated[str].connect(self.get_train_selection)

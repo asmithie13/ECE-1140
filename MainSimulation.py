@@ -22,19 +22,27 @@ import Track_Model
 from Track_Model.TrackModel import *
 
 #Train Model Imports
-#import Train_Model
-#from Train_Model.app_trainmodel_ui import *
-#from Train_Model.app_trainmodel_tb import *
+import Train_Model
+from Train_Model.app_trainmodel_ui import *
+from Train_Model.app_trainmodel_tb import *
 
 
 #Utility function to initialize clock
 def clock():
     global time
-    time = time.addSecs(60)
+    time = time.addSecs(1)
 
     current_time = time.toString("hh:mm")
     #Pulling clock data for CTC UI
     MainWindow.CTCwindow.displayClock(current_time)
+
+    for train in MainWindow.currentTrains:
+        train.update_time(time)
+
+def updateClockSpeed():
+    #MainWindow.horizontalSlider.
+    print("temp")
+    #timer0.setInterval(1000)
 
 #Starting PyQt application
 UI_window = QtWidgets.QApplication(sys.argv)
@@ -52,6 +60,10 @@ MainWindow.CTC_tb.sendTicketSales.connect(MainWindow.CTCwindow.updateTicketSales
 MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.CTC_tb.showDispatchInfo)
 
 #CTC to Wayside
+
+
+#CTC to MainWindow
+MainWindow.CTCwindow.create_a_train.connect(MainWindow.create_new_train)
 
 
 """Wayside SW Signals"""
@@ -79,12 +91,16 @@ MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieve
 
 """Clock Initialization"""
 #Initializing Qtimer for clock
-timer0 = QtCore.QTimer()
+#global timer0 = QtCore.QTimer()
 time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
-timer0.setInterval(100)         #Interval in ms
-timer0.timeout.connect(clock)
-timer0.start()
+# timer0.setInterval(1000)         #Interval in ms
+# timer0.timeout.connect(clock)
+# timer0.start()
+
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+
+#Initializing Time Slider
+MainWindow.horizontalSlider.SliderRealeased(updateClockSpeed)
 
 
 sys.exit(UI_window.exec_())

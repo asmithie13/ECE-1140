@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>749</height>
+    <height>750</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -70,6 +70,21 @@
         <item>
          <property name="text">
           <string>Select Block</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Y0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Y1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Y2</string>
          </property>
         </item>
         <item>
@@ -5953,6 +5968,60 @@
          </property>
          <property name="text">
           <string>J</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="44" rowspan="3">
+        <widget class="QPushButton" name="Y1">
+         <property name="styleSheet">
+          <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 0.5px;
+        border-color: black;
+		 background-color: rgb(50,205,50)
+    }
+&quot;&quot;&quot;)
+</string>
+         </property>
+         <property name="text">
+          <string>1</string>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="48" rowspan="2">
+        <widget class="QPushButton" name="Y2">
+         <property name="styleSheet">
+          <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 0.5px;
+        border-color: black;
+		 background-color: rgb(50,205,50)
+    }
+&quot;&quot;&quot;)
+</string>
+         </property>
+         <property name="text">
+          <string>2</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="45" rowspan="2" colspan="4">
+        <widget class="QPushButton" name="Y">
+         <property name="styleSheet">
+          <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 0.5px;
+        border-color: black;
+		 background-color: white
+    }
+&quot;&quot;&quot;)
+</string>
+         </property>
+         <property name="text">
+          <string>Yard</string>
          </property>
         </widget>
        </item>

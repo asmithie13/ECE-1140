@@ -367,7 +367,6 @@ class trainmodel_testbench(QMainWindow):
         self.TC = TC
         uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
 
-<<<<<<< HEAD
         #TRAIN CONTROLLER INSTANCE CREATED
         self.TC = TrainController()
 
@@ -376,8 +375,6 @@ class trainmodel_testbench(QMainWindow):
 
 
 
-=======
->>>>>>> 1585d328c05ed1b57aa23a9f3258c84f2ba3ffcc
         #TC.service_brake_sig.connect(self.)
         # self.TC.curr_power_sig.connect(self.receive_power)
         

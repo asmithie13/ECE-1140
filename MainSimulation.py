@@ -96,6 +96,7 @@ time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
 # timer0.setInterval(1000)         #Interval in ms
 # timer0.timeout.connect(clock)
 # timer0.start()
+
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 
 #Initializing Time Slider

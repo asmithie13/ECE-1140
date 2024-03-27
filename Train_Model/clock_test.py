@@ -24,7 +24,7 @@ class Clock(QtCore.QObject):
     def update_time(self):
         self.time = self.time.addSecs(1)
         current_time = self.time.toString("hh:mm:ss")
-        self.current_time_changed.emit(current_time)
+        #self.current_time_changed.emit(current_time)
 
 if __name__ == "__main__":
     clock = Clock()

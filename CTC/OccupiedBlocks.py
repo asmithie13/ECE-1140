@@ -13,12 +13,38 @@ from Track_Resources import *
 
 #Class to hold the data and manage the occupied blocks
 class OccupiedBlocks():
-    def __init__(self, Blocks = []):
-        self.BlockData = Blocks
+    def __init__(self):
+        #Holds train name and block num to display
+        #Based on current occupied Blocks
+        self.BlockDataCurrent = []
+        self.BlockDataNew = []
+        #Holds train and block num
+        #Based on current Trains
+        self.currentTrains = []
 
     def addBlockOccupancy(self, TrainName, BlockNum):
         newBlockOccupancy = [TrainName, BlockNum]
-        self.BlockData.append(newBlockOccupancy)
+        self.BlockDataNew.append(newBlockOccupancy)
+
+    def matchOccupanciesToTrains(self, BlockID, line):
+        BlockNum = int(BlockID[1:])
+
+        if (BlockNum == 63) and (line == 'green'):
+            for i in self.currentTrains:
+                if i[1] == 'K63':
+                    return i[0]
+        elif (BlockNum == 10) and (line == 'red'):
+            for i in self.currentTrains:
+                if i[1] == 'K63':
+                    return i[0]
+        elif (line == 'green') and (BlockNum > 63) and (BlockNum < 76):
+            for i in self.currentTrains:
+                print(int(i[1][1:]))
+
+                if int(i[1][1:]) == (BlockNum - 1):
+                    return i[0]
+
+        return 'X'
 
 
 

@@ -99,7 +99,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         
         #Initializing Occupied Blocks Table
         self.occupiedBlocks = OccupiedBlocks()
-        self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockData))
+        self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockDataCurrent))
 
         #Initializing Maintance Tables
         self.Maintence = CTC_Maintenance()
@@ -250,6 +250,12 @@ class CTC_UI(QtWidgets.QMainWindow):
                 self.sendDispatchInfo.emit([i[1], 70, 900])
                 print(i[1], "Dispatched")
 
+                #Initializing where the train starts
+                if i[0] == 'green':
+                    self.occupiedBlocks.currentTrains.append([i[1], 'K63'])
+                elif i[0] == 'red':
+                    self.occupiedBlocks.currentTrains.append([i[1], 'D10'])
+
 
     #Define functionality for Upload File Button
     def selectScheduleFile(self):
@@ -299,7 +305,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         
         #Adding TrainID, Block ID, and line color to an array
         for i in arr:
-            UpdatedBlocksWithTrain.append(['X', i[0], i[1]])
+            TrainID = self.occupiedBlocks.matchOccupanciesToTrains(i[0], i[1])
+            UpdatedBlocksWithTrain.append([TrainID, i[0], i[1]])
             
         self.OccupiedBlockTable.setModel(BlocksTableModel(UpdatedBlocksWithTrain))
 

@@ -244,13 +244,11 @@ class CTC_UI(QtWidgets.QMainWindow):
     #function to update the clock display on the layout
     def displayClock(self, time):
         self.CTC_clock.display(time)
-
+        
         for i in self.trainSchedule.Scheduledata:
-            if time == i[5]:
-<<<<<<< HEAD
-                self.sendDispatchInfo.emit([i[1], 50, 500])
+            if (time == i[5]) and (int(i[1][1:]) > len(self.occupiedBlocks.currentTrains)):
                 self.create_a_train.emit(i[1])
-=======
+
                 #Train ID, speed, Authority
                 self.sendDispatchInfo.emit([i[1], 70, 900])
                 print(i[1], "Dispatched")
@@ -260,7 +258,6 @@ class CTC_UI(QtWidgets.QMainWindow):
                     self.occupiedBlocks.currentTrains.append([i[1], 'K63'])
                 elif i[0] == 'red':
                     self.occupiedBlocks.currentTrains.append([i[1], 'D10'])
->>>>>>> 4388cdf278af16e6edf94148e31b132d71b8060f
 
 
     #Define functionality for Upload File Button

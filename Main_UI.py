@@ -93,13 +93,12 @@ class Main_UI(QtWidgets.QMainWindow):
         self.TrackModel_tb.show()
 
     def create_new_train(self, TrainID):
-        print("Temp, attempt to add train")
-
+        #Add new train UI to list
         self.currentTrains.append(TrainModel_mainwindow())
         self.currentTrains[-1].show()
 
-        #Add new train, pass in Train ID
-        #self.currentTrains.append("New Train UI?")
+        #Eventually let track model know train has started
+
 
         #Connect Signals to Track Model
         #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)

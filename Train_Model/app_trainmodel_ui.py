@@ -89,7 +89,7 @@ class TrainModel_mainwindow(QMainWindow):
 
     #CLOCK
     def update_time(self, current_time):
-        print(current_time.toString("hh:mm:ss"))
+        #print(current_time.toString("hh:mm:ss"))
         #print("Current Time:", current_time)
         self.TC.time_sig.emit(current_time.toString("hh:mm:ss"))
         

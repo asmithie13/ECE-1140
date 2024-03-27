@@ -27,7 +27,7 @@ class Vital_Authority():
         if self.ui.lcdAuth.value() != 0:
 
             #authority in m from ft
-            self.AuthM = self.ui.lcdAuth.value()*0.3048
+            self.AuthM = self.decimal_m_auth
 
             #current speed in m/s from mph
             self.V_i = self.ui.lcdCurSpd.value()*0.44704
@@ -67,4 +67,7 @@ class Vital_Authority():
                 self.ui.buttonDoorR.toggle()
 
     def Control_Authority(self,auth):
-        self.ui.lcdAuth.display(auth)
+        self.decimal_m_auth = auth
+        self.ui.lcdAuth.display(int(auth * 3.28084))
+        if(self.ui.lcdAuth.value() != 0):
+            self.ui.vertSliderPow.setDisabled(False)

@@ -15,7 +15,7 @@ class TrainController(QMainWindow):
 
     #vital signals we recieve
     curr_spd_sig = pyqtSignal(int)
-    curr_auth_sig = pyqtSignal(int)
+    curr_auth_sig = pyqtSignal(float)
     curr_bool_auth_sig  = pyqtSignal(bool)
     curr_cmd_spd_sig = pyqtSignal(int)
     curr_temp_sig = pyqtSignal(int)

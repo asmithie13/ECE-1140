@@ -1,4 +1,10 @@
 import sys
+#Fixing file hierarchy issues
+import os
+import re
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_root)
+
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
@@ -7,7 +13,7 @@ from PyQt5 import QtCore as qtc
 from PyQt5.QtCore import pyqtSignal, QTimer
 from PyQt5 import QtGui as qtg
 from PyQt5.QtCore import Qt
-from clock_test import Clock
+from Train_Model.clock_test import Clock
 from Train_Controller_SW.TrainController import TrainController
 import subprocess
 
@@ -83,8 +89,9 @@ class TrainModel_mainwindow(QMainWindow):
 
     #CLOCK
     def update_time(self, current_time):
-        print("Current Time:", current_time)
-        self.TC.time_sig.emit(current_time)
+        #print(current_time.toString("hh:mm:ss"))
+        #print("Current Time:", current_time)
+        self.TC.time_sig.emit(current_time.toString("hh:mm:ss"))
         
     #function to set Power LCD
     def get_power_input(self, power_input):
@@ -93,7 +100,14 @@ class TrainModel_mainwindow(QMainWindow):
         self.train_calculations.calculate_force()
         return power_input
 
-
+    #sending authority to train controller [ASK LAUREN AND CHAD]
+    def receiveSpeedAuth_tm(self,speedAuth):
+        trainID=speedAuth[0]
+        Comm_Speed=speedAuth[1]
+        Authority=speedAuth[2]
+        self.sendSpeedAuth.emit(speedAuth)
+        self.send_com_speed_tb.emit(str(Comm_Speed))
+        self.send_authority_tb.emit(str(Authority))
 
 
     def estop_button_clicked(self):

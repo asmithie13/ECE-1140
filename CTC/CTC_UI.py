@@ -23,6 +23,7 @@ class CTC_UI(QtWidgets.QMainWindow):
     sendDispatchInfo = pyqtSignal(list)
     sendBlockClosures = pyqtSignal(list)
     sendSwitchPositions = pyqtSignal(list)
+    create_a_train = pyqtSignal(str)
 
     def __init__(self):
         super(CTC_UI, self).__init__()
@@ -243,9 +244,11 @@ class CTC_UI(QtWidgets.QMainWindow):
     #function to update the clock display on the layout
     def displayClock(self, time):
         self.CTC_clock.display(time)
-
+        
         for i in self.trainSchedule.Scheduledata:
-            if time == i[5]:
+            if (time == i[5]) and (int(i[1][1:]) > len(self.occupiedBlocks.currentTrains)):
+                self.create_a_train.emit(i[1])
+
                 #Train ID, speed, Authority
                 self.sendDispatchInfo.emit([i[1], 70, 900])
                 print(i[1], "Dispatched")

@@ -26,9 +26,9 @@ import Track_Model
 from Track_Model.TrackModel import *
 
 #Train Model Imports
-#import Train_Model
-#from Train_Model.app_trainmodel_ui import *
-#from Train_Model.app_trainmodel_tb import *
+import Train_Model
+from Train_Model.app_trainmodel_ui import *
+from Train_Model.app_trainmodel_tb import *
 
 
 class Main_UI(QtWidgets.QMainWindow):
@@ -59,6 +59,10 @@ class Main_UI(QtWidgets.QMainWindow):
 
         #Train Model (Might need initialized per train)
         self.currentTrains = []
+        #self.TrainModelWindow = TrainModel_mainwindow()
+        #self.TrackModel_tb = trainmodel_testbench()
+        #self.TrainModelWindow.show()
+        self.TrainModelButton.clicked.connect(self.create_new_train)
 
         #Train Controller SW (Might need initialized per train)
 
@@ -89,10 +93,12 @@ class Main_UI(QtWidgets.QMainWindow):
         self.TrackModel_tb.show()
 
     def create_new_train(self, TrainID):
-        print("Temp, attempt to add train")
+        #Add new train UI to list
+        self.currentTrains.append(TrainModel_mainwindow())
+        self.currentTrains[-1].show()
 
-        #Add new train, pass in Train ID
-        self.currentTrains.append("New Train UI?")
+        #Eventually let track model know train has started
+
 
         #Connect Signals to Track Model
         #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)

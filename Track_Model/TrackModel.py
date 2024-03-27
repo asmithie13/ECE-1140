@@ -37,6 +37,15 @@ class TrackModelMain(QMainWindow):
     #send ticket sales to ctc
     SendTicketsales = pyqtSignal(list)
 
+    #send train model train id, speed, and authority
+    sendSpeedAuth = pyqtSignal(list)
+
+    #send com speed to testbench
+    send_com_speed_tb = pyqtSignal(str)
+
+    #send authority to ttestbench
+    send_authority_tb = pyqtSignal(str)
+
     def __init__(self):
         super().__init__()
         self.blockStates = {}
@@ -44,7 +53,11 @@ class TrackModelMain(QMainWindow):
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track_Model/Track_Model.ui", self)
 
-        
+        self.set_broken_rail.clicked.connect(self.set_broken_rail_failure)
+        self.set_track_failure.clicked.connect(self.set_track_circuit_failure)
+        self.set_power_failure.clicked.connect(self.set_power_failure_func)
+        self.reset_button.clicked.connect(self.reset_block_colors)
+
         # Connect Upload Track Layout button to make upload file
         self.pushButton.clicked.connect(self.upload_track_layout) 
 
@@ -52,7 +65,8 @@ class TrackModelMain(QMainWindow):
         self.block_in_1.activated.connect(self.update_block_in_2_based_on_block_in_1)
         self.block_in_2.setEnabled(False)
 
-
+        self.setup_block_buttons()
+        self.block_in_1.activated[str].connect(self.block_clicked)
         self.generateTickets()
 
         # Instantiate the Data class
@@ -60,22 +74,111 @@ class TrackModelMain(QMainWindow):
 
         # Connect the comboBox to the function
         self.green_line.hide()
-        self.green_fault.hide()
         #self.red_line.hide()
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
+
+        # After setting up UI elements, load the default track layout
+        self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
+        self.load_default_track_layout()
+
+    def load_default_track_layout(self):
+        # Directly load the default track layout file
+        if os.path.exists(self.default_track_path):
+            self.data.read_excel(self.default_track_path)
+        else:
+            print("")
+                
+    def receiveSpeedAuth_tm(self,speedAuth):
+        trainID=speedAuth[0]
+        Comm_Speed=speedAuth[1]
+        Authority=speedAuth[2]
+        self.sendSpeedAuth.emit(speedAuth)
+        self.send_com_speed_tb.emit(str(Comm_Speed))
+        self.send_authority_tb.emit(str(Authority))
 
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box
         selected_option = self.line_select.currentText()
         if selected_option == "Green Line":
             self.green_line.show()
-            self.green_fault.show()
         elif selected_option == "Select Line":
             self.green_line.hide()    
        # elif selected_option == "Red Line":
         #    self.red_line.show()
         #    self.green.hide()
             
+    def set_broken_rail_failure(self):
+        selected_block = self.block_in_1.currentText()
+        if selected_block:
+            button = self.findChild(QPushButton, selected_block)
+            if button:
+                button.setStyleSheet("background-color: grey")
+
+    def set_track_circuit_failure(self):
+        selected_block = self.block_in_1.currentText()
+        if selected_block:
+            button = self.findChild(QPushButton, selected_block)
+            if button:
+                button.setStyleSheet("background-color: yellow")
+    
+    def set_power_failure_func(self):
+        selected_block = self.block_in_1.currentText()
+        if selected_block:
+            button = self.findChild(QPushButton, selected_block)
+            if button:
+                button.setStyleSheet("background-color: tan")
+
+    def reset_block_colors(self):
+        # Defaull stylesheet of buttons for the Track Layout
+        default_color = '''
+            QPushButton {
+                border-style: solid;
+                border-width: 0.5px;
+                border-color: black;
+                background-color: rgb(50, 205, 50);
+            }
+        '''
+        #iterate through all buttons to reset them
+        for block_id, button in self.block_buttons.items():
+            button.setStyleSheet(default_color)
+
+    def setup_block_buttons(self):
+        #list of block IDs
+        block_ids = [
+        'A1', 'A2', 'A3', 'B4', 'B5', 'B6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12',
+        'D13', 'D14', 'D15', 'D16', 'E17', 'E18', 'E19', 'E20', 'F21', 'F22', 'F23', 'F24',
+        'F25', 'F26', 'F27', 'F28', 'G29', 'G30', 'G31', 'G32', 'H33', 'H34', 'H35', 'I36',
+        'I37', 'I38', 'I39', 'I40', 'I41', 'I42', 'I43', 'I44', 'I45', 'I46', 'I47', 'I48',
+        'I49', 'I50', 'I51', 'I52', 'I53', 'I54', 'I55', 'I56', 'I57', 'J58', 'J59', 'J60',
+        'J61', 'J62', 'K63', 'K64', 'K65', 'K66', 'K67', 'K68', 'L69', 'L70', 'L71', 'L72',
+        'L73', 'M74', 'M75', 'M76', 'N77', 'N78', 'N79', 'N80', 'N81', 'N82', 'N83', 'N84',
+        'N85', 'O86', 'O87', 'O88', 'P89', 'P90', 'P91', 'P92', 'P93', 'P94', 'P95', 'P96',
+        'P97', 'Q98', 'Q99', 'Q100', 'R101', 'S102', 'S103', 'S104', 'T105', 'T106', 'T107',
+        'T108', 'T109', 'U110', 'U111', 'U112', 'U113', 'U114', 'U115', 'U116', 'V117',
+        'V118', 'V119', 'V120', 'V121', 'W122', 'W123', 'W124', 'W125', 'W126', 'W127',
+        'W128', 'W129', 'W130', 'W131', 'W132', 'W133', 'W134', 'W135', 'W136', 'W137',
+        'W138', 'W139', 'W140', 'W141', 'W142', 'W143', 'X144', 'X145', 'X146', 'Y147',
+        'Y148', 'Y149', 'Z150', 'Y1', 'Y2', 'Y0'
+        ]
+
+        self.block_buttons = {}
+
+        for block_id in block_ids:
+                button = self.findChild(QPushButton, block_id)
+                if button:
+                    self.block_buttons[block_id] = button
+                    #pass block_id
+                    button.clicked.connect(lambda checked, b_id=block_id: self.block_clicked(b_id))
+
+    def block_clicked(self, block_id):
+        self.block_in_1.setCurrentText(block_id)
+        self.block_in_2.setCurrentText(block_id) 
+
+        #Call the update_block_info to fetch and update the UI with block data
+        self.update_block_info(block_id)
+
+        #Emit a signal or perform actions needed when a block is selected
+        self.block_selected_signal.emit(block_id)
 
     def generateTickets(self):
         # Generate a random number between 1 and 74 for ticket sales
@@ -158,17 +261,8 @@ class TrackModelMain(QMainWindow):
         if uploaded_track:
             # Instantiate the Data class and pull
             self.data = Data()
-            
-        #current_selection = self.line_select.currentText()
 
-        #if current_selection == "Blue Line":
         self.data.read_excel(uploaded_track)
-        #elif current_selection == "Red Line":
-            #self.data.read_excel(uploaded_track ,2)
-        #else:
-            #pass
-            
-            #self.data.read_excel(uploaded_track ,1)
  
         # Connect the block selection dropdown to update_block_info function!
         self.block_in_1.activated[str].connect(lambda text: self.update_block_info(text))
@@ -188,10 +282,14 @@ class TrackModelMain(QMainWindow):
         block_num = self.data.get_block_for_block(block_num)
         section = self.data.get_section_for_block(block_num)
         speed_limit_km = self.data.get_speed_for_block(block_num)
+        cumm_elevation_m = self.data.get_cumm_ele_for_block(block_num)
 
         # Math conversion from metric to imperial for track length, speed limit, and elevation.
         elevation_ft = elevation_m * 3.28084
         elevation_str = "{:.4f}".format(elevation_ft).rstrip('0').rstrip('.')
+
+        cumm_elevation_ft = cumm_elevation_m * 3.28084
+        cumm_elevation_str = "{:.4f}".format(cumm_elevation_ft).rstrip('0').rstrip('.')
 
         length_ft = length1_m * 3.28084
         length_str = "{:.4f}".format(length_ft).rstrip('0').rstrip('.')
@@ -201,6 +299,7 @@ class TrackModelMain(QMainWindow):
 
         # Update the labels with the block data and output it.
         self.elevation_in.setText(elevation_str)
+        self.cumm_elevation_in.setText(cumm_elevation_str)
         self.grade_in.setText(str(grade))
         self.length_in.setText(length_str)
         self.block_num_in.setText(str(block_num))
@@ -230,6 +329,7 @@ class TrackModelMain(QMainWindow):
             self.grade_in.setText(str(block_data['grade']))
             self.length_in.setText(str(block_data['length1_m']))
             self.elevation_in.setText(str(block_data['elevation_m']))
+            self.cumm_elevation_in.setText(str(block_data['cumm_elevation_m']))
 
 
 
@@ -261,7 +361,6 @@ class TrackModel_tb(QMainWindow):
         # Load the track model testbench straight from the UI file using uic
         uic.loadUi("Track_Model/testbench_trackmodel.ui", self)
 
-
         # Calling test input functions
         self.test_input()
         self.test_input_2()
@@ -289,6 +388,13 @@ class TrackModel_tb(QMainWindow):
     def update_grade_label(self, grade):
         # Update the grade_out label with the received grade
         self.grade_out.setText(str(grade))
+
+    def update_commanded_speed(self, commanded_speed):
+        self.com_speed_out_1.setText(str(commanded_speed))
+
+    def update_authority(self, authority1):
+        self.authority_out.setText(str(authority1))
+
 
     #Function for inputs/outputs for textboxes
     def test_input(self):
@@ -417,11 +523,15 @@ class Data:
     def set_heater(self): #based on set temp
         pass
     
+
     # read Excel files from DataFrame
     def read_excel(self, filename):
 
         self.df = pd.read_excel("Track_Resources/Blue_Line_Block_Info.xlsx")
         self.df = pd.read_csv("Track_Resources/Blue_Line_Block_Info.csv")
+
+        self.df = pd.read_excel("Track_Resources/green_line_block_info.xlsx")
+        self.df = pd.read_csv("Track_Resources/green_line_block_info.csv")
 
         #extract data from DataFrame of the Excel and assign to variables
         self.elevation_data = self.df.set_index('Block Number')['ELEVATION (M)'].to_dict()
@@ -449,6 +559,7 @@ class Data:
                     'grade': block_row.iloc[0]['Block Grade (%)'],
                     'length1_m': block_row.iloc[0]['Block Length (m)'],
                     'elevation_m': block_row.iloc[0]['ELEVATION (M)'],
+                    'cumm_elevation_m': block_row.iloc[0]['CUMALTIVE ELEVATION (M)'],
                     # Add more fields as needed
                 }
         return None 
@@ -519,6 +630,17 @@ class Data:
                     return row['Speed Limit (Km/Hr)']
         return None  # Return None if block number is not found or there is nothing in the Dataframe
     
+    def get_cumm_ele_for_block(self, block_num):
+        # iterate through the DataFrame of the Ecel file
+        if self.df is not None:
+            #  iterate through the DataFrame
+            for index, row in self.df.iterrows():
+                #check if the block number matches and if so...
+                if row['Block Number'] == block_num:
+                    # Return the corresponding section value of that row
+                    return row['CUMALTIVE ELEVATION (M)']
+        return None  # Return None if block number is not found or there is nothing in the Dataframe
+    
     #receive speed
     def recieveSpeedAuthority(data):#block
         pass
@@ -555,12 +677,11 @@ class TrackFaultTable(QAbstractTableModel):
         self._data = []
 
         
-    
+
 # Call Main window
 if __name__ == "__main__":
 
-    app = QApplication(sys.argv)
-    
+    app = QtWidgets.QApplication(sys.argv)
     window = TrackModelMain()
     window_2 = TrackModel_tb()
 
@@ -572,6 +693,9 @@ if __name__ == "__main__":
     window_2.light_input_signal.connect(window.toggle_light_state_tb)
     window_2.cross_input_signal.connect(window.toggle_cross_state_tb)
     window_2.switch_input_signal.connect(window.toggle_switch_tb)
+
+    # window.send_com_speed_tb.connect(window_2.update_commanded_speed)
+    # window.send_authority_tb.connect(window_2.update_authority)
 
     # Connect TrackModelMain's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)

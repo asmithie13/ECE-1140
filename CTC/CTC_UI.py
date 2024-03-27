@@ -23,6 +23,7 @@ class CTC_UI(QtWidgets.QMainWindow):
     sendDispatchInfo = pyqtSignal(list)
     sendBlockClosures = pyqtSignal(list)
     sendSwitchPositions = pyqtSignal(list)
+    create_a_train = pyqtSignal(str)
 
     def __init__(self):
         super(CTC_UI, self).__init__()
@@ -247,6 +248,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         for i in self.trainSchedule.Scheduledata:
             if time == i[5]:
                 self.sendDispatchInfo.emit([i[1], 50, 500])
+                self.create_a_train.emit(i[1])
 
 
     #Define functionality for Upload File Button

@@ -54,6 +54,10 @@ MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.CTC_tb.showDispatchInfo
 #CTC to Wayside
 
 
+#CTC to MainWindow
+MainWindow.CTCwindow.create_a_train.connect(MainWindow.create_new_train)
+
+
 """Wayside SW Signals"""
 MainWindow.WaysideSWwindow.sendSpecialBlocks.connect(MainWindow.WaysideSW_tb.updateBlockStates)
 MainWindow.WaysideSWwindow.changeModeSend.connect(MainWindow.WaysideSW_tb.receiveMode)

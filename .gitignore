@@ -15,3 +15,9 @@ Wayside_HW/__pycache__/readTrackFile.cpython-312.pyc
 Wayside_HW/__pycache__/TrackController_HW_TB.cpython-312.pyc
 Wayside_HW/__pycache__/TrackController_HW.cpython-312.pyc
 Wayside_SW/__pycache__/WaysideSWandTB.cpython-312.pyc
+Train_Controller_SW/__pycache__/Authority.cpython-312.pyc
+Train_Controller_SW/__pycache__/Failure.cpython-312.pyc
+Train_Controller_SW/__pycache__/NonVital.cpython-312.pyc
+Train_Controller_SW/__pycache__/Power.cpython-312.pyc
+Train_Controller_SW/__pycache__/Speed.cpython-312.pyc
+Train_Controller_SW/__pycache__/TrainController.cpython-312.

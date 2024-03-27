@@ -30,11 +30,14 @@ from Train_Model.app_trainmodel_tb import *
 #Utility function to initialize clock
 def clock():
     global time
-    time = time.addSecs(60)
+    time = time.addSecs(1)
 
     current_time = time.toString("hh:mm")
     #Pulling clock data for CTC UI
     MainWindow.CTCwindow.displayClock(current_time)
+
+    for train in MainWindow.currentTrains:
+        train.update_time(time)
 
 #Starting PyQt application
 UI_window = QtWidgets.QApplication(sys.argv)

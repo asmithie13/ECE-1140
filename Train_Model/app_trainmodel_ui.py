@@ -1,4 +1,10 @@
 import sys
+#Fixing file hierarchy issues
+import os
+import re
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_root)
+
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
@@ -83,8 +89,9 @@ class TrainModel_mainwindow(QMainWindow):
 
     #CLOCK
     def update_time(self, current_time):
-        print("Current Time:", current_time)
-        self.TC.time_sig.emit(current_time)
+        print(current_time.toString("hh:mm:ss"))
+        #print("Current Time:", current_time)
+        self.TC.time_sig.emit(current_time.toString("hh:mm:ss"))
         
     #function to set Power LCD
     def get_power_input(self, power_input):

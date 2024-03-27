@@ -37,6 +37,15 @@ class TrackModelMain(QMainWindow):
     #send ticket sales to ctc
     SendTicketsales = pyqtSignal(list)
 
+    #send train model train id, speed, and authority
+    sendSpeedAuth = pyqtSignal(list)
+
+    #send com speed to testbench
+    send_com_speed_tb = pyqtSignal(str)
+
+    #send authority to ttestbench
+    send_authority_tb = pyqtSignal(str)
+
     def __init__(self):
         super().__init__()
         self.blockStates = {}
@@ -67,6 +76,25 @@ class TrackModelMain(QMainWindow):
         self.green_line.hide()
         #self.red_line.hide()
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
+
+        # After setting up UI elements, load the default track layout
+        self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
+        self.load_default_track_layout()
+
+    def load_default_track_layout(self):
+        # Directly load the default track layout file
+        if os.path.exists(self.default_track_path):
+            self.data.read_excel(self.default_track_path)
+        else:
+            print("")
+                
+    def receiveSpeedAuth_tm(self,speedAuth):
+        trainID=speedAuth[0]
+        Comm_Speed=speedAuth[1]
+        Authority=speedAuth[2]
+        self.sendSpeedAuth.emit(speedAuth)
+        self.send_com_speed_tb.emit(str(Comm_Speed))
+        self.send_authority_tb.emit(str(Authority))
 
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box
@@ -102,14 +130,14 @@ class TrackModelMain(QMainWindow):
 
     def reset_block_colors(self):
         # Defaull stylesheet of buttons for the Track Layout
-        default_color = """
+        default_color = '''
             QPushButton {
                 border-style: solid;
-                border-width: 2px;
+                border-width: 0.5px;
                 border-color: black;
                 background-color: rgb(50, 205, 50);
             }
-        """
+        '''
         #iterate through all buttons to reset them
         for block_id, button in self.block_buttons.items():
             button.setStyleSheet(default_color)
@@ -130,7 +158,7 @@ class TrackModelMain(QMainWindow):
         'V118', 'V119', 'V120', 'V121', 'W122', 'W123', 'W124', 'W125', 'W126', 'W127',
         'W128', 'W129', 'W130', 'W131', 'W132', 'W133', 'W134', 'W135', 'W136', 'W137',
         'W138', 'W139', 'W140', 'W141', 'W142', 'W143', 'X144', 'X145', 'X146', 'Y147',
-        'Y148', 'Y149', 'Z150'
+        'Y148', 'Y149', 'Z150', 'Y1', 'Y2', 'Y0'
         ]
 
         self.block_buttons = {}
@@ -233,17 +261,8 @@ class TrackModelMain(QMainWindow):
         if uploaded_track:
             # Instantiate the Data class and pull
             self.data = Data()
-            
-        #current_selection = self.line_select.currentText()
 
-        #if current_selection == "Blue Line":
         self.data.read_excel(uploaded_track)
-        #elif current_selection == "Red Line":
-            #self.data.read_excel(uploaded_track ,2)
-        #else:
-            #pass
-            
-            #self.data.read_excel(uploaded_track ,1)
  
         # Connect the block selection dropdown to update_block_info function!
         self.block_in_1.activated[str].connect(lambda text: self.update_block_info(text))
@@ -342,7 +361,6 @@ class TrackModel_tb(QMainWindow):
         # Load the track model testbench straight from the UI file using uic
         uic.loadUi("Track_Model/testbench_trackmodel.ui", self)
 
-
         # Calling test input functions
         self.test_input()
         self.test_input_2()
@@ -370,6 +388,13 @@ class TrackModel_tb(QMainWindow):
     def update_grade_label(self, grade):
         # Update the grade_out label with the received grade
         self.grade_out.setText(str(grade))
+
+    def update_commanded_speed(self, commanded_speed):
+        self.com_speed_out_1.setText(str(commanded_speed))
+
+    def update_authority(self, authority1):
+        self.authority_out.setText(str(authority1))
+
 
     #Function for inputs/outputs for textboxes
     def test_input(self):
@@ -498,6 +523,7 @@ class Data:
     def set_heater(self): #based on set temp
         pass
     
+
     # read Excel files from DataFrame
     def read_excel(self, filename):
 
@@ -651,12 +677,11 @@ class TrackFaultTable(QAbstractTableModel):
         self._data = []
 
         
-    
+
 # Call Main window
 if __name__ == "__main__":
 
-    app = QApplication(sys.argv)
-    
+    app = QtWidgets.QApplication(sys.argv)
     window = TrackModelMain()
     window_2 = TrackModel_tb()
 
@@ -668,6 +693,9 @@ if __name__ == "__main__":
     window_2.light_input_signal.connect(window.toggle_light_state_tb)
     window_2.cross_input_signal.connect(window.toggle_cross_state_tb)
     window_2.switch_input_signal.connect(window.toggle_switch_tb)
+
+    # window.send_com_speed_tb.connect(window_2.update_commanded_speed)
+    # window.send_authority_tb.connect(window_2.update_authority)
 
     # Connect TrackModelMain's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)

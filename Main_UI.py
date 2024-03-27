@@ -5,6 +5,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
+import subprocess
 
 #CTC Imports
 import CTC
@@ -79,6 +80,11 @@ class Main_UI(QtWidgets.QMainWindow):
         self.WaysideHW_tb.show()
 
     def open_track_model_UI(self):
+        # Define the path to the mainControl.py file
+        #track_model_path = "Track_Model/TrackModel.py"
+
+        # Run mainControl.py as a separate process
+        #subprocess.Popen(["python", track_model_path])
         self.TrackModelWindow.show()
         self.TrackModel_tb.show()
 

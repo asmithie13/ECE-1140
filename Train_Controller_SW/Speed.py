@@ -22,17 +22,21 @@ class Vital_Speed():
         cmd_speed = self.ui.lcdCmdSpd.value()
 
         #this case is vital, will override driver input
-        if current_speed > speed_limit:
+        if current_speed > speed_limit :
+            self.ui.vertSliderBrk.setValue(1)
+            self.ui.vertSliderPow.setValue(0)
+
+        elif current_speed > cmd_speed and (self.ui.buttonAuto.isChecked() == True):
             self.ui.vertSliderBrk.setValue(1)
             self.ui.vertSliderPow.setValue(0)
         
         #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
         elif current_speed < ((speed_limit or cmd_speed) and (self.ui.buttonAuto.isChecked() == True)):
-            self.ui.vertSliderPow.setValue(1)
+            self.ui.vertSliderPow.setValue(100)
             self.ui.vertSliderBrk.setValue(0)
         
         #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
-        elif current_speed == (speed_limit or cmd_speed):
+        elif current_speed == (speed_limit or cmd_speed) and (self.ui.buttonAuto.isChecked() == True):
             self.ui.vertSliderPow.setValue(0)
             self.ui.vertSliderBrk.setValue(0) 
     
@@ -45,6 +49,7 @@ class Vital_Speed():
         if self.ui.vertSliderBrk.value() == 0:
             self.service_brake_sig.emit(False)
         self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
+        self.Speed_Monitor()
         
     def Control_Speed_Limit(self,spdLim):
         #update speed limit for current block

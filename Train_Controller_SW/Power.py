@@ -25,10 +25,12 @@ class Vital_Power():
     def Control_Ki(self):
             self.ui.lcdKi.display(self.ui.inputKi.value())
             self.Ki = self.ui.inputKi.value()
+            self.calculate_power()
 
     def Control_Kp(self):
             self.ui.lcdKp.display(self.ui.inputKp.value())
             self.Kp = self.ui.inputKp.value()
+            self.calculate_power()
 
     def Set_Clock(self, time):
          self.globalClock = time
@@ -68,9 +70,10 @@ class Vital_Power():
                 self.power = 120000
             elif self.power < 0:
                 self.power = 0
-        
+
+        print(self.power)
         self.ui.lcdPowOut.display(self.ui.vertSliderPow.value())
         self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
         self.ui.lcdAcel.display(self.power)
         self.curr_power_sig.emit(self.power)
-        
+

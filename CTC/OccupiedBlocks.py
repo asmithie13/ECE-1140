@@ -39,12 +39,12 @@ class OccupiedBlocks():
                     return i[0]
         elif (line == 'green') and (BlockNum > 63) and (BlockNum < 76):
             for i in self.currentTrains:
-                print(int(i[1][1:]))
-
                 if int(i[1][1:]) == (BlockNum - 1):
+                    #Update Train Movement
                     return i[0]
 
         return 'X'
+    
 
 
 

@@ -301,14 +301,28 @@ class CTC_UI(QtWidgets.QMainWindow):
 
     #function to update block occupied table based on input from Wayside
     def updateOccupiedBlocks(self, arr):
-        UpdatedBlocksWithTrain = []
-        
+        #Clear temp new block layout array
+        self.occupiedBlocks.BlockDataNew = []
+
         #Adding TrainID, Block ID, and line color to an array
         for i in arr:
             TrainID = self.occupiedBlocks.matchOccupanciesToTrains(i[0], i[1])
-            UpdatedBlocksWithTrain.append([TrainID, i[0], i[1]])
-            
-        self.OccupiedBlockTable.setModel(BlocksTableModel(UpdatedBlocksWithTrain))
+            self.occupiedBlocks.BlockDataNew.append([TrainID, i[0], i[1]])
+            self.occupiedBlocks.currentTrains[int(TrainID[1:]) - 1].append(i[0])
+
+        #print(self.occupiedBlocks.currentTrains)
+        
+        """
+        for i in self.occupiedBlocks.currentTrains[:]:
+            for j in i[1:]:
+                if j not in arr:
+                    print(arr)
+                    i.remove(j)
+        """
+        #print(self.occupiedBlocks.currentTrains)
+
+        self.occupiedBlocks.BlockDataCurrent = self.occupiedBlocks.BlockDataNew   
+        self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockDataCurrent))
 
 
     #defining manual mode add train button functionality

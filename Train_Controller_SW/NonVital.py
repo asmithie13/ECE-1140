@@ -1,4 +1,4 @@
-from mainControl import Ui_MainWindow
+from Train_Controller_SW.mainControl import Ui_MainWindow
 class NonVital():
     def __init__(self,ui, door_control_sig,announcement_sig,
     temp_control_sig,int_light_sig,ext_light_sig):

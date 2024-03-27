@@ -7,6 +7,7 @@ from PyQt5 import QtWidgets
 
 class Vital_Authority():
 
+    #def __init__(self,ui):
     def __init__(self,ui,curr_auth_signal):
         self.ui = ui
         self.curr_auth_signal = curr_auth_signal
@@ -25,7 +26,7 @@ class Vital_Authority():
         if self.ui.lcdAuth.value() != 0:
 
             #authority in m from ft
-            self.AuthM = self.decimal_m_auth
+            self.AuthM = self.ui.lcdAuth.value()*0.3048
 
             #current speed in m/s from mph
             self.V_i = self.ui.lcdCurSpd.value()*0.44704

@@ -51,7 +51,8 @@ class Vital_Authority():
             self.ui.vertSliderBrk.setValue(1)
             self.ui.vertSliderPow.setDisabled(True)
         else:
-            self.ui.vertSliderPow.setDisabled(False)
+            if(self.ui.buttonAuto.isChecked()):
+                self.ui.vertSliderPow.setDisabled(False)
 
     #I want to move this to nonvital
     def Control_Doors(self,door):
@@ -67,5 +68,5 @@ class Vital_Authority():
     def Control_Authority(self,auth):
         self.decimal_m_auth = auth
         self.ui.lcdAuth.display(int(auth * 3.28084))
-        if(self.ui.lcdAuth.value() != 0):
+        if(self.ui.lcdAuth.value() != 0 and not(self.ui.buttonAuto.isChecked())):
             self.ui.vertSliderPow.setDisabled(False)

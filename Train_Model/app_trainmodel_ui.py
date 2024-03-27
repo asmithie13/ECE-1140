@@ -23,7 +23,7 @@ class TrainModel_mainwindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        uic.loadUi("TrainModel_UI.ui", self)
+        uic.loadUi("Train_Model/TrainModel_UI.ui", self)
         
         #this is added stuff for the TC
         self.TC = TrainController()
@@ -365,7 +365,7 @@ class trainmodel_testbench(QMainWindow):
         super().__init__()
 
         self.TC = TC
-        uic.loadUi("TrainModel_testbench.ui", self)
+        uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
 
         #TC.service_brake_sig.connect(self.)
         # self.TC.curr_power_sig.connect(self.receive_power)

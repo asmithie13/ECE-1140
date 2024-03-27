@@ -100,7 +100,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         
         #Initializing Occupied Blocks Table
         self.occupiedBlocks = OccupiedBlocks()
-        self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockData))
+        self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockDataCurrent))
 
         #Initializing Maintance Tables
         self.Maintence = CTC_Maintenance()
@@ -247,8 +247,20 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         for i in self.trainSchedule.Scheduledata:
             if time == i[5]:
+<<<<<<< HEAD
                 self.sendDispatchInfo.emit([i[1], 50, 500])
                 self.create_a_train.emit(i[1])
+=======
+                #Train ID, speed, Authority
+                self.sendDispatchInfo.emit([i[1], 70, 900])
+                print(i[1], "Dispatched")
+
+                #Initializing where the train starts
+                if i[0] == 'green':
+                    self.occupiedBlocks.currentTrains.append([i[1], 'K63'])
+                elif i[0] == 'red':
+                    self.occupiedBlocks.currentTrains.append([i[1], 'D10'])
+>>>>>>> 4388cdf278af16e6edf94148e31b132d71b8060f
 
 
     #Define functionality for Upload File Button
@@ -295,13 +307,28 @@ class CTC_UI(QtWidgets.QMainWindow):
 
     #function to update block occupied table based on input from Wayside
     def updateOccupiedBlocks(self, arr):
-        UpdatedBlocksWithTrain = []
-        
+        #Clear temp new block layout array
+        self.occupiedBlocks.BlockDataNew = []
+
         #Adding TrainID, Block ID, and line color to an array
         for i in arr:
-            UpdatedBlocksWithTrain.append(['X', i[0], i[1]])
-            
-        self.OccupiedBlockTable.setModel(BlocksTableModel(UpdatedBlocksWithTrain))
+            TrainID = self.occupiedBlocks.matchOccupanciesToTrains(i[0], i[1])
+            self.occupiedBlocks.BlockDataNew.append([TrainID, i[0], i[1]])
+            self.occupiedBlocks.currentTrains[int(TrainID[1:]) - 1].append(i[0])
+
+        #print(self.occupiedBlocks.currentTrains)
+        
+        """
+        for i in self.occupiedBlocks.currentTrains[:]:
+            for j in i[1:]:
+                if j not in arr:
+                    print(arr)
+                    i.remove(j)
+        """
+        #print(self.occupiedBlocks.currentTrains)
+
+        self.occupiedBlocks.BlockDataCurrent = self.occupiedBlocks.BlockDataNew   
+        self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockDataCurrent))
 
 
     #defining manual mode add train button functionality
@@ -313,10 +340,11 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Calculating Departure Info
         Departure = []
-        self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure)
+        self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure, self.currentLine)
 
         #Adding all schedule info to the schedule
         ArrivalTime = ArrivalTime.toString("hh:mm")
+        #Line, TrainID, Destination, Arrival Time, Departure Station, Departure Time
         self.trainSchedule.addTrain(self.currentLine, TrainID, Destination, ArrivalTime, Departure[0], Departure[1])
 
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))

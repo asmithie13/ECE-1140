@@ -77,13 +77,21 @@ class TrackModelMain(QMainWindow):
         #self.red_line.hide()
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
+        # After setting up UI elements, load the default track layout
+        self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
+        self.load_default_track_layout()
+
+    def load_default_track_layout(self):
+        # Directly load the default track layout file
+        if os.path.exists(self.default_track_path):
+            self.data.read_excel(self.default_track_path)
+        else:
+            print("")
+                
     def receiveSpeedAuth_tm(self,speedAuth):
-        print("I am at receive speed auth for track model")
         trainID=speedAuth[0]
         Comm_Speed=speedAuth[1]
         Authority=speedAuth[2]
-        print("comm",Comm_Speed)
-        print("auth",Authority)
         self.sendSpeedAuth.emit(speedAuth)
         self.send_com_speed_tb.emit(str(Comm_Speed))
         self.send_authority_tb.emit(str(Authority))
@@ -122,14 +130,14 @@ class TrackModelMain(QMainWindow):
 
     def reset_block_colors(self):
         # Defaull stylesheet of buttons for the Track Layout
-        default_color = """
+        default_color = '''
             QPushButton {
                 border-style: solid;
-                border-width: 2px;
+                border-width: 0.5px;
                 border-color: black;
                 background-color: rgb(50, 205, 50);
             }
-        """
+        '''
         #iterate through all buttons to reset them
         for block_id, button in self.block_buttons.items():
             button.setStyleSheet(default_color)
@@ -150,7 +158,7 @@ class TrackModelMain(QMainWindow):
         'V118', 'V119', 'V120', 'V121', 'W122', 'W123', 'W124', 'W125', 'W126', 'W127',
         'W128', 'W129', 'W130', 'W131', 'W132', 'W133', 'W134', 'W135', 'W136', 'W137',
         'W138', 'W139', 'W140', 'W141', 'W142', 'W143', 'X144', 'X145', 'X146', 'Y147',
-        'Y148', 'Y149', 'Z150'
+        'Y148', 'Y149', 'Z150', 'Y1', 'Y2', 'Y0'
         ]
 
         self.block_buttons = {}
@@ -253,17 +261,8 @@ class TrackModelMain(QMainWindow):
         if uploaded_track:
             # Instantiate the Data class and pull
             self.data = Data()
-            
-        #current_selection = self.line_select.currentText()
 
-        #if current_selection == "Blue Line":
         self.data.read_excel(uploaded_track)
-        #elif current_selection == "Red Line":
-            #self.data.read_excel(uploaded_track ,2)
-        #else:
-            #pass
-            
-            #self.data.read_excel(uploaded_track ,1)
  
         # Connect the block selection dropdown to update_block_info function!
         self.block_in_1.activated[str].connect(lambda text: self.update_block_info(text))
@@ -336,7 +335,6 @@ class TrackModelMain(QMainWindow):
 
 #this is my testbench window
 class TrackModel_tb(QMainWindow):
-    print("im in tb")
     #Change the signal to emit a string for buttons
     broken_rail_input_signal = pyqtSignal(str)
     track_input_signal = pyqtSignal(str)
@@ -362,7 +360,6 @@ class TrackModel_tb(QMainWindow):
 
         # Load the track model testbench straight from the UI file using uic
         uic.loadUi("Track_Model/testbench_trackmodel.ui", self)
-
 
         # Calling test input functions
         self.test_input()
@@ -393,11 +390,9 @@ class TrackModel_tb(QMainWindow):
         self.grade_out.setText(str(grade))
 
     def update_commanded_speed(self, commanded_speed):
-        print("up com speed")
         self.com_speed_out_1.setText(str(commanded_speed))
 
     def update_authority(self, authority1):
-        print("up auth")
         self.authority_out.setText(str(authority1))
 
 
@@ -528,6 +523,7 @@ class Data:
     def set_heater(self): #based on set temp
         pass
     
+
     # read Excel files from DataFrame
     def read_excel(self, filename):
 

@@ -122,14 +122,14 @@ class TrackModelMain(QMainWindow):
 
     def reset_block_colors(self):
         # Defaull stylesheet of buttons for the Track Layout
-        default_color = """
+        default_color = '''
             QPushButton {
                 border-style: solid;
-                border-width: 2px;
+                border-width: 0.5px;
                 border-color: black;
                 background-color: rgb(50, 205, 50);
             }
-        """
+        '''
         #iterate through all buttons to reset them
         for block_id, button in self.block_buttons.items():
             button.setStyleSheet(default_color)

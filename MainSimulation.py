@@ -43,9 +43,7 @@ UI_window = QtWidgets.QApplication(sys.argv)
 global MainWindow
 MainWindow = Main_UI()
 
-MainWindow.CTCwindow.resize(400, 200)
-MainWindow.WaysideSWwindow.resize(400, 200)
-MainWindow.TrackModelWindow.resize(400, 200)
+
 MainWindow.show()
 
 """CTC Signals"""

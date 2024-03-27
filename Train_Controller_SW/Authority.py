@@ -10,19 +10,17 @@ class Vital_Authority():
     def __init__(self,ui,curr_auth_signal):
         self.ui = ui
         self.curr_auth_signal = curr_auth_signal
-    #     self.authTimer = QTimer()
-    #     self.authTimer.setInterval(1000)
-    #     self.authTimer.timeout.connect(self.Authority_Monitor)
-
-
-    # def authTimerStart(self):
-    #     if not self.authTimer.isActive():
-    #         self.authTimer.start()
 
     
     #make sure we can stop in time for authority in ft
     #Put this on a timer every sec based on global
     def Authority_Monitor(self):
+
+        #calculate authority using d=r*t
+        self.rate = self.ui.lcdCurSpd.value()*1.46667 #mph to fps
+        self.time = 1
+        self.ui.lcdAuth.display(self.ui.lcdAuth.value() - self.rate*self.time) #auth = auth - rate*time
+
 
         if self.ui.lcdAuth.value() != 0:
 
@@ -44,8 +42,7 @@ class Vital_Authority():
                 self.ui.vertSliderPow.setDisabled(True)
                 if self.AuthM < self.stoppubgdistanceEmergency:
                     self.ui.Ebrake.setChecked(True)
-            else:
-                self.authTimer.stop()
+
 
     #we need to deal with whatever this is
     def Authority_Monitor_Bool(self, bool_auth):

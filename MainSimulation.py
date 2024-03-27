@@ -30,7 +30,7 @@ from Train_Model.app_trainmodel_tb import *
 #Utility function to initialize clock
 def clock():
     global time
-    time = time.addSecs(1)
+    time = time.addSecs(60)
 
     current_time = time.toString("hh:mm")
     #Pulling clock data for CTC UI
@@ -89,18 +89,20 @@ MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.u
 #Track Model to CTC
 MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieveTicketSales)
 
+#Track Model to Train Model.
+
 """Clock Initialization"""
 #Initializing Qtimer for clock
-#global timer0 = QtCore.QTimer()
+timer0 = QtCore.QTimer()
 time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
-# timer0.setInterval(1000)         #Interval in ms
-# timer0.timeout.connect(clock)
-# timer0.start()
+timer0.setInterval(100)         #Interval in ms
+timer0.timeout.connect(clock)
+timer0.start()
 
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 
 #Initializing Time Slider
-MainWindow.horizontalSlider.SliderRealeased(updateClockSpeed)
+#MainWindow.horizontalSlider.SliderRealeased(updateClockSpeed)
 
 
 sys.exit(UI_window.exec_())

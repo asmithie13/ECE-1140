@@ -15,6 +15,7 @@ from PyQt5 import QtGui as qtg
 from PyQt5.QtCore import Qt
 from Train_Model.clock_test import Clock
 from Train_Controller_SW.TrainController import TrainController
+from Track_Model.TrackModel import *
 import subprocess
 
 
@@ -33,12 +34,16 @@ class TrainModel_mainwindow(QMainWindow):
         
         #this is added stuff for the TC
         self.TC = TrainController()
+        self.Track_Model= TrackModelMain()
     
         # Instantiate TrainCalculations and pass self (MyMainWindow instance) as an argument
         self.train_calculations = TrainCalculations(self,TC=self.TC)
         #CLOCK
         self.clock = Clock()
         self.clock.current_time_changed.connect(self.update_time)
+
+        #Connecting Track Model signals to Train Model
+        self.Track_Model.sendSpeedAuth.connect(self.receiveSpeedAuth_train)
 
         #Connecting TC signals to Train Model
         self.TC.int_light_sig.connect(self.interior_lights)    
@@ -101,13 +106,20 @@ class TrainModel_mainwindow(QMainWindow):
         return power_input
 
     #sending authority to train controller [ASK LAUREN AND CHAD]
-    def receiveSpeedAuth_tm(self,speedAuth):
+    def receiveSpeedAuth_train(self,speedAuth):
         trainID=speedAuth[0]
         Comm_Speed=speedAuth[1]
         Authority=speedAuth[2]
-        self.sendSpeedAuth.emit(speedAuth)
-        self.send_com_speed_tb.emit(str(Comm_Speed))
-        self.send_authority_tb.emit(str(Authority))
+        self.train_calculations.get_commanded_speed(Comm_Speed)
+        #self.sendSpeedAuth.emit(speedAuth)
+        print("Comm_speed_trainmodel",str(Comm_Speed))
+        print("authority",str(Authority))
+        self.TC.curr_cmd_spd_sig.emit(int(Comm_Speed))
+        self.TC.curr_auth_sig.emit(Authority)
+     
+
+    # def send_auth(self,authority):
+    #     self.TC.curr_auth_sig(authority)
 
 
     def estop_button_clicked(self):
@@ -307,7 +319,7 @@ class TrainCalculations:
         self.calculate_force()
         self.Calculate_acceleration()
         self.calculate_acc_velocity()
-        self.TC.curr_cmd_spd_sig.emit(int(commanded_speed))
+        
 
     def get_mass(self, mass):
         self.main_window.mass_display.setText(str(mass))

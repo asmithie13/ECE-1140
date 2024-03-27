@@ -87,7 +87,9 @@ class TrackModelMain(QMainWindow):
             self.data.read_excel(self.default_track_path)
         else:
             print("")
-                
+
+    def set_clock(self, time):
+        pass            
     def receiveSpeedAuth_tm(self,speedAuth):
         trainID=speedAuth[0]
         Comm_Speed=speedAuth[1]

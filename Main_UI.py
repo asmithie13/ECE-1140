@@ -26,21 +26,18 @@ import Track_Model
 from Track_Model.TrackModel import *
 
 #Train Model Imports
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 # import Train_Model
 # from Train_Model.app_trainmodel_ui import *
 # from Train_Model.app_trainmodel_tb import *
-=======
+
 #import Train_Model
 #from Train_Model.app_trainmodel_ui import *
 #from Train_Model.app_trainmodel_tb import *
->>>>>>> 0eac259e0536927d69642635bcc897fd85c1e002
-=======
+
 #import Train_Model
 #from Train_Model.app_trainmodel_ui import *
 #from Train_Model.app_trainmodel_tb import *
->>>>>>> 1585d328c05ed1b57aa23a9f3258c84f2ba3ffcc
 
 
 class Main_UI(QtWidgets.QMainWindow):

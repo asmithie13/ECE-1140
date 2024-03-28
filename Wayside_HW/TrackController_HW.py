@@ -17,8 +17,7 @@ from Track_Resources.Block import Block
 #Main train controller class:
 class TrackController_HW(QMainWindow):
     #Signals:
-    sendAuthority = pyqtSignal(int)
-    sendSpeed = pyqtSignal(int)
+    sendSpeedAuthority = pyqtSignal(list)
     sendUpdatedBlocks = pyqtSignal(list)
     sendOccupiedBlocks = pyqtSignal(list)
     
@@ -259,8 +258,5 @@ class TrackController_HW(QMainWindow):
         self.pushButtonDown.setStyleSheet("background-color : #f0ecb1")
         self.pushButtonDown.setFont(QFont("Times New Roman", 12))
     
-    def handleAuthority(self, receivedAuthority):
-        self.sendAuthority.emit(receivedAuthority) #Pass-on distance-wise authority straight to train controller without changing
-    
-    def handleSpeed(self, receivedSpeed):
-        self.sendSpeed.emit(receivedSpeed) #Pass-on speed straight to train controller
+    def handleSpeedAuthority(self, receivedSpeedAuthority):
+        self.sendSpeedAuthority.emit(receivedSpeedAuthority) #Pass-on distance-wise authority straight to train controller without changing

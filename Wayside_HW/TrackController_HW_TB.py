@@ -17,8 +17,7 @@ class TrackController_HW_TB(QMainWindow):
     #Signals:
     occupiedBlocksSignal = pyqtSignal(list)
     closedBlocksSignal = pyqtSignal(list)
-    speedSignal = pyqtSignal(int)
-    authoritySignal = pyqtSignal(int)
+    speedAuthoritySignal = pyqtSignal(list)
 
     def __init__(self):
         #Upload UI file:
@@ -47,8 +46,7 @@ class TrackController_HW_TB(QMainWindow):
         self.comboBoxBlockStates.activated.connect(self.displayBlockStates)
         self.pushButtonClearOcc.clicked.connect(self.clearOccupiedBlocks)
         self.pushButtonClearClose.clicked.connect(self.clearClosedBlocks)
-        self.lineEditAuthIn.returnPressed.connect(self.sendAuth)
-        self.lineEditSpeedIn.returnPressed.connect(self.sendSpeed)
+        self.pushButtonSendSpeedAuth.clicked.connect(self.sendSpeedAuthority)
 
     def selectOccupiedBlocks(self):
         currentBlockStr = self.comboBoxOccupancies.currentText()
@@ -74,21 +72,18 @@ class TrackController_HW_TB(QMainWindow):
         self.closedBlocks.clear()
         self.closedBlocksSignal.emit(self.closedBlocks)
 
-    def sendSpeed(self):
-        tempSpeed = int(self.lineEditSpeedIn.text())
-        self.speedSignal.emit(tempSpeed)
-        #Add signal here to main UI
-    
-    def sendAuth(self):
-        tempAuth = int(self.lineEditAuthIn.text())
-        self.authoritySignal.emit(tempAuth)
-        #Add signal here to main UI
-    
-    def receiveSpeed(self, receivedSpeed):
-        self.lineEditSpeedOut.setText(str(receivedSpeed))
+    def sendSpeedAuthority(self):
+        tempTrainID = self.lineEditTrainIDIn.text()
+        tempSpeed = float(self.lineEditSpeedIn.text())
+        tempAuth = float(self.lineEditAuthIn.text())
 
-    def receiveAuthority(self, receivedAuthority):
-        self.lineEditAuthOut.setText(str(receivedAuthority))
+        trainTriple = [tempTrainID, tempSpeed, tempAuth]
+        self.speedAuthoritySignal.emit(trainTriple)
+    
+    def receiveSpeedAuthority(self, receivedSpeedAuthority):
+        self.lineEditTrainIDOut.setText(str(receivedSpeedAuthority[0]))
+        self.lineEditSpeedOut.setText(str(receivedSpeedAuthority[1]))
+        self.lineEditAuthOut.setText(str(receivedSpeedAuthority[2]))
     
     def receiveOccupiedBlocks(self, occupiedBlocks):
         blockOccupancyStr = ""

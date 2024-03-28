@@ -98,7 +98,7 @@ class Main_UI(QtWidgets.QMainWindow):
         self.currentTrains[-1].show()
 
         #Eventually let track model know train has started
-
+        self.TrackModelWindow.receiveSpeedAuth_tm.connect(self.currentTrains[-1].receiveSpeedAuth_train)
 
         #Connect Signals to Track Model
         #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)

@@ -26,17 +26,15 @@ import Train_Model
 from Train_Model.app_trainmodel_ui import *
 from Train_Model.app_trainmodel_tb import *
 
-
 #Utility function to update the clock
 def clock():
     global time
-    time = time.addSecs(1)
+    time = time.addSecs(50)
     current_time = time.toString("hh:mm")
 
     #Pulling clock data for CTC and Track Model
     MainWindow.CTCwindow.displayClock(current_time)
     MainWindow.TrackModelWindow.set_clock(current_time)
-    MainWindow.TrackModelWindow.get_time(time)
 
     #Pulling clock data for each train in existance
     for train in MainWindow.currentTrains:

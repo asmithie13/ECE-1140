@@ -65,8 +65,8 @@
      <rect>
       <x>100</x>
       <y>40</y>
-      <width>261</width>
-      <height>81</height>
+      <width>242</width>
+      <height>80</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -154,6 +154,12 @@
        </item>
        <item>
         <widget class="QLabel" name="CurrentSpeedLabel">
+         <property name="styleSheet">
+          <string notr="true">
+    background-color: white;
+
+</string>
+         </property>
          <property name="text">
           <string>Current Speed: 1x</string>
          </property>

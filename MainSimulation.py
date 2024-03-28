@@ -26,7 +26,6 @@ import Train_Model
 from Train_Model.app_trainmodel_ui import *
 from Train_Model.app_trainmodel_tb import *
 
-
 #Utility function to update the clock
 def clock():
     global time
@@ -36,7 +35,6 @@ def clock():
     #Pulling clock data for CTC and Track Model
     MainWindow.CTCwindow.displayClock(current_time)
     MainWindow.TrackModelWindow.set_clock(current_time)
-    MainWindow.TrackModelWindow.get_time(time)
 
     #Pulling clock data for each train in existance
     for train in MainWindow.currentTrains:
@@ -103,7 +101,6 @@ MainWindow.WaysideSWwindow.sendTrainSpeedAuth.connect(MainWindow.TrackModelWindo
 """Track Model Signals"""
 MainWindow.TrackModelWindow.send_com_speed_tb.connect(MainWindow.TrackModel_tb.update_commanded_speed)
 MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.update_authority)
-
 
 
 #Track Model to CTC

@@ -42,12 +42,14 @@ def clock():
     for train in MainWindow.currentTrains:
         train.update_time(time)
     
-    
-
 def updateClockSpeed():
-    #MainWindow.horizontalSlider.
-    print("temp")
-    #timer0.setInterval(1000)
+        #MainWindow.horizontalSlider.
+        testValue = MainWindow.horizontalSlider.value()
+        print(testValue)
+        
+        timer.setInterval(int(1000 / testValue))   
+        timer.timeout.connect(clock)
+        timer.start() 
 
 #Starting PyQt application
 UI_window = QtWidgets.QApplication(sys.argv)
@@ -98,16 +100,17 @@ MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieve
 
 """Clock Initialization"""
 #Initializing Qtimer for clock
-timer0 = QtCore.QTimer()
+global timer 
+timer = QtCore.QTimer()
 time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
-timer0.setInterval(100)         #Interval in ms
-timer0.timeout.connect(clock)
-timer0.start()
+timer.setInterval(1000)         #Interval in ms
+timer.timeout.connect(clock)
+timer.start()
 
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 
 #Initializing Time Slider
-#MainWindow.horizontalSlider.SliderRealeased(updateClockSpeed)
+MainWindow.horizontalSlider.sliderReleased.connect(updateClockSpeed)
 
 
 sys.exit(UI_window.exec_())

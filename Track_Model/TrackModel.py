@@ -95,6 +95,7 @@ class TrackModelMain(QMainWindow):
         self.sendSpeedAuth.emit(speedAuth)
         self.send_com_speed_tb.emit(str(Comm_Speed))
         self.send_authority_tb.emit(str(Authority))
+        return speedAuth
 
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box

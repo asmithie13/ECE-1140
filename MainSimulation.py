@@ -35,9 +35,13 @@ def clock():
     current_time = time.toString("hh:mm")
     #Pulling clock data for CTC UI
     MainWindow.CTCwindow.displayClock(current_time)
+    #speedAuth_train = [0, 0, 0]
+
+    #speedAuth_train = MainWindow.TrackModelWindow.receiveSpeedAuth_tm
 
     for train in MainWindow.currentTrains:
         train.update_time(time)
+        #train.receiveSpeedAuth_train(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
 
 def updateClockSpeed():
     #MainWindow.horizontalSlider.

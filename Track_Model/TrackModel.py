@@ -81,64 +81,64 @@ class TrackModelMain(QMainWindow):
         self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
         self.load_default_track_layout()
 
-    def update_occupancy(self):
-        global_time = self.get_time()  # Use your method to get the current global time
+    # def update_occupancy(self):
+    #     global_time = self.get_time()  # Use your method to get the current global time
 
-        # Assuming you have a way to get the current train ID, speed, and authority
-        train_id = self.trainID
-        commanded_speed = self.Comm_Speed
-        authority = self.Authority
+    #     # Assuming you have a way to get the current train ID, speed, and authority
+    #     train_id = self.trainID
+    #     commanded_speed = self.Comm_Speed
+    #     authority = self.Authority
 
-        occupied_blocks = self.calculate_block_occupancy(train_id, commanded_speed, authority, global_time)
+    #     occupied_blocks = self.calculate_block_occupancy(train_id, commanded_speed, authority, global_time)
 
-        # Reset the color of previously occupied blocks
-        for block_id in self.previous_occupied_blocks:
-            if block_id in self.block_buttons:
-                self.block_buttons[block_id].setStyleSheet("background-color: rgb(50, 205, 50);")
+    #     # Reset the color of previously occupied blocks
+    #     for block_id in self.previous_occupied_blocks:
+    #         if block_id in self.block_buttons:
+    #             self.block_buttons[block_id].setStyleSheet("background-color: rgb(50, 205, 50);")
 
-        # Set the current occupied blocks to orange
-        for block_id in occupied_blocks:
-            if block_id in self.block_buttons:
-                self.block_buttons[block_id].setStyleSheet("background-color: orange;")
+    #     # Set the current occupied blocks to orange
+    #     for block_id in occupied_blocks:
+    #         if block_id in self.block_buttons:
+    #             self.block_buttons[block_id].setStyleSheet("background-color: orange;")
 
-        self.previous_occupied_blocks = occupied_blocks  # Update the list of previously occupied blocks
+    #     self.previous_occupied_blocks = occupied_blocks  # Update the list of previously occupied blocks
 
-    def calculate_block_occupancy(self, train_id, commanded_speed, authority, global_time):
-        train_position = 0
-        occupied_blocks = []
+    # def calculate_block_occupancy(self, train_id, commanded_speed, authority, global_time):
+    #     train_position = 0
+    #     occupied_blocks = []
 
-        for block_id in authority:
-            block_length = self.data.get_length_for_block(block_id)
-            #speed_limit = self.data.get_speed_for_block(block_id)
-            speed_limit = 45
-            speed_limit_m_s = speed_limit*1000/(60*60)
-            commanded_speed_m_s = min(commanded_speed, speed_limit) * 1000 / (60 * 60)
+    #     for block_id in authority:
+    #         block_length = self.data.get_length_for_block(block_id)
+    #         #speed_limit = self.data.get_speed_for_block(block_id)
+    #         speed_limit = 45
+    #         speed_limit_m_s = speed_limit*1000/(60*60)
+    #         commanded_speed_m_s = min(commanded_speed, speed_limit) * 1000 / (60 * 60)
 
-            if int(commanded_speed_m_s) > 0:
-                traverse_time = block_length / commanded_speed_m_s
-            else:
-                continue
+    #         if int(commanded_speed_m_s) > 0:
+    #             traverse_time = block_length / commanded_speed_m_s
+    #         else:
+    #             continue
 
-            train_position += block_length
-            if int(global_time) >= int(traverse_time):
-                occupied_blocks.append(block_id)
-                global_time -= traverse_time
+    #         train_position += block_length
+    #         if int(global_time) >= int(traverse_time):
+    #             occupied_blocks.append(block_id)
+    #             global_time -= traverse_time
 
-                # Change the color of the occupied block button to orange
-                if block_id in self.block_buttons:
-                    self.block_buttons[block_id].setStyleSheet("background-color: orange;")
+    #             # Change the color of the occupied block button to orange
+    #             if block_id in self.block_buttons:
+    #                 self.block_buttons[block_id].setStyleSheet("background-color: orange;")
 
-            else:
-                break
+    #         else:
+    #             break
 
-        # Update blockStates and reset button colors for non-occupied blocks
-        for block_id in self.blockStates.keys():
-            self.blockStates[block_id] = block_id in occupied_blocks
-            if block_id not in occupied_blocks and block_id in self.block_buttons:
-                # Reset the color of the non-occupied block button (assuming green is the default)
-                self.block_buttons[block_id].setStyleSheet("background-color: rgb(50, 205, 50);")
+    #     # Update blockStates and reset button colors for non-occupied blocks
+    #     for block_id in self.blockStates.keys():
+    #         self.blockStates[block_id] = block_id in occupied_blocks
+    #         if block_id not in occupied_blocks and block_id in self.block_buttons:
+    #             # Reset the color of the non-occupied block button (assuming green is the default)
+    #             self.block_buttons[block_id].setStyleSheet("background-color: rgb(50, 205, 50);")
 
-        ###SEND occupied_blocks signals.
+    #     ###SEND occupied_blocks signals.
 
     def load_default_track_layout(self):
         # Directly load the default track layout file
@@ -163,9 +163,9 @@ class TrackModelMain(QMainWindow):
         self.send_com_speed_tb.emit(str(self.Comm_Speed))
         self.send_authority_tb.emit(str(self.Authority))
 
-        global_time = self.get_time()
-        self.calculate_block_occupancy(self.trainID, self.Comm_Speed, self.Authority, global_time)
-        self.update_occupancy()
+        #global_time = self.get_time()
+        #self.calculate_block_occupancy(self.trainID, self.Comm_Speed, self.Authority, global_time)
+        #self.update_occupancy()
 
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box

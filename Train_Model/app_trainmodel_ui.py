@@ -30,7 +30,7 @@ class TrainModel_mainwindow(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("Train_Model/TrainModel_UI.ui", self)
-        
+        #self.main_window = main_window
         #this is added stuff for the TC
         self.TC = TrainController()
     
@@ -107,8 +107,9 @@ class TrainModel_mainwindow(QMainWindow):
         Authority=speedAuth[2]
         print("hiiiiii", speedAuth)
         #self.sendSpeedAuth.emit(speedAuth)
-        self.send_com_speed_tb.emit(str(Comm_Speed))
-        self.send_authority_tb.emit(str(Authority))
+        #self.main_window.cspeed_display.setText(str(Comm_Speed))
+        # self.send_com_speed_tb.emit(str(Comm_Speed))
+        # self.send_authority_tb.emit(str(Authority))
 
 
     def estop_button_clicked(self):

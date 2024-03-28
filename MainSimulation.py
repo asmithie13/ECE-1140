@@ -119,6 +119,7 @@ timer.timeout.connect(clock)
 
 #Initializing Time on clock for CTC
 MainWindow.CTCwindow.displayClock(time.toString("hh:mm"))
+MainWindow.TrackModelWindow.set_clock(time.toString("hh:mm"))
 
 
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)

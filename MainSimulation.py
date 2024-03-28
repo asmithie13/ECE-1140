@@ -29,7 +29,7 @@ from Train_Model.app_trainmodel_tb import *
 #Utility function to update the clock
 def clock():
     global time
-    time = time.addSecs(50)
+    time = time.addSecs(1)
     current_time = time.toString("hh:mm")
 
     #Pulling clock data for CTC and Track Model

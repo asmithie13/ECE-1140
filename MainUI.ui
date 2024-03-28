@@ -142,9 +142,12 @@
        <item>
         <widget class="QPushButton" name="PauseButton">
          <property name="text">
-          <string>Pause Simulation</string>
+          <string>Start Simulation</string>
          </property>
          <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
           <bool>true</bool>
          </property>
         </widget>

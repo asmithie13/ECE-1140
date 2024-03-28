@@ -30,7 +30,6 @@ from Train_Model.app_trainmodel_tb import *
 #Utility function to update the clock
 def clock():
     global time
-<<<<<<< HEAD
     time = time.addSecs(60)
 
     current_time = time.toString("hh:mm")
@@ -39,10 +38,8 @@ def clock():
     #speedAuth_train = [0, 0, 0]
 
     #speedAuth_train = MainWindow.TrackModelWindow.receiveSpeedAuth_tm
-=======
     time = time.addSecs(1)
     current_time = time.toString("hh:mm")
->>>>>>> 0814692f52e24a6c51fe32fda455ee5f463896d5
 
     #Pulling clock data for CTC and Track Model
     MainWindow.CTCwindow.displayClock(current_time)
@@ -125,7 +122,6 @@ MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieve
 
 """Clock Initialization"""
 #Initializing Qtimer for clock
-<<<<<<< HEAD
 timer0 = QtCore.QTimer()
 time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
 timer0.setInterval(100)         #Interval in ms
@@ -136,7 +132,6 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 
 #Initializing Time Slider
 #MainWindow.horizontalSlider.SliderRealeased(updateClockSpeed)
-=======
 global timer 
 timer = QtCore.QTimer()
 time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
@@ -149,7 +144,6 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 #Connecting Main UI functionality signals
 MainWindow.SpeedSlider.sliderReleased.connect(updateClockSpeed)
 MainWindow.PauseButton.clicked.connect(pauseSim)
->>>>>>> 0814692f52e24a6c51fe32fda455ee5f463896d5
 
 
 sys.exit(UI_window.exec_())

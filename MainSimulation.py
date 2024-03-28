@@ -103,7 +103,6 @@ MainWindow.TrackModelWindow.send_com_speed_tb.connect(MainWindow.TrackModel_tb.u
 MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.update_authority)
 
 
-
 #Track Model to CTC
 MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieveTicketSales)
 

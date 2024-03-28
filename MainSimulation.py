@@ -45,11 +45,12 @@ def clock():
 #Modifies speed of simulation based of slider on the main UI    
 def updateClockSpeed():
         SliderValue = MainWindow.SpeedSlider.value()
-        print(SliderValue)
         
         timer.setInterval(int(1000 / SliderValue))   
         timer.timeout.connect(clock)
-        timer.start() 
+        timer.start()
+
+        MainWindow.CurrentSpeedLabel.setText("Current Speed: "+str(SliderValue)+"x") 
 
 #Pauses simulation as a toggle function from button on the main UI
 def pauseSim():
@@ -77,7 +78,7 @@ MainWindow.CTC_tb.sendTicketSales.connect(MainWindow.CTCwindow.updateTicketSales
 MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.CTC_tb.showDispatchInfo)
 
 #CTC to Wayside
-
+MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
 
 #CTC to MainWindow
 MainWindow.CTCwindow.create_a_train.connect(MainWindow.create_new_train)

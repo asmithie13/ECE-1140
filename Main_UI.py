@@ -104,6 +104,7 @@ class Main_UI(QtWidgets.QMainWindow):
         #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)
 
 
+
 """
 UI_window = QtWidgets.QApplication(sys.argv)
 window = MainUI()

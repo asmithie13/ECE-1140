@@ -27,9 +27,10 @@ from Train_Model.app_trainmodel_ui import *
 from Train_Model.app_trainmodel_tb import *
 
 
-#Utility function to initialize clock
+#Utility function to update the clock
 def clock():
     global time
+<<<<<<< HEAD
     time = time.addSecs(60)
 
     current_time = time.toString("hh:mm")
@@ -38,15 +39,40 @@ def clock():
     #speedAuth_train = [0, 0, 0]
 
     #speedAuth_train = MainWindow.TrackModelWindow.receiveSpeedAuth_tm
+=======
+    time = time.addSecs(1)
+    current_time = time.toString("hh:mm")
+>>>>>>> 0814692f52e24a6c51fe32fda455ee5f463896d5
 
+    #Pulling clock data for CTC and Track Model
+    MainWindow.CTCwindow.displayClock(current_time)
+    MainWindow.TrackModelWindow.set_clock(current_time)
+    MainWindow.TrackModelWindow.get_time(time)
+
+    #Pulling clock data for each train in existance
     for train in MainWindow.currentTrains:
         train.update_time(time)
         #train.receiveSpeedAuth_train(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
 
+#Modifies speed of simulation based of slider on the main UI    
 def updateClockSpeed():
-    #MainWindow.horizontalSlider.
-    print("temp")
-    #timer0.setInterval(1000)
+        SliderValue = MainWindow.SpeedSlider.value()
+        
+        timer.setInterval(int(1000 / SliderValue))   
+        timer.timeout.connect(clock)
+        timer.start()
+
+        MainWindow.CurrentSpeedLabel.setText("Current Speed: "+str(SliderValue)+"x") 
+
+#Pauses simulation as a toggle function from button on the main UI
+def pauseSim():
+    if MainWindow.PauseButton.isChecked():
+          timer.stop()
+          MainWindow.PauseButton.setText("Unpause Simulation")
+    else:
+         timer.start()
+         MainWindow.PauseButton.setText("Pause Simulation")
+
 
 #Starting PyQt application
 UI_window = QtWidgets.QApplication(sys.argv)
@@ -64,7 +90,7 @@ MainWindow.CTC_tb.sendTicketSales.connect(MainWindow.CTCwindow.updateTicketSales
 MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.CTC_tb.showDispatchInfo)
 
 #CTC to Wayside
-
+MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
 
 #CTC to MainWindow
 MainWindow.CTCwindow.create_a_train.connect(MainWindow.create_new_train)
@@ -90,6 +116,8 @@ MainWindow.WaysideSWwindow.sendTrainSpeedAuth.connect(MainWindow.TrackModelWindo
 MainWindow.TrackModelWindow.send_com_speed_tb.connect(MainWindow.TrackModel_tb.update_commanded_speed)
 MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.update_authority)
 
+
+
 #Track Model to CTC
 MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieveTicketSales)
 
@@ -97,6 +125,7 @@ MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieve
 
 """Clock Initialization"""
 #Initializing Qtimer for clock
+<<<<<<< HEAD
 timer0 = QtCore.QTimer()
 time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
 timer0.setInterval(100)         #Interval in ms
@@ -107,6 +136,20 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 
 #Initializing Time Slider
 #MainWindow.horizontalSlider.SliderRealeased(updateClockSpeed)
+=======
+global timer 
+timer = QtCore.QTimer()
+time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
+timer.setInterval(1000)         #Interval in ms
+timer.timeout.connect(clock)
+timer.start()
+
+QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+
+#Connecting Main UI functionality signals
+MainWindow.SpeedSlider.sliderReleased.connect(updateClockSpeed)
+MainWindow.PauseButton.clicked.connect(pauseSim)
+>>>>>>> 0814692f52e24a6c51fe32fda455ee5f463896d5
 
 
 sys.exit(UI_window.exec_())

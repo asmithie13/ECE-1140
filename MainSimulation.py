@@ -27,29 +27,39 @@ from Train_Model.app_trainmodel_ui import *
 from Train_Model.app_trainmodel_tb import *
 
 
-#Utility function to initialize clock
+#Utility function to update the clock
 def clock():
     global time
-    time = time.addSecs(60)
-
+    time = time.addSecs(1)
     current_time = time.toString("hh:mm")
-    #Pulling clock data for CTC UI
+
+    #Pulling clock data for CTC and Track Model
     MainWindow.CTCwindow.displayClock(current_time)
     MainWindow.TrackModelWindow.set_clock(current_time)
     MainWindow.TrackModelWindow.get_time(time)
 
-
+    #Pulling clock data for each train in existance
     for train in MainWindow.currentTrains:
         train.update_time(time)
-    
+
+#Modifies speed of simulation based of slider on the main UI    
 def updateClockSpeed():
-        #MainWindow.horizontalSlider.
-        testValue = MainWindow.horizontalSlider.value()
-        print(testValue)
+        SliderValue = MainWindow.SpeedSlider.value()
+        print(SliderValue)
         
-        timer.setInterval(int(1000 / testValue))   
+        timer.setInterval(int(1000 / SliderValue))   
         timer.timeout.connect(clock)
         timer.start() 
+
+#Pauses simulation as a toggle function from button on the main UI
+def pauseSim():
+    if MainWindow.PauseButton.isChecked():
+          timer.stop()
+          MainWindow.PauseButton.setText("Unpause Simulation")
+    else:
+         timer.start()
+         MainWindow.PauseButton.setText("Pause Simulation")
+
 
 #Starting PyQt application
 UI_window = QtWidgets.QApplication(sys.argv)
@@ -109,8 +119,9 @@ timer.start()
 
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 
-#Initializing Time Slider
-MainWindow.horizontalSlider.sliderReleased.connect(updateClockSpeed)
+#Connecting Main UI functionality signals
+MainWindow.SpeedSlider.sliderReleased.connect(updateClockSpeed)
+MainWindow.PauseButton.clicked.connect(pauseSim)
 
 
 sys.exit(UI_window.exec_())

@@ -114,7 +114,7 @@ timer = QtCore.QTimer()
 time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
 timer.setInterval(1000)         #Interval in ms
 timer.timeout.connect(clock)
-timer.start()
+#timer.start()
 
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 

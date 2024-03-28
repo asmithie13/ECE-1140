@@ -22,3 +22,5 @@ Train_Controller_SW/__pycache__/Power.cpython-312.pyc
 Train_Controller_SW/__pycache__/Speed.cpython-312.pyc
 Train_Controller_SW/__pycache__/TrainController.cpython-312.
 Wayside_SW/__pycache__/WaysideSWandTB.cpython-312.pyc
+__pycache__/Main_UI.cpython-312.pyc
+Train_Model/__pycache__/app_trainmodel_ui.cpython-312.pyc

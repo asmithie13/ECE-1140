@@ -106,6 +106,8 @@ MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.u
 #Track Model to CTC
 MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieveTicketSales)
 
+
+
 """Clock Initialization"""
 #Initializing Qtimer for clock
 global timer 

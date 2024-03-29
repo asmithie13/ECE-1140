@@ -106,14 +106,18 @@ class TrainModel_mainwindow(QMainWindow):
 
     #sending authority to train controller [ASK LAUREN AND CHAD]
     def receiveSpeedAuth_tm(self,speedAuth):
+        print("train model is receiving comm speed and auth")
         trainID=speedAuth[0]
         Comm_Speed=speedAuth[1]
+        self.train_calculations.get_commanded_speed(float(Comm_Speed))
         Authority=speedAuth[2]
         print("speedAuth",speedAuth)
         #self.sendSpeedAuth.emit(speedAuth)
         #self.main_window.cspeed_display.setText(str(Comm_Speed))
         # self.send_com_speed_tb.emit(str(Comm_Speed))
         # self.send_authority_tb.emit(str(Authority))
+        self.TC.curr_cmd_spd_sig.emit(int(Comm_Speed))
+        self.TC.curr_auth_sig.emit(float(Authority))
 
 
     # def estop_button_clicked(self,state):

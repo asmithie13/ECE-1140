@@ -12,13 +12,13 @@ sys.path.append(project_root)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
+from Wayside_HW.newParse import *
 from Track_Resources.Block import Block
 
 #Main train controller class:
 class TrackController_HW(QMainWindow):
     #Signals:
-    sendAuthority = pyqtSignal(int)
-    sendSpeed = pyqtSignal(int)
+    sendSpeedAuthority = pyqtSignal(list)
     sendUpdatedBlocks = pyqtSignal(list)
     sendOccupiedBlocks = pyqtSignal(list)
     
@@ -39,6 +39,7 @@ class TrackController_HW(QMainWindow):
 
         #Lists to hold blocks that are currently occupied or closed by CTC:
         self.occupiedBlocks = []
+        self.listOccIDs = []
         self.closedBlocks = []
 
         #Signals (Manual mode-related):
@@ -54,9 +55,19 @@ class TrackController_HW(QMainWindow):
     
     def modeHandler(self, occupiedBlocks):
         self.occupiedBlocks = occupiedBlocks
+        self.listOccIDs
+        for block in occupiedBlocks:
+            self.listOccIDs.append(block.ID)
+        
+        for block in self.allBlocks:
+            if block.ID in self.listOccIDs:
+                block.occupied = 1
+            else:
+                block.occupied = 0
+        
+        self.sendOccupiedBlocks.emit(self.occupiedBlocks)
         listBlockIDOccupied = []
         listBlockStrOccupied = ""
-        self.sendOccupiedBlocks.emit(self.occupiedBlocks)
 
         for block in self.occupiedBlocks:
             listBlockIDOccupied.append(block.ID)
@@ -67,7 +78,8 @@ class TrackController_HW(QMainWindow):
 
         #If a block is closed by CTC, it is recognized as "occupied" by the PLC parser:
         for block in self.closedBlocks:
-            if block not in self.occupiedBlocks:
+            if block.ID not in self.listOccIDs:
+                self.listOccIDs.append(block.ID)
                 self.occupiedBlocks.append(block)
 
         if self.modeFlag == 0:
@@ -75,15 +87,11 @@ class TrackController_HW(QMainWindow):
         
     def getClosedBlocks(self, closedBlocks):
         self.closedBlocks = closedBlocks
-        listBlockIDClosed = []
-        listBlockStrClosed = ""
-
-        for block in closedBlocks:
-            listBlockIDClosed.append(block.ID)
-        listBlockIDClosed.sort()
-        for ID in listBlockIDClosed:
-            listBlockStrClosed = listBlockStrClosed + ID + " "
-        self.lineEditClosed.setText(listBlockStrClosed)
+        for block in self.closedBlocks:
+            if block.ID not in self.listOccIDs:
+                self.listOccIDs.append(block.ID)
+                self.occupiedBlocks.append(block)
+        self.modeHandler(self.occupiedBlocks)
 
     def manualMode(self):
         self.modeFlag = 1
@@ -106,15 +114,23 @@ class TrackController_HW(QMainWindow):
         self.comboBoxSection.addItems(listSecIDs)
     
     def automaticMode(self):
-        #Add the IDs of all occupanices to a list to be communicated serially
-        occupiedBlockIDs = []
+        #Add the sections of all occupanices to a list to be communicated serially:
+        occupiedBlockSections = []
         for block in self.occupiedBlocks:
-            occupiedBlockIDs.append(block.ID)
-        occupiedBlockIDs.sort()
+            if block.blockSection not in occupiedBlockSections:
+                occupiedBlockSections.append(block.blockSection)
+        occupiedBlockSections.sort()
+
+        #Pare PLC file and adjust blocks accordingly:
+        self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
+    
+        #TO-DO HERE:
+        #-Adjust block-wise authority based on lights and collisions
+        #-Move parser to RPi
+        #-Ensure vitality (Run calculation two/three times and compare)
+
+        self.sendUpdatedBlocks.emit(self.allBlocks)
         
-        
-        #Initialize serial communication with Raspberry Pi here
-        #Produce a list of changed block states to emit to Track Model, as conducted in manual operation
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)
@@ -143,6 +159,20 @@ class TrackController_HW(QMainWindow):
         self.comboBoxBlock.addItems(listBlockNum)
 
     def initialBlockConditions(self):
+        self.pushButtonRed.setStyleSheet("background-color: white")
+        self.pushButtonGreen.setStyleSheet("background-color: white")
+        self.pushButtonLeft.setStyleSheet("background-color: white")
+        self.pushButtonRight.setStyleSheet("background-color: white")
+        self.pushButtonUp.setStyleSheet("background-color: white")
+        self.pushButtonDown.setStyleSheet("background-color: white")
+
+        self.pushButtonRed.setFont(QFont("Times New Roman", 12))
+        self.pushButtonGreen.setFont(QFont("Times New Roman", 12))
+        self.pushButtonLeft.setFont(QFont("Times New Roman", 12))
+        self.pushButtonRight.setFont(QFont("Times New Roman", 12))
+        self.pushButtonUp.setFont(QFont("Times New Roman", 12))
+        self.pushButtonDown.setFont(QFont("Times New Roman", 12))
+
         for block in self.allBlocks:
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
                 selectedBlock = block
@@ -259,8 +289,5 @@ class TrackController_HW(QMainWindow):
         self.pushButtonDown.setStyleSheet("background-color : #f0ecb1")
         self.pushButtonDown.setFont(QFont("Times New Roman", 12))
     
-    def handleAuthority(self, receivedAuthority):
-        self.sendAuthority.emit(receivedAuthority) #Pass-on distance-wise authority straight to train controller without changing
-    
-    def handleSpeed(self, receivedSpeed):
-        self.sendSpeed.emit(receivedSpeed) #Pass-on speed straight to train controller
+    def handleSpeedAuthority(self, receivedSpeedAuthority):
+        self.sendSpeedAuthority.emit(receivedSpeedAuthority) #Pass-on distance-wise authority straight to train controller without changing

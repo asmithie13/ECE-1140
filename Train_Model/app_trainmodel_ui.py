@@ -105,7 +105,7 @@ class TrainModel_mainwindow(QMainWindow):
         trainID=speedAuth[0]
         Comm_Speed=speedAuth[1]
         Authority=speedAuth[2]
-        print("hiiiiii", speedAuth)
+        print("speedAuth",speedAuth)
         #self.sendSpeedAuth.emit(speedAuth)
         #self.main_window.cspeed_display.setText(str(Comm_Speed))
         # self.send_com_speed_tb.emit(str(Comm_Speed))

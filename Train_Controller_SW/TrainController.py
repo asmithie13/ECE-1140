@@ -97,7 +97,8 @@ class TrainController(QMainWindow):
         #self.ui.lcdAuth.valueChanged.connect(lambda :self.Vital_Authority.authTimerStart())
 
         #sending off signals in manual mode
-        self.ui.buttonDoorL.clicked.connect(lambda : self.NonVital.Control_DoorL())
+        self.ui.buttonDoorL.clicked.connect(lambda : self.NonVital.Door())
+        self.ui.buttonDoorR.clicked.connect(lambda : self.NonVital.Door())
         self.ui.IntLightSld.valueChanged.connect(lambda : self.int_light_sig.emit(self.ui.IntLightSld.value()))
 
 

@@ -58,7 +58,7 @@ def readTrackFile(fileName,crossingTriples):
         for block in totalBlocks:
             if block.ID[1:] in lightBlocks and (not block.SWITCH or block.lineColor == "Red"):
                 block.LIGHT = True
-                block.lightState = False
+                block.lightState = True
 
     return totalBlocks #Return a list of all blocks within the file
 
@@ -235,6 +235,11 @@ class WaysideSW(QMainWindow):
         if current_text == "MANUAL":   
             self.label_7.setText("AUTOMATIC")
             self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
+
+            for block in self.currentBlocks:
+                if block.LIGHT and block.lightState: block.authority = True
+                elif block.LIGHT and not block.lightState: block.authority = False
+
             self.blockActions()
             self.sendSpecialBlocks.emit(self.currentBlocks)
             self.changeModeSend.emit(False)
@@ -492,11 +497,15 @@ class WaysideSW(QMainWindow):
             blockNum = int(block[1:])
             for x in (self.green5blocks[blockNum - 1]):
                 if self.allGreenBlocks[x - 1].occupied:
-                    self.sendTrainSpeedAuth.emit([0,0,0])
                     self.allGreenBlocks[x - 1].authority = False
         
         self.BlockOcc.setText(" ".join(sentBlocks))
-        if self.label_7.text() == "AUTOMATIC" : self.FileParser.parsePLC()
+        if self.label_7.text() == "AUTOMATIC" : 
+            self.FileParser.parsePLC()
+            for block in self.currentBlocks:
+                if block.LIGHT and block.lightState: block.authority = True
+                elif block.LIGHT and not block.lightState: block.authority = False
+            
         self.blockActions()
         self.sendSpecialBlocks.emit(self.currentBlocks)
         self.sendOccupiedBlocks.emit(self.occupiedBlocks)

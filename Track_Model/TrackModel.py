@@ -127,20 +127,20 @@ class TrackModelMain(QMainWindow):
             #also dont forget to set that button orange
             self.block_length = self.data.get_length_for_block(block_num)
             self.block_position = self.get_block_occupancy(authority, self.speedLimit_m,self.speedOfTrain, self.block_length)
+        
+        #List of included block ID in order
+        self.blockID = ["K63", "K64", "K65"]
 
-        #if 0, then stay at yard or J62    
-        #if we can set var using block class and setting it equal to them, then i can do that.    
+        #emit signal to using self.blockID[block_position]
 
-        #possible way to set block occ    
-        # tempBlock = Block(line[0],line[1],line[2],hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,blockId)
-        # totalBlocks.append(tempBlock)
             
     #Station Glenbury 2#
-    def station_glenbury_q(self, authority):
-        '''
-        #Block ID(from yard to): Yard - K63 - K65: 50, 100, 100, 200
-        #Authority from yard(m): 450m
+    def station_glenbury_2(self, authority):
         
+        #Block ID(from yard to): Yard(J62) - K63 - Q100 - N77 - N85 - R101 - U114: 50, 100, 100, 200, 200, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 300, 300, 300, 300, 300, 300, 300, 300, 300, 100, 86.6, 100, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 35, 100, 100, 80, 100, 100, 90, 100, 100, 100, 100, 100, 100, 162
+
+        #Authority from yard(m): 9603.6???9603.7?
+        '''
         self.speedLimit_m = self.speed_limit_km /1.609
         self.speedOfTrain = self.AcutalSpeed
 
@@ -402,7 +402,7 @@ class TrackModelMain(QMainWindow):
         self.send_authority_tb.emit(str(self.Authority))
 
         if self.Authority == 450: #check with Abby if sent in m or what
-            pass #call glenbury !
+            self.station_glenbury_1(self.Authority)
 
     #FROM TRAIN MODEL
     def receiveSendVelocity(self, velocity):

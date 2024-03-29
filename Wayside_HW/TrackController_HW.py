@@ -80,14 +80,6 @@ class TrackController_HW(QMainWindow):
             if block.ID not in self.listOccIDs:
                 self.listOccIDs.append(block.ID)
                 self.occupiedBlocks.append(block)
-        
-        print("Occupied:")
-        for block in self.occupiedBlocks:
-            print(block.ID)
-
-        print("Closed:")
-        for block in self.closedBlocks:
-            print(block.ID)
 
         if self.modeFlag == 0:
             self.automaticMode()

@@ -121,11 +121,16 @@ class TrackController_HW(QMainWindow):
                 occupiedBlockSections.append(block.blockSection)
         occupiedBlockSections.sort()
 
-        #PARSE PLC HERE:
+        #Pare PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
+    
+        #TO-DO HERE:
+        #-Adjust block-wise authority based on lights and collisions
+        #-Move parser to RPi
+        #-Ensure vitality (Run calculation two/three times and compare)
+
+        self.sendUpdatedBlocks.emit(self.allBlocks)
         
-        #Initialize serial communication with Raspberry Pi here
-        #Produce a list of changed block states to emit to Track Model, as conducted in manual operation
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)

@@ -13,7 +13,6 @@ def newParse(occupiedBlockSections, allBlocks):
     fileObject = open("Wayside_HW/testOtherPLC.txt", "r")
     PLCfile = fileObject.read()
     allLines = PLCfile.split('\n')
-    print(occupiedBlockSections)
 
     for line in allLines:
         tempLine = line.split(" ")

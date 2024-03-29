@@ -12,3 +12,6 @@ RightLIGHT
 
 CrossingBlockOccupied
 crossingState
+
+not SwitchOcc and not SwitchLeftOcc and not SwitchRightOcc
+continue

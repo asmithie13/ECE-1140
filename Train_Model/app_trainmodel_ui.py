@@ -21,12 +21,15 @@ import subprocess
 class TrainModel_mainwindow(QMainWindow):
     
     #in mph
-    commanded_speed_def=50
+    commanded_speed_def=0
     #in lbs
-    mass_def=125002.1
+    mass_def=0
     #in seconds
-    time_def=10
+    time_def=0
 
+    #Track Model Signals
+    track_model_acc_velo = qtc.pyqtSignal(int)
+    
     def __init__(self):
         super().__init__()
         uic.loadUi("Train_Model/TrainModel_UI.ui", self)
@@ -87,6 +90,8 @@ class TrainModel_mainwindow(QMainWindow):
         self.sig_fail_state = False
         self.en_fail_state = False
         self.emergency_stop_state=False
+
+
 
     def Return_TrainController(self):
         return self.TC
@@ -309,6 +314,11 @@ class TrainModel_mainwindow(QMainWindow):
             self.left_doors_value.setFixedSize(109, 97)
             self.left_doors_value.setText('OPEN')
 
+    def acc_vel_to_track_model(self,velocity):
+        velocity=self.train_calculations.calculate_acc_velocity
+        self.track_model_acc_velo.emit(int(velocity))
+
+
 #CLASS CONTAINING ALL TRAIN CALCULATIONS
 class TrainCalculations:
 
@@ -364,6 +374,7 @@ class TrainCalculations:
         velocity = initial_velocity + (acceleration * time)
         self.main_window.Acc_Velo_value_lcd.display(velocity)
         self.TC.curr_spd_sig.emit(int(velocity))
+        return int(velocity)
         
 
 

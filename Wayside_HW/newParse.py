@@ -10,6 +10,7 @@ from Wayside_HW.readTrackFile import *
 from Track_Resources.Block import Block
 
 def newParse(occupiedBlockIDs, allBlocks):
+    #CONSIDER HARD-CODING FOR ITERATION #3
     occupiedBlocks = []
     for block in allBlocks:
         if block.ID in occupiedBlockIDs:

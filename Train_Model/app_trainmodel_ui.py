@@ -21,15 +21,15 @@ import subprocess
 class TrainModel_mainwindow(QMainWindow):
     
     #in mph
-    commanded_speed_def=0
+    commanded_speed_def= 50
     #in lbs
-    mass_def=0
+    mass_def= 50
     #in seconds
-    time_def=0
+    time_def= 10
 
     #Track Model Signals
     track_model_acc_velo = qtc.pyqtSignal(int)
-    
+
     def __init__(self):
         super().__init__()
         uic.loadUi("Train_Model/TrainModel_UI.ui", self)

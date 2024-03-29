@@ -66,9 +66,7 @@ class Main_UI(QtWidgets.QMainWindow):
 
         #Train Controller SW (Might need initialized per train)
 
-
         #Train Controller HW (Might need initialized per train)
-
 
 
     def open_CTC_UI(self):

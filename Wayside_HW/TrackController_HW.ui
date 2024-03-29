@@ -634,37 +634,6 @@
                </item>
               </layout>
              </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_10">
-               <item>
-                <widget class="QLabel" name="labelClosed">
-                 <property name="font">
-                  <font>
-                   <family>Times New Roman</family>
-                   <pointsize>14</pointsize>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Closed</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="lineEditClosed">
-                 <property name="font">
-                  <font>
-                   <family>Times New Roman</family>
-                   <pointsize>12</pointsize>
-                  </font>
-                 </property>
-                 <property name="readOnly">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
             </layout>
            </widget>
           </item>

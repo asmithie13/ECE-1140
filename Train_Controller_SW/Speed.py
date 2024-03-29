@@ -28,7 +28,7 @@ class Vital_Speed():
         
         #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
         elif current_speed < ((speed_limit or cmd_speed) and (self.ui.buttonAuto.isChecked() == True)):
-            self.ui.vertSliderPow.setValue(1)
+            self.ui.vertSliderPow.setValue(100)
             self.ui.vertSliderBrk.setValue(0)
         
         #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please

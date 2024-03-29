@@ -68,7 +68,7 @@ class TrainController(QMainWindow):
         self.curr_spd_lim_sig.connect(self.Vital_Speed.Control_Speed_Limit)
         self.curr_auth_sig.connect(self.Vital_Authority.Control_Authority)
         self.curr_temp_sig.connect(self.NonVital.Cabin_Temperature)
-        self.ebrake_sig.connect(self.ui.Ebrake.setChecked)
+        self.ebrake_sig.connect(self.Vital_Failure.Control_Emergency_Brake)
         self.pwr_fail_sig.connect(self.Vital_Failure.Control_Power_Failure)
         self.brk_fail_sig.connect(self.Vital_Failure.Control_Brake_Failure)
         self.sig_fail_sig.connect(self.Vital_Failure.Control_Signal_Failure)
@@ -81,7 +81,7 @@ class TrainController(QMainWindow):
         self.time_sig.connect(self.Timer)
 
         #connecting UI buttons to functions
-        self.ui.Ebrake.clicked.connect(lambda : self.Vital_Failure.Control_Emergency_Brake())
+        self.ui.Ebrake.clicked.connect(lambda : self.Vital_Failure.Control_Emergency_Brake(0))
         self.ui.buttonMan.clicked.connect(lambda : self.Control_Manual())
         self.ui.buttonAuto.clicked.connect(lambda : self.Control_Automatic())
         #self.ui.temp.valueChanged.connect(lambda : self.NonVital.Cabin_Temperature())

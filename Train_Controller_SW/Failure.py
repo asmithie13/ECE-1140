@@ -9,14 +9,24 @@ class Vital_Failure():
         self.ebrake_disable_sig = ebrake_disable_sig
 
 
-    def Control_Emergency_Brake(self):
+    def Control_Emergency_Brake(self,ebrake_in):
             if self.ui.Ebrake.isChecked() == True:
                 enable = True
                 self.ebrake_disable_sig.emit(1)
-
+            
+            elif ebrake_in == True:
+                if self.ui.Ebrake.isChecked() == False:
+                    self.ui.Ebrake.toggle()
+                enable = True
             else:
+                if self.ui.Ebrake.isChecked() == True:
+                    self.ui.Ebrake.toggle()
                 enable = False
                 self.ebrake_disable_sig.emit(0)
+            
+
+
+               
 
             if(not(self.ui.buttonAuto.isChecked())):
                 self.ui.buttonDoorL.setDisabled(enable)

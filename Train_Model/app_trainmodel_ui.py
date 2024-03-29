@@ -46,8 +46,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.TC.curr_power_sig.connect(self.get_power_input)
         self.TC.announcement_sig.connect(self.set_announcements)
         self.TC.temp_control_sig.connect(self.set_cabin_temp)
-        self.TC.ebrake_disable_sig.connect(self.change_ebrake_color)
-
+        #self.TC.ebrake_disable_sig.connect(self.change_ebrake_color)
 
 
         self.train_calculations.Calculate_acceleration()
@@ -55,7 +54,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.train_calculations.get_acceleration()
         self.train_calculations.calculate_acc_velocity()
 
-        self.estop_locked=False
+        
         #changing state when sig_fail_enable/disable are clicked
         self.sig_fail_enable.clicked.connect(self.sig_fail_enable_clicked)
         self.sig_fail_disable.clicked.connect(self.sig_fail_disable_clicked) 
@@ -68,6 +67,11 @@ class TrainModel_mainwindow(QMainWindow):
         self.en_fail_enable.clicked.connect(self.en_fail_enable_clicked)
         self.en_fail_disable.clicked.connect(self.en_fail_disable_clicked)
         #self.brake_fail_input_tb.stateChanged.connect(self.brake_fail_tb)
+
+        self.ebrake.setCheckable(True)
+        #ebrake signals
+        self.ebrake.clicked.connect(lambda : self.ebrake_activated(1))
+        self.TC.ebrake_disable_sig.connect(self.ebrake_disabled)        
 
         #Initially setting the default colors
         self.bf_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
@@ -112,21 +116,31 @@ class TrainModel_mainwindow(QMainWindow):
         # self.send_authority_tb.emit(str(Authority))
 
 
-    def estop_button_clicked(self):
-        if not self.emergency_stop_state:
-            self.ebrake.setStyleSheet('background-color: rgb(99, 99, 99);')
-            self.emergency_stop_state = True
-
-    def change_ebrake_color(self,ebrake_state):
-        if ebrake_state:
-            self.ebrake.setStyleSheet('background-color:  rgb(99, 99, 99);')
+    # def estop_button_clicked(self,state):
+    #     self.emergency_stop_state=state
+    #     if not state:
+    #         self.ebrake.setStyleSheet('background-color: rgb(99, 99, 99);')
+    #         self.emergency_stop_state = True
+    #     self.TC.ebrake_sig.emit(state)
         
-        else: 
-            self.ebrake.setStyleSheet('background-color: rgb(195, 16, 40);')
+    def TC_ebrake_activated(self,state):
+        self.ebrake.toggle()
+        if(self.ebrake.isChecked()):
+            self.ebrake.setCheckable(False)
+
         
 
-        self.TC.ebrake_sig.emit(ebrake_state)
+    def ebrake_activated(self,state):
+        self.ebrake.setCheckable(False)
+        self.TC.ebrake_sig.emit(1)
 
+    def ebrake_disabled(self,ebrake_state):
+        self.ebrake.setCheckable(True)
+        self.ebrake.toggle()
+           
+        
+        
+        
     def set_length(self, input_txt):
         self.length_of_vehicle_display.setText(input_txt)
 
@@ -610,9 +624,9 @@ if __name__ == "__main__":
     #set ccount
     window_tb.ccount_input_signal.connect(window.set_ccount)
     #set ebrake
-    window_tb.ebrake_input_signal.connect(window.change_ebrake_color)
+    #window_tb.ebrake_input_signal.connect(window.change_ebrake_color)
     #estop manual
-    window.ebrake.clicked.connect(window.estop_button_clicked)
+   
     #brake_fail
     window_tb.brake_fail_input_signal.connect(window.brake_fail_tb)
     #signal_fail

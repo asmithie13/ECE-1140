@@ -18,12 +18,10 @@ windowTwo.occupiedBlocksSignal.connect(windowOne.modeHandler)
 windowTwo.closedBlocksSignal.connect(windowOne.getClosedBlocks)
 
 #Signal to send speed and authority (distance-wise) from the CTC office to wayside:
-windowTwo.speedSignal.connect(windowOne.handleSpeed)
-windowTwo.authoritySignal.connect(windowOne.handleAuthority)
+windowTwo.speedAuthoritySignal.connect(windowOne.handleSpeedAuthority)
 
 #Signal to send speed and authority (distance-wise) from wayside to the track model:
-windowOne.sendSpeed.connect(windowTwo.receiveSpeed)
-windowOne.sendAuthority.connect(windowTwo.receiveAuthority)
+windowOne.sendSpeedAuthority.connect(windowTwo.receiveSpeedAuthority)
 
 #Signal to send an updated block list (w/ changed attributes) from wayside to the track model:
 windowOne.sendUpdatedBlocks.connect(windowTwo.receiveUpdatedBlocks)

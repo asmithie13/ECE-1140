@@ -26,7 +26,6 @@ import Train_Model
 from Train_Model.app_trainmodel_ui import *
 from Train_Model.app_trainmodel_tb import *
 
-
 #Utility function to update the clock
 def clock():
     global time
@@ -36,7 +35,6 @@ def clock():
     #Pulling clock data for CTC and Track Model
     MainWindow.CTCwindow.displayClock(current_time)
     MainWindow.TrackModelWindow.set_clock(current_time)
-    MainWindow.TrackModelWindow.get_time(time)
 
     #Pulling clock data for each train in existance
     for train in MainWindow.currentTrains:
@@ -105,7 +103,6 @@ MainWindow.TrackModelWindow.send_com_speed_tb.connect(MainWindow.TrackModel_tb.u
 MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.update_authority)
 
 
-
 #Track Model to CTC
 MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieveTicketSales)
 
@@ -116,7 +113,11 @@ timer = QtCore.QTimer()
 time = QtCore.QTime(0, 0, 0)    #Hours, Minutes, Second
 timer.setInterval(1000)         #Interval in ms
 timer.timeout.connect(clock)
-timer.start()
+
+#Initializing Time on clock for CTC
+MainWindow.CTCwindow.displayClock(time.toString("hh:mm"))
+MainWindow.TrackModelWindow.set_clock(time.toString("hh:mm"))
+
 
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 

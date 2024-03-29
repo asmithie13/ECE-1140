@@ -12,6 +12,7 @@ sys.path.append(project_root)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
+from Wayside_HW.newParse import *
 from Track_Resources.Block import Block
 
 #Main train controller class:
@@ -113,11 +114,15 @@ class TrackController_HW(QMainWindow):
         self.comboBoxSection.addItems(listSecIDs)
     
     def automaticMode(self):
-        #Add the IDs of all occupanices to a list to be communicated serially
-        occupiedBlockIDs = []
+        #Add the sections of all occupanices to a list to be communicated serially:
+        occupiedBlockSections = []
         for block in self.occupiedBlocks:
-            occupiedBlockIDs.append(block.ID)
-        occupiedBlockIDs.sort()
+            if block.blockSection not in occupiedBlockSections:
+                occupiedBlockSections.append(block.blockSection)
+        occupiedBlockSections.sort()
+
+        #PARSE PLC HERE:
+        newParse(occupiedBlockSections, self.allBlocks)
         
         #Initialize serial communication with Raspberry Pi here
         #Produce a list of changed block states to emit to Track Model, as conducted in manual operation
@@ -149,6 +154,20 @@ class TrackController_HW(QMainWindow):
         self.comboBoxBlock.addItems(listBlockNum)
 
     def initialBlockConditions(self):
+        self.pushButtonRed.setStyleSheet("background-color: white")
+        self.pushButtonGreen.setStyleSheet("background-color: white")
+        self.pushButtonLeft.setStyleSheet("background-color: white")
+        self.pushButtonRight.setStyleSheet("background-color: white")
+        self.pushButtonUp.setStyleSheet("background-color: white")
+        self.pushButtonDown.setStyleSheet("background-color: white")
+
+        self.pushButtonRed.setFont(QFont("Times New Roman", 12))
+        self.pushButtonGreen.setFont(QFont("Times New Roman", 12))
+        self.pushButtonLeft.setFont(QFont("Times New Roman", 12))
+        self.pushButtonRight.setFont(QFont("Times New Roman", 12))
+        self.pushButtonUp.setFont(QFont("Times New Roman", 12))
+        self.pushButtonDown.setFont(QFont("Times New Roman", 12))
+        
         for block in self.allBlocks:
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
                 selectedBlock = block

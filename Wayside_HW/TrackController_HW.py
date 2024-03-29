@@ -53,9 +53,19 @@ class TrackController_HW(QMainWindow):
     
     def modeHandler(self, occupiedBlocks):
         self.occupiedBlocks = occupiedBlocks
+        listOccID = []
+        for block in occupiedBlocks:
+            listOccID.append(block.ID)
+        
+        for block in self.allBlocks:
+            if block.ID in listOccID:
+                block.occupied = 1
+            else:
+                block.occupied = 0
+        
+        self.sendOccupiedBlocks.emit(self.occupiedBlocks)
         listBlockIDOccupied = []
         listBlockStrOccupied = ""
-        self.sendOccupiedBlocks.emit(self.occupiedBlocks)
 
         for block in self.occupiedBlocks:
             listBlockIDOccupied.append(block.ID)

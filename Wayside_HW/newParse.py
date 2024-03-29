@@ -9,22 +9,39 @@ sys.path.append(project_root)
 from Wayside_HW.readTrackFile import *
 from Track_Resources.Block import Block
 
-def newParse(occupiedBlockIDs, allBlocks):
-    #CONSIDER HARD-CODING FOR ITERATION #3
-    occupiedBlocks = []
-    for block in allBlocks:
-        if block.ID in occupiedBlockIDs:
-            block.occupied = True
-            occupiedBlocks.append(block)
-
+def newParse(occupiedBlockSections, allBlocks):
     fileObject = open("Wayside_HW/testOtherPLC.txt", "r")
     PLCfile = fileObject.read()
     allLines = PLCfile.split('\n')
+    print(occupiedBlockSections)
 
     for line in allLines:
         tempLine = line.split(" ")
-        if tempLine[0] == 'LOGIC':
-            print(tempLine)
+        if tempLine[0] == 'IF':
+            logicFlag = 0
+            for section in tempLine:
+                if section in occupiedBlockSections:
+                    logicFlag = 1
+                    break
+
+        elif tempLine[0] == 'SWITCH' or tempLine[0] == 'LIGHT' or tempLine[0] == 'CROSSING':
+            if logicFlag == 1:
+                for block in allBlocks:
+                    if block.ID == tempLine[1]:
+                        if tempLine[0] == 'SWITCH':
+                            block.switchState = int(tempLine[2])
+                        elif tempLine[0] == 'LIGHT':
+                            block.lightState = int(tempLine[2])
+                        elif tempLine[0] == 'CROSSING':
+                            block.crossingState = int(tempLine[2])
+                        break
+
+        elif tempLine[0] == "ELSE":
+            logicFlag = not logicFlag
+
+    return allBlocks
+                        
+
 
 
 

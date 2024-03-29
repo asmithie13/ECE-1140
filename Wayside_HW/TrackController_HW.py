@@ -122,7 +122,7 @@ class TrackController_HW(QMainWindow):
         occupiedBlockSections.sort()
 
         #PARSE PLC HERE:
-        newParse(occupiedBlockSections, self.allBlocks)
+        self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
         
         #Initialize serial communication with Raspberry Pi here
         #Produce a list of changed block states to emit to Track Model, as conducted in manual operation
@@ -167,7 +167,7 @@ class TrackController_HW(QMainWindow):
         self.pushButtonRight.setFont(QFont("Times New Roman", 12))
         self.pushButtonUp.setFont(QFont("Times New Roman", 12))
         self.pushButtonDown.setFont(QFont("Times New Roman", 12))
-        
+
         for block in self.allBlocks:
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
                 selectedBlock = block

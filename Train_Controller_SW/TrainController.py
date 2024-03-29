@@ -129,9 +129,9 @@ class TrainController(QMainWindow):
       self.ui.inputKi.setDisabled(True)
       self.ui.inputKp.setDisabled(True)
 
-      #self.ui.Speed_Montior()
-      self.ui.vertSliderPow.setDisabled(True)
-      self.ui.vertSliderBrk.setDisabled(True)
+      self.Vital_Speed.Speed_Monitor()
+      #self.ui.vertSliderPow.setDisabled(True)
+      #self.ui.vertSliderBrk.setDisabled(True)
 
     def Control_Manual(self):
         self.ui.buttonAuto.toggle()
@@ -149,7 +149,7 @@ class TrainController(QMainWindow):
             self.ui.vertSliderPow.setDisabled(True)
         else:
             self.ui.vertSliderPow.setDisabled(False)
-        self.ui.vertSliderBrk.setDisabled(False)
+            self.ui.vertSliderBrk.setDisabled(False)
 
     def Timer(self, time):
         hours, minutes, seconds = [int(part) for part in time.split(':')]

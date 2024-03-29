@@ -111,7 +111,6 @@ class TrackController_HW(QMainWindow):
             occupiedBlockIDs.append(block.ID)
         occupiedBlockIDs.sort()
         
-        
         #Initialize serial communication with Raspberry Pi here
         #Produce a list of changed block states to emit to Track Model, as conducted in manual operation
     

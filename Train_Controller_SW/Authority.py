@@ -20,13 +20,18 @@ class Vital_Authority():
         #calculate authority using d=r*t
         self.rate = self.ui.lcdCurSpd.value()*1.46667 #mph to fps
         self.time = 1
-        self.ui.lcdAuth.display(self.ui.lcdAuth.value() - self.rate*self.time) #auth = auth - rate*time
+        if(not(self.ui.lcdAuth.value() == 0) and not(self.ui.lcdCurSpd.value)):
+            self.ui.lcdAuth.display(self.ui.lcdAuth.value() - int(self.rate*self.time)) #auth = auth - rate*time
 
 
         if self.ui.lcdAuth.value() != 0:
 
             #authority in m from ft
-            self.AuthM = self.ui.lcdAuth.value()*0.3048
+            
+            # in order to get most accurate stopping distance we use this
+            #self.AuthM = self.ui.lcdAuth.value()*0.3048
+
+            self.AuthM = self.decimal_m_auth
 
             #current speed in m/s from mph
             self.V_i = self.ui.lcdCurSpd.value()*0.44704
@@ -66,6 +71,6 @@ class Vital_Authority():
 
     def Control_Authority(self,auth):
         self.decimal_m_auth = auth
+        print(auth)
         self.ui.lcdAuth.display(int(auth * 3.28084))
-        if(self.ui.lcdAuth.value() != 0):
-            self.ui.vertSliderPow.setDisabled(False)
+        self.ui.vertSliderPow.setEnabled(True)

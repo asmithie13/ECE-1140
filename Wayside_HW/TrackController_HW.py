@@ -38,6 +38,7 @@ class TrackController_HW(QMainWindow):
 
         #Lists to hold blocks that are currently occupied or closed by CTC:
         self.occupiedBlocks = []
+        self.listOccIDs = []
         self.closedBlocks = []
 
         #Signals (Manual mode-related):
@@ -53,12 +54,12 @@ class TrackController_HW(QMainWindow):
     
     def modeHandler(self, occupiedBlocks):
         self.occupiedBlocks = occupiedBlocks
-        listOccID = []
+        self.listOccIDs
         for block in occupiedBlocks:
-            listOccID.append(block.ID)
+            self.listOccIDs.append(block.ID)
         
         for block in self.allBlocks:
-            if block.ID in listOccID:
+            if block.ID in self.listOccIDs:
                 block.occupied = 1
             else:
                 block.occupied = 0
@@ -76,23 +77,28 @@ class TrackController_HW(QMainWindow):
 
         #If a block is closed by CTC, it is recognized as "occupied" by the PLC parser:
         for block in self.closedBlocks:
-            if block not in self.occupiedBlocks:
+            if block.ID not in self.listOccIDs:
+                self.listOccIDs.append(block.ID)
                 self.occupiedBlocks.append(block)
+        
+        print("Occupied:")
+        for block in self.occupiedBlocks:
+            print(block.ID)
+
+        print("Closed:")
+        for block in self.closedBlocks:
+            print(block.ID)
 
         if self.modeFlag == 0:
             self.automaticMode()
         
     def getClosedBlocks(self, closedBlocks):
         self.closedBlocks = closedBlocks
-        listBlockIDClosed = []
-        listBlockStrClosed = ""
-
-        for block in closedBlocks:
-            listBlockIDClosed.append(block.ID)
-        listBlockIDClosed.sort()
-        for ID in listBlockIDClosed:
-            listBlockStrClosed = listBlockStrClosed + ID + " "
-        self.lineEditClosed.setText(listBlockStrClosed)
+        for block in self.closedBlocks:
+            if block.ID not in self.listOccIDs:
+                self.listOccIDs.append(block.ID)
+                self.occupiedBlocks.append(block)
+        self.modeHandler(self.occupiedBlocks)
 
     def manualMode(self):
         self.modeFlag = 1

@@ -111,6 +111,9 @@ class TrainController(QMainWindow):
         #self.ui.SigFail.stateChanged.connect(self.Vital_Failure.Control_Signal_Failure())
         #self.ui.Ebrake.stateChanged.connect(self.Vital_Failure.Control_Emergency_Brake())
 
+        #temporary ADD SPEED LIM
+        self.curr_spd_lim_sig.emit(30)
+
         ## add for doors
         self.window.show()
 
@@ -126,7 +129,6 @@ class TrainController(QMainWindow):
       self.ui.inputKi.setDisabled(True)
       self.ui.inputKp.setDisabled(True)
 
-      #CHAD FIX THIS
       #self.ui.Speed_Montior()
       self.ui.vertSliderPow.setDisabled(True)
       self.ui.vertSliderBrk.setDisabled(True)

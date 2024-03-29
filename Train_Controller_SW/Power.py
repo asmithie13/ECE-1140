@@ -73,4 +73,6 @@ class Vital_Power():
         self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
         self.ui.lcdAcel.display(self.power)
         self.curr_power_sig.emit(self.power)
+        print("Curr Power")
+        print(self.power)
         

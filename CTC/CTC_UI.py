@@ -119,13 +119,73 @@ class CTC_UI(QtWidgets.QMainWindow):
 
     """Slots to recieve Signals"""
     #BlockList will be a list of occupied block objects from wayside controllers
-    def recieveOccupiedBlocks(self, BlockList):
+    def recieveOccupiedBlocksG1(self, BlockList):
+        #Parsign through block objects to pull out ID and lineColor
         TempBlockList = []
-
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
-        
-        self.updateOccupiedBlocks(TempBlockList)
+
+        #Add to list that holds occupancies by block
+        self.occupiedBlocks.recievedFromWayside[0] = TempBlockList
+
+        #Compile all occupied blocks into full list to update list
+        FullBlockList = []
+        for i in self.occupiedBlocks.recievedFromWayside:
+            for j in i:
+                FullBlockList.append(j)
+
+        self.updateOccupiedBlocks(FullBlockList)
+
+    def recieveOccupiedBlocksG2(self, BlockList):
+        #Parsign through block objects to pull out ID and lineColor
+        TempBlockList = []
+        for i in BlockList:
+            TempBlockList.append([i.ID, i.lineColor])
+
+        #Add to list that holds occupancies by block
+        self.occupiedBlocks.recievedFromWayside[1] = TempBlockList
+
+        #Compile all occupied blocks into full list to update list
+        FullBlockList = []
+        for i in self.occupiedBlocks.recievedFromWayside:
+            for j in i:
+                FullBlockList.append(j)
+
+        self.updateOccupiedBlocks(FullBlockList)
+
+    def recieveOccupiedBlocksR1(self, BlockList):
+        #Parsign through block objects to pull out ID and lineColor
+        TempBlockList = []
+        for i in BlockList:
+            TempBlockList.append([i.ID, i.lineColor])
+
+        #Add to list that holds occupancies by block
+        self.occupiedBlocks.recievedFromWayside[2] = TempBlockList
+
+        #Compile all occupied blocks into full list to update list
+        FullBlockList = []
+        for i in self.occupiedBlocks.recievedFromWayside:
+            for j in i:
+                FullBlockList.append(j)
+
+        self.updateOccupiedBlocks(FullBlockList)
+
+    def recieveOccupiedBlocksR2(self, BlockList):
+        #Parsign through block objects to pull out ID and lineColor
+        TempBlockList = []
+        for i in BlockList:
+            TempBlockList.append([i.ID, i.lineColor])
+
+        #Add to list that holds occupancies by block
+        self.occupiedBlocks.recievedFromWayside[3] = TempBlockList
+
+        #Compile all occupied blocks into full list to update list
+        FullBlockList = []
+        for i in self.occupiedBlocks.recievedFromWayside:
+            for j in i:
+                FullBlockList.append(j)
+
+        self.updateOccupiedBlocks(FullBlockList)
 
     #TicketSales will be a list of two lists of ints, representing the sales at each station in 
     #green line and red line respectively, from Track Model
@@ -368,6 +428,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintence.BlocksClosedIDs))
         #Add to list of block objects for sending to wayside
         temp.occupied = 1
+        temp.maintenance = 1
         self.Maintence.BlocksClosed.append(temp)
 
         #Send to wayside
@@ -399,6 +460,8 @@ class CTC_UI(QtWidgets.QMainWindow):
             temp.switchState = True
         else:   #Else the position is the second one, switch state is right = false
             temp.switchState = False
+
+        temp.maintenance = 1
 
         self.Maintence.SwitchesSet.append(temp)
     

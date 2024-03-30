@@ -136,7 +136,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.comm_speed=speedAuth[1]
         self.train_calculations.get_commanded_speed(float(self.comm_speed))
         Authority=speedAuth[2]
-        print("speedAuth",speedAuth)
+        #print("speedAuth",speedAuth)
         #self.sendSpeedAuth.emit(speedAuth)
         #self.main_window.cspeed_display.setText(str(Comm_Speed))
         # self.send_com_speed_tb.emit(str(Comm_Speed))

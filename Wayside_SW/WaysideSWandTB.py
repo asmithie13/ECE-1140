@@ -58,7 +58,7 @@ def readTrackFile(fileName,crossingTriples):
         for block in totalBlocks:
             if block.ID[1:] in lightBlocks and (not block.SWITCH or block.lineColor == "Red"):
                 block.LIGHT = True
-                block.lightState = False
+                block.lightState = True
 
     return totalBlocks #Return a list of all blocks within the file
 
@@ -235,14 +235,19 @@ class WaysideSW(QMainWindow):
         if current_text == "MANUAL":   
             self.label_7.setText("AUTOMATIC")
             self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
+
+            for block in self.currentBlocks:
+                if block.LIGHT and block.lightState: block.authority = True
+                elif block.LIGHT and not block.lightState: block.authority = False
+
             self.blockActions()
-            self.sendSpecialBlocks.emit(self.currentBlocks)
+            self.sendAllBlocks.emit(self.currentBlocks)
             self.changeModeSend.emit(False)
 
         elif current_text == "AUTOMATIC":
             self.label_7.setText("MANUAL")
             self.blockActions()
-            self.sendSpecialBlocks.emit(self.currentBlocks)
+            self.sendAllBlocks.emit(self.currentBlocks)
             self.changeModeSend.emit(True)
             
 
@@ -431,6 +436,8 @@ class WaysideSW(QMainWindow):
         self.greenButton.setStyleSheet('QPushButton {background-color: green; color: yellow;}')
         self.redButton.setStyleSheet("")
         self.sendSpecialBlocks.emit(self.currentBlocks)
+        self.sendAllBlocks.emit(self.currentBlocks)
+        
 
     def redButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -440,6 +447,7 @@ class WaysideSW(QMainWindow):
         self.greenButton.setStyleSheet("")
         self.redButton.setStyleSheet('QPushButton {background-color: red; color: yellow;}')
         self.sendSpecialBlocks.emit(self.currentBlocks)
+        self.sendAllBlocks.emit(self.currentBlocks)
 
     def upButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -449,6 +457,7 @@ class WaysideSW(QMainWindow):
         self.upCrossingButton.setStyleSheet("background-color: yellow")
         self.downCrossingButton.setStyleSheet("")
         self.sendSpecialBlocks.emit(self.currentBlocks)
+        self.sendAllBlocks.emit(self.currentBlocks)
 
     def downButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -458,6 +467,7 @@ class WaysideSW(QMainWindow):
         self.upCrossingButton.setStyleSheet("")
         self.downCrossingButton.setStyleSheet("background-color: yellow")
         self.sendSpecialBlocks.emit(self.currentBlocks)
+        self.sendAllBlocks.emit(self.currentBlocks)
 
     def switchButtonPushed(self):
         selectedIndex = self.blockMenu.currentIndex()
@@ -475,6 +485,7 @@ class WaysideSW(QMainWindow):
         elif current_text[1:] == self.currentTriple[2]:
             self.label_11.setText(letter1 + self.currentTriple[1])
         self.sendSpecialBlocks.emit(self.currentBlocks)
+        self.sendAllBlocks.emit(self.currentBlocks)
 
     def updateBlocks(self,new_data):
         sentBlocks = new_data
@@ -492,14 +503,17 @@ class WaysideSW(QMainWindow):
             blockNum = int(block[1:])
             for x in (self.green5blocks[blockNum - 1]):
                 if self.allGreenBlocks[x - 1].occupied:
-                    self.sendTrainSpeedAuth.emit([0,0,0])
                     self.allGreenBlocks[x - 1].authority = False
         
         self.BlockOcc.setText(" ".join(sentBlocks))
-        if self.label_7.text() == "AUTOMATIC" : self.FileParser.parsePLC()
+        if self.label_7.text() == "AUTOMATIC" : 
+            self.FileParser.parsePLC()
+            
+            
         self.blockActions()
         self.sendSpecialBlocks.emit(self.currentBlocks)
         self.sendOccupiedBlocks.emit(self.occupiedBlocks)
+        self.sendAllBlocks.emit(self.currentBlocks)
 
     def receiveSpeedAuth(self,initialTrainSpeedAuthority):
         self.sendTrainSpeedAuth.emit(initialTrainSpeedAuthority)

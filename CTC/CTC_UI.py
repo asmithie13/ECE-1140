@@ -325,7 +325,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         """
         #print(self.occupiedBlocks.currentTrains)
 
-        self.occupiedBlocks.BlockDataCurrent = self.occupiedBlocks.BlockDataNew   
+        self.occupiedBlocks.BlockDataCurrent = self.occupiedBlocks.BlockDataNew
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockDataCurrent))
 
 
@@ -348,7 +348,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
 
 
-    #Function to add a block closure when in maintence mode
+    #Function to add a block closure when in maintence mode, sets block object as occupied
     def closeBlock_button(self):
         #Read block selection from UI drop down
         BlockToClose = self.CloseBlockSelect.currentText()
@@ -367,8 +367,11 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.Maintence.BlocksClosedIDs.append([BlockToClose, temp.lineColor])
         self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintence.BlocksClosedIDs))
         #Add to list of block objects for sending to wayside
-        temp.authority = 0
+        temp.occupied = 1
         self.Maintence.BlocksClosed.append(temp)
+
+        #Send to wayside
+        self.sendBlockClosures.emit(self.Maintence.BlocksClosed)
         
     #Function to set switch positons when in maintenance mode
     def setSwitch_button(self):

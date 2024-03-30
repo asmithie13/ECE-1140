@@ -311,7 +311,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         for i in arr:
             TrainID = self.occupiedBlocks.matchOccupanciesToTrains(i[0], i[1])
             self.occupiedBlocks.BlockDataNew.append([TrainID, i[0], i[1]])
-            self.occupiedBlocks.currentTrains[int(TrainID[1:]) - 1].append(i[0])
+            if TrainID != 'X':
+                self.occupiedBlocks.currentTrains[int(TrainID[1:]) - 1].append(i[0])
 
         #print(self.occupiedBlocks.currentTrains)
         

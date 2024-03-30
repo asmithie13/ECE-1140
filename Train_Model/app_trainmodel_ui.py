@@ -21,7 +21,7 @@ import subprocess
 class TrainModel_mainwindow(QMainWindow):
     
     #in mph
-    commanded_speed_def= 0
+    comm_speed= 0
     #in lbs
     mass_def= 12500
     #in seconds
@@ -116,6 +116,8 @@ class TrainModel_mainwindow(QMainWindow):
         # print("time_train_model",total_seconds)
         # print("TYPE3",type(total_seconds))
         self.train_calculations.set_time(total_seconds)
+        self.train_calculations.calculate_acc_velocity(self.comm_speed)
+        
         #return total_seconds
 
 
@@ -131,19 +133,19 @@ class TrainModel_mainwindow(QMainWindow):
     def receiveSpeedAuth_tm(self,speedAuth):
         print("train model is receiving comm speed and auth")
         trainID=speedAuth[0]
-        Comm_Speed=speedAuth[1]
-        self.train_calculations.get_commanded_speed(float(Comm_Speed))
+        self.comm_speed=speedAuth[1]
+        self.train_calculations.get_commanded_speed(float(self.comm_speed))
         Authority=speedAuth[2]
         print("speedAuth",speedAuth)
         #self.sendSpeedAuth.emit(speedAuth)
         #self.main_window.cspeed_display.setText(str(Comm_Speed))
         # self.send_com_speed_tb.emit(str(Comm_Speed))
         # self.send_authority_tb.emit(str(Authority))
-        self.train_calculations.Calculate_acceleration(Comm_Speed)
-        self.train_calculations.calculate_force(Comm_Speed)
-        self.train_calculations.get_acceleration(Comm_Speed)
-        self.train_calculations.calculate_acc_velocity(Comm_Speed)
-        self.TC.curr_cmd_spd_sig.emit(int(Comm_Speed))
+        self.train_calculations.Calculate_acceleration(self.comm_speed)
+        self.train_calculations.calculate_force(self.comm_speed)
+        self.train_calculations.get_acceleration(self.comm_speed)
+        self.train_calculations.calculate_acc_velocity(self.comm_speed)
+        self.TC.curr_cmd_spd_sig.emit(int(self.comm_speed))
         self.TC.curr_auth_sig.emit(float(Authority))
 
 
@@ -353,6 +355,7 @@ class TrainCalculations:
         self.train_model_time =0
         self.main_window = main_window
         self.TC = TC
+        commanded_speed=main_window.comm_speed
 
         #calc_time=TrainModel_mainwindow.Timer
 
@@ -378,6 +381,7 @@ class TrainCalculations:
         self.main_window.get_power_input(power_input)
 
     def get_commanded_speed(self, commanded_speed):
+        #commanded_speed=main_window.comm_speed
        # self.main_window.commanded_speed_def = commanded_speed
         self.main_window.cspeed_display.setText(str(commanded_speed))
         self.calculate_force(commanded_speed)
@@ -394,6 +398,7 @@ class TrainCalculations:
         self.calculate_acc_velocity()
 
     def calculate_force(self,commanded_speed):
+        #commanded_speed=main_window.comm_speed
         power = 1000 * (self.main_window.Power_value_lcd.value())
         #commanded_speed = self.get_commanded_speed
         print("comm_speed",commanded_speed)
@@ -402,6 +407,7 @@ class TrainCalculations:
         return force
 
     def Calculate_acceleration(self,commanded_speed):
+        #commanded_speed=main_window.comm_speed
         force = self.calculate_force(commanded_speed)
         mass = self.main_window.mass_def
         acceleration = (force / mass) * ((1 / 3.28084) * (1 / 3.28084))
@@ -409,11 +415,13 @@ class TrainCalculations:
         return acceleration
 
     def get_acceleration(self,commanded_speed):
+        #commanded_speed=main_window.comm_speed
         acceleration = self.Calculate_acceleration(commanded_speed)
         self.main_window.Acceleration_value_lcd.display(acceleration)
 
 
     def calculate_acc_velocity(self,commanded_speed):
+        #commanded_speed=main_window.comm_speed
         acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration(commanded_speed)
         train_model_time=self.get_time()
         #int_time=int(time_acc)
@@ -421,6 +429,7 @@ class TrainCalculations:
         self.main_window.Acc_Velo_value_lcd.display(velocity)
         self.TC.curr_spd_sig.emit(int(velocity))
         self.main_window.track_model_acc_velo.emit(int(velocity))
+        #print("train model vel",velocity)
         return int(velocity)
         
 

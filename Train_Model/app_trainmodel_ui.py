@@ -21,11 +21,14 @@ import subprocess
 class TrainModel_mainwindow(QMainWindow):
     
     #in mph
-    commanded_speed_def=50
+    commanded_speed_def= 50
     #in lbs
-    mass_def=125002.1
+    mass_def= 50
     #in seconds
-    time_def=10
+    time_def= 10
+
+    #Track Model Signals
+    track_model_acc_velo = qtc.pyqtSignal(int)
 
     def __init__(self):
         super().__init__()
@@ -46,8 +49,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.TC.curr_power_sig.connect(self.get_power_input)
         self.TC.announcement_sig.connect(self.set_announcements)
         self.TC.temp_control_sig.connect(self.set_cabin_temp)
-        self.TC.ebrake_disable_sig.connect(self.change_ebrake_color)
-
+        #self.TC.ebrake_disable_sig.connect(self.change_ebrake_color)
 
 
         self.train_calculations.Calculate_acceleration()
@@ -55,7 +57,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.train_calculations.get_acceleration()
         self.train_calculations.calculate_acc_velocity()
 
-        self.estop_locked=False
+        
         #changing state when sig_fail_enable/disable are clicked
         self.sig_fail_enable.clicked.connect(self.sig_fail_enable_clicked)
         self.sig_fail_disable.clicked.connect(self.sig_fail_disable_clicked) 
@@ -68,6 +70,11 @@ class TrainModel_mainwindow(QMainWindow):
         self.en_fail_enable.clicked.connect(self.en_fail_enable_clicked)
         self.en_fail_disable.clicked.connect(self.en_fail_disable_clicked)
         #self.brake_fail_input_tb.stateChanged.connect(self.brake_fail_tb)
+
+        self.ebrake.setCheckable(True)
+        #ebrake signals
+        self.ebrake.clicked.connect(lambda : self.ebrake_activated(1))
+        self.TC.ebrake_disable_sig.connect(self.ebrake_disabled)        
 
         #Initially setting the default colors
         self.bf_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
@@ -83,6 +90,8 @@ class TrainModel_mainwindow(QMainWindow):
         self.sig_fail_state = False
         self.en_fail_state = False
         self.emergency_stop_state=False
+
+
 
     def Return_TrainController(self):
         return self.TC
@@ -102,31 +111,45 @@ class TrainModel_mainwindow(QMainWindow):
 
     #sending authority to train controller [ASK LAUREN AND CHAD]
     def receiveSpeedAuth_tm(self,speedAuth):
+        print("train model is receiving comm speed and auth")
         trainID=speedAuth[0]
         Comm_Speed=speedAuth[1]
+        self.train_calculations.get_commanded_speed(float(Comm_Speed))
         Authority=speedAuth[2]
-        print("hiiiiii", speedAuth)
+        print("speedAuth",speedAuth)
         #self.sendSpeedAuth.emit(speedAuth)
         #self.main_window.cspeed_display.setText(str(Comm_Speed))
         # self.send_com_speed_tb.emit(str(Comm_Speed))
         # self.send_authority_tb.emit(str(Authority))
+        self.TC.curr_cmd_spd_sig.emit(int(Comm_Speed))
+        self.TC.curr_auth_sig.emit(float(Authority))
 
 
-    def estop_button_clicked(self):
-        if not self.emergency_stop_state:
-            self.ebrake.setStyleSheet('background-color: rgb(99, 99, 99);')
-            self.emergency_stop_state = True
-
-    def change_ebrake_color(self,ebrake_state):
-        if ebrake_state:
-            self.ebrake.setStyleSheet('background-color:  rgb(99, 99, 99);')
+    # def estop_button_clicked(self,state):
+    #     self.emergency_stop_state=state
+    #     if not state:
+    #         self.ebrake.setStyleSheet('background-color: rgb(99, 99, 99);')
+    #         self.emergency_stop_state = True
+    #     self.TC.ebrake_sig.emit(state)
         
-        else: 
-            self.ebrake.setStyleSheet('background-color: rgb(195, 16, 40);')
+    def TC_ebrake_activated(self,state):
+        self.ebrake.toggle()
+        if(self.ebrake.isChecked()):
+            self.ebrake.setCheckable(False)
+
         
 
-        self.TC.ebrake_sig.emit(ebrake_state)
+    def ebrake_activated(self,state):
+        self.ebrake.setCheckable(False)
+        self.TC.ebrake_sig.emit(1)
 
+    def ebrake_disabled(self,ebrake_state):
+        self.ebrake.setCheckable(True)
+        self.ebrake.toggle()
+           
+        
+        
+        
     def set_length(self, input_txt):
         self.length_of_vehicle_display.setText(input_txt)
 
@@ -291,6 +314,11 @@ class TrainModel_mainwindow(QMainWindow):
             self.left_doors_value.setFixedSize(109, 97)
             self.left_doors_value.setText('OPEN')
 
+    def acc_vel_to_track_model(self,velocity):
+        velocity=self.train_calculations.calculate_acc_velocity
+        self.track_model_acc_velo.emit(int(velocity))
+
+
 #CLASS CONTAINING ALL TRAIN CALCULATIONS
 class TrainCalculations:
 
@@ -346,6 +374,7 @@ class TrainCalculations:
         velocity = initial_velocity + (acceleration * time)
         self.main_window.Acc_Velo_value_lcd.display(velocity)
         self.TC.curr_spd_sig.emit(int(velocity))
+        return int(velocity)
         
 
 
@@ -610,9 +639,9 @@ if __name__ == "__main__":
     #set ccount
     window_tb.ccount_input_signal.connect(window.set_ccount)
     #set ebrake
-    window_tb.ebrake_input_signal.connect(window.change_ebrake_color)
+    #window_tb.ebrake_input_signal.connect(window.change_ebrake_color)
     #estop manual
-    window.ebrake.clicked.connect(window.estop_button_clicked)
+   
     #brake_fail
     window_tb.brake_fail_input_signal.connect(window.brake_fail_tb)
     #signal_fail

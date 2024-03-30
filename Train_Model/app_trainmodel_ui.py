@@ -125,8 +125,8 @@ class TrainModel_mainwindow(QMainWindow):
     #function to set Power LCD
     def get_power_input(self, power_input):
         self.Power_value_lcd.display(power_input)
-        self.train_calculations.Calculate_acceleration()
-        self.train_calculations.calculate_force()
+        self.train_calculations.Calculate_acceleration(self.comm_speed)
+        self.train_calculations.calculate_force(self.comm_speed)
         return power_input
 
     #sending authority to train controller [ASK LAUREN AND CHAD]
@@ -136,7 +136,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.comm_speed=speedAuth[1]
         self.train_calculations.get_commanded_speed(float(self.comm_speed))
         Authority=speedAuth[2]
-        #print("speedAuth",speedAuth)
+        print("speedAuth",speedAuth)
         #self.sendSpeedAuth.emit(speedAuth)
         #self.main_window.cspeed_display.setText(str(Comm_Speed))
         # self.send_com_speed_tb.emit(str(Comm_Speed))

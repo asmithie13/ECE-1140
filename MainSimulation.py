@@ -46,9 +46,7 @@ def updateClockSpeed():
         
         timer.setInterval(int(1000 / SliderValue))   
         timer.timeout.connect(clock)
-
-        if not MainWindow.PauseButton.isChecked():
-            timer.start()
+        timer.start()
 
         MainWindow.CurrentSpeedLabel.setText("Current Speed: "+str(SliderValue)+"x") 
 
@@ -76,12 +74,8 @@ MainWindow.CTC_tb.sendOccupiedBlocks.connect(MainWindow.CTCwindow.updateOccupied
 MainWindow.CTC_tb.sendTicketSales.connect(MainWindow.CTCwindow.updateTicketSales)
 MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.CTC_tb.showDispatchInfo)
 
-#CTC to Wayside SW
+#CTC to Wayside
 MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
-
-#CTC to Wayside HW
-MainWindow.CTCwindow.sendBlockClosures.connect(MainWindow.WaysideHWwindow.getClosedBlocks)
-MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.WaysideHWwindow.handleSpeedAuthority)
 
 #CTC to MainWindow
 MainWindow.CTCwindow.create_a_train.connect(MainWindow.create_new_train)
@@ -100,7 +94,6 @@ MainWindow.WaysideSWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recie
 #Wayside to Track Model
 MainWindow.WaysideSWwindow.sendTrainSpeedAuth.connect(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
 MainWindow.WaysideSWwindow.sendAllBlocks.connect(MainWindow.TrackModelWindow.recieveSpecialBlocks)
-#MainWindow.WaysideSWwindow.sendAllBlocks.connect(MainWindow.TrackModelWindow.
 
 """Wayside HW Signals"""
 MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.WaysideHW_tb.receiveOccupiedBlocks)
@@ -110,6 +103,7 @@ MainWindow.WaysideHW_tb.speedAuthoritySignal.connect(MainWindow.WaysideHWwindow.
 MainWindow.WaysideHW_tb.occupiedBlocksSignal.connect(MainWindow.WaysideHWwindow.modeHandler)
 MainWindow.WaysideHW_tb.closedBlocksSignal.connect(MainWindow.WaysideHWwindow.getClosedBlocks)
 
+<<<<<<< HEAD
 #Wayside HW to CTC:
 MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocks)
 
@@ -117,6 +111,8 @@ MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recie
 MainWindow.WaysideHWwindow.sendSpeedAuthority.connect(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
 #Add signal to send list of all blocks to Track Model
 
+=======
+>>>>>>> 5c98b2c9b1f999a7778f4f2399823f4287bc4266
 """Track Model Signals"""
 MainWindow.TrackModelWindow.send_com_speed_tb.connect(MainWindow.TrackModel_tb.update_commanded_speed)
 MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.update_authority)
@@ -143,7 +139,7 @@ MainWindow.TrackModelWindow.set_clock(time.toString("hh:mm"))
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 
 #Connecting Main UI functionality signals
-MainWindow.SpeedSlider.valueChanged.connect(updateClockSpeed)
+MainWindow.SpeedSlider.sliderReleased.connect(updateClockSpeed)
 MainWindow.PauseButton.clicked.connect(pauseSim)
 
 

@@ -96,11 +96,14 @@ class TrackModelMain(QMainWindow):
         self.speed_of_train_kms = speed_of_train / 2237
         self.length_m = length / 1000
 
-        # while self.total_block_length != authority:
-        #     if self.total_block_length <= (speed_of_train*(self.length_m*(1/(speed_limit*1000/(60*60))))):
-        #         self.
-        #     else:
-        #         self.block_occ
+        for block_num in range(63, 65):
+            while self.total_block_length != authority:
+                if self.total_block_length <= (speed_of_train*(self.length_m*(1/(speed_limit*1000/(60*60))))):
+                    self.block_num_occ = self.data.get_block_for_block(block_num)
+                    self.section_occ = self.data.get_section_for_block(block_num)
+                    blockID = self.block_num_occ + self.section_occ
+                else:
+                    pass
 
     # Adding str block id that is occupied based on failures and where the train is (might send 1) 
     def add_block_occ(self, blockID):

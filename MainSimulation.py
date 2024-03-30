@@ -99,6 +99,7 @@ MainWindow.WaysideSWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recie
 
 #Wayside to Track Model
 MainWindow.WaysideSWwindow.sendTrainSpeedAuth.connect(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
+MainWindow.WaysideSWwindow.sendAllBlocks.connect(MainWindow.TrackModelWindow.recieveSpecialBlocks)
 #MainWindow.WaysideSWwindow.sendAllBlocks.connect(MainWindow.TrackModelWindow.
 
 """Wayside HW Signals"""
@@ -123,6 +124,8 @@ MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.u
 
 #Track Model to CTC
 MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieveTicketSales)
+
+
 
 """Clock Initialization"""
 #Initializing Qtimer for clock

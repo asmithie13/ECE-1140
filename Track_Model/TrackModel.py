@@ -113,6 +113,11 @@ class TrackModelMain(QMainWindow):
             self.block_occ_list.remove(blockID)
 
 
+    def recieveSpecialBlocks(self, specialBlock):
+        self.specialBlock_list = specialBlock
+        print("i'm getting blocks", specialBlock)
+        
+
     #####Green Line Stations######
     
     #Station Glenbury - closest to Yard#
@@ -407,6 +412,7 @@ class TrackModelMain(QMainWindow):
     #FROM TRAIN MODEL
     def receiveSendVelocity(self, velocity):
         self.AcutalSpeed = velocity
+        print("velocity = ", self.AcutalSpeed)
     
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box

@@ -93,7 +93,6 @@ class Main_UI(QtWidgets.QMainWindow):
     def create_new_train(self, TrainID):
         #Add new train UI to list
         self.currentTrains.append(TrainModel_mainwindow())
-        self.currentTrains.append(TrainCalculations())
         self.currentTrains[-1].show()
 
         #Track Model to Train Model
@@ -102,7 +101,7 @@ class Main_UI(QtWidgets.QMainWindow):
 
         #Train Model to Track Model
         # Actual Velocity
-        self.currentTrains[-1].acc_vel_2_track_model.connect(self.TrackModelWindow.receiveSendVelocity)
+        self.currentTrains[-1].track_model_acc_velo.connect(self.TrackModelWindow.receiveSendVelocity)
 
         #Connect Signals to Track Model
         #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)

@@ -315,7 +315,9 @@ class TrainModel_mainwindow(QMainWindow):
             self.left_doors_value.setText('OPEN')
 
     def acc_vel_to_track_model(self,velocity):
+        print("tm acc vel")
         velocity=self.train_calculations.calculate_acc_velocity
+        velocity=1000
         self.track_model_acc_velo.emit(int(velocity))
 
 

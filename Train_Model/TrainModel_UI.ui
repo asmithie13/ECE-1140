@@ -1419,7 +1419,7 @@ selection-color: rgb(99, 99, 99);
 </string>
     </property>
     <property name="text">
-     <string>EMERGENCY STOP</string>
+     <string>EMERGENCY BRAKE</string>
     </property>
     <property name="checkable">
      <bool>false</bool>

@@ -68,7 +68,7 @@ class TrainController(QMainWindow):
         self.curr_spd_lim_sig.connect(self.Vital_Speed.Control_Speed_Limit)
         self.curr_auth_sig.connect(self.Vital_Authority.Control_Authority)
         self.curr_temp_sig.connect(self.NonVital.Cabin_Temperature)
-        self.ebrake_sig.connect(self.ui.Ebrake.setChecked)
+        self.ebrake_sig.connect(self.Vital_Failure.Control_Emergency_Brake)
         self.pwr_fail_sig.connect(self.Vital_Failure.Control_Power_Failure)
         self.brk_fail_sig.connect(self.Vital_Failure.Control_Brake_Failure)
         self.sig_fail_sig.connect(self.Vital_Failure.Control_Signal_Failure)
@@ -81,7 +81,7 @@ class TrainController(QMainWindow):
         self.time_sig.connect(self.Timer)
 
         #connecting UI buttons to functions
-        self.ui.Ebrake.clicked.connect(lambda : self.Vital_Failure.Control_Emergency_Brake())
+        self.ui.Ebrake.clicked.connect(lambda : self.Vital_Failure.Control_Emergency_Brake(0))
         self.ui.buttonMan.clicked.connect(lambda : self.Control_Manual())
         self.ui.buttonAuto.clicked.connect(lambda : self.Control_Automatic())
         #self.ui.temp.valueChanged.connect(lambda : self.NonVital.Cabin_Temperature())
@@ -97,7 +97,8 @@ class TrainController(QMainWindow):
         #self.ui.lcdAuth.valueChanged.connect(lambda :self.Vital_Authority.authTimerStart())
 
         #sending off signals in manual mode
-        self.ui.buttonDoorL.clicked.connect(lambda : self.NonVital.Control_DoorL())
+        self.ui.buttonDoorL.clicked.connect(lambda : self.NonVital.Door())
+        self.ui.buttonDoorR.clicked.connect(lambda : self.NonVital.Door())
         self.ui.IntLightSld.valueChanged.connect(lambda : self.int_light_sig.emit(self.ui.IntLightSld.value()))
 
 
@@ -109,6 +110,9 @@ class TrainController(QMainWindow):
         #self.ui.PwrFail.stateChanged.connect(self.Vital_Failure.Control_Power_Failure())
         #self.ui.SigFail.stateChanged.connect(self.Vital_Failure.Control_Signal_Failure())
         #self.ui.Ebrake.stateChanged.connect(self.Vital_Failure.Control_Emergency_Brake())
+
+        #temporary ADD SPEED LIM
+        self.curr_spd_lim_sig.emit(30)
 
         ## add for doors
         self.window.show()
@@ -125,10 +129,9 @@ class TrainController(QMainWindow):
       self.ui.inputKi.setDisabled(True)
       self.ui.inputKp.setDisabled(True)
 
-      #CHAD FIX THIS
-      #self.ui.Speed_Montior()
-      self.ui.vertSliderPow.setDisabled(True)
-      self.ui.vertSliderBrk.setDisabled(True)
+      self.Vital_Speed.Speed_Monitor()
+      #self.ui.vertSliderPow.setDisabled(True)
+      #self.ui.vertSliderBrk.setDisabled(True)
 
     def Control_Manual(self):
         self.ui.buttonAuto.toggle()
@@ -146,15 +149,18 @@ class TrainController(QMainWindow):
             self.ui.vertSliderPow.setDisabled(True)
         else:
             self.ui.vertSliderPow.setDisabled(False)
-        self.ui.vertSliderBrk.setDisabled(False)
+            self.ui.vertSliderBrk.setDisabled(False)
 
     def Timer(self, time):
+
         hours, minutes, seconds = [int(part) for part in time.split(':')]
         total_seconds = (hours * 3600) + (minutes * 60) + seconds
+        #if things go wrong, try changing the order of speed, authority, power
         self.Vital_Power.Set_Clock(total_seconds)
         self.Vital_Speed.Speed_Monitor()
         self.Vital_Authority.Authority_Monitor()
         self.globalClock = total_seconds
+        self.Vital_Power.calculate_power()
         #print(total_seconds)
 
     def Open_Main_UI(self):

@@ -31,28 +31,30 @@ class Vital_Power():
             self.Kp = self.ui.inputKp.value()
 
     def Set_Clock(self, time):
-         self.globalClock = time
+         self.local_clock = time
+
     
     def calculate_power(self):
-
         if self.ui.vertSliderPow.value() == 0:
+            print("Only in if")
             self.ui.vertSliderBrk.setValue(1)
             self.power = 0
 
         else:
+            print("Start Math")
             self.ui.vertSliderBrk.setValue(0)
-            self.time = self.globalClock
-            print(self.time)
+            self.time = self.local_clock
+            print("Curr Time", self.time)
             self.dt = self.time - self.prevTime
             self.prevTime = self.time
-            self.error = self.ui.lcdCmdSpd.value() - self.ui.lcdCurSpd.value()
+            self.error = float(self.ui.lcdCmdSpd.value()) * 0.44704 - float(self.ui.lcdCurSpd.value())
             self.uk = self.prevUk + (self.error + self.prevError) * self.dt / 2
             self.prevError = self.error
             self.prevUk = self.uk
-            
-            self.power0 = (self.ui.lcdKp.value() * self.error + self.ui.lcdKi.value() * self.uk) * (self.ui.lcdAcel.value() / 100)
-            self.power1 = (self.ui.lcdKp.value() * self.error + self.ui.lcdKi.value() * self.uk) * (self.ui.lcdAcel.value() / 100)
-            self.power2 = (self.ui.lcdKp.value() * self.error + self.ui.lcdKi.value() * self.uk) * (self.ui.lcdAcel.value() / 100)
+
+            self.power0 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.lcdPowOut.value())* 0.44704 / 100.0)
+            self.power1 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.lcdPowOut.value())* 0.44704 / 100.0)  
+            self.power2 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.lcdPowOut.value())* 0.44704 / 100.0)
 
             if(self.power0 == self.power1 or self.power1 == self.power2 or self.power0 == self.power2):
                 if(self.power0 == self.power1):
@@ -73,4 +75,5 @@ class Vital_Power():
         self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
         self.ui.lcdAcel.display(self.power)
         self.curr_power_sig.emit(self.power)
+        print("Curr Power",self.power)
         

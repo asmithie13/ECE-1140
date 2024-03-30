@@ -1,4 +1,10 @@
 import sys
+#Fixing file hierarchy issues
+import os
+import re
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_root)
+
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
@@ -7,7 +13,7 @@ from PyQt5 import QtCore as qtc
 from PyQt5.QtCore import pyqtSignal, QTimer
 from PyQt5 import QtGui as qtg
 from PyQt5.QtCore import Qt
-from clock_test import Clock
+from Train_Model.clock_test import Clock
 from Train_Controller_SW.TrainController import TrainController
 import subprocess
 
@@ -15,16 +21,22 @@ import subprocess
 class TrainModel_mainwindow(QMainWindow):
     
     #in mph
-    commanded_speed_def=50
+    comm_speed= 0
     #in lbs
-    mass_def=125002.1
+    mass_def= 12500
     #in seconds
-    time_def=10
+    time_def= 10
+
+    prev_vel=0
+    prev_acc=0
+
+    #Track Model Signals
+    track_model_acc_velo = qtc.pyqtSignal(int)
 
     def __init__(self):
         super().__init__()
         uic.loadUi("Train_Model/TrainModel_UI.ui", self)
-        
+        #self.main_window = main_window
         #this is added stuff for the TC
         self.TC = TrainController()
     
@@ -40,16 +52,15 @@ class TrainModel_mainwindow(QMainWindow):
         self.TC.curr_power_sig.connect(self.get_power_input)
         self.TC.announcement_sig.connect(self.set_announcements)
         self.TC.temp_control_sig.connect(self.set_cabin_temp)
-        self.TC.ebrake_disable_sig.connect(self.change_ebrake_color)
+        #self.TC.ebrake_disable_sig.connect(self.change_ebrake_color)
 
 
+        # self.train_calculations.Calculate_acceleration()
+        # self.train_calculations.calculate_force()
+        # self.train_calculations.get_acceleration()
+        # self.train_calculations.calculate_acc_velocity()
 
-        self.train_calculations.Calculate_acceleration()
-        self.train_calculations.calculate_force()
-        self.train_calculations.get_acceleration()
-        self.train_calculations.calculate_acc_velocity()
-
-        self.estop_locked=False
+        
         #changing state when sig_fail_enable/disable are clicked
         self.sig_fail_enable.clicked.connect(self.sig_fail_enable_clicked)
         self.sig_fail_disable.clicked.connect(self.sig_fail_disable_clicked) 
@@ -62,6 +73,11 @@ class TrainModel_mainwindow(QMainWindow):
         self.en_fail_enable.clicked.connect(self.en_fail_enable_clicked)
         self.en_fail_disable.clicked.connect(self.en_fail_disable_clicked)
         #self.brake_fail_input_tb.stateChanged.connect(self.brake_fail_tb)
+
+        self.ebrake.setCheckable(True)
+        #ebrake signals
+        self.ebrake.clicked.connect(lambda : self.ebrake_activated(1))
+        self.TC.ebrake_disable_sig.connect(self.ebrake_disabled)        
 
         #Initially setting the default colors
         self.bf_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
@@ -78,39 +94,86 @@ class TrainModel_mainwindow(QMainWindow):
         self.en_fail_state = False
         self.emergency_stop_state=False
 
+
+
     def Return_TrainController(self):
         return self.TC
 
     #CLOCK
     def update_time(self, current_time):
-        print("Current Time:", current_time)
-        self.TC.time_sig.emit(current_time)
+        #print(current_time.toString("hh:mm:ss"))
+        
+        str_time=current_time.toString("hh:mm:ss")
+        # print("Current Time:", str_time)
+        # print("type:",type(str_time))
+        self.TC.time_sig.emit(current_time.toString("hh:mm:ss"))
+        self.Timer_calc(str_time)
+
+    def Timer_calc(self, time):
+        self.time=time
+        hours, minutes, seconds = [int(part) for part in time.split(':')]
+        total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
+        # print("time_train_model",total_seconds)
+        # print("TYPE3",type(total_seconds))
+        self.train_calculations.set_time(total_seconds)
+        self.train_calculations.calculate_acc_velocity(self.comm_speed)
+        
+        #return total_seconds
+
+
         
     #function to set Power LCD
     def get_power_input(self, power_input):
         self.Power_value_lcd.display(power_input)
-        self.train_calculations.Calculate_acceleration()
-        self.train_calculations.calculate_force()
+        self.train_calculations.Calculate_acceleration(self.comm_speed)
+        self.train_calculations.calculate_force(self.comm_speed)
         return power_input
 
+    #sending authority to train controller [ASK LAUREN AND CHAD]
+    def receiveSpeedAuth_tm(self,speedAuth):
+        print("train model is receiving comm speed and auth")
+        trainID=speedAuth[0]
+        self.comm_speed=speedAuth[1]
+        self.train_calculations.get_commanded_speed(float(self.comm_speed))
+        Authority=speedAuth[2]
+        print("speedAuth",speedAuth)
+        #self.sendSpeedAuth.emit(speedAuth)
+        #self.main_window.cspeed_display.setText(str(Comm_Speed))
+        # self.send_com_speed_tb.emit(str(Comm_Speed))
+        # self.send_authority_tb.emit(str(Authority))
+        self.train_calculations.Calculate_acceleration(self.comm_speed)
+        self.train_calculations.calculate_force(self.comm_speed)
+        self.train_calculations.get_acceleration(self.comm_speed)
+        self.train_calculations.calculate_acc_velocity(self.comm_speed)
+        self.TC.curr_cmd_spd_sig.emit(int(self.comm_speed))
+        self.TC.curr_auth_sig.emit(float(Authority))
 
 
-
-    def estop_button_clicked(self):
-        if not self.emergency_stop_state:
-            self.ebrake.setStyleSheet('background-color: rgb(99, 99, 99);')
-            self.emergency_stop_state = True
-
-    def change_ebrake_color(self,ebrake_state):
-        if ebrake_state:
-            self.ebrake.setStyleSheet('background-color:  rgb(99, 99, 99);')
+    # def estop_button_clicked(self,state):
+    #     self.emergency_stop_state=state
+    #     if not state:
+    #         self.ebrake.setStyleSheet('background-color: rgb(99, 99, 99);')
+    #         self.emergency_stop_state = True
+    #     self.TC.ebrake_sig.emit(state)
         
-        else: 
-            self.ebrake.setStyleSheet('background-color: rgb(195, 16, 40);')
+    def TC_ebrake_activated(self,state):
+        self.ebrake.toggle()
+        if(self.ebrake.isChecked()):
+            self.ebrake.setCheckable(False)
+
         
 
-        self.TC.ebrake_sig.emit(ebrake_state)
+    def ebrake_activated(self,state):
+        self.ebrake.setCheckable(False)
+        self.TC.ebrake_sig.emit(1)
 
+    def ebrake_disabled(self,ebrake_state):
+        self.ebrake.setCheckable(True)
+        self.ebrake.toggle()
+           
+        
+        
+        
     def set_length(self, input_txt):
         self.length_of_vehicle_display.setText(input_txt)
 
@@ -275,24 +338,55 @@ class TrainModel_mainwindow(QMainWindow):
             self.left_doors_value.setFixedSize(109, 97)
             self.left_doors_value.setText('OPEN')
 
+    def acc_vel_to_track_model(self,velocity):
+        print("tm acc vel")
+        velocity=self.train_calculations.calculate_acc_velocity
+        velocity=1000
+        self.track_model_acc_velo.emit(int(velocity))
+
+
 #CLASS CONTAINING ALL TRAIN CALCULATIONS
 class TrainCalculations:
 
 
+
     def __init__(self, main_window,TC):
+
+        self.train_model_time =0
         self.main_window = main_window
         self.TC = TC
+        commanded_speed=main_window.comm_speed
+
+        #calc_time=TrainModel_mainwindow.Timer
+
+
     
+     #parsed time
+    # def Timer_calc(self, time):
+    #     self.time=time
+    #     hours, minutes, seconds = [int(part) for part in time.split(':')]
+    #     total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
+    #     print("time_train_model",total_seconds)
+    #     print("TYPE3",type(total_seconds))
+    #     return total_seconds
+        
+    def set_time(self,time_calc):
+        self.train_model_time=time_calc
+        #print("calc class time", type(time_calc))
+
+    def get_time(self):
+        return self.train_model_time
     
     def get_power(self, power_input):
         self.main_window.get_power_input(power_input)
 
     def get_commanded_speed(self, commanded_speed):
-        self.main_window.commanded_speed_def = commanded_speed
+        #commanded_speed=main_window.comm_speed
+       # self.main_window.commanded_speed_def = commanded_speed
         self.main_window.cspeed_display.setText(str(commanded_speed))
-        self.calculate_force()
-        self.Calculate_acceleration()
-        self.calculate_acc_velocity()
+        self.calculate_force(commanded_speed)
+        self.Calculate_acceleration(commanded_speed)
+        self.calculate_acc_velocity(commanded_speed)
         self.TC.curr_cmd_spd_sig.emit(int(commanded_speed))
 
     def get_mass(self, mass):
@@ -303,33 +397,40 @@ class TrainCalculations:
         self.Calculate_acceleration()
         self.calculate_acc_velocity()
 
-    def calculate_force(self):
+    def calculate_force(self,commanded_speed):
+        #commanded_speed=main_window.comm_speed
         power = 1000 * (self.main_window.Power_value_lcd.value())
-        commanded_speed = self.main_window.commanded_speed_def
-        print(commanded_speed)
+        #commanded_speed = self.get_commanded_speed
+        print("comm_speed",commanded_speed)
         speed_fts = commanded_speed * (5280 / 3600)
         force = power / speed_fts
         return force
 
-    def Calculate_acceleration(self):
-        force = self.calculate_force()
+    def Calculate_acceleration(self,commanded_speed):
+        #commanded_speed=main_window.comm_speed
+        force = self.calculate_force(commanded_speed)
         mass = self.main_window.mass_def
         acceleration = (force / mass) * ((1 / 3.28084) * (1 / 3.28084))
         self.main_window.Acceleration_value_lcd.display(acceleration)
         return acceleration
 
-    def get_acceleration(self):
-        acceleration = self.Calculate_acceleration()
+    def get_acceleration(self,commanded_speed):
+        #commanded_speed=main_window.comm_speed
+        acceleration = self.Calculate_acceleration(commanded_speed)
         self.main_window.Acceleration_value_lcd.display(acceleration)
 
 
-    def calculate_acc_velocity(self):
-        acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration()
-        time = self.main_window.time_def
-        initial_velocity = 0
-        velocity = initial_velocity + (acceleration * time)
+    def calculate_acc_velocity(self,commanded_speed):
+        #commanded_speed=main_window.comm_speed
+        acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration(commanded_speed)
+        train_model_time=self.get_time()
+        #int_time=int(time_acc)
+        velocity = self.main_window.prev_vel + (train_model_time/2)*(acceleration + self.main_window.prev_acc)
         self.main_window.Acc_Velo_value_lcd.display(velocity)
         self.TC.curr_spd_sig.emit(int(velocity))
+        self.main_window.track_model_acc_velo.emit(int(velocity))
+        #print("train model vel",velocity)
+        return int(velocity)
         
 
 
@@ -582,7 +683,8 @@ if __name__ == "__main__":
     #sending power input signal from tb to main
     window_tb.power_input_signal.connect(window.train_calculations.get_power)
     #sending commanded speed from tb to main
-    window_tb.commanded_speed_input_signal.connect(window.train_calculations.get_commanded_speed)
+    #
+    # window_tb.commanded_speed_input_signal.connect(window.train_calculations.get_commanded_speed)
     #mass signal
     window_tb.mass_input_signal.connect(window.train_calculations.get_mass)
     #announcement signal
@@ -602,9 +704,9 @@ if __name__ == "__main__":
     #set ccount
     window_tb.ccount_input_signal.connect(window.set_ccount)
     #set ebrake
-    window_tb.ebrake_input_signal.connect(window.change_ebrake_color)
+    #window_tb.ebrake_input_signal.connect(window.change_ebrake_color)
     #estop manual
-    window.ebrake.clicked.connect(window.estop_button_clicked)
+   
     #brake_fail
     window_tb.brake_fail_input_signal.connect(window.brake_fail_tb)
     #signal_fail

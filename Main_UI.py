@@ -26,6 +26,7 @@ import Track_Model
 from Track_Model.TrackModel import *
 
 #Train Model Imports
+<<<<<<< HEAD
 
 # import Train_Model
 # from Train_Model.app_trainmodel_ui import *
@@ -38,6 +39,11 @@ from Track_Model.TrackModel import *
 #import Train_Model
 #from Train_Model.app_trainmodel_ui import *
 #from Train_Model.app_trainmodel_tb import *
+=======
+import Train_Model
+from Train_Model.app_trainmodel_ui import *
+from Train_Model.app_trainmodel_tb import *
+>>>>>>> 5c98b2c9b1f999a7778f4f2399823f4287bc4266
 
 
 class Main_UI(QtWidgets.QMainWindow):
@@ -68,12 +74,14 @@ class Main_UI(QtWidgets.QMainWindow):
 
         #Train Model (Might need initialized per train)
         self.currentTrains = []
+        #self.TrainModelWindow = TrainModel_mainwindow()
+        #self.TrackModel_tb = trainmodel_testbench()
+        #self.TrainModelWindow.show()
+        self.TrainModelButton.clicked.connect(self.create_new_train)
 
         #Train Controller SW (Might need initialized per train)
 
-
         #Train Controller HW (Might need initialized per train)
-
 
 
     def open_CTC_UI(self):
@@ -98,13 +106,21 @@ class Main_UI(QtWidgets.QMainWindow):
         self.TrackModel_tb.show()
 
     def create_new_train(self, TrainID):
-        print("Temp, attempt to add train")
+        #Add new train UI to list
+        self.currentTrains.append(TrainModel_mainwindow())
+        self.currentTrains[-1].show()
 
-        #Add new train, pass in Train ID
-        self.currentTrains.append("New Train UI?")
+        #Track Model to Train Model
+        # [Train ID, commanded speed, authority]
+        self.TrackModelWindow.sendSpeedAuth.connect(self.currentTrains[-1].receiveSpeedAuth_tm)
+
+        #Train Model to Track Model
+        # Actual Velocity
+        self.currentTrains[-1].track_model_acc_velo.connect(self.TrackModelWindow.receiveSendVelocity)
 
         #Connect Signals to Track Model
         #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)
+
 
 
 """

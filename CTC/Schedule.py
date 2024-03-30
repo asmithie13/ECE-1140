@@ -9,11 +9,14 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
 import csv
+from CTC.TempData import *
 
 #Schedule class, holds schedule data and defines methods for editing the schedule
 class Schedule():
-    def __init__(self, ScheduleData = []):
-        self.Scheduledata = ScheduleData
+    def __init__(self):
+        self.Scheduledata = []
+        self.AuthorityInfo = []
+        self.TrackData = TempData()
 
     #Function to add a single train to the schedule
     def addTrain(self, line, TrainID, Destination, ArrivalTime, Departure, DepartureTime):
@@ -22,26 +25,63 @@ class Schedule():
 
     #function to parse a schedule file for automatic mode
     def parseScheduleFile(self, filepath):
-        #print(filepath)
-        
+        #Parse file using csv library
         if filepath:
             csv_file = open(filepath,"r")
             reader = csv.reader(csv_file)
+            headers = next(reader)      #Skip header row
             csv_file.close
 
+        #For each row besides the header row, calculate departure data and add to schedule
         for row in reader:
+            DepartureData = []
+            tempArrivalTime = QTime()   #Converting ArrivalTime to QTime for easier math
+            self.calculateDeparture(row[2], tempArrivalTime.fromString(row[3]), DepartureData, row[0])
+            #Adding departure Data to the row data
+            row.append(DepartureData[0])
+            row.append(DepartureData[1])
+            #Adding to Schedule
+            #Line, TrainID, Destination, Arrival Time, Departure Station, Departure Time
             self.Scheduledata.append(row)
 
-    def calculateDeparture(self, Destination, ArrivalTime, Departure):
+    def calculateDeparture(self, Destination, ArrivalTime, Departure, line):
         #Setting Departure Station
         DepartureStation = "Yard"
         Departure.append(DepartureStation)
 
         #Calculating Departure Time
-        DepartureTime = ArrivalTime.addSecs(-15 * 60)
+        TravelTime = 0
+        Authority = 0
+
+        if line == 'green':
+            for i in range(len(self.TrackData.GreenRouteInfo)):
+                if self.TrackData.GreenRouteInfo[i][0] == DepartureStation:
+                    for j in range(i + 1, len(self.TrackData.GreenRouteInfo)):
+                        TravelTime += float(self.TrackData.GreenRouteInfo[j][1])
+                        Authority += float(self.TrackData.GreenRouteInfo[j][2])
+
+                        if self.TrackData.GreenRouteInfo[j][0] == Destination:
+                            break
+
+                    break
+        elif line == 'red':
+            for i in range(len(self.TrackData.RedRouteInfo)):
+                if self.TrackData.RedRouteInfo[i][0] == DepartureStation:
+                    for j in range(i + 1, len(self.TrackData.RedRouteInfo)):
+                        TravelTime += float(self.TrackData.RedRouteInfo[j][1])
+                        Authority += float(self.TrackData.GreenRouteInfo[j][2])
+
+                        if self.TrackData.RedRouteInfo[j][0] == Destination:
+                            break
+
+                    break
+
+        DepartureTime = ArrivalTime.addSecs(int(-1 * 60 * TravelTime))
         DepartureTime = DepartureTime.toString("hh:mm")
 
         Departure.append(DepartureTime)
+
+        self.AuthorityInfo.append(Authority)
 
 
 

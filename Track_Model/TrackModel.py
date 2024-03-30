@@ -90,28 +90,28 @@ class TrackModelMain(QMainWindow):
         self.load_default_track_layout()
 
     def get_block_occupancy(self, authority, speed_of_train):
-        # #initializing varibales
-        # self.total_block_length = 0
-        # self.iteration = 0
+        #loop iteration
+        print("i'm in block occ")
+        self.total_block_length = 0
+        for block_num in range(63, 66):
+            block_length = self.data.get_length_for_block(block_num)
+            self.total_block_length += block_length  # Cumulative sum of block lengths
+            print("total block length: ", self.total_block_length)
 
-        # # Convert train speed to m/s from km/h for calculation 
-        # self.speed_of_train_kms = speed_of_train / 2237
+            # Proceed with the rest of your logic
+            self.speed_limit_km = self.data.get_speed_for_block(block_num)
 
-        # for block_num in range(63, 66):
-        #     self.total_block_length = self.data.get_length_for_block(block_num)
-        #     self.speed_limit_km = self.data.get_speed_for_block(block_num)
-        #     while self.total_block_length != authority:
-        #         if self.total_block_length <= (speed_of_train*(self.total_block_length*(1/(self.speed_limit_km*1000/(60*60))))):
-        #             self.block_num_occ = self.data.get_block_for_block(block_num)
-        #             self.section_occ = self.data.get_section_for_block(block_num)
-        #             blockID = self.block_num_occ + self.section_occ
-        #             print("block occ", blockID)
-        #         else:
-        #             self.total_block_length 
+            # Now you can compare total block length with some other calculated distance or condition
+            # Ensure the right side of the condition calculates a distance for a meaningful comparison
+            distance_covered = speed_of_train * (1 / (self.speed_limit_km * 1000 / (60 * 60)))
+            if self.total_block_length <= distance_covered:
+                self.block_num_occ = self.data.get_block_for_block(block_num)
+                self.section_occ = self.data.get_section_for_block(block_num)
+                blockID = self.block_num_occ + self.section_occ
+                print("block occ", blockID)
 
-        # Adding str block id that is occupied based on failures and where the train is (might send 1) 
-        pass
-
+        #Adding str block id that is occupied based on failures and where the train is (might send 1) 
+    
     def add_block_occ(self, blockID):
         self.block_occ_list.append(blockID)
 
@@ -153,13 +153,15 @@ class TrackModelMain(QMainWindow):
         self.send_com_speed_tb.emit(str(self.Comm_Speed))
         self.send_authority_tb.emit(str(self.Authority))
 
+        print("auhtority issss:", speedAuth)
+        #print("speed isss:", self.AcutalSpeed)
         self.get_block_occupancy(self.Authority, self.AcutalSpeed)
 
 
     #FROM TRAIN MODEL
     def receiveSendVelocity(self, velocity):
         self.AcutalSpeed = velocity
-        print("velocity = ", self.AcutalSpeed)
+        #print("velocity = ", self.AcutalSpeed)
     
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box

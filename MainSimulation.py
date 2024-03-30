@@ -105,9 +105,13 @@ MainWindow.WaysideHW_tb.closedBlocksSignal.connect(MainWindow.WaysideHWwindow.ge
 
 #Wayside HW to CTC:
 MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocks)
+MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.WaysideHWwindow.handleSpeedAuthority)
 
 #CTC to Wayside HW:
 MainWindow.CTCwindow.sendBlockClosures.connect(MainWindow.WaysideHWwindow.getClosedBlocks)
+
+#Wayside HW to Track Model:
+MainWindow.WaysideHWwindow.sendSpeedAuthority.connect(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
 
 """Track Model Signals"""
 MainWindow.TrackModelWindow.send_com_speed_tb.connect(MainWindow.TrackModel_tb.update_commanded_speed)

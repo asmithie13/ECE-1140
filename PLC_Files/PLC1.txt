@@ -15,3 +15,7 @@ crossingState
 
 not SwitchOcc and not SwitchLeftOcc and not SwitchRightOcc
 continue
+
+SwitchOcc and not SwitchLeftOcc and not SwitchRightOcc
+SWITCH
+continue

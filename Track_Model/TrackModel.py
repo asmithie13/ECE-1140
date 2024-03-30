@@ -117,7 +117,7 @@ class TrackModelMain(QMainWindow):
 
     def recieveSpecialBlocks(self, specialBlock):
         self.specialBlock_list = specialBlock
-        print("i'm getting blocks", specialBlock)
+        #print("i'm getting blocks", specialBlock)
         
 
     #####Green Line Stations######

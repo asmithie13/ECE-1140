@@ -1,10 +1,10 @@
-SwitchOcc or not SwitchRightOcc
+not SwitchOcc and SwitchRightOcc
 SWITCH
 
-SwitchOcc or SwitchRightOcc
+SwitchOcc and not SwitchLeftOcc
 CurrentLIGHT
 
-SwitchOcc
+False
 LeftLIGHT
 
 not SwitchOcc and SwitchRightOcc

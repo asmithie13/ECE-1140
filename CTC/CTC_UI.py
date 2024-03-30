@@ -125,7 +125,21 @@ class CTC_UI(QtWidgets.QMainWindow):
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
         
-        self.updateOccupiedBlocks(TempBlockList)
+        if (BlockList[0].lineColor == 'Green') and (BlockList[0].Wayside == "W1"):
+            self.occupiedBlocks.recievedFromWayside[0] = TempBlockList
+        elif (BlockList[0].lineColor == 'Green') and (BlockList[0].Wayside == "W2"):
+            self.occupiedBlocks.recievedFromWayside[1] = TempBlockList
+        elif (BlockList[0].lineColor == 'Red') and (BlockList[0].Wayside == "W1"):
+            self.occupiedBlocks.recievedFromWayside[2] = TempBlockList
+        elif (BlockList[0].lineColor == 'Red') and (BlockList[0].Wayside == "W2"):
+            self.occupiedBlocks.recievedFromWayside[3] = TempBlockList
+
+        FullBlockList = []
+        for i in self.occupiedBlocks.recievedFromWayside:
+            for j in i:
+                FullBlockList.append(j)
+
+        self.updateOccupiedBlocks(FullBlockList)
 
     #TicketSales will be a list of two lists of ints, representing the sales at each station in 
     #green line and red line respectively, from Track Model

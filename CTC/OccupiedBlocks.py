@@ -14,10 +14,14 @@ from Track_Resources import *
 #Class to hold the data and manage the occupied blocks
 class OccupiedBlocks():
     def __init__(self):
+        #Green 1, Green 2, Red 1, Red 2
+        self.recievedFromWayside = []
+
         #Holds train name and block num to display
         #Based on current occupied Blocks
         self.BlockDataCurrent = []
         self.BlockDataNew = []
+
         #Holds train and block num
         #Based on current Trains
         self.currentTrains = []

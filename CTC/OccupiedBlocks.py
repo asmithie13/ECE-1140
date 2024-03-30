@@ -44,26 +44,126 @@ class OccupiedBlocks():
                 return i[0]
 
         #Begin logic to see if the block is occupied by a train
-        #Green line train dipatch case
-        if (BlockNum == 63) and (line == 'Green'):
-            for i in range(len(self.currentTrains)):
-                if self.currentTrains[i][0] == 'K63':
+        #Green Line
+        if line == 'Green':
+            #A-C blocks, train can only come from its previous blocks, but they are in reverse number order
+            if (BlockNum >= 1) and (BlockNum <= 12):
+                if self.searchPreviousBlockR(BlockNum):
                     return ("T" + str(i+1))
-        #Red line train dispatch case        
-        elif (BlockNum == 10) and (line == 'Red'):
-            for i in range(len(self.currentTrains)):
-                if self.currentTrains[i][0] == 'D10':
+
+            #D13 switch block
+            elif BlockNum == 13:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 1:
+                            return ("T" + str(i+1))
+                        if int(j[1:]) == 14:
+                            return ("T" + str(i+1))
+                            
+            #D,E,F blocks (without the switches), bidirectional
+            elif (BlockNum >= 14) and (BlockNum <= 27):
+                if self.searchBothDirections(BlockNum):
                     return ("T" + str(i+1))
-        elif (line == 'Green') and (BlockNum > 63) and (BlockNum < 100):
-            for i in range(len(self.currentTrains)):
-                for j in self.currentTrains[i]:
-                    if int(j[1:]) == (BlockNum - 1):
-                        #Update Train Movement
+
+            #F28 switch block
+            elif BlockNum == 28:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 27:
+                            return ("T" + str(i+1))
+                        if int(j[1:]) == 150:
+                            return ("T" + str(i+1))
+                        
+            #G-I blocks, train can only come from its previous blocks
+            elif (BlockNum >= 29) and (BlockNum <= 57):
+                if self.searchPreviousBlock(BlockNum):
+                    return ("T" + str(i+1))
+                        
+            #J Blocks are the ones we skip near the yard
+                        
+            #Green line train dipatch case
+            elif BlockNum == 63:
+                #for each train
+                for i in range(len(self.currentTrains)):
+                    #for each block the train occupies
+                    if self.currentTrains[i][0] == 'K63':
+                        #return the current train if conditions are meet
                         return ("T" + str(i+1))
+                        
+            #K-M blocks, train can only come from its previous blocks
+            elif (BlockNum >= 64) and (BlockNum <= 76):
+                if self.searchPreviousBlock(BlockNum):
+                    return ("T" + str(i+1))
+                        
+            #Full n block, bidirectional
+            elif (BlockNum >= 77) and (BlockNum <= 84):
+                if self.searchBothDirections(BlockNum):
+                    return ("T" + str(i+1))
 
+            #n switch on block 85, can come from N84 or Q100
+            elif BlockNum == 85:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 84:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 100:
+                            return ("T" + str(i+1))
+                        
+            #O-Q blocks, train can only come from its previous blocks        
+            elif (BlockNum >= 86) and (BlockNum <= 100):
+                if self.searchPreviousBlock(BlockNum):
+                    return ("T" + str(i+1))
+
+            #R101 block, comes from n track
+            elif BlockNum == 101:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 77:
+                            return ("T" + str(i+1))            
+
+            #S-Z blocks, train can only come from its previous blocks
+            elif ((BlockNum >= 102) and (BlockNum <= 150)):
+                if self.searchPreviousBlock(BlockNum):
+                    return ("T" + str(i+1))              
+            
+        #Red Line                                  
+        if line == "Red":
+            #Red line train dispatch case        
+            if (BlockNum == 10):
+                for i in range(len(self.currentTrains)):
+                    if self.currentTrains[i][0] == 'D10':
+                        return ("T" + str(i+1))
+        
         return 'X'
-    
 
+#Internal function that searches if the current occupancy coresponds to train from a previous block
+def searchPreviousBlock(self, BlockNum):
+    for i in range(len(self.currentTrains)):
+        for j in self.currentTrains[i]:
+            if int(j[1:]) == (BlockNum - 1):
+                return True
+    
+    return False
+
+#Internal function that searches if the current occupancy coresponds to train from a previous block, in reverse order
+def searchPreviousBlockR(self, BlockNum):
+    for i in range(len(self.currentTrains)):
+        for j in self.currentTrains[i]:
+            if int(j[1:]) == (BlockNum + 1):
+                return True
+    
+    return False
+
+#Internal function that searches if the current occupancy coresponds to train from a previous block, iin both direction
+def searchBothDirections(self, BlockNum):
+    for i in range(len(self.currentTrains)):
+        for j in self.currentTrains[i]:
+            if int(j[1:]) == (BlockNum - 1):
+                return True
+            if int(j[1:]) == (BlockNum + 1):
+                return True
+    
+    return False
 
 
 #Table class to initialize a Pyqt5 table object that will display the list of block occupancies

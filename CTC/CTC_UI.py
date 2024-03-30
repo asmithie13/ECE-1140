@@ -368,6 +368,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintence.BlocksClosedIDs))
         #Add to list of block objects for sending to wayside
         temp.occupied = 1
+        temp.maintenance = 1
         self.Maintence.BlocksClosed.append(temp)
 
         #Send to wayside
@@ -399,6 +400,8 @@ class CTC_UI(QtWidgets.QMainWindow):
             temp.switchState = True
         else:   #Else the position is the second one, switch state is right = false
             temp.switchState = False
+
+        temp.maintenance = 1
 
         self.Maintence.SwitchesSet.append(temp)
     

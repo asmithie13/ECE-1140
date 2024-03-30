@@ -21,11 +21,14 @@ import subprocess
 class TrainModel_mainwindow(QMainWindow):
     
     #in mph
-    commanded_speed_def= 50
+    commanded_speed_def= 0
     #in lbs
-    mass_def= 50
+    mass_def= 12500
     #in seconds
     time_def= 10
+
+    prev_vel=0
+    prev_acc=0
 
     #Track Model Signals
     track_model_acc_velo = qtc.pyqtSignal(int)
@@ -52,10 +55,10 @@ class TrainModel_mainwindow(QMainWindow):
         #self.TC.ebrake_disable_sig.connect(self.change_ebrake_color)
 
 
-        self.train_calculations.Calculate_acceleration()
-        self.train_calculations.calculate_force()
-        self.train_calculations.get_acceleration()
-        self.train_calculations.calculate_acc_velocity()
+        # self.train_calculations.Calculate_acceleration()
+        # self.train_calculations.calculate_force()
+        # self.train_calculations.get_acceleration()
+        # self.train_calculations.calculate_acc_velocity()
 
         
         #changing state when sig_fail_enable/disable are clicked
@@ -99,8 +102,23 @@ class TrainModel_mainwindow(QMainWindow):
     #CLOCK
     def update_time(self, current_time):
         #print(current_time.toString("hh:mm:ss"))
-        #print("Current Time:", current_time)
+        
+        str_time=current_time.toString("hh:mm:ss")
+        # print("Current Time:", str_time)
+        # print("type:",type(str_time))
         self.TC.time_sig.emit(current_time.toString("hh:mm:ss"))
+        self.Timer_calc(str_time)
+
+    def Timer_calc(self, time):
+        self.time=time
+        hours, minutes, seconds = [int(part) for part in time.split(':')]
+        total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
+        # print("time_train_model",total_seconds)
+        # print("TYPE3",type(total_seconds))
+        self.train_calculations.set_time(total_seconds)
+        #return total_seconds
+
+
         
     #function to set Power LCD
     def get_power_input(self, power_input):
@@ -121,6 +139,10 @@ class TrainModel_mainwindow(QMainWindow):
         #self.main_window.cspeed_display.setText(str(Comm_Speed))
         # self.send_com_speed_tb.emit(str(Comm_Speed))
         # self.send_authority_tb.emit(str(Authority))
+        self.train_calculations.Calculate_acceleration(Comm_Speed)
+        self.train_calculations.calculate_force(Comm_Speed)
+        self.train_calculations.get_acceleration(Comm_Speed)
+        self.train_calculations.calculate_acc_velocity(Comm_Speed)
         self.TC.curr_cmd_spd_sig.emit(int(Comm_Speed))
         self.TC.curr_auth_sig.emit(float(Authority))
 
@@ -325,20 +347,42 @@ class TrainModel_mainwindow(QMainWindow):
 class TrainCalculations:
 
 
+
     def __init__(self, main_window,TC):
+
+        self.train_model_time =0
         self.main_window = main_window
         self.TC = TC
+
+        #calc_time=TrainModel_mainwindow.Timer
+
+
     
+     #parsed time
+    # def Timer_calc(self, time):
+    #     self.time=time
+    #     hours, minutes, seconds = [int(part) for part in time.split(':')]
+    #     total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
+    #     print("time_train_model",total_seconds)
+    #     print("TYPE3",type(total_seconds))
+    #     return total_seconds
+        
+    def set_time(self,time_calc):
+        self.train_model_time=time_calc
+        #print("calc class time", type(time_calc))
+
+    def get_time(self):
+        return self.train_model_time
     
     def get_power(self, power_input):
         self.main_window.get_power_input(power_input)
 
     def get_commanded_speed(self, commanded_speed):
-        self.main_window.commanded_speed_def = commanded_speed
+       # self.main_window.commanded_speed_def = commanded_speed
         self.main_window.cspeed_display.setText(str(commanded_speed))
-        self.calculate_force()
-        self.Calculate_acceleration()
-        self.calculate_acc_velocity()
+        self.calculate_force(commanded_speed)
+        self.Calculate_acceleration(commanded_speed)
+        self.calculate_acc_velocity(commanded_speed)
         self.TC.curr_cmd_spd_sig.emit(int(commanded_speed))
 
     def get_mass(self, mass):
@@ -349,33 +393,34 @@ class TrainCalculations:
         self.Calculate_acceleration()
         self.calculate_acc_velocity()
 
-    def calculate_force(self):
+    def calculate_force(self,commanded_speed):
         power = 1000 * (self.main_window.Power_value_lcd.value())
-        commanded_speed = self.main_window.commanded_speed_def
-        print(commanded_speed)
+        #commanded_speed = self.get_commanded_speed
+        print("comm_speed",commanded_speed)
         speed_fts = commanded_speed * (5280 / 3600)
         force = power / speed_fts
         return force
 
-    def Calculate_acceleration(self):
-        force = self.calculate_force()
+    def Calculate_acceleration(self,commanded_speed):
+        force = self.calculate_force(commanded_speed)
         mass = self.main_window.mass_def
         acceleration = (force / mass) * ((1 / 3.28084) * (1 / 3.28084))
         self.main_window.Acceleration_value_lcd.display(acceleration)
         return acceleration
 
-    def get_acceleration(self):
-        acceleration = self.Calculate_acceleration()
+    def get_acceleration(self,commanded_speed):
+        acceleration = self.Calculate_acceleration(commanded_speed)
         self.main_window.Acceleration_value_lcd.display(acceleration)
 
 
-    def calculate_acc_velocity(self):
-        acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration()
-        time = self.main_window.time_def
-        initial_velocity = 0
-        velocity = initial_velocity + (acceleration * time)
+    def calculate_acc_velocity(self,commanded_speed):
+        acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration(commanded_speed)
+        train_model_time=self.get_time()
+        #int_time=int(time_acc)
+        velocity = self.main_window.prev_vel + (train_model_time/2)*(acceleration + self.main_window.prev_acc)
         self.main_window.Acc_Velo_value_lcd.display(velocity)
         self.TC.curr_spd_sig.emit(int(velocity))
+        self.main_window.track_model_acc_velo.emit(int(velocity))
         return int(velocity)
         
 
@@ -621,7 +666,8 @@ if __name__ == "__main__":
     #sending power input signal from tb to main
     window_tb.power_input_signal.connect(window.train_calculations.get_power)
     #sending commanded speed from tb to main
-    window_tb.commanded_speed_input_signal.connect(window.train_calculations.get_commanded_speed)
+    #
+    # window_tb.commanded_speed_input_signal.connect(window.train_calculations.get_commanded_speed)
     #mass signal
     window_tb.mass_input_signal.connect(window.train_calculations.get_mass)
     #announcement signal

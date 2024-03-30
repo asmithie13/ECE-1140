@@ -23,10 +23,11 @@ class Vital_Failure():
                     self.ui.Ebrake.toggle()
                 enable = False
                 self.ebrake_disable_sig.emit(0)
-            
 
-
-               
+            self.ui.buttonAuto.setDisabled(enable)
+            self.ui.buttonMan.setDisabled(enable)
+            self.ui.vertSliderPow.setValue(0)
+            self.ui.vertSliderBrk.setValue(0)
 
             if(not(self.ui.buttonAuto.isChecked())):
                 self.ui.buttonDoorL.setDisabled(enable)
@@ -41,10 +42,6 @@ class Vital_Failure():
                 self.ui.inputKi.setDisabled(enable)
                 self.ui.inputKp.setDisabled(enable)
 
-            self.ui.buttonAuto.setDisabled(enable)
-            self.ui.buttonMan.setDisabled(enable)
-            self.ui.vertSliderPow.setValue(0)
-            self.ui.vertSliderBrk.setValue(0)
 
 
     def Control_Signal_Failure(self,sig_fail):

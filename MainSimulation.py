@@ -93,6 +93,7 @@ MainWindow.WaysideSWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recie
 
 #Wayside to Track Model
 MainWindow.WaysideSWwindow.sendTrainSpeedAuth.connect(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
+#MainWindow.WaysideSWwindow.sendAllBlocks.connect(MainWindow.TrackModelWindow.
 
 """Wayside HW Signals"""
 MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.WaysideHW_tb.receiveOccupiedBlocks)

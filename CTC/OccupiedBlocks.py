@@ -48,8 +48,9 @@ class OccupiedBlocks():
         if line == 'Green':
             #A-C blocks, train can only come from its previous blocks, but they are in reverse number order
             if (BlockNum >= 1) and (BlockNum <= 12):
-                if self.searchPreviousBlockR(BlockNum):
-                    return ("T" + str(i+1))
+                ID = self.searchPreviousBlock(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1))
 
             #D13 switch block
             elif BlockNum == 13:
@@ -62,8 +63,9 @@ class OccupiedBlocks():
                             
             #D,E,F blocks (without the switches), bidirectional
             elif (BlockNum >= 14) and (BlockNum <= 27):
-                if self.searchBothDirections(BlockNum):
-                    return ("T" + str(i+1))
+                ID = self.searchBothDirections(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1))
 
             #F28 switch block
             elif BlockNum == 28:
@@ -76,8 +78,9 @@ class OccupiedBlocks():
                         
             #G-I blocks, train can only come from its previous blocks
             elif (BlockNum >= 29) and (BlockNum <= 57):
-                if self.searchPreviousBlock(BlockNum):
-                    return ("T" + str(i+1))
+                ID = self.searchPreviousBlock(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1))
                         
             #J Blocks are the ones we skip near the yard
                         
@@ -92,13 +95,15 @@ class OccupiedBlocks():
                         
             #K-M blocks, train can only come from its previous blocks
             elif (BlockNum >= 64) and (BlockNum <= 76):
-                if self.searchPreviousBlock(BlockNum):
-                    return ("T" + str(i+1))
+                ID = self.searchPreviousBlock(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1))
                         
             #Full n block, bidirectional
             elif (BlockNum >= 77) and (BlockNum <= 84):
-                if self.searchBothDirections(BlockNum):
-                    return ("T" + str(i+1))
+                ID = self.searchBothDirections(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1))
 
             #n switch on block 85, can come from N84 or Q100
             elif BlockNum == 85:
@@ -111,8 +116,9 @@ class OccupiedBlocks():
                         
             #O-Q blocks, train can only come from its previous blocks        
             elif (BlockNum >= 86) and (BlockNum <= 100):
-                if self.searchPreviousBlock(BlockNum):
-                    return ("T" + str(i+1))
+                ID = self.searchPreviousBlock(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1))
 
             #R101 block, comes from n track
             elif BlockNum == 101:
@@ -123,8 +129,9 @@ class OccupiedBlocks():
 
             #S-Z blocks, train can only come from its previous blocks
             elif ((BlockNum >= 102) and (BlockNum <= 150)):
-                if self.searchPreviousBlock(BlockNum):
-                    return ("T" + str(i+1))              
+                ID = self.searchPreviousBlock(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1))             
             
         #Red Line                                  
         if line == "Red":
@@ -136,34 +143,34 @@ class OccupiedBlocks():
         
         return 'X'
 
-#Internal function that searches if the current occupancy coresponds to train from a previous block
-def searchPreviousBlock(self, BlockNum):
-    for i in range(len(self.currentTrains)):
-        for j in self.currentTrains[i]:
-            if int(j[1:]) == (BlockNum - 1):
-                return True
-    
-    return False
+    #Internal function that searches if the current occupancy coresponds to train from a previous block
+    def searchPreviousBlock(self, BlockNum):
+        for i in range(len(self.currentTrains)):
+            for j in self.currentTrains[i]:
+                if int(j[1:]) == (BlockNum - 1):
+                    return i
+        
+        return -1
 
-#Internal function that searches if the current occupancy coresponds to train from a previous block, in reverse order
-def searchPreviousBlockR(self, BlockNum):
-    for i in range(len(self.currentTrains)):
-        for j in self.currentTrains[i]:
-            if int(j[1:]) == (BlockNum + 1):
-                return True
-    
-    return False
+    #Internal function that searches if the current occupancy coresponds to train from a previous block, in reverse order
+    def searchPreviousBlockR(self, BlockNum):
+        for i in range(len(self.currentTrains)):
+            for j in self.currentTrains[i]:
+                if int(j[1:]) == (BlockNum + 1):
+                    return i
+        
+        return -1
 
-#Internal function that searches if the current occupancy coresponds to train from a previous block, iin both direction
-def searchBothDirections(self, BlockNum):
-    for i in range(len(self.currentTrains)):
-        for j in self.currentTrains[i]:
-            if int(j[1:]) == (BlockNum - 1):
-                return True
-            if int(j[1:]) == (BlockNum + 1):
-                return True
-    
-    return False
+    #Internal function that searches if the current occupancy coresponds to train from a previous block, iin both direction
+    def searchBothDirections(self, BlockNum):
+        for i in range(len(self.currentTrains)):
+            for j in self.currentTrains[i]:
+                if int(j[1:]) == (BlockNum - 1):
+                    return i
+                if int(j[1:]) == (BlockNum + 1):
+                    return i
+        
+        return -1
 
 
 #Table class to initialize a Pyqt5 table object that will display the list of block occupancies

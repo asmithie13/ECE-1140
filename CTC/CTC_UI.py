@@ -250,7 +250,7 @@ class CTC_UI(QtWidgets.QMainWindow):
                 self.create_a_train.emit(i[1])
 
                 #Train ID, speed, Authority
-                self.sendDispatchInfo.emit([i[1], 70, 900])
+                self.sendDispatchInfo.emit([i[1], 70, self.trainSchedule.AuthorityInfo[int(i[1][1:]) - 1]])
                 print(i[1], "Dispatched")
 
                 #Initializing where the train starts
@@ -311,7 +311,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         for i in arr:
             TrainID = self.occupiedBlocks.matchOccupanciesToTrains(i[0], i[1])
             self.occupiedBlocks.BlockDataNew.append([TrainID, i[0], i[1]])
-            self.occupiedBlocks.currentTrains[int(TrainID[1:]) - 1].append(i[0])
+            if TrainID != 'X':
+                self.occupiedBlocks.currentTrains[int(TrainID[1:]) - 1].append(i[0])
 
         #print(self.occupiedBlocks.currentTrains)
         

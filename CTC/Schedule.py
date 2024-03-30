@@ -15,7 +15,7 @@ from CTC.TempData import *
 class Schedule():
     def __init__(self):
         self.Scheduledata = []
-        self.departureInfo = []
+        self.AuthorityInfo = []
         self.TrackData = TempData()
 
     #Function to add a single train to the schedule
@@ -51,12 +51,14 @@ class Schedule():
 
         #Calculating Departure Time
         TravelTime = 0
+        Authority = 0
 
         if line == 'green':
             for i in range(len(self.TrackData.GreenRouteInfo)):
                 if self.TrackData.GreenRouteInfo[i][0] == DepartureStation:
                     for j in range(i + 1, len(self.TrackData.GreenRouteInfo)):
                         TravelTime += float(self.TrackData.GreenRouteInfo[j][1])
+                        Authority += float(self.TrackData.GreenRouteInfo[j][2])
 
                         if self.TrackData.GreenRouteInfo[j][0] == Destination:
                             break
@@ -67,6 +69,7 @@ class Schedule():
                 if self.TrackData.RedRouteInfo[i][0] == DepartureStation:
                     for j in range(i + 1, len(self.TrackData.RedRouteInfo)):
                         TravelTime += float(self.TrackData.RedRouteInfo[j][1])
+                        Authority += float(self.TrackData.GreenRouteInfo[j][2])
 
                         if self.TrackData.RedRouteInfo[j][0] == Destination:
                             break
@@ -77,6 +80,8 @@ class Schedule():
         DepartureTime = DepartureTime.toString("hh:mm")
 
         Departure.append(DepartureTime)
+
+        self.AuthorityInfo.append(Authority)
 
 
 

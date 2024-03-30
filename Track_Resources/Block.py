@@ -16,4 +16,5 @@ class Block:
         self.authority = True
         self.blockLength = None
         self.Wayside = None
+        self.maintenance = False
 

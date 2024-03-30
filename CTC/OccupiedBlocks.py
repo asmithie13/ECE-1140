@@ -17,6 +17,9 @@ class OccupiedBlocks():
         #Green 1, Green 2, Red 1, Red 2
         self.recievedFromWayside = []
 
+        for i in range(4):
+            self.recievedFromWayside.append([])
+
         #Holds train name and block num to display
         #Based on current occupied Blocks
         self.BlockDataCurrent = []

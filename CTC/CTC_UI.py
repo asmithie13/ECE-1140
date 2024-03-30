@@ -120,11 +120,12 @@ class CTC_UI(QtWidgets.QMainWindow):
     """Slots to recieve Signals"""
     #BlockList will be a list of occupied block objects from wayside controllers
     def recieveOccupiedBlocks(self, BlockList):
+        #Parsign through block objects to pull out ID and lineColor
         TempBlockList = []
-
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
-        
+
+        #Add to list that holds occupancies by block
         if (BlockList[0].lineColor == 'Green') and (BlockList[0].Wayside == "W1"):
             self.occupiedBlocks.recievedFromWayside[0] = TempBlockList
         elif (BlockList[0].lineColor == 'Green') and (BlockList[0].Wayside == "W2"):
@@ -134,6 +135,10 @@ class CTC_UI(QtWidgets.QMainWindow):
         elif (BlockList[0].lineColor == 'Red') and (BlockList[0].Wayside == "W2"):
             self.occupiedBlocks.recievedFromWayside[3] = TempBlockList
 
+
+        print(self.occupiedBlocks.recievedFromWayside)
+
+        #Compile all occupied blocks into full list to update list
         FullBlockList = []
         for i in self.occupiedBlocks.recievedFromWayside:
             for j in i:

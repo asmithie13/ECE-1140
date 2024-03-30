@@ -368,11 +368,12 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.occupiedBlocks.BlockDataNew = []
 
         #Adding TrainID, Block ID, and line color to an array
-        for i in arr:
-            TrainID = self.occupiedBlocks.matchOccupanciesToTrains(i[0], i[1])
-            self.occupiedBlocks.BlockDataNew.append([TrainID, i[0], i[1]])
+        for block in arr:
+            TrainID = self.occupiedBlocks.matchOccupanciesToTrains(block[0], block[1])
+            self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
             if TrainID != 'X':
-                self.occupiedBlocks.currentTrains[int(TrainID[1:]) - 1].append(i[0])
+                self.occupiedBlocks.currentTrains[int(TrainID[1:]) - 1].append(block[0])
 
         #print(self.occupiedBlocks.currentTrains)
         

@@ -44,7 +44,7 @@ class OccupiedBlocks():
             for i in self.currentTrains:
                 if i[1] == 'K63':
                     return i[0]
-        elif (line == 'green') and (BlockNum > 63) and (BlockNum < 76):
+        elif (line == 'green') and (BlockNum > 63) and (BlockNum < 100):
             for i in self.currentTrains:
                 if int(i[1][1:]) == (BlockNum - 1):
                     #Update Train Movement

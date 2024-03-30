@@ -40,7 +40,13 @@ class TrackModelMain(QMainWindow):
     #send train model train id, speed, and authority
     sendSpeedAuth = pyqtSignal(list)
 
-    #send com speed to testbench
+    # Send Wayside_SW block occupancies as a list
+    sendBlockOcc_SW = pyqtSignal(list)
+
+    # Send Wayside_HW block occupancies as a list
+    sendBlockOcc_HW = pyqtSignal(list)
+    
+    #send com speed to testbenchs
     send_com_speed_tb = pyqtSignal(str)
 
     #send authority to ttestbench
@@ -81,64 +87,60 @@ class TrackModelMain(QMainWindow):
         self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
         self.load_default_track_layout()
 
-    # def update_occupancy(self):
-    #     global_time = self.get_time()  # Use your method to get the current global time
+    def get_block_occupancy(self, authority, speed_limit, speed_of_train, length):
+        #initializing varibales
+        self.total_block_length = 0
+        self.iteration = 0
 
-    #     # Assuming you have a way to get the current train ID, speed, and authority
-    #     train_id = self.trainID
-    #     commanded_speed = self.Comm_Speed
-    #     authority = self.Authority
+        # Convert train speed to m/s from km/h for calculation 
+        self.speed_of_train_kms = speed_of_train / 2237
+        self.length_m = length / 1000
 
-    #     occupied_blocks = self.calculate_block_occupancy(train_id, commanded_speed, authority, global_time)
+        # while self.total_block_length != authority:
+        #     if self.total_block_length <= (speed_of_train*(self.length_m*(1/(speed_limit*1000/(60*60))))):
+        #         self.
+        #     else:
+        #         self.block_occ
 
-    #     # Reset the color of previously occupied blocks
-    #     for block_id in self.previous_occupied_blocks:
-    #         if block_id in self.block_buttons:
-    #             self.block_buttons[block_id].setStyleSheet("background-color: rgb(50, 205, 50);")
+    # Adding str block id that is occupied based on failures and where the train is (might send 1) 
+    def add_block_occ(self, blockID):
+        self.block_occ_list.append(blockID)
 
-    #     # Set the current occupied blocks to orange
-    #     for block_id in occupied_blocks:
-    #         if block_id in self.block_buttons:
-    #             self.block_buttons[block_id].setStyleSheet("background-color: orange;")
+    def remove_block_occ(self, blockID):
+    # If exists, remove it
+        if blockID in self.block_occ_list:
+            self.block_occ_list.remove(blockID)
 
-    #     self.previous_occupied_blocks = occupied_blocks  # Update the list of previously occupied blocks
 
-    # def calculate_block_occupancy(self, train_id, commanded_speed, authority, global_time):
-    #     train_position = 0
-    #     occupied_blocks = []
+    def recieveSpecialBlocks(self, specialBlock):
+        self.specialBlock_list = specialBlock
+        print("i'm getting blocks", specialBlock)
+        
 
-    #     for block_id in authority:
-    #         block_length = self.data.get_length_for_block(block_id)
-    #         #speed_limit = self.data.get_speed_for_block(block_id)
-    #         speed_limit = 45
-    #         speed_limit_m_s = speed_limit*1000/(60*60)
-    #         commanded_speed_m_s = min(commanded_speed, speed_limit) * 1000 / (60 * 60)
+    #####Green Line Stations######
+    
+    #Station Glenbury - closest to Yard#
+    def station_glenbury_1(self, authority):
+        #Block ID(from yard to): Yard(J62) - K63 - K65: 50, 100, 100, 200
+        #Authority from yard(m): 450m
+        
+        self.speedLimit_m = self.speed_limit_km /1.609
+        self.speedOfTrain = self.AcutalSpeed
 
-    #         if int(commanded_speed_m_s) > 0:
-    #             traverse_time = block_length / commanded_speed_m_s
-    #         else:
-    #             continue
+        for block_num in range(62, 66):
+            #also dont forget to set that button orange
+            self.block_length = self.data.get_length_for_block(block_num)
+            self.block_position = self.get_block_occupancy(authority, self.speedLimit_m,self.speedOfTrain, self.block_length)
+        
+        #List of included block ID in order
+        self.blockID = ["K63", "K64", "K65"]
 
-    #         train_position += block_length
-    #         if int(global_time) >= int(traverse_time):
-    #             occupied_blocks.append(block_id)
-    #             global_time -= traverse_time
+        #emit signal to using self.blockID[block_position]
 
-    #             # Change the color of the occupied block button to orange
-    #             if block_id in self.block_buttons:
-    #                 self.block_buttons[block_id].setStyleSheet("background-color: orange;")
+          
+    def sendBlockOcc(self):
+        self.sendBlockOcc_SW.emit(self.block_occ_list)
 
-    #         else:
-    #             break
-
-    #     # Update blockStates and reset button colors for non-occupied blocks
-    #     for block_id in self.blockStates.keys():
-    #         self.blockStates[block_id] = block_id in occupied_blocks
-    #         if block_id not in occupied_blocks and block_id in self.block_buttons:
-    #             # Reset the color of the non-occupied block button (assuming green is the default)
-    #             self.block_buttons[block_id].setStyleSheet("background-color: rgb(50, 205, 50);")
-
-    #     ###SEND occupied_blocks signals.
 
     def load_default_track_layout(self):
         # Directly load the default track layout file
@@ -163,10 +165,14 @@ class TrackModelMain(QMainWindow):
         self.send_com_speed_tb.emit(str(self.Comm_Speed))
         self.send_authority_tb.emit(str(self.Authority))
 
-        #global_time = self.get_time()
-        #self.calculate_block_occupancy(self.trainID, self.Comm_Speed, self.Authority, global_time)
-        #self.update_occupancy()
+        if self.Authority == 450: #check with Abby if sent in m or what
+            self.station_glenbury_1(self.Authority)
 
+    #FROM TRAIN MODEL
+    def receiveSendVelocity(self, velocity):
+        self.AcutalSpeed = velocity
+        print("velocity = ", self.AcutalSpeed)
+    
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box
         selected_option = self.line_select.currentText()
@@ -347,38 +353,38 @@ class TrackModelMain(QMainWindow):
         block_num = int(block_text.split()[-1][1:])  
 
         # Get certain data from specific block
-        elevation_m = self.data.get_elevation_for_block(block_num)
-        grade = self.data.get_grade_for_block(block_num)
-        length1_m = self.data.get_length_for_block(block_num)
-        block_num = self.data.get_block_for_block(block_num)
-        section = self.data.get_section_for_block(block_num)
-        speed_limit_km = self.data.get_speed_for_block(block_num)
-        cumm_elevation_m = self.data.get_cumm_ele_for_block(block_num)
+        self.elevation_m = self.data.get_elevation_for_block(block_num)
+        self.grade = self.data.get_grade_for_block(block_num)
+        self.length1_m = self.data.get_length_for_block(block_num)
+        self.block_num = self.data.get_block_for_block(block_num)
+        self.section = self.data.get_section_for_block(block_num)
+        self.speed_limit_km = self.data.get_speed_for_block(block_num)
+        self.cumm_elevation_m = self.data.get_cumm_ele_for_block(block_num)
 
         # Math conversion from metric to imperial for track length, speed limit, and elevation.
-        elevation_ft = elevation_m * 3.28084
+        elevation_ft = self.elevation_m * 3.28084
         elevation_str = "{:.4f}".format(elevation_ft).rstrip('0').rstrip('.')
 
-        cumm_elevation_ft = cumm_elevation_m * 3.28084
+        cumm_elevation_ft = self.cumm_elevation_m * 3.28084
         cumm_elevation_str = "{:.4f}".format(cumm_elevation_ft).rstrip('0').rstrip('.')
 
-        length_ft = length1_m * 3.28084
+        length_ft = self.length1_m * 3.28084
         length_str = "{:.4f}".format(length_ft).rstrip('0').rstrip('.')
 
-        speed_limit_ft = speed_limit_km / 1.609344 
+        speed_limit_ft = self.speed_limit_km / 1.609344 
         speed_limit_str = "{:.4f}".format(speed_limit_ft).rstrip('0').rstrip('.')
 
         # Update the labels with the block data and output it.
         self.elevation_in.setText(elevation_str)
         self.cumm_elevation_in.setText(cumm_elevation_str)
-        self.grade_in.setText(str(grade))
+        self.grade_in.setText(str(self.grade))
         self.length_in.setText(length_str)
         self.block_num_in.setText(str(block_num))
-        self.section_in.setText(str(section))
+        self.section_in.setText(str(self.section))
         self.speed_in.setText(speed_limit_str)
 
         # Emit the grade signal with the grade value (sig)
-        self.grade_signal.emit(grade)
+        self.grade_signal.emit(self.grade)
 
         # Emit screen change based on block selection
         self.block_selected_signal.emit(block_text)
@@ -617,12 +623,12 @@ class Data:
 
 
     def get_data_for_block(self, block_num):
-        # Ensure the DataFrame is not empty and contains data
+        #Ensure the DataFrame is not empty and contains data
         if self.df is not None and not self.df.empty:
-            # Find the row in the DataFrame for the given block number
+            #find datain row
             block_row = self.df[self.df['Block Number'] == block_num]
             if not block_row.empty:
-                # Assuming you want to return a dictionary of the relevant block data
+                #Block  data presented
                 return {
                     'block_num': block_row.iloc[0]['Block Number'],
                     'section': block_row.iloc[0]['Section'],
@@ -631,7 +637,7 @@ class Data:
                     'length1_m': block_row.iloc[0]['Block Length (m)'],
                     'elevation_m': block_row.iloc[0]['ELEVATION (M)'],
                     'cumm_elevation_m': block_row.iloc[0]['CUMALTIVE ELEVATION (M)'],
-                    # Add more fields as needed
+
                 }
         return None 
     

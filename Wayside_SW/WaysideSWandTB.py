@@ -664,6 +664,10 @@ class TestBench(QMainWindow):
         self.authOut.setText(splits[2])
         self.ctcIDSpeedAuthority.emit(splits)
 
+    def displaySpeedAuth(self, data):
+        self.comSpeed.setText(str(data[1]))
+        self.authOut.setText(str(data[2]))
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -674,6 +678,7 @@ if __name__ == "__main__":
     window.sendSpecialBlocks.connect(window2.updateBlockStates)
     window.changeModeSend.connect(window2.receiveMode)
     window.sendAllBlocks.connect(window2.receiveBlocks)
+    window.sendTrainSpeedAuth.connect(window2.displaySpeedAuth)
 
     #Signal: Window 2
     window2.OccBlocksChanged.connect(window.updateBlocks)

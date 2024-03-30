@@ -123,7 +123,32 @@ class TrackModelMain(QMainWindow):
 
     def recieveSpecialBlocks(self, specialBlock):
         self.specialBlock_list = specialBlock
+<<<<<<< HEAD
         print("i'm getting blocks", specialBlock)
+=======
+        #print("i'm getting blocks", specialBlock)
+        
+
+    #####Green Line Stations######
+    
+    #Station Glenbury - closest to Yard#
+    def station_glenbury_1(self, authority):
+        #Block ID(from yard to): Yard(J62) - K63 - K65: 50, 100, 100, 200
+        #Authority from yard(m): 450m
+        
+        self.speedLimit_m = self.speed_limit_km /1.609
+        self.speedOfTrain = self.AcutalSpeed
+
+        for block_num in range(62, 66):
+            #also dont forget to set that button orange
+            self.block_length = self.data.get_length_for_block(block_num)
+            self.block_position = self.get_block_occupancy(authority, self.speedLimit_m,self.speedOfTrain, self.block_length)
+        
+        #List of included block ID in order
+        self.blockID = ["K63", "K64", "K65"]
+
+        #emit signal to using self.blockID[block_position]
+>>>>>>> df5f45d7ec35767bc09381504601e324b34223d9
 
           
     def sendBlockOcc(self):

@@ -35,13 +35,15 @@ class Vital_Power():
 
     
     def calculate_power(self):
-        if self.ui.vertSliderPow.value() == 0:
-            print("Only in if")
+
+        if self.ui.Ebrake.isChecked():
+            self.power = 0
+
+        elif self.ui.vertSliderPow.value() == 0:
             self.ui.vertSliderBrk.setValue(1)
             self.power = 0
 
         else:
-            print("Start Math")
             self.ui.vertSliderBrk.setValue(0)
             self.time = self.local_clock
             print("Curr Time", self.time)
@@ -75,5 +77,5 @@ class Vital_Power():
         self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
         self.ui.lcdAcel.display(self.power)
         self.curr_power_sig.emit(self.power)
-        print("Curr Power",self.power)
+
         

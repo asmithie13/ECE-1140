@@ -32,14 +32,6 @@ class Parser():
             SwitchOcc = data[0].occupied
             SwitchLeftOcc = data[1].occupied
             SwitchRightOcc = data[2].occupied
-
-            if eval(lines[15]): #continue if no blocks are occupied
-                continue
-
-            if eval(lines[18]):
-                data[0].switchState = True
-                data[0].lightState = True
-                continue
                
             data[0].switchState = eval(switchLogic)
             data[0].lightState = eval(curLightLogic)

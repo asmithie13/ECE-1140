@@ -35,11 +35,10 @@ class Vital_Power():
 
     
     def calculate_power(self):
-
-        if self.ui.Ebrake.isChecked():
-            self.power = 0
-
-        elif self.ui.vertSliderPow.value() == 0:
+        #if self.ui.Ebrake.isChecked():
+         #   self.power = 0
+        """
+        if self.ui.vertSliderPow.value() == 0:
             self.ui.vertSliderBrk.setValue(1)
             self.power = 0
 
@@ -76,6 +75,8 @@ class Vital_Power():
         self.ui.lcdPowOut.display(self.ui.vertSliderPow.value())
         self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
         self.ui.lcdAcel.display(self.power)
-        self.curr_power_sig.emit(self.power)
+        self.curr_power_sig.emit(int(self.power))
 
+    """
+        self.curr_power_sig.emit(20000)
         

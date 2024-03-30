@@ -200,6 +200,7 @@ class Ui_MainWindow(object):
         self.Power_value_lcd = QLCDNumber(self.verticalLayoutWidget_5)
         self.Power_value_lcd.setObjectName(u"Power_value_lcd")
         self.Power_value_lcd.setProperty("intValue", 743)
+        self.Power_value_lcd.setDigitCount(6)
 
         self.verticalLayout_6.addWidget(self.Power_value_lcd)
 

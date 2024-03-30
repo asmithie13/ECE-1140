@@ -112,6 +112,7 @@ MainWindow.CTCwindow.sendBlockClosures.connect(MainWindow.WaysideHWwindow.getClo
 
 #Wayside HW to Track Model:
 MainWindow.WaysideHWwindow.sendSpeedAuthority.connect(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
+#Insert signal that sends all blocks to Track Model
 
 """Track Model Signals"""
 MainWindow.TrackModelWindow.send_com_speed_tb.connect(MainWindow.TrackModel_tb.update_commanded_speed)

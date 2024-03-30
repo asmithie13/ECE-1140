@@ -91,24 +91,30 @@ class TrackModelMain(QMainWindow):
 
     def get_block_occupancy(self, authority, speed_of_train):
         #loop iteration
-        print("i'm in block occ")
+        print("I'm in block occ")
+        self.blockID = ""
+        previous_blockID = ""  # Track the previous occupied block
         self.total_block_length = 0
+
         for block_num in range(63, 66):
             block_length = self.data.get_length_for_block(block_num)
-            self.total_block_length += block_length  # Cumulative sum of block lengths
+            self.total_block_length += block_length
             print("total block length: ", self.total_block_length)
 
-            # Proceed with the rest of your logic
             self.speed_limit_km = self.data.get_speed_for_block(block_num)
-
-            # Now you can compare total block length with some other calculated distance or condition
-            # Ensure the right side of the condition calculates a distance for a meaningful comparison
             distance_covered = speed_of_train * (1 / (self.speed_limit_km * 1000 / (60 * 60)))
-            if self.total_block_length <= distance_covered:
+
+            if self.total_block_length >= distance_covered:
+                if previous_blockID:
+                    self.update_block_color(previous_blockID, "default")  # Revert the previous block to default color
+
                 self.block_num_occ = self.data.get_block_for_block(block_num)
                 self.section_occ = self.data.get_section_for_block(block_num)
-                blockID = self.block_num_occ + self.section_occ
-                print("block occ", blockID)
+                self.blockID = self.section_occ + str(self.block_num_occ)
+                self.update_block_color(self.blockID, "orange")  # Update the current block to orange
+
+                print("block occ", self.blockID)
+                previous_blockID = self.blockID  # Update the previous block ID for the next iteration
 
         #Adding str block id that is occupied based on failures and where the train is (might send 1) 
     
@@ -123,32 +129,7 @@ class TrackModelMain(QMainWindow):
 
     def recieveSpecialBlocks(self, specialBlock):
         self.specialBlock_list = specialBlock
-<<<<<<< HEAD
-        print("i'm getting blocks", specialBlock)
-=======
         #print("i'm getting blocks", specialBlock)
-        
-
-    #####Green Line Stations######
-    
-    #Station Glenbury - closest to Yard#
-    def station_glenbury_1(self, authority):
-        #Block ID(from yard to): Yard(J62) - K63 - K65: 50, 100, 100, 200
-        #Authority from yard(m): 450m
-        
-        self.speedLimit_m = self.speed_limit_km /1.609
-        self.speedOfTrain = self.AcutalSpeed
-
-        for block_num in range(62, 66):
-            #also dont forget to set that button orange
-            self.block_length = self.data.get_length_for_block(block_num)
-            self.block_position = self.get_block_occupancy(authority, self.speedLimit_m,self.speedOfTrain, self.block_length)
-        
-        #List of included block ID in order
-        self.blockID = ["K63", "K64", "K65"]
-
-        #emit signal to using self.blockID[block_position]
->>>>>>> df5f45d7ec35767bc09381504601e324b34223d9
 
           
     def sendBlockOcc(self):
@@ -178,8 +159,6 @@ class TrackModelMain(QMainWindow):
         self.send_com_speed_tb.emit(str(self.Comm_Speed))
         self.send_authority_tb.emit(str(self.Authority))
 
-        print("auhtority issss:", speedAuth)
-        #print("speed isss:", self.AcutalSpeed)
         self.get_block_occupancy(self.Authority, self.AcutalSpeed)
 
 

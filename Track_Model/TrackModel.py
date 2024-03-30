@@ -90,26 +90,28 @@ class TrackModelMain(QMainWindow):
         self.load_default_track_layout()
 
     def get_block_occupancy(self, authority, speed_of_train):
-        #initializing varibales
-        self.total_block_length = 0
-        self.iteration = 0
+        # #initializing varibales
+        # self.total_block_length = 0
+        # self.iteration = 0
 
-        # Convert train speed to m/s from km/h for calculation 
-        self.speed_of_train_kms = speed_of_train / 2237
+        # # Convert train speed to m/s from km/h for calculation 
+        # self.speed_of_train_kms = speed_of_train / 2237
 
-        for block_num in range(63, 66):
-            self.total_block_length = self.data.get_length_for_block(block_num)
-            self.speed_limit_km = self.data.get_speed_for_block(block_num)
-            while self.total_block_length != authority:
-                if self.total_block_length <= (speed_of_train*(self.total_block_length*(1/(self.speed_limit_km*1000/(60*60))))):
-                    self.block_num_occ = self.data.get_block_for_block(block_num)
-                    self.section_occ = self.data.get_section_for_block(block_num)
-                    blockID = self.block_num_occ + self.section_occ
-                    print("block occ", blockID)
-                else:
-                    self.total_block_length 
+        # for block_num in range(63, 66):
+        #     self.total_block_length = self.data.get_length_for_block(block_num)
+        #     self.speed_limit_km = self.data.get_speed_for_block(block_num)
+        #     while self.total_block_length != authority:
+        #         if self.total_block_length <= (speed_of_train*(self.total_block_length*(1/(self.speed_limit_km*1000/(60*60))))):
+        #             self.block_num_occ = self.data.get_block_for_block(block_num)
+        #             self.section_occ = self.data.get_section_for_block(block_num)
+        #             blockID = self.block_num_occ + self.section_occ
+        #             print("block occ", blockID)
+        #         else:
+        #             self.total_block_length 
 
-    # Adding str block id that is occupied based on failures and where the train is (might send 1) 
+        # Adding str block id that is occupied based on failures and where the train is (might send 1) 
+        pass
+
     def add_block_occ(self, blockID):
         self.block_occ_list.append(blockID)
 

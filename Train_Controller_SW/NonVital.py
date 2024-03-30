@@ -109,9 +109,12 @@ class NonVital():
         self.stationTimer.timeout.connect(lambda: self.ui.buttonDoorL.toggle(), self.ui.buttonDoorR.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
 
     def Read_Beacon(self,beacon_info):
-        #take in beacon info from tanvi
-        #call station function depending on beacon info
         print(beacon_info)
+
+    def Create_Beacon_Dictionary(self):
+        Beacon_Dictionary = 
+        { 
+
         
     
     def Control_Underground(self,underground):

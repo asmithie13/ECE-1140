@@ -325,7 +325,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         """
         #print(self.occupiedBlocks.currentTrains)
 
-        self.occupiedBlocks.BlockDataCurrent = self.occupiedBlocks.BlockDataNew   
+        self.occupiedBlocks.BlockDataCurrent = self.occupiedBlocks.BlockDataNew
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockDataCurrent))
 
 

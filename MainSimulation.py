@@ -46,9 +46,7 @@ def updateClockSpeed():
         
         timer.setInterval(int(1000 / SliderValue))   
         timer.timeout.connect(clock)
-
-        if not MainWindow.PauseButton.isChecked():
-            timer.start()
+        timer.start()
 
         MainWindow.CurrentSpeedLabel.setText("Current Speed: "+str(SliderValue)+"x") 
 
@@ -103,6 +101,9 @@ MainWindow.WaysideHWwindow.sendUpdatedBlocks.connect(MainWindow.WaysideHW_tb.rec
 MainWindow.WaysideHW_tb.speedAuthoritySignal.connect(MainWindow.WaysideHWwindow.handleSpeedAuthority)
 MainWindow.WaysideHW_tb.occupiedBlocksSignal.connect(MainWindow.WaysideHWwindow.modeHandler)
 MainWindow.WaysideHW_tb.closedBlocksSignal.connect(MainWindow.WaysideHWwindow.getClosedBlocks)
+
+#Wayside HW to CTC:
+MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocks)
 
 """Track Model Signals"""
 MainWindow.TrackModelWindow.send_com_speed_tb.connect(MainWindow.TrackModel_tb.update_commanded_speed)

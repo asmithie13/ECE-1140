@@ -32,13 +32,9 @@ import Train_Model
 from Train_Model.app_trainmodel_ui import *
 from Train_Model.app_trainmodel_tb import *
 
-<<<<<<< HEAD
 
 
 #Utility function to initialize clock
-=======
-#Utility function to update the clock
->>>>>>> 5c98b2c9b1f999a7778f4f2399823f4287bc4266
 def clock():
     global time
     time = time.addSecs(1)

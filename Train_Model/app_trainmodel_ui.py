@@ -125,6 +125,7 @@ class TrainModel_mainwindow(QMainWindow):
     #function to set Power LCD
     def get_power_input(self, power_input):
         self.Power_value_lcd.display(power_input)
+        print("power train model",power_input)
         self.train_calculations.Calculate_acceleration(self.comm_speed)
         self.train_calculations.calculate_force(self.comm_speed)
         return power_input

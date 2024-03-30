@@ -115,11 +115,8 @@ MainWindow.WaysideHWwindow.sendSpeedAuthority.connect(MainWindow.TrackModelWindo
 MainWindow.TrackModelWindow.send_com_speed_tb.connect(MainWindow.TrackModel_tb.update_commanded_speed)
 MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.update_authority)
 
-
 #Track Model to CTC
 MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieveTicketSales)
-
-
 
 """Clock Initialization"""
 #Initializing Qtimer for clock

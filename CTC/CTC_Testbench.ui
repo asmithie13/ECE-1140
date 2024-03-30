@@ -117,21 +117,21 @@
         <item>
          <widget class="QLabel" name="TrainLabel">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Train ID: </string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel" name="SpeedLabel">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Speed: </string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="AuthorityLabel">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Authority:</string>
           </property>
          </widget>
         </item>

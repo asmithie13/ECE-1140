@@ -132,12 +132,12 @@ class TrainModel_mainwindow(QMainWindow):
 
     #sending authority to train controller [ASK LAUREN AND CHAD]
     def receiveSpeedAuth_tm(self,speedAuth):
-        print("train model is receiving comm speed and auth")
+        #print("train model is receiving comm speed and auth")
         trainID=speedAuth[0]
         self.comm_speed=speedAuth[1]
         self.train_calculations.get_commanded_speed(float(self.comm_speed))
         Authority=speedAuth[2]
-        print("speedAuth",speedAuth)
+        #print("speedAuth",speedAuth)
         #self.sendSpeedAuth.emit(speedAuth)
         #self.main_window.cspeed_display.setText(str(Comm_Speed))
         # self.send_com_speed_tb.emit(str(Comm_Speed))
@@ -340,7 +340,7 @@ class TrainModel_mainwindow(QMainWindow):
             self.left_doors_value.setText('OPEN')
 
     def acc_vel_to_track_model(self,velocity):
-        print("tm acc vel")
+        #print("tm acc vel")
         velocity=self.train_calculations.calculate_acc_velocity
         velocity=1000
         self.track_model_acc_velo.emit(int(velocity))
@@ -402,7 +402,7 @@ class TrainCalculations:
         #commanded_speed=main_window.comm_speed
         power = 1000 * (self.main_window.Power_value_lcd.value())
         #commanded_speed = self.get_commanded_speed
-        print("comm_speed",commanded_speed)
+        #print("comm_speed",commanded_speed)
         speed_fts = commanded_speed * (5280 / 3600)
         force = power / speed_fts
         return force

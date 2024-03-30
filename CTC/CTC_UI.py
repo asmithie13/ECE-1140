@@ -210,7 +210,6 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Calculatig the Departure Station and time
         Departure = []
-        print(type(ArrivalTime))
         self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure)
 
         #Adding the train to the schedule
@@ -315,9 +314,9 @@ class CTC_UI(QtWidgets.QMainWindow):
 
                 #Initializing where the train starts
                 if i[0] == 'green':
-                    self.occupiedBlocks.currentTrains.append([i[1], 'K63'])
+                    self.occupiedBlocks.currentTrains.append(['K63'])
                 elif i[0] == 'red':
-                    self.occupiedBlocks.currentTrains.append([i[1], 'D10'])
+                    self.occupiedBlocks.currentTrains.append(['D10'])
 
 
     #Define functionality for Upload File Button
@@ -366,27 +365,25 @@ class CTC_UI(QtWidgets.QMainWindow):
     def updateOccupiedBlocks(self, arr):
         #Clear temp new block layout array
         self.occupiedBlocks.BlockDataNew = []
+        #clear new train matrix, and initialize the correct number of row
+        self.occupiedBlocks.newTrains = []
+        for i in range(len(self.occupiedBlocks.currentTrains)):
+            self.occupiedBlocks.newTrains.append([])
 
         #Adding TrainID, Block ID, and line color to an array
         for block in arr:
+            #Getting train ID
             TrainID = self.occupiedBlocks.matchOccupanciesToTrains(block[0], block[1])
             self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
 
+            #If it's a train, add to updated train list
             if TrainID != 'X':
-                self.occupiedBlocks.currentTrains[int(TrainID[1:]) - 1].append(block[0])
+                self.occupiedBlocks.newTrains[int(TrainID[1:]) - 1].append(block[0])
 
-        #print(self.occupiedBlocks.currentTrains)
-        
-        """
-        for i in self.occupiedBlocks.currentTrains[:]:
-            for j in i[1:]:
-                if j not in arr:
-                    print(arr)
-                    i.remove(j)
-        """
-        #print(self.occupiedBlocks.currentTrains)
-
+        #update the current variable to be the newly calculated ones
+        self.occupiedBlocks.currentTrains = self.occupiedBlocks.newTrains
         self.occupiedBlocks.BlockDataCurrent = self.occupiedBlocks.BlockDataNew
+        
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockDataCurrent))
 
 

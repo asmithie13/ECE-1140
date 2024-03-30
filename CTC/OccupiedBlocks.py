@@ -28,27 +28,38 @@ class OccupiedBlocks():
         #Holds train and block num
         #Based on current Trains
         self.currentTrains = []
+        self.newTrains = []
 
     def addBlockOccupancy(self, TrainName, BlockNum):
         newBlockOccupancy = [TrainName, BlockNum]
         self.BlockDataNew.append(newBlockOccupancy)
 
     def matchOccupanciesToTrains(self, BlockID, line):
+        #Get block number from ID
         BlockNum = int(BlockID[1:])
 
-        if (BlockNum == 63) and (line == 'green'):
-            for i in self.currentTrains:
-                if i[1] == 'K63':
-                    return i[0]
-        elif (BlockNum == 10) and (line == 'red'):
-            for i in self.currentTrains:
-                if i[1] == 'K63':
-                    return i[0]
-        elif (line == 'green') and (BlockNum > 63) and (BlockNum < 100):
-            for i in self.currentTrains:
-                if int(i[1][1:]) == (BlockNum - 1):
-                    #Update Train Movement
-                    return i[0]
+        #Check to see if the block was occupied already
+        for i in self.BlockDataCurrent:
+            if i[1] == BlockID:
+                return i[0]
+
+        #Begin logic to see if the block is occupied by a train
+        #Green line train dipatch case
+        if (BlockNum == 63) and (line == 'Green'):
+            for i in range(len(self.currentTrains)):
+                if self.currentTrains[i][0] == 'K63':
+                    return ("T" + str(i+1))
+        #Red line train dispatch case        
+        elif (BlockNum == 10) and (line == 'Red'):
+            for i in range(len(self.currentTrains)):
+                if self.currentTrains[i][0] == 'D10':
+                    return ("T" + str(i+1))
+        elif (line == 'Green') and (BlockNum > 63) and (BlockNum < 100):
+            for i in range(len(self.currentTrains)):
+                for j in self.currentTrains[i]:
+                    if int(j[1:]) == (BlockNum - 1):
+                        #Update Train Movement
+                        return ("T" + str(i+1))
 
         return 'X'
     

@@ -46,7 +46,9 @@ def updateClockSpeed():
         
         timer.setInterval(int(1000 / SliderValue))   
         timer.timeout.connect(clock)
-        timer.start()
+
+        if not MainWindow.PauseButton.isChecked():
+            timer.start()
 
         MainWindow.CurrentSpeedLabel.setText("Current Speed: "+str(SliderValue)+"x") 
 

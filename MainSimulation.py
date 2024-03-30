@@ -128,7 +128,7 @@ MainWindow.TrackModelWindow.set_clock(time.toString("hh:mm"))
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 
 #Connecting Main UI functionality signals
-MainWindow.SpeedSlider.sliderReleased.connect(updateClockSpeed)
+MainWindow.SpeedSlider.valueChanged.connect(updateClockSpeed)
 MainWindow.PauseButton.clicked.connect(pauseSim)
 
 

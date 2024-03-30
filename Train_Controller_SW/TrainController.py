@@ -152,12 +152,15 @@ class TrainController(QMainWindow):
             self.ui.vertSliderBrk.setDisabled(False)
 
     def Timer(self, time):
+
         hours, minutes, seconds = [int(part) for part in time.split(':')]
         total_seconds = (hours * 3600) + (minutes * 60) + seconds
+        #if things go wrong, try changing the order of speed, authority, power
         self.Vital_Power.Set_Clock(total_seconds)
         self.Vital_Speed.Speed_Monitor()
         self.Vital_Authority.Authority_Monitor()
         self.globalClock = total_seconds
+        self.Vital_Power.calculate_power()
         #print(total_seconds)
 
     def Open_Main_UI(self):

@@ -31,8 +31,10 @@ class TrackController_HW(QMainWindow):
         self.groupBoxManual.setEnabled(False)
 
         #Initialize an empty list to hold all blocks:
-        self.allTripleIDs = []
+        self.allTripleIDs = [] #This is unused
         self.allBlocks = readTrackFile("Wayside_HW/greenLine.csv", self.allTripleIDs)
+        for block in self.allBlocks:
+            block.Wayside = "WI"
 
         #Initialize a flag integer to determine which mode the system is currently in:
         self.modeFlag = 0 #0 = Automatic, 1 = Manual, 2 = Maintenance

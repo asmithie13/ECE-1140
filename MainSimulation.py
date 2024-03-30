@@ -91,11 +91,13 @@ MainWindow.WaysideSW_tb.tbChangeMode.connect(MainWindow.WaysideSWwindow.changeMo
 MainWindow.WaysideSW_tb.ctcIDSpeedAuthority.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
 
 #Wayside to CTC
-MainWindow.WaysideSWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocks)
+MainWindow.WaysideSWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksG2)
+#MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksR1)
+#MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksR2)
 
 #Wayside to Track Model
 MainWindow.WaysideSWwindow.sendTrainSpeedAuth.connect(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
-#MainWindow.WaysideSWwindow.sendAllBlocks.connect(MainWindow.TrackModelWindow.
+MainWindow.WaysideSWwindow.sendAllBlocks.connect(MainWindow.TrackModelWindow.recieveSpecialBlocks)
 
 """Wayside HW Signals"""
 MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.WaysideHW_tb.receiveOccupiedBlocks)
@@ -105,6 +107,12 @@ MainWindow.WaysideHW_tb.speedAuthoritySignal.connect(MainWindow.WaysideHWwindow.
 MainWindow.WaysideHW_tb.occupiedBlocksSignal.connect(MainWindow.WaysideHWwindow.modeHandler)
 MainWindow.WaysideHW_tb.closedBlocksSignal.connect(MainWindow.WaysideHWwindow.getClosedBlocks)
 
+#Wayside HW to CTC:
+MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksG1)
+
+#Wayside HW to Track Model:
+MainWindow.WaysideHWwindow.sendSpeedAuthority.connect(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
+
 """Track Model Signals"""
 MainWindow.TrackModelWindow.send_com_speed_tb.connect(MainWindow.TrackModel_tb.update_commanded_speed)
 MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.update_authority)
@@ -112,6 +120,8 @@ MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.u
 
 #Track Model to CTC
 MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieveTicketSales)
+
+
 
 """Clock Initialization"""
 #Initializing Qtimer for clock
@@ -129,7 +139,7 @@ MainWindow.TrackModelWindow.set_clock(time.toString("hh:mm"))
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 
 #Connecting Main UI functionality signals
-MainWindow.SpeedSlider.valueChanged.connect(updateClockSpeed)
+MainWindow.SpeedSlider.sliderReleased.connect(updateClockSpeed)
 MainWindow.PauseButton.clicked.connect(pauseSim)
 
 

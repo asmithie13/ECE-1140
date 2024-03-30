@@ -58,8 +58,10 @@ class CTC_Testbench(QtWidgets.QMainWindow):
         self.sendTicketSales.emit(Sales)
 
     #Function to display CTC output
-    def showDispatchInfo(self, nums):
-        self.TrainLabel.setText('Test')
+    def showDispatchInfo(self, info):
+        self.TrainLabel.setText("Train ID: " + info[0])
+        self.SpeedLabel.setText("Speed: " + str(info[1]))
+        self.AuthorityLabel.setText("Authority: " + str(info[2]))
 
 
         

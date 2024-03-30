@@ -119,11 +119,10 @@ class TrainModel_mainwindow(QMainWindow):
         self.train_calculations.calculate_acc_velocity(self.comm_speed)
         
         #return total_seconds
-
-
         
     #function to set Power LCD
     def get_power_input(self, power_input):
+        #power_input=10
         self.Power_value_lcd.display(power_input)
         self.train_calculations.Calculate_acceleration(self.comm_speed)
         self.train_calculations.calculate_force(self.comm_speed)

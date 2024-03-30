@@ -27,6 +27,9 @@ class TrainModel_mainwindow(QMainWindow):
     #in seconds
     time_def= 10
 
+    prev_vel=0
+    prev_acc=0
+
     #Track Model Signals
     track_model_acc_velo = qtc.pyqtSignal(int)
 
@@ -99,8 +102,23 @@ class TrainModel_mainwindow(QMainWindow):
     #CLOCK
     def update_time(self, current_time):
         #print(current_time.toString("hh:mm:ss"))
-        #print("Current Time:", current_time)
+        
+        str_time=current_time.toString("hh:mm:ss")
+        # print("Current Time:", str_time)
+        # print("type:",type(str_time))
         self.TC.time_sig.emit(current_time.toString("hh:mm:ss"))
+        self.Timer_calc(str_time)
+
+    def Timer_calc(self, time):
+        self.time=time
+        hours, minutes, seconds = [int(part) for part in time.split(':')]
+        total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
+        # print("time_train_model",total_seconds)
+        # print("TYPE3",type(total_seconds))
+        self.train_calculations.set_time(total_seconds)
+        #return total_seconds
+
+
         
     #function to set Power LCD
     def get_power_input(self, power_input):
@@ -323,10 +341,32 @@ class TrainModel_mainwindow(QMainWindow):
 class TrainCalculations:
 
 
+
     def __init__(self, main_window,TC):
+
+        self.train_model_time =0
         self.main_window = main_window
         self.TC = TC
+
+        #calc_time=TrainModel_mainwindow.Timer
+
+
     
+     #parsed time
+    # def Timer_calc(self, time):
+    #     self.time=time
+    #     hours, minutes, seconds = [int(part) for part in time.split(':')]
+    #     total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
+    #     print("time_train_model",total_seconds)
+    #     print("TYPE3",type(total_seconds))
+    #     return total_seconds
+        
+    def set_time(self,time_calc):
+        self.train_model_time=time_calc
+        print("calc class time", type(time_calc))
+
+    def get_time(self):
+        return self.train_model_time
     
     def get_power(self, power_input):
         self.main_window.get_power_input(power_input)
@@ -369,9 +409,9 @@ class TrainCalculations:
 
     def calculate_acc_velocity(self):
         acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration()
-        time = self.main_window.time_def
-        initial_velocity = 0
-        velocity = initial_velocity + (acceleration * time)
+        train_model_time=self.get_time()
+        #int_time=int(time_acc)
+        velocity = self.main_window.prev_vel + (train_model_time/2)*(acceleration + self.main_window.prev_acc)
         self.main_window.Acc_Velo_value_lcd.display(velocity)
         self.TC.curr_spd_sig.emit(int(velocity))
         return int(velocity)

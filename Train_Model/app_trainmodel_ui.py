@@ -432,6 +432,7 @@ class trainmodel_testbench(QMainWindow):
         super().__init__()
 
         self.TC = TC
+
         uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
 
         #TC.service_brake_sig.connect(self.)
@@ -633,7 +634,7 @@ if __name__ == "__main__":
     app.setStyle("windows")
     
     #add functionality to take in Train Controller Varible
-    window = TrainModel_mainwindow()
+    window = TrainModel_mainwindow(1)
     TC = window.Return_TrainController()
     window_tb = trainmodel_testbench(TC)
 

@@ -305,7 +305,7 @@ class WaysideSW(QMainWindow):
             for block in self.currentSpecialBlocks:
                 self.blockMenu.addItems([block.ID])
 
-            self.FileParser = Parser(None,self.greenCrossingTriplesIDS,self.allGreenBlocks)
+            self.FileParser = Parser(None,self.greenCrossingTriplesIDS,self.greenWayside2Blocks)
             self.sendAllBlocks.emit(self.greenWayside2Blocks)
             
 

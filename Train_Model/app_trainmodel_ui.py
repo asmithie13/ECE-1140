@@ -101,11 +101,7 @@ class TrainModel_mainwindow(QMainWindow):
 
     #CLOCK
     def update_time(self, current_time):
-        #print(current_time.toString("hh:mm:ss"))
-        
         str_time=current_time.toString("hh:mm:ss")
-        # print("Current Time:", str_time)
-        # print("type:",type(str_time))
         self.TC.time_sig.emit(current_time.toString("hh:mm:ss"))
         self.Timer_calc(str_time)
 
@@ -113,35 +109,23 @@ class TrainModel_mainwindow(QMainWindow):
         self.time=time
         hours, minutes, seconds = [int(part) for part in time.split(':')]
         total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
-        # print("time_train_model",total_seconds)
-        # print("TYPE3",type(total_seconds))
         self.train_calculations.set_time(total_seconds)
         self.train_calculations.calculate_acc_velocity(self.comm_speed)
         
-        #return total_seconds
-
-
         
     #function to set Power LCD
     def get_power_input(self, power_input):
         self.Power_value_lcd.display(power_input)
-        print("Power train model",power_input)
         self.train_calculations.Calculate_acceleration(self.comm_speed)
         self.train_calculations.calculate_force(self.comm_speed)
         return power_input
 
     #sending authority to train controller [ASK LAUREN AND CHAD]
     def receiveSpeedAuth_tm(self,speedAuth):
-        print("train model is receiving comm speed and auth")
         trainID=speedAuth[0]
         self.comm_speed=speedAuth[1]
         self.train_calculations.get_commanded_speed(float(self.comm_speed))
         Authority=speedAuth[2]
-        print("speedAuth",speedAuth)
-        #self.sendSpeedAuth.emit(speedAuth)
-        #self.main_window.cspeed_display.setText(str(Comm_Speed))
-        # self.send_com_speed_tb.emit(str(Comm_Speed))
-        # self.send_authority_tb.emit(str(Authority))
         self.train_calculations.Calculate_acceleration(self.comm_speed)
         self.train_calculations.calculate_force(self.comm_speed)
         self.train_calculations.get_acceleration(self.comm_speed)
@@ -150,12 +134,6 @@ class TrainModel_mainwindow(QMainWindow):
         self.TC.curr_auth_sig.emit(float(Authority))
 
 
-    # def estop_button_clicked(self,state):
-    #     self.emergency_stop_state=state
-    #     if not state:
-    #         self.ebrake.setStyleSheet('background-color: rgb(99, 99, 99);')
-    #         self.emergency_stop_state = True
-    #     self.TC.ebrake_sig.emit(state)
         
     def TC_ebrake_activated(self,state):
         self.ebrake.toggle()
@@ -340,7 +318,6 @@ class TrainModel_mainwindow(QMainWindow):
             self.left_doors_value.setText('OPEN')
 
     def acc_vel_to_track_model(self,velocity):
-        print("tm acc vel")
         velocity=self.train_calculations.calculate_acc_velocity
         velocity=1000
         self.track_model_acc_velo.emit(int(velocity))
@@ -358,22 +335,8 @@ class TrainCalculations:
         self.TC = TC
         commanded_speed=main_window.comm_speed
 
-        #calc_time=TrainModel_mainwindow.Timer
-
-
-    
-     #parsed time
-    # def Timer_calc(self, time):
-    #     self.time=time
-    #     hours, minutes, seconds = [int(part) for part in time.split(':')]
-    #     total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
-    #     print("time_train_model",total_seconds)
-    #     print("TYPE3",type(total_seconds))
-    #     return total_seconds
-        
     def set_time(self,time_calc):
         self.train_model_time=time_calc
-        #print("calc class time", type(time_calc))
 
     def get_time(self):
         return self.train_model_time
@@ -382,8 +345,6 @@ class TrainCalculations:
         self.main_window.get_power_input(power_input)
 
     def get_commanded_speed(self, commanded_speed):
-        #commanded_speed=main_window.comm_speed
-       # self.main_window.commanded_speed_def = commanded_speed
         self.main_window.cspeed_display.setText(str(commanded_speed))
         self.calculate_force(commanded_speed)
         self.Calculate_acceleration(commanded_speed)
@@ -399,16 +360,12 @@ class TrainCalculations:
         self.calculate_acc_velocity()
 
     def calculate_force(self,commanded_speed):
-        #commanded_speed=main_window.comm_speed
         power = 1000 * (self.main_window.Power_value_lcd.value())
-        #commanded_speed = self.get_commanded_speed
-        print("comm_speed",commanded_speed)
         speed_fts = commanded_speed * (5280 / 3600)
         force = power / speed_fts
         return force
 
     def Calculate_acceleration(self,commanded_speed):
-        #commanded_speed=main_window.comm_speed
         force = self.calculate_force(commanded_speed)
         mass = self.main_window.mass_def
         acceleration = (force / mass) * ((1 / 3.28084) * (1 / 3.28084))
@@ -416,21 +373,17 @@ class TrainCalculations:
         return acceleration
 
     def get_acceleration(self,commanded_speed):
-        #commanded_speed=main_window.comm_speed
         acceleration = self.Calculate_acceleration(commanded_speed)
         self.main_window.Acceleration_value_lcd.display(acceleration)
 
 
     def calculate_acc_velocity(self,commanded_speed):
-        #commanded_speed=main_window.comm_speed
         acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration(commanded_speed)
         train_model_time=self.get_time()
-        #int_time=int(time_acc)
         velocity = self.main_window.prev_vel + (train_model_time/2)*(acceleration + self.main_window.prev_acc)
         self.main_window.Acc_Velo_value_lcd.display(velocity)
         self.TC.curr_spd_sig.emit(int(velocity))
         self.main_window.track_model_acc_velo.emit(int(velocity))
-        #print("train model vel",velocity)
         return int(velocity)
         
 

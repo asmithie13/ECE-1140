@@ -468,15 +468,13 @@ class CTC_UI(QtWidgets.QMainWindow):
 
                 return
 
-        """
-        #Attempt to popup a message if the user enters a block that isn't closed
+        #Popup a message if the user enters a block that isn't closed
         error_msg = QMessageBox()
         error_msg.setWindowTitle("Selection Error")
         error_msg.setText("Selected block was not closed")
         error_msg.setIcon(QMessageBox.Critical)
 
-        error_msg.show()
-        """
+        error_msg.exec_() 
         
     #Function to set switch positons when in maintenance mode
     def setSwitch_button(self):
@@ -511,8 +509,32 @@ class CTC_UI(QtWidgets.QMainWindow):
     
     #Function to release a set switch positons when in maintenance mode
     def releaseSwitch_button(self):
-        test = self.SwitchPositionTable.QItemSelectionModel()
-        print(test)
+        #Read the current switch selected
+        switchToRelease = self.ChooseSwitchSelect.currentText()
+
+        for i in range(len(self.Maintenance.SwitchText)):
+            if (switchToRelease == self.Maintenance.SwitchText[i][0]) and (self.currentLine == self.Maintenance.SwitchText[i][2]):
+                #Reset block
+                self.Maintenance.SwitchesSet[i].maintenance = 0
+
+                #Send to wayside
+                self.sendSwitchPositions.emit(self.Maintenance.SwitchesSet)
+
+                #Remove from maintenence list and update table
+                self.Maintenance.SwitchText.pop(i)
+                self.Maintenance.SwitchesSet.pop(i)
+                self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintenance.SwitchText))
+
+                return
+            
+        #Popup a message if the user enters a block that isn't closed
+        error_msg = QMessageBox()
+        error_msg.setWindowTitle("Selection Error")
+        error_msg.setText("Selected switch was not under maintenance")
+        error_msg.setIcon(QMessageBox.Critical)
+
+        error_msg.exec_() 
+
 
     #Funciton to sync switch position options to current selected switch
     def newSwitchSelected(self, index):

@@ -40,13 +40,17 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.AddTrainButton.clicked.connect(self.addTrain_button)
         self.MaintenanceModeButton.clicked.connect(self.enterMaintenanceMode)
         self.CloseBlockButton.clicked.connect(self.closeBlock_button)
+        self.ReopenBlockButto.clicked.connect(self.reopenBlock_button)
         self.SetSwitchPositionButton.clicked.connect(self.setSwitch_button)
+        self.ReleaseSwitchButton.clicked.connect(self.releaseSwitch_button)
 
         #Changing Button Colors
-        self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")     #Green
-        self.UploadButton.setStyleSheet("background-color : rgb(38, 207, 4)")       #Green
-        self.CloseBlockButton.setStyleSheet("background-color: rgb(195, 16, 40)")   #Red
-        self.SetSwitchPositionButton.setStyleSheet("background-color: rgb(195, 16, 40)")   #Red
+        self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")             #Green
+        self.UploadButton.setStyleSheet("background-color : rgb(38, 207, 4)")               #Green
+        self.CloseBlockButton.setStyleSheet("background-color: rgb(195, 16, 40)")           #Red
+        self.ReopenBlockButton.setStyleSheet("background-color : rgb(38, 207, 4)")          #Green
+        self.SetSwitchPositionButton.setStyleSheet("background-color: rgb(195, 16, 40)")    #Red
+        self.ReleaseSwitchButton.setStyleSheet("background-color : rgb(38, 207, 4)")        #Green
 
         #Changing Background colors to section off UI, all light blue
         self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255);")
@@ -91,7 +95,9 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.CloseBlockButton.setEnabled(False)
         self.ChooseSwitchSelect.setEnabled(False)
         self.SwitchPositionSelect.setEnabled(False)
+        self.ReopenBlockButton.setEnables(False)
         self.SetSwitchPositionButton.setEnabled(False)
+        self.ReleaseSwitchButton.setEnable(False)
         #Setting text to gray
         self.CloseBlockPromptLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ChooseSwitchLabel.setStyleSheet("color: rgb(120, 120, 120);")
@@ -438,6 +444,10 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Send to wayside
         self.sendBlockClosures.emit(self.Maintence.BlocksClosed)
+
+    #Function to reopen a block closure when in maintence mode
+    def reopenBlock_button(self):
+        print("to be written")
         
     #Function to set switch positons when in maintenance mode
     def setSwitch_button(self):
@@ -470,6 +480,10 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         self.Maintence.SwitchesSet.append(temp)
     
+    #Function to release a set switch positons when in maintenance mode
+    def releaseSwitch_button(self):
+        print("TBD")
+
     #Funciton to sync switch position options to current selected switch
     def newSwitchSelected(self, index):
         self.SwitchPositionSelect.clear()

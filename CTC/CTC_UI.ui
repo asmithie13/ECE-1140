@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1037</width>
-    <height>677</height>
+    <height>673</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -650,7 +650,7 @@
               <widget class="QComboBox" name="CloseBlockSelect"/>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <layout class="QHBoxLayout" name="CloseBlockButtonLayout">
                <item>
                 <widget class="QPushButton" name="CloseBlockButton">
                  <property name="text">
@@ -659,7 +659,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton">
+                <widget class="QPushButton" name="ReopenBlockButton">
                  <property name="text">
                   <string>Reopen Block</string>
                  </property>
@@ -695,7 +695,7 @@
               <widget class="QComboBox" name="SwitchPositionSelect"/>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <layout class="QHBoxLayout" name="SwitchButtonLayout">
                <item>
                 <widget class="QPushButton" name="SetSwitchPositionButton">
                  <property name="text">
@@ -704,7 +704,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_2">
+                <widget class="QPushButton" name="ReleaseSwitchButton">
                  <property name="text">
                   <string>Release Switch</string>
                  </property>

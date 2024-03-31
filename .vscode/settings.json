@@ -1,5 +1,6 @@
 {
     "editor.autoClosingQuotes": "never",
     "editor.autoClosingBrackets": "never",
-    "editor.autoClosingDelete": "never"
+    "editor.autoClosingDelete": "never",
+    "python.REPL.enableREPLSmartSend": false
 }

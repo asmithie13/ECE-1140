@@ -57,6 +57,9 @@ class TrackModelMain(QMainWindow):
     def __init__(self):
         super().__init__()
         self.blockStates = {}
+        self.blockID = None
+        self.station = ""
+        self.occupied_blocks = []
 
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track_Model/Track_Model.ui", self)
@@ -91,50 +94,72 @@ class TrackModelMain(QMainWindow):
 
     def get_block_occupancy(self, authority, speed_of_train):
         #loop iteration
-        print("I'm in block occ")
+        print("i'm in block occ")
         self.blockID = ""
-        previous_blockID = ""  # Track the previous occupied block
         self.total_block_length = 0
+        self.prev_block = ""
+        self.selected_block = ""
+        self.prevblockID = ""
+        self.output_block_occ = "False"
 
         for block_num in range(63, 66):
             block_length = self.data.get_length_for_block(block_num)
-            self.total_block_length += block_length
+            self.total_block_length += block_length  # Cumulative sum of block lengths
             print("total block length: ", self.total_block_length)
 
+            # Proceed with the rest of your logic
             self.speed_limit_km = self.data.get_speed_for_block(block_num)
+
+            # Now you can compare total block length with some other calculated distance or condition
+            # Ensure the right side of the condition calculates a distance for a meaningful comparison
             distance_covered = speed_of_train * (1 / (self.speed_limit_km * 1000 / (60 * 60)))
 
             if self.total_block_length >= distance_covered:
-                if previous_blockID:
-                    self.update_block_color(previous_blockID, "default")  # Revert the previous block to default color
-
-                self.block_num_occ = self.data.get_block_for_block(block_num)
+                self.block_num_occ = int(self.data.get_block_for_block(block_num))
                 self.section_occ = self.data.get_section_for_block(block_num)
                 self.blockID = self.section_occ + str(self.block_num_occ)
-                self.update_block_color(self.blockID, "orange")  # Update the current block to orange
-
                 print("block occ", self.blockID)
-                previous_blockID = self.blockID  # Update the previous block ID for the next iteration
+                
+                self.update_occupied_blocks(self.blockID, is_occupied=True)
+                # print("selected block",self.selected_block)
+                # #######ALSO ADD FUNCTION VARIABLE FROM BLOCK FAILURES 
+                # if not self.selected_block:
+                #     self.sendBlockOcc_SW.emit([self.blockID])
+                # else:
+                #     self.sendBlockOcc_SW.emit([self.blockID, self.selected_block])
+                #self.sendBlockOcc_HW.emit([self.blockID])
 
-        #Adding str block id that is occupied based on failures and where the train is (might send 1) 
-    
-    def add_block_occ(self, blockID):
-        self.block_occ_list.append(blockID)
+                self.prevblock_block = self.block_num_occ-1
+                self.prevblockID = self.section_occ + str(self.prevblock_block)
 
-    def remove_block_occ(self, blockID):
-    # If exists, remove it
-        if blockID in self.block_occ_list:
-            self.block_occ_list.remove(blockID)
+                block_button = self.findChild(QPushButton, self.blockID)
+                prev_button = self.findChild(QPushButton, self.prevblockID)
+                if block_button:
+                    # Set the color and style using setStyleSheet
+                    block_button.setStyleSheet('''
+                        QPushButton {
+                            border-style: solid;
+                            border-width: 0.5px;
+                            border-color: black;
+                            background-color: orange;
+                        }
+                    ''')
 
+                if prev_button:
+                    # Set the color and style using setStyleSheet
+                    prev_button.setStyleSheet('''
+                        QPushButton {
+                            border-style: solid;
+                            border-width: 0.5px;
+                            border-color: black;
+                            background-color: rgb(50, 205, 50);
+                        }
+                    ''')
 
+    # Recieve from Wayside
     def recieveSpecialBlocks(self, specialBlock):
         self.specialBlock_list = specialBlock
         #print("i'm getting blocks", specialBlock)
-
-          
-    def sendBlockOcc(self):
-        self.sendBlockOcc_SW.emit(self.block_occ_list)
-
 
     def load_default_track_layout(self):
         # Directly load the default track layout file
@@ -146,10 +171,6 @@ class TrackModelMain(QMainWindow):
     def set_clock(self, time):
         self.clock_in.display(time)
         self.current_time = time
-        
-    #use time for calculations
-    def get_time(self):
-        return self.current_time
 
     def receiveSpeedAuth_tm(self,speedAuth):
         self.trainID=speedAuth[0]
@@ -160,12 +181,22 @@ class TrackModelMain(QMainWindow):
         self.send_authority_tb.emit(str(self.Authority))
 
         self.get_block_occupancy(self.Authority, self.AcutalSpeed)
+        
+    def update_occupied_blocks(self, block_id, is_occupied=True):
+        if is_occupied:
+            if block_id not in self.occupied_blocks:
+                self.occupied_blocks.append(block_id)
+        else:
+            if block_id in self.occupied_blocks:
+                self.occupied_blocks.remove(block_id)
+
+        # Emit the updated list of occupied blocks
+        self.sendBlockOcc_SW.emit(self.occupied_blocks)
 
 
-    #FROM TRAIN MODEL
+    #FROM TRAIN MODEL for block occupancy
     def receiveSendVelocity(self, velocity):
         self.AcutalSpeed = velocity
-        #print("velocity = ", self.AcutalSpeed)
     
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box
@@ -179,24 +210,27 @@ class TrackModelMain(QMainWindow):
         #    self.green.hide()
             
     def set_broken_rail_failure(self):
-        selected_block = self.block_in_1.currentText()
-        if selected_block:
-            button = self.findChild(QPushButton, selected_block)
+        self.selected_block = self.block_in_1.currentText()
+        if self.selected_block:
+            button = self.findChild(QPushButton, self.selected_block)
             if button:
+                self.update_occupied_blocks(self.selected_block, is_occupied=True)
                 button.setStyleSheet("background-color: grey")
 
     def set_track_circuit_failure(self):
-        selected_block = self.block_in_1.currentText()
-        if selected_block:
-            button = self.findChild(QPushButton, selected_block)
+        self.selected_block = self.block_in_1.currentText()
+        if self.selected_block:
+            button = self.findChild(QPushButton, self.selected_block)
             if button:
+                self.update_occupied_blocks(self.selected_block, is_occupied=True)
                 button.setStyleSheet("background-color: yellow")
     
     def set_power_failure_func(self):
-        selected_block = self.block_in_1.currentText()
-        if selected_block:
-            button = self.findChild(QPushButton, selected_block)
+        self.selected_block = self.block_in_1.currentText()
+        if self.selected_block:
+            button = self.findChild(QPushButton, self.selected_block)
             if button:
+                self.update_occupied_blocks(self.selected_block, is_occupied=True)
                 button.setStyleSheet("background-color: tan")
 
     def reset_block_colors(self):
@@ -252,42 +286,53 @@ class TrackModelMain(QMainWindow):
         self.block_selected_signal.emit(block_id)
 
     def generateTickets(self):
-        # Generate a random number between 1 and 74 for ticket sales
-        random_number = random.randint(1, 74)
-        #Output the random numberto ticket sales block info
-        self.ticket_out.setText(str(random_number))
-        self.SendTicketsales.emit([random_number])
-        
+        if not self.station:
+            pass
+        else:
+            #Output the random numberto ticket sales block info
+            if self.current_time.toString("mm") == "00":
+                # Generate a random number between 1 and 74 for ticket sales
+                random_number = random.randint(1, 74)
+                self.ticket_out.setText(str(random_number)) 
+                self.SendTicketsales.emit([random_number])
+
+    def get_infra_for_block(self, block_num):
+        self.station = None  # Set to None initially to clearly see if it gets changed
+        self.block_num = str(block_num)
+
+        if self.block_num == "A2":
+            self.station = "PIONEER"
+        elif self.block_num == "C9":
+            self.station = "EDGEBROOKE"
+        elif self.block_num == "D16":
+            self.station = "STATION"
+        elif self.block_num == "DF22":
+            self.station = "WHITED"
+        elif self.block_num == "G31":
+            self.station = "SOUTH BANK"
+        elif self.block_num == "I39" or self.block_num == "W141":
+            self.station = "CENTRAL"
+        elif self.block_num == "I48" or self.block_num == "W132":
+            self.station = "INGLEWOOD"
+        elif self.block_num == "I57" or self.block_num == "W123":
+            self.station = "OVERBROOK"
+        elif self.block_num == "K65" or self.block_num == "U114":
+            self.station = "GLENBURY"
+        elif self.block_num == "L73" or self.block_num == "T105":
+            self.station = "DORMONT"
+        elif self.block_num == "N77":
+            self.station = "MT LEBANON"
+        elif self.block_num == "O88":
+            self.station = "POPLAR"
+        elif self.block_num == "P96":
+            self.station = "CASTLE SHANNON"
+        else:
+            self.station = ""  
+
     
     #set temperature
     def set_temp(self, temp):
         pass
-
-    #use global clock
-    def clock(self):
-        pass
-
-    #failures:
-    def set_broken(broke):
-        broken = broke
-        #send occupancies
-
-    def set_track_circuit(fail1):
-        track_circuit = fail1
-        #send occupancies
-
-    def set_power_fail(fail2):
-        power_fail = fail2
-        #send occupancies
-
-    def get_broken(self):
-        return self.broken
-
-    def get_track_circuit(self):
-        return self.track_circuit
-
-    def get_power_fail(self):
-        return self.power_fail
 
 
     #This function is a starter connector to UI from tb for ticket sales
@@ -346,6 +391,11 @@ class TrackModelMain(QMainWindow):
         # From dropdown of "B#" take out the letter B
         block_num = int(block_text.split()[-1][1:])  
 
+        if(block_text == self.blockID):
+            self.occupancy_in.setText("True")
+        else:
+            self.occupancy_in.setText("False")
+
         # Get certain data from specific block
         self.elevation_m = self.data.get_elevation_for_block(block_num)
         self.grade = self.data.get_grade_for_block(block_num)
@@ -354,6 +404,7 @@ class TrackModelMain(QMainWindow):
         self.section = self.data.get_section_for_block(block_num)
         self.speed_limit_km = self.data.get_speed_for_block(block_num)
         self.cumm_elevation_m = self.data.get_cumm_ele_for_block(block_num)
+        self.get_infra_for_block(block_text)
 
         # Math conversion from metric to imperial for track length, speed limit, and elevation.
         elevation_ft = self.elevation_m * 3.28084
@@ -376,6 +427,7 @@ class TrackModelMain(QMainWindow):
         self.block_num_in.setText(str(block_num))
         self.section_in.setText(str(self.section))
         self.speed_in.setText(speed_limit_str)
+        self.station_in.setText(self.station)
 
         # Emit the grade signal with the grade value (sig)
         self.grade_signal.emit(self.grade)
@@ -565,9 +617,6 @@ class TrackModel_tb(QMainWindow):
         # Set the text to the output text
         self.power_block_out.setText(power1)
 
-    def update_on_block_selection(self, selected_block):
-        pass
-    
 #My data class containing data from excel 
 class Data:
     def __init__(self):
@@ -771,7 +820,6 @@ if __name__ == "__main__":
     # Connect TrackModelMain's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)
 
-    window.block_selected_signal.connect(window_2.update_on_block_selection)
     window.show()
     window_2.show()
 

@@ -95,13 +95,23 @@ class Main_UI(QtWidgets.QMainWindow):
         self.currentTrains.append(TrainModel_mainwindow())
         self.currentTrains[-1].show()
 
-        #Track Model to Train Model
+        ##Track Model to Train Model##
         # [Train ID, commanded speed, authority]
         self.TrackModelWindow.sendSpeedAuth.connect(self.currentTrains[-1].receiveSpeedAuth_tm)
 
-        #Train Model to Track Model
+        #Passenger Disembarking
+
+
+        ##Train Model to Track Model##
         # Actual Velocity
         self.currentTrains[-1].track_model_acc_velo.connect(self.TrackModelWindow.receiveSendVelocity)
+
+        #Grade
+
+        #Beacon
+
+        #Ticket Sales
+        
 
         #Connect Signals to Track Model
         #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)

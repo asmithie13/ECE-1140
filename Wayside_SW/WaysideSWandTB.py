@@ -249,6 +249,7 @@ class WaysideSW(QMainWindow):
             self.blockActions()
             self.sendAllBlocks.emit(self.currentBlocks)
             self.changeModeSend.emit(True)
+            self.modeButton.setDisabled(True)
             
 
     def checkLine(self):

@@ -124,4 +124,5 @@ class TrackController_HW_TB(QMainWindow):
             else:
                 self.lineEditCrossing.setText("UP")
 
+        self.lineEditBooleanAuth.setText(str(tempBlock.authority))
    

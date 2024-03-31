@@ -27,6 +27,12 @@ class TrackController_HW(QMainWindow):
         super(TrackController_HW, self).__init__()
         uic.loadUi("Wayside_HW/TrackController_HW.ui", self)
 
+        #Constant lists for blocks affected based on light color:
+        self.LIGHT_A1 = ['A1', 'A2']
+        self.LIGHT_C12 = ['C12', 'D13']
+        self.LIGHT_G29 = ['F26', 'F27', 'F28', 'G29']
+        self.LIGHT_Z150 = ['Y148', 'Y149', 'Z150']
+
         #Disable manual mode operations, as program begins in automatic operation:
         self.groupBoxManual.setEnabled(False)
 
@@ -123,16 +129,61 @@ class TrackController_HW(QMainWindow):
                 occupiedBlockSections.append(block.blockSection)
         occupiedBlockSections.sort()
 
-        #Pare PLC file and adjust blocks accordingly:
+        #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
     
         #TO-DO HERE:
-        #-Adjust block-wise authority based on lights and collisions
         #-Move parser to RPi
-        #-Ensure vitality (Run calculation two/three times and compare)
+        #***Could calculate on software and hardware to ensure vitality?
+
+        #Ajust block-wise authority based on active red lights:
+        for block in self.allBlocks:
+            if block.ID == 'A1':
+                tempA1 = block.lightState
+            elif block.ID == 'C12':
+                tempC12 = block.lightState
+            elif block.ID == 'G29':
+                tempG29 = block.lightState
+            elif block.ID == 'Z150':
+                tempZ150 = block.lightState
+        
+        if tempA1 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_A1:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_A1:
+                    block.authority = True
+        
+        if tempC12 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_C12:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_C12:
+                    block.authority = True
+        
+        if tempG29 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_G29:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_G29:
+                    block.authority = True
+        
+        if tempZ150 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_Z150:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_Z150:
+                    block.authority = True
 
         self.sendUpdatedBlocks.emit(self.allBlocks)
-        
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)
@@ -212,6 +263,54 @@ class TrackController_HW(QMainWindow):
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
                 block.lightState = False
                 break
+
+        #Ajust block-wise authority based on active red lights:
+        for block in self.allBlocks:
+            if block.ID == 'A1':
+                tempA1 = block.lightState
+            elif block.ID == 'C12':
+                tempC12 = block.lightState
+            elif block.ID == 'G29':
+                tempG29 = block.lightState
+            elif block.ID == 'Z150':
+                tempZ150 = block.lightState
+        
+        if tempA1 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_A1:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_A1:
+                    block.authority = True
+        
+        if tempC12 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_C12:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_C12:
+                    block.authority = True
+        
+        if tempG29 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_G29:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_G29:
+                    block.authority = True
+        
+        if tempZ150 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_Z150:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_Z150:
+                    block.authority = True
+
         self.sendUpdatedBlocks.emit(self.allBlocks)
 
         self.pushButtonGreen.setEnabled(True)
@@ -226,6 +325,54 @@ class TrackController_HW(QMainWindow):
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
                 block.lightState = True
                 break
+
+        #Ajust block-wise authority based on active red lights:
+        for block in self.allBlocks:
+            if block.ID == 'A1':
+                tempA1 = block.lightState
+            elif block.ID == 'C12':
+                tempC12 = block.lightState
+            elif block.ID == 'G29':
+                tempG29 = block.lightState
+            elif block.ID == 'Z150':
+                tempZ150 = block.lightState
+        
+        if tempA1 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_A1:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_A1:
+                    block.authority = True
+        
+        if tempC12 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_C12:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_C12:
+                    block.authority = True
+        
+        if tempG29 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_G29:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_G29:
+                    block.authority = True
+        
+        if tempZ150 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_Z150:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_Z150:
+                    block.authority = True
+
         self.sendUpdatedBlocks.emit(self.allBlocks)
 
         self.pushButtonRed.setEnabled(True)

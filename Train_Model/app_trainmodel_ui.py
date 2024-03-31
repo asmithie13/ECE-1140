@@ -369,6 +369,9 @@ class TrainCalculations:
         #FORMULA: FORCE= MASS*g*SIN(THETA)
         #GRADE=SIN(THETA)
         theta=math.atan(grade/100)
+        self.grav_force=mass*9.81*math.sin(theta)
+
+    
         power = 1000 * (self.main_window.Power_value_lcd.value())
         speed_fts = commanded_speed * (5280 / 3600)
         force = power / speed_fts

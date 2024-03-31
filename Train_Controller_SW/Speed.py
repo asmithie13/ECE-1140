@@ -39,7 +39,7 @@ class Vital_Speed():
     def service_brake(self):
         #send signal to brake
         #turn down acceltor
-        if self.ui.vertSliderBrk.value() == 1:
+        if self.ui.vertSliderBrk.value() > 0:
             self.ui.vertSliderPow.setValue(0)
             self.service_brake_sig.emit(True)
         if self.ui.vertSliderBrk.value() == 0:

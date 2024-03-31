@@ -56,7 +56,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255);")
         self.ScheduleBox.setStyleSheet("background-color : rgb(233, 247, 255);")
         self.OccupiedBlocksBox.setStyleSheet("background-color : rgb(233, 247, 255);")
-        self.MaintenceBox.setStyleSheet("background-color : rgb(233, 247, 255);")
+        self.MaintenanceBox.setStyleSheet("background-color : rgb(233, 247, 255);")
 
         #Manual Dispatch Formatting
         self.ArrivalTimeEdit.setDisplayFormat("hh:mm")
@@ -102,7 +102,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.CloseBlockPromptLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ChooseSwitchLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.SwitchPositionLabel.setStyleSheet("color: rgb(120, 120, 120);")
-        self.MaintenceBox.setStyleSheet("color: rgb(120, 120, 120);")
+        self.MaintenanceBox.setStyleSheet("color: rgb(120, 120, 120);")
         #Seting the Swith Position Drop Down
         self.ChooseSwitchSelect.currentIndexChanged.connect(self.newSwitchSelected)
         
@@ -111,12 +111,12 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockDataCurrent))
 
         #Initializing Maintance Tables
-        self.Maintence = CTC_Maintenance()
-        self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintence.BlocksClosed))
+        self.Maintenance = CTC_Maintenance()
+        self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintenance.BlocksClosed))
         BCHeader = self.BlockClosureTable.horizontalHeader()
         BCHeader.setSectionResizeMode(QHeaderView.ResizeToContents)
         
-        self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintence.BlocksClosed))
+        self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintenance.BlocksClosed))
         SPHeader = self.SwitchPositionTable.horizontalHeader()
         SPHeader.setSectionResizeMode(QHeaderView.ResizeToContents)
 
@@ -322,7 +322,7 @@ class CTC_UI(QtWidgets.QMainWindow):
                 self.create_a_train.emit(i[1])
 
                 #Train ID, speed, Authority
-                self.sendDispatchInfo.emit([i[1], 70, self.trainSchedule.AuthorityInfo[int(i[1][1:]) - 1]])
+                self.sendDispatchInfo.emit([i[1], 40, self.trainSchedule.AuthorityInfo[int(i[1][1:]) - 1]])
                 print(i[1], "Dispatched")
 
                 #Initializing where the train starts
@@ -366,7 +366,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.CloseBlockPromptLabel.setStyleSheet("color: black;")
         self.ChooseSwitchLabel.setStyleSheet("color: black;")
         self.SwitchPositionLabel.setStyleSheet("color: black;")
-        self.MaintenceBox.setStyleSheet("color: black;")
+        self.MaintenanceBox.setStyleSheet("color: black;")
 
 
     #Will indicate that the system is no longer in maintenance mode
@@ -437,15 +437,15 @@ class CTC_UI(QtWidgets.QMainWindow):
                     temp = i
 
         #Add to list of strings for diplaying on CTC UI
-        self.Maintence.BlocksClosedIDs.append([BlockToClose, temp.lineColor])
-        self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintence.BlocksClosedIDs))
+        self.Maintenance.BlocksClosedIDs.append([BlockToClose, temp.lineColor])
+        self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintenance.BlocksClosedIDs))
         #Add to list of block objects for sending to wayside
         temp.occupied = 1
         temp.maintenance = 1
-        self.Maintence.BlocksClosed.append(temp)
+        self.Maintenance.BlocksClosed.append(temp)
 
         #Send to wayside
-        self.sendBlockClosures.emit(self.Maintence.BlocksClosed)
+        self.sendBlockClosures.emit(self.Maintenance.BlocksClosed)
 
     #Function to reopen a block closure when in maintence mode
     def reopenBlock_button(self):
@@ -454,19 +454,19 @@ class CTC_UI(QtWidgets.QMainWindow):
         BlockToOpen.append(self.CloseBlockSelect.currentText())
         BlockToOpen.append(self.currentLine)
 
-        for i in range(len(self.Maintence.BlocksClosedIDs)):
-            if BlockToOpen == self.Maintence.BlocksClosedIDs[i]:
+        for i in range(len(self.Maintenance.BlocksClosedIDs)):
+            if BlockToOpen == self.Maintenance.BlocksClosedIDs[i]:
                 #Reset block
-                self.Maintence.BlocksClosed[i].occupied = 0
-                self.Maintence.BlocksClosed[i].maintenance = 0
+                self.Maintenance.BlocksClosed[i].occupied = 0
+                self.Maintenance.BlocksClosed[i].maintenance = 0
 
                 #Send to wayside
-                self.sendBlockClosures.emit(self.Maintence.BlocksClosed)
+                self.sendBlockClosures.emit(self.Maintenance.BlocksClosed)
 
                 #Remove from maintenence list and update table
-                self.Maintence.BlocksClosed.pop(i)
-                self.Maintence.BlocksClosedIDs.pop(i)
-                self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintence.BlocksClosedIDs))
+                self.Maintenance.BlocksClosed.pop(i)
+                self.Maintenance.BlocksClosedIDs.pop(i)
+                self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintenance.BlocksClosedIDs))
 
                 return
 
@@ -498,8 +498,8 @@ class CTC_UI(QtWidgets.QMainWindow):
                     temp = i
 
         #Add to list of strings for displaying on CTC UI
-        self.Maintence.SwitchText.append([switchToSet, positionToSet, temp.lineColor])
-        self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintence.SwitchText))
+        self.Maintenance.SwitchText.append([switchToSet, positionToSet, temp.lineColor])
+        self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintenance.SwitchText))
         #Add to list of block objects for sending to wayside
         #If the position is the first one, switch state is left = true
         if positionIndex == 0:
@@ -509,7 +509,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         temp.maintenance = 1
 
-        self.Maintence.SwitchesSet.append(temp)
+        self.Maintenance.SwitchesSet.append(temp)
     
     #Function to release a set switch positons when in maintenance mode
     def releaseSwitch_button(self):

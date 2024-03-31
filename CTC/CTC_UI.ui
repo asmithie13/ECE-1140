@@ -622,7 +622,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QGroupBox" name="MaintenceBox">
+         <widget class="QGroupBox" name="MaintenanceBox">
           <property name="title">
            <string>Maintenance</string>
           </property>

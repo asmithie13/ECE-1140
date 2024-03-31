@@ -29,17 +29,19 @@ class TrainModel_mainwindow(QMainWindow):
 
     prev_vel=0
     prev_acc=0
-
+    
     #Track Model Signals
     track_model_acc_velo = qtc.pyqtSignal(int)
 
-    def __init__(self):
+    def __init__(self,TrainID):
         super().__init__()
         uic.loadUi("Train_Model/TrainModel_UI.ui", self)
         #self.main_window = main_window
         #this is added stuff for the TC
         self.TC = TrainController()
-    
+        self.TrainID = TrainID
+        self.Set_Train_ID(TrainID)
+
         # Instantiate TrainCalculations and pass self (MyMainWindow instance) as an argument
         self.train_calculations = TrainCalculations(self,TC=self.TC)
         #CLOCK
@@ -94,6 +96,8 @@ class TrainModel_mainwindow(QMainWindow):
         self.en_fail_state = False
         self.emergency_stop_state=False
 
+    def Set_Train_ID(self,TrainID):
+        self.Train_ID_Label.setText(str(TrainID))
 
 
     def Return_TrainController(self):

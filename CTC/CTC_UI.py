@@ -38,7 +38,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.RedLineButton.clicked.connect(self.redLine_button)
         self.UploadButton.clicked.connect(self.selectScheduleFile)
         self.AddTrainButton.clicked.connect(self.addTrain_button)
-        self.MaintenanceModeButton.clicked.connect(self.enterMaintenanceMode)
+        self.MaintenanceModeButton.clicked.connect(self.maintenanceMode_button)
         self.CloseBlockButton.clicked.connect(self.closeBlock_button)
         self.ReopenBlockButton.clicked.connect(self.reopenBlock_button)
         self.SetSwitchPositionButton.clicked.connect(self.setSwitch_button)
@@ -333,7 +333,13 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Disable Manual Mode and upload button
         self.UploadButton.setEnabled(False)
         self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
-
+    
+    #Function to determine if the system is entering or exitting maintenance mode
+    def maintenanceMode_button(self):
+        if self.MaintenanceModeButton.isChecked():
+            self.enterMaintenanceMode()
+        else:
+            self.exitMaintenanceMode()
 
     #Indication that the system is in maintenance mode
     #Same behavior will occur if a block is closed or a switch is sets

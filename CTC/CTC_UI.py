@@ -40,7 +40,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.AddTrainButton.clicked.connect(self.addTrain_button)
         self.MaintenanceModeButton.clicked.connect(self.enterMaintenanceMode)
         self.CloseBlockButton.clicked.connect(self.closeBlock_button)
-        self.ReopenBlockButto.clicked.connect(self.reopenBlock_button)
+        self.ReopenBlockButton.clicked.connect(self.reopenBlock_button)
         self.SetSwitchPositionButton.clicked.connect(self.setSwitch_button)
         self.ReleaseSwitchButton.clicked.connect(self.releaseSwitch_button)
 
@@ -95,9 +95,9 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.CloseBlockButton.setEnabled(False)
         self.ChooseSwitchSelect.setEnabled(False)
         self.SwitchPositionSelect.setEnabled(False)
-        self.ReopenBlockButton.setEnables(False)
+        self.ReopenBlockButton.setEnabled(False)
         self.SetSwitchPositionButton.setEnabled(False)
-        self.ReleaseSwitchButton.setEnable(False)
+        self.ReleaseSwitchButton.setEnabled(False)
         #Setting text to gray
         self.CloseBlockPromptLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ChooseSwitchLabel.setStyleSheet("color: rgb(120, 120, 120);")
@@ -276,7 +276,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
     #Sets drop down options if green line is selected
     def greenLine_button(self):
-        self.currentLine = 'green'
+        self.currentLine = 'Green'
         
         #Highlight green line button
         self.GreenLineButton.setStyleSheet("background-color : rgb(38, 207, 4)")     #Green
@@ -295,7 +295,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.newSwitchSelected(0)
     
     def redLine_button(self):
-        self.currentLine = 'red'
+        self.currentLine = 'Red'
         
         #Highlight red line button
         self.RedLineButton.setStyleSheet("background-color: rgb(195, 16, 40)")     #Red
@@ -326,9 +326,9 @@ class CTC_UI(QtWidgets.QMainWindow):
                 print(i[1], "Dispatched")
 
                 #Initializing where the train starts
-                if i[0] == 'green':
+                if i[0] == 'Green':
                     self.occupiedBlocks.currentTrains.append(['K63'])
-                elif i[0] == 'red':
+                elif i[0] == 'Red':
                     self.occupiedBlocks.currentTrains.append(['D10'])
 
 
@@ -357,9 +357,11 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Enable Maintenance Mode functions
         self.CloseBlockSelect.setEnabled(True)
         self.CloseBlockButton.setEnabled(True)
+        self.ReopenBlockButton.setEnabled(True)
         self.ChooseSwitchSelect.setEnabled(True)
         self.SwitchPositionSelect.setEnabled(True)
         self.SetSwitchPositionButton.setEnabled(True)
+        self.ReleaseSwitchButton.setEnabled(True)
         #Setting text to gray
         self.CloseBlockPromptLabel.setStyleSheet("color: black;")
         self.ChooseSwitchLabel.setStyleSheet("color: black;")
@@ -425,7 +427,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         BlockToClose = self.CloseBlockSelect.currentText()
         
         #if green line blocks are being shown, find corresponding green line block
-        if self.currentLine == 'green':
+        if self.currentLine == 'Green':
             for i in self.TrackData.GreenBlocks:
                 if i.ID == BlockToClose:
                     temp = i
@@ -447,7 +449,36 @@ class CTC_UI(QtWidgets.QMainWindow):
 
     #Function to reopen a block closure when in maintence mode
     def reopenBlock_button(self):
-        print("to be written")
+        #Read block selection from UI drop down
+        BlockToOpen = []
+        BlockToOpen.append(self.CloseBlockSelect.currentText())
+        BlockToOpen.append(self.currentLine)
+
+        for i in range(len(self.Maintence.BlocksClosedIDs)):
+            if BlockToOpen == self.Maintence.BlocksClosedIDs[i]:
+                #Reset block
+                self.Maintence.BlocksClosed[i].occupied = 0
+                self.Maintence.BlocksClosed[i].maintenance = 0
+
+                #Send to wayside
+                self.sendBlockClosures.emit(self.Maintence.BlocksClosed)
+
+                #Remove from maintenence list and update table
+                self.Maintence.BlocksClosed.pop(i)
+                self.Maintence.BlocksClosedIDs.pop(i)
+                self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintence.BlocksClosedIDs))
+
+                return
+
+        """
+        #Attempt to popup a message if the user enters a block that isn't closed
+        error_msg = QMessageBox()
+        error_msg.setWindowTitle("Selection Error")
+        error_msg.setText("Selected block was not closed")
+        error_msg.setIcon(QMessageBox.Critical)
+
+        error_msg.show()
+        """
         
     #Function to set switch positons when in maintenance mode
     def setSwitch_button(self):
@@ -457,7 +488,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         positionIndex = self.SwitchPositionSelect.currentIndex()
 
         #if green line blocks are being shown, find corresponding green line block
-        if self.currentLine == 'green':
+        if self.currentLine == 'Green':
             for i in self.TrackData.GreenBlocks:
                 if i.blockNum == switchToSet:
                     temp = i
@@ -482,16 +513,17 @@ class CTC_UI(QtWidgets.QMainWindow):
     
     #Function to release a set switch positons when in maintenance mode
     def releaseSwitch_button(self):
-        print("TBD")
+        test = self.SwitchPositionTable.QItemSelectionModel()
+        print(test)
 
     #Funciton to sync switch position options to current selected switch
     def newSwitchSelected(self, index):
         self.SwitchPositionSelect.clear()
 
-        if self.currentLine == 'green':
+        if self.currentLine == 'Green':
             self.SwitchPositionSelect.addItem(self.TrackData.GreenSwitches[index][1])
             self.SwitchPositionSelect.addItem(self.TrackData.GreenSwitches[index][2])
-        if self.currentLine == 'red':
+        if self.currentLine == 'Red':
             self.SwitchPositionSelect.addItem(self.TrackData.RedSwitches[index][1])
             self.SwitchPositionSelect.addItem(self.TrackData.RedSwitches[index][2])
 

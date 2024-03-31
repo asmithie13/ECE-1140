@@ -66,6 +66,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Initializing Schedule
         self.trainSchedule = Schedule() 
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        ScheduleHeader = self.ScheduleTable.horizontalHeader()
+        ScheduleHeader.setSectionResizeMode(QHeaderView.ResizeToContents)
 
         #Initializing Manual Mode Functions before Manual Mode has been selected
         self.TrainNameField.clear()
@@ -105,7 +107,12 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Initializing Maintance Tables
         self.Maintence = CTC_Maintenance()
         self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintence.BlocksClosed))
+        BCHeader = self.BlockClosureTable.horizontalHeader()
+        BCHeader.setSectionResizeMode(QHeaderView.ResizeToContents)
+        
         self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintence.BlocksClosed))
+        SPHeader = self.SwitchPositionTable.horizontalHeader()
+        SPHeader.setSectionResizeMode(QHeaderView.ResizeToContents)
 
         #Initializing Throughput    
         self.ThroughputGraph = Throughput()
@@ -383,7 +390,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         #update the current variable to be the newly calculated ones
         self.occupiedBlocks.currentTrains = self.occupiedBlocks.newTrains
         self.occupiedBlocks.BlockDataCurrent = self.occupiedBlocks.BlockDataNew
-        
+
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockDataCurrent))
 
 

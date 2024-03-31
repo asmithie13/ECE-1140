@@ -29,6 +29,7 @@ class TrainModel_mainwindow(QMainWindow):
 
     prev_vel=0
     prev_acc=0
+    grade=0
     
     #Track Model Signals
     track_model_acc_velo = qtc.pyqtSignal(int)

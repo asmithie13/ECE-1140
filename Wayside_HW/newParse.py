@@ -41,8 +41,3 @@ def newParse(occupiedBlockSections, allBlocks):
             logicFlag = not logicFlag
 
     return allBlocks
-                        
-
-
-
-

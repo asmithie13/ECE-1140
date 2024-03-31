@@ -72,10 +72,11 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
         ScheduleHeader = self.ScheduleTable.horizontalHeader()
         ScheduleHeader.setSectionResizeMode(QHeaderView.ResizeToContents)
+        #ScheduleHeader.setSectionResizeMode(QHeaderView.Fixed)
 
         #Initializing Manual Mode Functions before Manual Mode has been selected
-        self.TrainNameField.clear()
-        self.TrainNameField.setEnabled(False)
+        self.TrainNameSelect.clear()
+        self.TrainNameSelect.setEnabled(False)
         self.DestinationSelect.setEnabled(False)
         self.ArrivalTimeEdit.setEnabled(False)
         #Disable the add train button
@@ -114,11 +115,11 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.Maintenance = CTC_Maintenance()
         self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintenance.BlocksClosed))
         BCHeader = self.BlockClosureTable.horizontalHeader()
-        BCHeader.setSectionResizeMode(QHeaderView.ResizeToContents)
+        BCHeader.setSectionResizeMode(QHeaderView.Stretch)
         
         self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintenance.BlocksClosed))
         SPHeader = self.SwitchPositionTable.horizontalHeader()
-        SPHeader.setSectionResizeMode(QHeaderView.ResizeToContents)
+        SPHeader.setSectionResizeMode(QHeaderView.Stretch)
 
         #Initializing Throughput    
         self.ThroughputGraph = Throughput()
@@ -214,29 +215,15 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.updateTicketSales(AverageSales)
 
     """Function to Define Behavior of CTC UI"""    
-    #defining manual mode add train button functionality
-    def addTrain_button(self):
-        #Grabbing values from the UI
-        TrainID = self.TrainNameField.text()
-        Destination = self.DestinationSelect.currentText()
-        ArrivalTime = self.ArrivalTimeEdit.time()
-
-        #Calculatig the Departure Station and time
-        Departure = []
-        self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure)
-
-        #Adding the train to the schedule
-        self.trainSchedule.addTrain(TrainID, Destination, ArrivalTime, Departure[0], Departure[1])
-        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
-
-
     #Define mutually exclisive auto/manual mode when manual mode is selected
     def selectManualMode_button(self):
         #Disable Manual Mode button because there's no need to select it twice
         self.ManualModeButton.setEnabled(False)
         self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
 
-        self.TrainNameField.setEnabled(True)
+        self.TrainNameSelect.setEnabled(True)
+        self.TrainNameSelect.clear()
+        self.TrainNameSelect.addItems(self.trainSchedule.TrainNames)
         self.DestinationSelect.setEnabled(True)
         self.ArrivalTimeEdit.setEnabled(True)
         #Disable the add train button
@@ -254,8 +241,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.UploadButton.setStyleSheet("background-color : rgb(38, 207, 4)")       #Green
         
         #Disable Manual Mode Functions
-        self.TrainNameField.clear()
-        self.TrainNameField.setEnabled(False)
+        self.TrainNameSelect.clear()
+        self.TrainNameSelect.setEnabled(False)
         self.DestinationSelect.setEnabled(False)
         self.ArrivalTimeEdit.setEnabled(False)
         #Disable the add train button
@@ -405,9 +392,20 @@ class CTC_UI(QtWidgets.QMainWindow):
     #defining manual mode add train button functionality
     def addTrain_button(self):
         #Getting User entered Info
-        TrainID = self.TrainNameField.text()
+        TrainID = self.TrainNameSelect.currentText() 
         Destination = self.DestinationSelect.currentText()
         ArrivalTime = self.ArrivalTimeEdit.time()
+
+        #Add a new train name option if required
+        if TrainID == self.trainSchedule.TrainNames[0]:
+            TrainID = self.trainSchedule.TrainNames[0][1:]
+            self.trainSchedule.TrainNames[0] = TrainID
+            newID = "*T" + str(int(self.trainSchedule.TrainNames[0][1:]) + 1)
+            self.trainSchedule.TrainNames.insert(0,newID)
+            
+            #reset train name options
+            self.TrainNameSelect.clear()
+            self.TrainNameSelect.addItems(self.trainSchedule.TrainNames)
 
         #Calculating Departure Info
         Departure = []

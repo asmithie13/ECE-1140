@@ -23,7 +23,7 @@
       <item>
        <layout class="QVBoxLayout" name="CTC_TabCol1" stretch="1,4">
         <item>
-         <layout class="QHBoxLayout" name="TopCol1Layout">
+         <layout class="QHBoxLayout" name="TopCol1Layout" stretch="1,2">
           <item>
            <layout class="QVBoxLayout" name="ButtonLayout">
             <item>
@@ -524,7 +524,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="TrainNameField"/>
+                  <widget class="QComboBox" name="TrainNameSelect"/>
                  </item>
                  <item>
                   <widget class="QPushButton" name="AddTrainButton">
@@ -536,7 +536,7 @@
                 </layout>
                </item>
                <item>
-                <layout class="QHBoxLayout" name="ManualDispatchRow2" stretch="1,2,2,2">
+                <layout class="QHBoxLayout" name="ManualDispatchRow2" stretch="1,2,1,1">
                  <property name="sizeConstraint">
                   <enum>QLayout::SetFixedSize</enum>
                  </property>

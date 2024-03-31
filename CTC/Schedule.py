@@ -17,6 +17,7 @@ class Schedule():
         self.Scheduledata = []
         self.AuthorityInfo = []
         self.TrackData = TempData()
+        self.TrainNames = ["*T1"]
 
     #Function to add a single train to the schedule
     def addTrain(self, line, TrainID, Destination, ArrivalTime, Departure, DepartureTime):

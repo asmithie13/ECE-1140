@@ -32,7 +32,7 @@ class Vital_Authority():
             #self.AuthM = self.ui.lcdAuth.value()*0.3048
 
             self.AuthM = self.decimal_m_auth
-
+        
             #current speed in m/s from mph
             self.V_i = self.ui.lcdCurSpd.value()*0.44704
 

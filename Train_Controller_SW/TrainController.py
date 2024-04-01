@@ -129,7 +129,7 @@ class TrainController(QMainWindow):
       self.ui.inputKi.setDisabled(True)
       self.ui.inputKp.setDisabled(True)
 
-      self.Vital_Speed.Speed_Monitor()
+      #self.Vital_Speed.Speed_Monitor()
       #self.ui.vertSliderPow.setDisabled(True)
       #self.ui.vertSliderBrk.setDisabled(True)
 

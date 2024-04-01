@@ -7,6 +7,7 @@ class Vital_Speed():
         self.service_brake_sig = service_brake_sig
 
     def Control_Current_Speed(self,newSpeed):
+        print("Curr Spd Tanvi :", newSpeed)
         self.ui.lcdCurSpd.display(newSpeed)
         self.Speed_Monitor()
     

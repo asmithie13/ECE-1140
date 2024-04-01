@@ -82,7 +82,7 @@ class Ui_MainWindow(object):
         self.lcdAcel = QtWidgets.QLCDNumber(self.groupBox_2)
         self.lcdAcel.setObjectName("lcdAcel")
         self.verticalLayout.addWidget(self.lcdAcel)
-        self.lcdAcel.setDigitCount(6)
+        self.lcdAcel.setDigitCount(8)
         self.label_20 = QtWidgets.QLabel(self.groupBox_2)
         font = QtGui.QFont()
         font.setPointSize(20)

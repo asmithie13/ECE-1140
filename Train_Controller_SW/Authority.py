@@ -48,6 +48,8 @@ class Vital_Authority():
                 self.ui.vertSliderPow.setDisabled(True)
                 if self.AuthM < self.stoppubgdistanceEmergency:
                     self.ui.Ebrake.setChecked(True)
+            elif self.ui.Ebrake.isChecked():
+                self.ui.Ebrake.setChecked(False)
 
 
     #we need to deal with whatever this is

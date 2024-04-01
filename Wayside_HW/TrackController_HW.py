@@ -157,55 +157,10 @@ class TrackController_HW(QMainWindow):
     
         #TO-DO HERE:
         #-Move parser to RPi
-        #***Could calculate on software and hardware to ensure vitality?
+        #-Calculate on software and hardware to ensure vitality?
 
         #Ajust block-wise authority based on active red lights:
-        for block in self.allBlocks:
-            if block.ID == 'A1':
-                tempA1 = block.lightState
-            elif block.ID == 'C12':
-                tempC12 = block.lightState
-            elif block.ID == 'G29':
-                tempG29 = block.lightState
-            elif block.ID == 'Z150':
-                tempZ150 = block.lightState
-        
-        if tempA1 == False:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_A1:
-                    block.authority = False
-        else:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_A1:
-                    block.authority = True
-        
-        if tempC12 == False:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_C12:
-                    block.authority = False
-        else:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_C12:
-                    block.authority = True
-        
-        if tempG29 == False:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_G29:
-                    block.authority = False
-        else:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_G29:
-                    block.authority = True
-        
-        if tempZ150 == False:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_Z150:
-                    block.authority = False
-        else:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_Z150:
-                    block.authority = True
-
+        self.updateBooleanAuth()
         self.sendUpdatedBlocks.emit(self.allBlocks)
     
     def selectBlock(self):
@@ -288,52 +243,7 @@ class TrackController_HW(QMainWindow):
                 break
 
         #Ajust block-wise authority based on active red lights:
-        for block in self.allBlocks:
-            if block.ID == 'A1':
-                tempA1 = block.lightState
-            elif block.ID == 'C12':
-                tempC12 = block.lightState
-            elif block.ID == 'G29':
-                tempG29 = block.lightState
-            elif block.ID == 'Z150':
-                tempZ150 = block.lightState
-        
-        if tempA1 == False:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_A1:
-                    block.authority = False
-        else:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_A1:
-                    block.authority = True
-        
-        if tempC12 == False:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_C12:
-                    block.authority = False
-        else:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_C12:
-                    block.authority = True
-        
-        if tempG29 == False:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_G29:
-                    block.authority = False
-        else:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_G29:
-                    block.authority = True
-        
-        if tempZ150 == False:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_Z150:
-                    block.authority = False
-        else:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_Z150:
-                    block.authority = True
-
+        self.updateBooleanAuth()
         self.sendUpdatedBlocks.emit(self.allBlocks)
 
         self.pushButtonGreen.setEnabled(True)
@@ -350,52 +260,7 @@ class TrackController_HW(QMainWindow):
                 break
 
         #Ajust block-wise authority based on active red lights:
-        for block in self.allBlocks:
-            if block.ID == 'A1':
-                tempA1 = block.lightState
-            elif block.ID == 'C12':
-                tempC12 = block.lightState
-            elif block.ID == 'G29':
-                tempG29 = block.lightState
-            elif block.ID == 'Z150':
-                tempZ150 = block.lightState
-        
-        if tempA1 == False:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_A1:
-                    block.authority = False
-        else:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_A1:
-                    block.authority = True
-        
-        if tempC12 == False:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_C12:
-                    block.authority = False
-        else:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_C12:
-                    block.authority = True
-        
-        if tempG29 == False:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_G29:
-                    block.authority = False
-        else:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_G29:
-                    block.authority = True
-        
-        if tempZ150 == False:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_Z150:
-                    block.authority = False
-        else:
-            for block in self.allBlocks:
-                if block.ID in self.LIGHT_Z150:
-                    block.authority = True
-
+        self.updateBooleanAuth()
         self.sendUpdatedBlocks.emit(self.allBlocks)
 
         self.pushButtonRed.setEnabled(True)
@@ -463,3 +328,51 @@ class TrackController_HW(QMainWindow):
     
     def handleSpeedAuthority(self, receivedSpeedAuthority):
         self.sendSpeedAuthority.emit(receivedSpeedAuthority) #Pass-on distance-wise authority straight to train controller without changing
+    
+    def updateBooleanAuth(self):
+        #Ajust block-wise authority based on active red lights:
+        for block in self.allBlocks:
+            if block.ID == 'A1':
+                tempA1 = block.lightState
+            elif block.ID == 'C12':
+                tempC12 = block.lightState
+            elif block.ID == 'G29':
+                tempG29 = block.lightState
+            elif block.ID == 'Z150':
+                tempZ150 = block.lightState
+        
+        if tempA1 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_A1:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_A1:
+                    block.authority = True
+        
+        if tempC12 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_C12:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_C12:
+                    block.authority = True
+        
+        if tempG29 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_G29:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_G29:
+                    block.authority = True
+        
+        if tempZ150 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_Z150:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_Z150:
+                    block.authority = True

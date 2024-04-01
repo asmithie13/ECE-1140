@@ -13,7 +13,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 #Enable serial communication:
-#serialObject = serial.Serial('COM8', 9600)
+serialObject = serial.Serial('COM8', 9600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -141,23 +141,44 @@ class TrackController_HW(QMainWindow):
         occupiedBlockString += '1'
 
         occupiedBlockBytes = occupiedBlockString.encode()
-        #serialObject.write(occupiedBlockBytes)
+        serialObject.write(occupiedBlockBytes)
 
         #Receiving serial response from the Raspberry Pi:
-        '''attributeList = []
+        copyBlocks = self.allBlocks #Copy of original blocks to compare
+
+        attributeList = []
         while True:
             if serialObject.in_waiting > 0:
-                readAttribute = serialObject.readline().decode('utf-8').rstrip()
-                if readAttribute == 'A':
+                myAttribute = serialObject.read(serialObject.in_waiting).decode('utf-8')
+                if myAttribute == 'A':
                     break
-                attributeList.append(readAttribute)'''
-
+                else:
+                    attributeList.append(myAttribute)
+                
+        for block in copyBlocks:
+            if block.ID == 'A1':
+                block.lightState = int(attributeList[0])
+            elif block.ID == 'C12':
+                block.lightState = int(attributeList[1])
+            elif block.ID == 'D13':
+                block.switchState = int(attributeList[2])
+            elif block.ID == 'E19':
+                block.crossingState = int(attributeList[3])
+            elif block.ID == 'F28':
+                block.switchState = int(attributeList[4])
+            elif block.ID == 'G29':
+                block.lightState = int(attributeList[5])
+            elif block.ID == 'T108':
+                block.crossingState = int(attributeList[6])
+            elif block.ID == 'Z150':
+                block.lightState = int(attributeList[7])
+        
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
-    
-        #TO-DO HERE:
-        #-Move parser to RPi
-        #-Calculate on software and hardware to ensure vitality?
+        if copyBlocks != self.allBlocks:
+            print("ERROR: HARDWARE CONTROL INCORRECT")
+        else:
+            print("SWITCH CALCULATED CORRECTLY")
 
         #Ajust block-wise authority based on active red lights:
         self.updateBooleanAuth()

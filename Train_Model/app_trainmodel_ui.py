@@ -400,6 +400,7 @@ class TrainCalculations:
         self.main_window.Acc_Velo_value_lcd.display(velocity)
         self.TC.curr_spd_sig.emit(int(velocity))
         self.main_window.track_model_acc_velo.emit(int(velocity))
+        self.prev_vel = velocity
         return int(velocity)
         
 

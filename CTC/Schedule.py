@@ -45,12 +45,26 @@ class Schedule():
 
         #For each row besides the header row, calculate departure data and add to schedule
         for row in reader:
-            #Check Color is valid
+            #Check Color and departure station are valid
             if (row[0] == 'Green') or (row[0] == 'green'):
                 line = 'Green'
+                stationExists = False
+
+                for station in self.TrackData.GreenStations:
+                    if station == row[2]:
+                        stationExists = True
+                        break
+
             elif (row[0] == 'Red') or (row[0] == 'red'):
                 line = 'Red'
+                stationExists = False
+
+                for station in self.TrackData.RedStations:
+                    if station == row[2]:
+                        stationExists = True
+                        break
             else:
+                #Line is not a valid color
                 line_error = QMessageBox()
                 line_error.setWindowTitle("Input Error")
                 message = row[0] + " is not a valid line color. Please fix the schedule."
@@ -59,6 +73,17 @@ class Schedule():
 
                 line_error.exec_() 
 
+                return 0
+            
+            #Destintion is not valid
+            if stationExists == False:
+                station_error = QMessageBox()
+                station_error.setWindowTitle("Input Error")
+                message = row[2] + " is not a valid destination on " + line + " line. Please fix the schedule."
+                station_error.setText(message)
+                station_error.setIcon(QMessageBox.Critical)
+
+                station_error.exec_()
                 return 0
 
             DepartureData = []

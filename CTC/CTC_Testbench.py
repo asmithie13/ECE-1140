@@ -42,7 +42,7 @@ class CTC_Testbench(QtWidgets.QMainWindow):
         for i in range(len(UpdatedBlocks)):
             temp = []
             temp.append(UpdatedBlocks[i])
-            temp.append('green')
+            temp.append('Green')
             BlocksWithLineColor.append(temp)
 
         self.sendOccupiedBlocks.emit(BlocksWithLineColor)

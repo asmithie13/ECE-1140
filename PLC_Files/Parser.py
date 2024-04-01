@@ -14,6 +14,7 @@ class Parser():
         self.outPuttedBlocks = outPuttedBlocks
 
     def parsePLC(self):
+        if self.inputPLC is None : return
         lines = self.inputPLC.split('\n')
         switchLogic, curLightLogic, leftLightLogic, rightLightLogic = lines[0], lines[3], lines[6], lines[9]
 
@@ -29,6 +30,7 @@ class Parser():
             
 
         for data in CrossingTripleBlocks:
+            if len(data) == 0: continue
             SwitchOcc = data[0].occupied
             SwitchLeftOcc = data[1].occupied
             SwitchRightOcc = data[2].occupied

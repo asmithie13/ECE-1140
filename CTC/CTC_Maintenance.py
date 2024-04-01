@@ -12,10 +12,10 @@ from PyQt5 import uic
 #Class to manage maintenece mode for CTC
 class CTC_Maintenance():
     def __init__(self):
-        self.BlocksClosed = []
-        self.BlocksClosedIDs = []
-        self.SwitchText = []
-        self.SwitchesSet = []
+        self.BlocksClosed = []          #Block class object
+        self.BlocksClosedIDs = []       #List of lists: Line, BlockID
+        self.SwitchText = []            #Block class objects
+        self.SwitchesSet = []           #List of lists: Line, Switch, Position
 
     def addBlockClosure(self, BlockID):
         newBlockClosure = [BlockID]

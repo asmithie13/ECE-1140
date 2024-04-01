@@ -128,7 +128,6 @@ class TrackModelMain(QMainWindow):
         for block_num in range(63, 66):
             block_length = self.data.get_length_for_block(block_num)
             self.total_block_length += block_length  # Cumulative sum of block lengths
-            print("total block length: ", self.total_block_length)
 
             # Proceed with the rest of your logic
             self.speed_limit_km = self.data.get_speed_for_block(block_num)
@@ -137,11 +136,13 @@ class TrackModelMain(QMainWindow):
             # Ensure the right side of the condition calculates a distance for a meaningful comparison
             distance_covered = speed_of_train * (1 / (self.speed_limit_km * 1000 / (60 * 60)))
 
+            if distance_covered >= authority:
+                break
+            
             if self.total_block_length >= distance_covered:
                 self.block_num_occ = int(self.data.get_block_for_block(block_num))
                 self.section_occ = self.data.get_section_for_block(block_num)
                 self.blockID = self.section_occ + str(self.block_num_occ)
-                print("block occ", self.blockID)
                 
                 self.update_occupied_blocks(self.blockID, is_occupied=True)
                 # print("selected block",self.selected_block)
@@ -217,6 +218,7 @@ class TrackModelMain(QMainWindow):
 
         # Emit the updated list of occupied blocks
         self.sendBlockOcc_SW.emit(self.occupied_blocks)
+        #self.sendBlockOcc_HW.emit(self.occupied_blocks)
 
 
     #FROM TRAIN MODEL for block occupancy

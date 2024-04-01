@@ -34,20 +34,36 @@ class Schedule():
             csv_file.close
 
         if len(headers) != 4:
-            error_msg = QMessageBox()
-            error_msg.setWindowTitle("Selection Error")
-            error_msg.setText("No Schedule File Selected")
-            error_msg.setIcon(QMessageBox.Critical)
+            col_error = QMessageBox()
+            col_error.setWindowTitle("Input Error")
+            col_error.setText("Incorrect Number of Columns in Schedule File")
+            col_error.setIcon(QMessageBox.Critical)
 
-            error_msg.exec_() 
+            col_error.exec_() 
 
             return 0
 
         #For each row besides the header row, calculate departure data and add to schedule
         for row in reader:
+            #Check Color is valid
+            if (row[0] == 'Green') or (row[0] == 'green'):
+                line = 'Green'
+            elif (row[0] == 'Red') or (row[0] == 'red'):
+                line = 'Red'
+            else:
+                line_error = QMessageBox()
+                line_error.setWindowTitle("Input Error")
+                message = row[0] + " is not a valid line color. Please fix the schedule."
+                line_error.setText(message)
+                line_error.setIcon(QMessageBox.Critical)
+
+                line_error.exec_() 
+
+                return 0
+
             DepartureData = []
             tempArrivalTime = QTime()   #Converting ArrivalTime to QTime for easier math
-            self.calculateDeparture(row[2], tempArrivalTime.fromString(row[3]), DepartureData, row[0])
+            self.calculateDeparture(row[2], tempArrivalTime.fromString(row[3]), DepartureData, line)
             #Adding departure Data to the row data
             row.append(DepartureData[0])
             row.append(DepartureData[1])

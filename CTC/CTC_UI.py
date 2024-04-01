@@ -328,6 +328,18 @@ class CTC_UI(QtWidgets.QMainWindow):
         file_dialog = QFileDialog()
         file_path, _ = file_dialog.getOpenFileName(self, "Select Schedule File", "", "CSV FIle (*.csv);;All Files (*)")
 
+        #Validate user has choosen a file
+        if file_path == "":
+            #Popup a message if the user enters a block that isn't closed
+            error_msg = QMessageBox()
+            error_msg.setWindowTitle("Selection Error")
+            error_msg.setText("No Schedule File Selected")
+            error_msg.setIcon(QMessageBox.Critical)
+
+            error_msg.exec_() 
+
+            return
+
         #Parse File
         self.trainSchedule.parseScheduleFile(file_path)
         #Update Table

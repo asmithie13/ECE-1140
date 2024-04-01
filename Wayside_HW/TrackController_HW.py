@@ -142,7 +142,7 @@ class TrackController_HW(QMainWindow):
 
         occupiedBlockBytes = occupiedBlockString.encode()
         serialObject.write(occupiedBlockBytes)
-
+        '''BEGIN SERIAL COMMUNICATION'''
         #Receiving serial response from the Raspberry Pi:
         copyBlocks = self.allBlocks #Copy of original blocks to compare
 

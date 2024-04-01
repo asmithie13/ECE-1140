@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
-     <layout class="QHBoxLayout" name="CTC_TabCols" stretch="5,4">
+     <layout class="QHBoxLayout" name="CTC_TabCols" stretch="5,3">
       <property name="spacing">
        <number>8</number>
       </property>

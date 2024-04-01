@@ -19,10 +19,12 @@ class Vital_Authority():
 
         #calculate authority using d=r*t
         self.rate = self.ui.lcdCurSpd.value()*1.46667 #mph to fps
+        self.rate_metric = self.ui.lcdCurSpd.value()*0.44704
         self.time = 1
         if(not(self.ui.lcdAuth.value() == 0) and not(self.ui.lcdCurSpd.value == 0)):
             self.ui.lcdAuth.display(self.ui.lcdAuth.value() - int(self.rate*self.time)) #auth = auth - rate*time
-            self.decimal
+            self.decimal_m_auth = self.decimal_m_auth - float(self.rate_metric*self.time)
+        
         if self.ui.lcdAuth.value() != 0:
 
             #authority in m from ft
@@ -45,10 +47,11 @@ class Vital_Authority():
                 self.ui.vertSliderBrk.setValue(1)
                 self.ui.vertSliderPow.setValue(0)
                 self.ui.vertSliderPow.setDisabled(True)
-                if self.AuthM < self.stoppubgdistanceEmergency:
-                    self.ui.Ebrake.setChecked(True)
-            elif self.ui.Ebrake.isChecked():
-                self.ui.Ebrake.setChecked(False)
+            if self.AuthM < self.stoppubgdistanceEmergency:
+                self.ui.vertSliderBrk.setValue(0)
+                self.ui.Ebrake.setChecked(True)
+            # elif self.ui.Ebrake.isChecked():
+            #     self.ui.Ebrake.setChecked(False)
 
 
     #we need to deal with whatever this is

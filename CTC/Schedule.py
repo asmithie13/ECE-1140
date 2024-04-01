@@ -33,6 +33,16 @@ class Schedule():
             headers = next(reader)      #Skip header row
             csv_file.close
 
+        if len(headers) != 4:
+            error_msg = QMessageBox()
+            error_msg.setWindowTitle("Selection Error")
+            error_msg.setText("No Schedule File Selected")
+            error_msg.setIcon(QMessageBox.Critical)
+
+            error_msg.exec_() 
+
+            return 0
+
         #For each row besides the header row, calculate departure data and add to schedule
         for row in reader:
             DepartureData = []
@@ -44,6 +54,8 @@ class Schedule():
             #Adding to Schedule
             #Line, TrainID, Destination, Arrival Time, Departure Station, Departure Time
             self.Scheduledata.append(row)
+
+        return 1
 
     def calculateDeparture(self, Destination, ArrivalTime, Departure, line):
         #Setting Departure Station

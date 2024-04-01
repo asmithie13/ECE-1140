@@ -341,13 +341,16 @@ class CTC_UI(QtWidgets.QMainWindow):
             return
 
         #Parse File
-        self.trainSchedule.parseScheduleFile(file_path)
-        #Update Table
-        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        correct = self.trainSchedule.parseScheduleFile(file_path)
 
-        #Disable Manual Mode and upload button
-        self.UploadButton.setEnabled(False)
-        self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
+        #If file has been parsed correctly
+        if correct:
+            #Update Table
+            self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+
+            #Disable Manual Mode and upload button
+            self.UploadButton.setEnabled(False)
+            self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
     
     #Function to determine if the system is entering or exitting maintenance mode
     def maintenanceMode_button(self):

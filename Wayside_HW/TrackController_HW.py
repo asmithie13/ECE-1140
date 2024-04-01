@@ -2,13 +2,19 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
+import time
+import serial
 import sys
 import os
 import re
 
-#Using Block Class as a seperate file
+#Using Block Class as a seperate file:
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
+
+#Enable serial communication:
+serialObject = serial.Serial('COM8', 9600)
+
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -128,6 +134,24 @@ class TrackController_HW(QMainWindow):
             if block.blockSection not in occupiedBlockSections:
                 occupiedBlockSections.append(block.blockSection)
         occupiedBlockSections.sort()
+
+        #Send string with flag at end to send block occupancies serially:
+        occupiedBlockString = ""
+        for section in occupiedBlockSections:
+            occupiedBlockString += section
+        occupiedBlockString += '1'
+
+        occupiedBlockBytes = occupiedBlockString.encode()
+        #serialObject.write(occupiedBlockBytes)
+
+        #Receiving serial response from the Raspberry Pi:
+        '''attributeList = []
+        while True:
+            if serialObject.in_waiting > 0:
+                readAttribute = serialObject.readline().decode('utf-8').rstrip()
+                if readAttribute == 'A':
+                    break
+                attributeList.append(readAttribute)'''
 
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)

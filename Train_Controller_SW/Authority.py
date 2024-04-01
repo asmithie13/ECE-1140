@@ -22,8 +22,7 @@ class Vital_Authority():
         self.time = 1
         if(not(self.ui.lcdAuth.value() == 0) and not(self.ui.lcdCurSpd.value == 0)):
             self.ui.lcdAuth.display(self.ui.lcdAuth.value() - int(self.rate*self.time)) #auth = auth - rate*time
-
-
+            self.decimal
         if self.ui.lcdAuth.value() != 0:
 
             #authority in m from ft
@@ -73,6 +72,5 @@ class Vital_Authority():
 
     def Control_Authority(self,auth):
         self.decimal_m_auth = auth
-        print(auth)
         self.ui.lcdAuth.display(int(auth * 3.28084))
         self.ui.vertSliderPow.setEnabled(True)

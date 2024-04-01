@@ -76,8 +76,6 @@ class TrainController(QMainWindow):
         self.curr_bool_auth_sig.connect(self.Vital_Authority.Authority_Monitor_Bool)
         self.block_passed_sig.connect(self.NonVital.BlockCounter)
         self.curr_bool_auth_sig.connect(self.Vital_Authority.Authority_Monitor_Bool)
-        
-        #CHAD FIX ME
         self.time_sig.connect(self.Timer)
 
         #connecting UI buttons to functions

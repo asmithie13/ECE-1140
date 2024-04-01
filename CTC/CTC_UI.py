@@ -385,9 +385,10 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #If we are exiting Maintenance Mode
         if exitMode == QMessageBox.Ok:
+            #Set button color
             self.inMaintenance = False
             self.MaintenanceModeButton.setStyleSheet("background-color : white")
-
+            #Disable all button/maintenace functions
             self.CloseBlockSelect.setEnabled(False)
             self.CloseBlockButton.setEnabled(False)
             self.ChooseSwitchSelect.setEnabled(False)
@@ -405,13 +406,31 @@ class CTC_UI(QtWidgets.QMainWindow):
             if len(self.Maintenance.BlocksClosed) > 0:
                 for block in range(len(self.Maintenance.BlocksClosed)):
                     #Reset block
-                    self.Maintenance.BlocksClosed[i].occupied = 0
-                    self.Maintenance.BlocksClosed[i].maintenance = 0
+                    self.Maintenance.BlocksClosed[block].occupied = 0
+                    self.Maintenance.BlocksClosed[block].maintenance = 0
 
                     
                 #Send to wayside
                 self.sendBlockClosures.emit(self.Maintenance.BlocksClosed)
 
+                #Update Table
+                self.Maintenance.BlocksClosed.clear()
+                self.Maintenance.BlocksClosedIDs.clear()
+                self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintenance.BlocksClosedIDs))
+
+            #Release all switches if any are set
+            if len(self.Maintenance.SwitchesSet) > 0:
+                for switch in range(len(self.Maintenance.SwitchesSet)):
+                    #Reset block
+                    self.Maintenance.SwitchesSet[switch].maintenance = 0
+
+                #Send to wayside
+                self.sendSwitchPositions.emit(self.Maintenance.SwitchesSet)
+
+                #Update Table
+                self.Maintenance.SwitchesSet.clear()
+                self.Maintenance.SwitchText.clear()
+                self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintenance.SwitchText))
 
 
     #function to update block occupied table based on input from Wayside

@@ -154,12 +154,12 @@ class TrainModel_mainwindow(QMainWindow):
     def ebrake_activated(self,state):
         self.ebrake.setCheckable(False)
         self.TC.ebrake_sig.emit(1)
-        self.main_window.ebrake_state=1
+        self.ebrake_state=1
 
     def ebrake_disabled(self,ebrake_state):
         self.ebrake.setCheckable(True)
         self.ebrake.toggle()
-        self.main_window.ebrake_state=0
+        self.ebrake_state=0
            
         
         
@@ -396,11 +396,11 @@ class TrainCalculations:
         force = self.calculate_force(commanded_speed,grade,mass)
         mass = self.main_window.mass
         acceleration = (0.3048*force)/(mass/32.2) #acc in ft/s^2
-        if self.main_window.brake_state==1:
-            acceleration=-3.9370078740157477 #in ft/s^2
+        # if self.main_window.brake_state==1:
+        #     acceleration=-3.9370078740157477 #in ft/s^2
         
-        if self.main_window.ebrake_state==1:
-            acceleration=-8.956692913385826 #in ft/s^2
+        # if self.main_window.ebrake_state==1:
+        #     acceleration=-8.956692913385826 #in ft/s^2
 
         self.main_window.Acceleration_value_lcd.display(acceleration)
         return acceleration
@@ -414,12 +414,21 @@ class TrainCalculations:
         #converting acceleration to mph^2
         acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration(commanded_speed,grade,mass)
         train_model_time=self.get_time()
-        if acceleration==0:
-            print(1)
         
         #converting sec to hours
         train_model_time_hours=train_model_time/3600
         self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration + self.main_window.prev_acc)
+
+        if self.main_window.brake_state==1:
+            acceleration=-3.9370078740157477 #in ft/s^2
+            self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
+        
+        if self.main_window.ebrake_state==1:
+            acceleration=-8.956692913385826 #in ft/s^2
+            self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
+        
+
+
         self.main_window.prev_vel=self.main_window.velocity
         self.main_window.prev_acc=acceleration
 

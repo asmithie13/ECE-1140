@@ -368,7 +368,7 @@ class TrainCalculations:
         #GRADE=SIN(THETA)
         theta=math.atan(grade/100)
         self.grav_force=mass*9.81*math.sin(theta)
-        power = 1000 * (self.main_window.Power_value_lcd.value())
+        power = self.main_window.Power_value_lcd.value()
         speed_fts = commanded_speed * (5280 / 3600)
         force = power / speed_fts
         #if train is on a slope, normal force= mgcos(theta)
@@ -381,7 +381,7 @@ class TrainCalculations:
     def Calculate_acceleration(self,commanded_speed,grade,mass):
         force = self.calculate_force(commanded_speed,grade,mass)
         mass = self.main_window.mass
-        acceleration = (force / mass) * ((1 / 3.28084) * (1 / 3.28084))
+        acceleration = (0.3048*force)/(mass/32.2) #acc in ft/s^2
         self.main_window.Acceleration_value_lcd.display(acceleration)
         return acceleration
 
@@ -391,9 +391,12 @@ class TrainCalculations:
 
 
     def calculate_acc_velocity(self,commanded_speed,grade,mass):
+        #converting acceleration to mph^2
         acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration(commanded_speed,grade,mass)
         train_model_time=self.get_time()
-        velocity = self.main_window.prev_vel + (train_model_time/2)*(acceleration + self.main_window.prev_acc)
+        #converting sec to hours
+        train_model_time_hours=train_model_time/3600
+        velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration + self.main_window.prev_acc)
         self.main_window.Acc_Velo_value_lcd.display(velocity)
         self.TC.curr_spd_sig.emit(int(velocity))
         self.main_window.track_model_acc_velo.emit(int(velocity))

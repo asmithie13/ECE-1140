@@ -111,6 +111,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Initializing Occupied Blocks Table
         self.occupiedBlocks = OccupiedBlocks()
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockDataCurrent))
+        OBHeader = self.OccupiedBlockTable.horizontalHeader()
+        OBHeader.setSectionResizeMode(QHeaderView.Stretch)
 
         #Initializing Maintance Tables
         self.Maintenance = CTC_Maintenance()

@@ -98,10 +98,10 @@ class ScheduleTableModel(QtCore.QAbstractTableModel):
         if role == Qt.DisplayRole:
             return self._data[index.row()][index.column()]
         
-        if role == Qt.BackgroundRole and index.column() == 0 and self._data[index.row()][index.column()] == 'green':
+        if role == Qt.BackgroundRole and index.column() == 0 and self._data[index.row()][index.column()] == 'Green':
             # See below for the data structure.
             return QtGui.QColor('#26cf04')
-        elif role == Qt.BackgroundRole and index.column() == 0 and self._data[index.row()][index.column()] == 'red':
+        elif role == Qt.BackgroundRole and index.column() == 0 and self._data[index.row()][index.column()] == 'Red':
             return QtGui.QColor('#c31028')
     
     #Returns the row count of the table

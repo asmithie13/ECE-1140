@@ -4,7 +4,8 @@ import os
 import re
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
-
+import math
+import random
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
@@ -23,20 +24,24 @@ class TrainModel_mainwindow(QMainWindow):
     #in mph
     commanded_speed_def= 50
     #in lbs
-    mass_def= 50
-    #in seconds
-    time_def= 10
+    mass= 12500
 
+    prev_vel=0
+    prev_acc=0
+    grade=0
+    
     #Track Model Signals
     track_model_acc_velo = qtc.pyqtSignal(int)
 
-    def __init__(self):
+    def __init__(self,TrainID):
         super().__init__()
         uic.loadUi("Train_Model/TrainModel_UI.ui", self)
         #self.main_window = main_window
         #this is added stuff for the TC
         self.TC = TrainController()
-    
+        self.TrainID = TrainID
+        self.Set_Train_ID(TrainID)
+
         # Instantiate TrainCalculations and pass self (MyMainWindow instance) as an argument
         self.train_calculations = TrainCalculations(self,TC=self.TC)
         #CLOCK
@@ -91,6 +96,8 @@ class TrainModel_mainwindow(QMainWindow):
         self.en_fail_state = False
         self.emergency_stop_state=False
 
+    def Set_Train_ID(self,TrainID):
+        self.Train_ID_Label.setText(str(TrainID))
 
 
     def Return_TrainController(self):
@@ -98,39 +105,39 @@ class TrainModel_mainwindow(QMainWindow):
 
     #CLOCK
     def update_time(self, current_time):
-        #print(current_time.toString("hh:mm:ss"))
-        #print("Current Time:", current_time)
+        str_time=current_time.toString("hh:mm:ss")
         self.TC.time_sig.emit(current_time.toString("hh:mm:ss"))
+        self.Timer_calc(str_time)
+
+    def Timer_calc(self, time):
+        self.time=time
+        hours, minutes, seconds = [int(part) for part in time.split(':')]
+        total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
+        self.train_calculations.set_time(total_seconds)
+        self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
+        
         
     #function to set Power LCD
     def get_power_input(self, power_input):
         self.Power_value_lcd.display(power_input)
-        self.train_calculations.Calculate_acceleration()
-        self.train_calculations.calculate_force()
+        self.train_calculations.Calculate_acceleration(self.comm_speed,self.grade, self.mass)
+        self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
         return power_input
 
     #sending authority to train controller [ASK LAUREN AND CHAD]
     def receiveSpeedAuth_tm(self,speedAuth):
-        print("train model is receiving comm speed and auth")
         trainID=speedAuth[0]
-        Comm_Speed=speedAuth[1]
-        self.train_calculations.get_commanded_speed(float(Comm_Speed))
+        self.comm_speed=speedAuth[1]
+        self.train_calculations.get_commanded_speed(float(self.comm_speed),self.grade,self.mass)
         Authority=speedAuth[2]
-        print("speedAuth",speedAuth)
-        #self.sendSpeedAuth.emit(speedAuth)
-        #self.main_window.cspeed_display.setText(str(Comm_Speed))
-        # self.send_com_speed_tb.emit(str(Comm_Speed))
-        # self.send_authority_tb.emit(str(Authority))
-        self.TC.curr_cmd_spd_sig.emit(int(Comm_Speed))
+        self.train_calculations.Calculate_acceleration(self.comm_speed,self.grade,self.mass)
+        self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
+        self.train_calculations.get_acceleration(self.comm_speed,self.grade,self.mass)
+        self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
+        self.TC.curr_cmd_spd_sig.emit(int(self.comm_speed))
         self.TC.curr_auth_sig.emit(float(Authority))
 
 
-    # def estop_button_clicked(self,state):
-    #     self.emergency_stop_state=state
-    #     if not state:
-    #         self.ebrake.setStyleSheet('background-color: rgb(99, 99, 99);')
-    #         self.emergency_stop_state = True
-    #     self.TC.ebrake_sig.emit(state)
         
     def TC_ebrake_activated(self,state):
         self.ebrake.toggle()
@@ -326,54 +333,68 @@ class TrainCalculations:
     def __init__(self, main_window,TC):
         self.main_window = main_window
         self.TC = TC
-    
+        commanded_speed=main_window.comm_speed
+        mass=main_window.mass
+        grade=main_window.grade
+
+    def set_time(self,time_calc):
+        self.train_model_time=time_calc
+
+    def get_time(self):
+        return self.train_model_time
     
     def get_power(self, power_input):
         self.main_window.get_power_input(power_input)
 
-    def get_commanded_speed(self, commanded_speed):
-        self.main_window.commanded_speed_def = commanded_speed
+    def get_commanded_speed(self, commanded_speed, grade, mass):
         self.main_window.cspeed_display.setText(str(commanded_speed))
-        self.calculate_force()
-        self.Calculate_acceleration()
-        self.calculate_acc_velocity()
+        self.calculate_force(commanded_speed,grade,mass)
+        self.Calculate_acceleration(commanded_speed,grade, mass)
+        self.calculate_acc_velocity(commanded_speed,grade,mass)
         self.TC.curr_cmd_spd_sig.emit(int(commanded_speed))
 
-    def get_mass(self, mass):
+    def get_mass(self, commanded_speed, mass, grade):
         self.main_window.mass_display.setText(str(mass))
         mass = mass / 2.205
-        self.main_window.mass_def = mass
-        self.calculate_force()
-        self.Calculate_acceleration()
-        self.calculate_acc_velocity()
+        self.main_window.mass = mass
+        self.calculate_force(commanded_speed,grade, mass)
+        self.Calculate_acceleration(commanded_speed,grade, mass)
+        self.calculate_acc_velocity(commanded_speed,grade,mass)
 
-    def calculate_force(self):
+    def calculate_force(self,commanded_speed,grade,mass):
+        #FORMULA: FORCE= MASS*g*SIN(THETA)
+        #GRADE=SIN(THETA)
+        theta=math.atan(grade/100)
+        self.grav_force=mass*9.81*math.sin(theta)
         power = 1000 * (self.main_window.Power_value_lcd.value())
-        commanded_speed = self.main_window.commanded_speed_def
-        print(commanded_speed)
         speed_fts = commanded_speed * (5280 / 3600)
         force = power / speed_fts
+        #if train is on a slope, normal force= mgcos(theta)
+        if(grade>0.00):
+            force=force*math.cos(theta)
+        #accounting for friction
+        friction_coeff=0.001
         return force
 
-    def Calculate_acceleration(self):
-        force = self.calculate_force()
-        mass = self.main_window.mass_def
+    def Calculate_acceleration(self,commanded_speed,grade,mass):
+        force = self.calculate_force(commanded_speed,grade,mass)
+        mass = self.main_window.mass
         acceleration = (force / mass) * ((1 / 3.28084) * (1 / 3.28084))
         self.main_window.Acceleration_value_lcd.display(acceleration)
         return acceleration
 
-    def get_acceleration(self):
-        acceleration = self.Calculate_acceleration()
+    def get_acceleration(self,commanded_speed,grade,mass):
+        acceleration = self.Calculate_acceleration(commanded_speed,grade,mass)
         self.main_window.Acceleration_value_lcd.display(acceleration)
 
 
-    def calculate_acc_velocity(self):
-        acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration()
-        time = self.main_window.time_def
-        initial_velocity = 0
-        velocity = initial_velocity + (acceleration * time)
+    def calculate_acc_velocity(self,commanded_speed,grade,mass):
+        acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration(commanded_speed,grade,mass)
+        train_model_time=self.get_time()
+        velocity = self.main_window.prev_vel + (train_model_time/2)*(acceleration + self.main_window.prev_acc)
         self.main_window.Acc_Velo_value_lcd.display(velocity)
         self.TC.curr_spd_sig.emit(int(velocity))
+        self.main_window.track_model_acc_velo.emit(int(velocity))
         return int(velocity)
         
 
@@ -410,6 +431,7 @@ class trainmodel_testbench(QMainWindow):
         super().__init__()
 
         self.TC = TC
+
         uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
 
         #TC.service_brake_sig.connect(self.)
@@ -611,7 +633,7 @@ if __name__ == "__main__":
     app.setStyle("windows")
     
     #add functionality to take in Train Controller Varible
-    window = TrainModel_mainwindow()
+    window = TrainModel_mainwindow(1)
     TC = window.Return_TrainController()
     window_tb = trainmodel_testbench(TC)
 

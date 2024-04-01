@@ -114,26 +114,27 @@ class TrainModel_mainwindow(QMainWindow):
         hours, minutes, seconds = [int(part) for part in time.split(':')]
         total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
         self.train_calculations.set_time(total_seconds)
-        self.train_calculations.calculate_acc_velocity(self.comm_speed)
+        self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
         
         
     #function to set Power LCD
     def get_power_input(self, power_input):
+        power_input=103
         self.Power_value_lcd.display(power_input)
-        self.train_calculations.Calculate_acceleration(self.comm_speed)
-        self.train_calculations.calculate_force(self.comm_speed,self.grade)
+        self.train_calculations.Calculate_acceleration(self.comm_speed,self.grade, self.mass)
+        self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
         return power_input
 
     #sending authority to train controller [ASK LAUREN AND CHAD]
     def receiveSpeedAuth_tm(self,speedAuth):
         trainID=speedAuth[0]
         self.comm_speed=speedAuth[1]
-        self.train_calculations.get_commanded_speed(float(self.comm_speed))
+        self.train_calculations.get_commanded_speed(float(self.comm_speed),self.grade,self.mass)
         Authority=speedAuth[2]
-        self.train_calculations.Calculate_acceleration(self.comm_speed)
-        self.train_calculations.calculate_force(self.comm_speed,self.grade)
-        self.train_calculations.get_acceleration(self.comm_speed,self.grade)
-        self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade)
+        self.train_calculations.Calculate_acceleration(self.comm_speed,self.grade,self.mass)
+        self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
+        self.train_calculations.get_acceleration(self.comm_speed,self.grade,self.mass)
+        self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
         self.TC.curr_cmd_spd_sig.emit(int(self.comm_speed))
         self.TC.curr_auth_sig.emit(float(Authority))
 
@@ -323,13 +324,11 @@ class TrainModel_mainwindow(QMainWindow):
 
     def acc_vel_to_track_model(self,velocity):
         velocity=self.train_calculations.calculate_acc_velocity
-        velocity=1000
         self.track_model_acc_velo.emit(int(velocity))
 
 
 #CLASS CONTAINING ALL TRAIN CALCULATIONS
 class TrainCalculations:
-
 
 
     def __init__(self, main_window,TC):
@@ -362,35 +361,38 @@ class TrainCalculations:
         mass = mass / 2.205
         self.main_window.mass = mass
         self.calculate_force(commanded_speed,grade, mass)
-        self.Calculate_acceleration()
-        self.calculate_acc_velocity()
+        self.Calculate_acceleration(commanded_speed,grade, mass)
+        self.calculate_acc_velocity(commanded_speed,grade,mass)
 
     def calculate_force(self,commanded_speed,grade,mass):
         #FORMULA: FORCE= MASS*g*SIN(THETA)
         #GRADE=SIN(THETA)
         theta=math.atan(grade/100)
         self.grav_force=mass*9.81*math.sin(theta)
-
-    
         power = 1000 * (self.main_window.Power_value_lcd.value())
         speed_fts = commanded_speed * (5280 / 3600)
         force = power / speed_fts
+        #if train is on a slope, normal force= mgcos(theta)
+        if(grade>0.00):
+            force=force*math.cos(theta)
+        #accounting for friction
+        friction_coeff=0.001
         return force
 
-    def Calculate_acceleration(self,commanded_speed,grade):
-        force = self.calculate_force(commanded_speed,grade)
+    def Calculate_acceleration(self,commanded_speed,grade,mass):
+        force = self.calculate_force(commanded_speed,grade,mass)
         mass = self.main_window.mass
         acceleration = (force / mass) * ((1 / 3.28084) * (1 / 3.28084))
         self.main_window.Acceleration_value_lcd.display(acceleration)
         return acceleration
 
-    def get_acceleration(self,commanded_speed,grade):
-        acceleration = self.Calculate_acceleration(commanded_speed,grade)
+    def get_acceleration(self,commanded_speed,grade,mass):
+        acceleration = self.Calculate_acceleration(commanded_speed,grade,mass)
         self.main_window.Acceleration_value_lcd.display(acceleration)
 
 
-    def calculate_acc_velocity(self,commanded_speed,grade):
-        acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration(commanded_speed,grade)
+    def calculate_acc_velocity(self,commanded_speed,grade,mass):
+        acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration(commanded_speed,grade,mass)
         train_model_time=self.get_time()
         velocity = self.main_window.prev_vel + (train_model_time/2)*(acceleration + self.main_window.prev_acc)
         self.main_window.Acc_Velo_value_lcd.display(velocity)

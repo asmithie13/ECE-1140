@@ -117,7 +117,7 @@ class TrackModelMain(QMainWindow):
 
     def get_block_occupancy(self, authority, speed_of_train):
         #loop iteration
-        print("i'm in block occ")
+        #print("i'm in block occ")
         self.blockID = ""
         self.total_block_length = 0
         self.prev_block = ""
@@ -305,7 +305,7 @@ class TrackModelMain(QMainWindow):
     def block_clicked(self, block_id):
         self.block_in_1.setCurrentText(block_id)
         self.block_in_2.setCurrentText(block_id) 
-        print(f"Block clicked: {block_id}")
+        #print(f"Block clicked: {block_id}")
         #Call the update_block_info to fetch and update the UI with block data
         self.update_block_info(block_id)
 

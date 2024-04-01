@@ -11,6 +11,7 @@ from Track_Resources.Block import Block
 
 #Function that reads all blocks from a *.csv file and assigns block attributes:
 def readTrackFile(fileName,crossingTriples):
+    SECTIONS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     totalBlocks = []
     lightBlocks = {}
     with open(fileName, "r") as fileObject:
@@ -26,6 +27,10 @@ def readTrackFile(fileName,crossingTriples):
             if(i == 0):
                 continue
             else:
+                tempID = line[1] + line[2]
+                if(line[1] not in SECTIONS and tempID != 'S103' and tempID != 'S104' and tempID != 'I36' and tempID != 'I37'):
+                    continue
+
                 if(line[6] == "RAILWAY CROSSING"):
                     hasCrossingTemp = True
                     crossingState = True

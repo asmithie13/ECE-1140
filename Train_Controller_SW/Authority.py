@@ -20,7 +20,7 @@ class Vital_Authority():
         #calculate authority using d=r*t
         self.rate = self.ui.lcdCurSpd.value()*1.46667 #mph to fps
         self.time = 1
-        if(not(self.ui.lcdAuth.value() == 0) and not(self.ui.lcdCurSpd.value)):
+        if(not(self.ui.lcdAuth.value() == 0) and not(self.ui.lcdCurSpd.value == 0)):
             self.ui.lcdAuth.display(self.ui.lcdAuth.value() - int(self.rate*self.time)) #auth = auth - rate*time
 
 

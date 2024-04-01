@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1037</width>
+    <width>1047</width>
     <height>673</height>
    </rect>
   </property>
@@ -615,7 +615,7 @@
              <string>Maintenance Mode</string>
             </property>
             <property name="checkable">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </item>

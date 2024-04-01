@@ -92,6 +92,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
         
         #Initializing Maintenance Mode functions before Mainenance Mode has been selected
+        self.inMaintenance = False
         self.CloseBlockSelect.setEnabled(False)
         self.CloseBlockButton.setEnabled(False)
         self.ChooseSwitchSelect.setEnabled(False)
@@ -336,7 +337,7 @@ class CTC_UI(QtWidgets.QMainWindow):
     
     #Function to determine if the system is entering or exitting maintenance mode
     def maintenanceMode_button(self):
-        if self.MaintenanceModeButton.isChecked():
+        if self.inMaintenance == False:
             self.enterMaintenanceMode()
         else:
             self.exitMaintenanceMode()
@@ -344,6 +345,8 @@ class CTC_UI(QtWidgets.QMainWindow):
     #Indication that the system is in maintenance mode
     #Same behavior will occur if a block is closed or a switch is sets
     def enterMaintenanceMode(self):
+        self.inMaintenance = True
+        
         #Set button color to blue to indicate selection
         self.MaintenanceModeButton.setStyleSheet("background-color : blue; color: black;")
 
@@ -355,7 +358,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.SwitchPositionSelect.setEnabled(True)
         self.SetSwitchPositionButton.setEnabled(True)
         self.ReleaseSwitchButton.setEnabled(True)
-        #Setting text to gray
+        #Setting text to black
         self.CloseBlockPromptLabel.setStyleSheet("color: black;")
         self.ChooseSwitchLabel.setStyleSheet("color: black;")
         self.SwitchPositionLabel.setStyleSheet("color: black;")
@@ -366,7 +369,49 @@ class CTC_UI(QtWidgets.QMainWindow):
     #Should work on the double press of the button
     #or if the block closures/switch position are empty
     def exitMaintenanceMode(self):
-        print("You still need to write this")
+        #If there are closures/switches set ask the user if they want to reopen all of them
+        if (len(self.Maintenance.BlocksClosed) > 0) or (len(self.Maintenance.SwitchesSet) > 0):
+            #Popup a message if the user enters a block that isn't closed
+            error_msg = QMessageBox()
+            error_msg.setWindowTitle("Confirmation")
+            error_msg.setText("Exiting Maintenance Mode will reopen all blocks and release all switches")
+            error_msg.setIcon(QMessageBox.Warning)
+            error_msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            #error_msg.buttonClicked.connect(self.msgbtn)
+
+            exitMode = error_msg.exec_()
+        else:
+            exitMode = QMessageBox.Ok
+
+        #If we are exiting Maintenance Mode
+        if exitMode == QMessageBox.Ok:
+            self.inMaintenance = False
+            self.MaintenanceModeButton.setStyleSheet("background-color : white")
+
+            self.CloseBlockSelect.setEnabled(False)
+            self.CloseBlockButton.setEnabled(False)
+            self.ChooseSwitchSelect.setEnabled(False)
+            self.SwitchPositionSelect.setEnabled(False)
+            self.ReopenBlockButton.setEnabled(False)
+            self.SetSwitchPositionButton.setEnabled(False)
+            self.ReleaseSwitchButton.setEnabled(False)
+            #Setting text to gray
+            self.CloseBlockPromptLabel.setStyleSheet("color: rgb(120, 120, 120);")
+            self.ChooseSwitchLabel.setStyleSheet("color: rgb(120, 120, 120);")
+            self.SwitchPositionLabel.setStyleSheet("color: rgb(120, 120, 120);")
+            self.MaintenanceBox.setStyleSheet("color: rgb(120, 120, 120);")
+
+            #Reopen all blocks if there are any
+            if len(self.Maintenance.BlocksClosed) > 0:
+                for block in range(len(self.Maintenance.BlocksClosed)):
+                    #Reset block
+                    self.Maintenance.BlocksClosed[i].occupied = 0
+                    self.Maintenance.BlocksClosed[i].maintenance = 0
+
+                    
+                #Send to wayside
+                self.sendBlockClosures.emit(self.Maintenance.BlocksClosed)
+
 
 
     #function to update block occupied table based on input from Wayside

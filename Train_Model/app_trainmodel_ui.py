@@ -29,6 +29,9 @@ class TrainModel_mainwindow(QMainWindow):
     prev_vel=0
     prev_acc=0
     grade=0
+    velocity=0
+    brake_state=0
+    ebrake_state=0
     
     #Track Model Signals
     track_model_acc_velo = qtc.pyqtSignal(int)
@@ -54,6 +57,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.TC.curr_power_sig.connect(self.get_power_input)
         self.TC.announcement_sig.connect(self.set_announcements)
         self.TC.temp_control_sig.connect(self.set_cabin_temp)
+        self.TC.service_brake_sig.connect(self.train_calculations.get_service_brake)
         #self.TC.ebrake_disable_sig.connect(self.change_ebrake_color)
 
 
@@ -143,16 +147,19 @@ class TrainModel_mainwindow(QMainWindow):
         self.ebrake.toggle()
         if(self.ebrake.isChecked()):
             self.ebrake.setCheckable(False)
+        self.main_window.ebrake_state=state
 
         
 
     def ebrake_activated(self,state):
         self.ebrake.setCheckable(False)
         self.TC.ebrake_sig.emit(1)
+        self.ebrake_state=1
 
     def ebrake_disabled(self,ebrake_state):
         self.ebrake.setCheckable(True)
         self.ebrake.toggle()
+        self.ebrake_state=0
            
         
         
@@ -339,6 +346,13 @@ class TrainCalculations:
         mass=main_window.mass
         grade=main_window.grade
 
+    def get_service_brake(self,brake):
+            self.main_window.brake_state=brake
+        
+
+            
+
+
     def set_time(self,time_calc):
         self.train_model_time=time_calc
 
@@ -382,6 +396,12 @@ class TrainCalculations:
         force = self.calculate_force(commanded_speed,grade,mass)
         mass = self.main_window.mass
         acceleration = (0.3048*force)/(mass/32.2) #acc in ft/s^2
+        # if self.main_window.brake_state==1:
+        #     acceleration=-3.9370078740157477 #in ft/s^2
+        
+        # if self.main_window.ebrake_state==1:
+        #     acceleration=-8.956692913385826 #in ft/s^2
+
         self.main_window.Acceleration_value_lcd.display(acceleration)
         return acceleration
 
@@ -394,14 +414,36 @@ class TrainCalculations:
         #converting acceleration to mph^2
         acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration(commanded_speed,grade,mass)
         train_model_time=self.get_time()
+        
         #converting sec to hours
         train_model_time_hours=train_model_time/3600
-        velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration + self.main_window.prev_acc)
-        self.main_window.Acc_Velo_value_lcd.display(velocity)
-        self.TC.curr_spd_sig.emit(int(velocity))
-        self.main_window.track_model_acc_velo.emit(int(velocity))
-        self.prev_vel = velocity
-        return int(velocity)
+        self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration + self.main_window.prev_acc)
+
+        if self.main_window.brake_state==1:
+            acceleration=-3.9370078740157477 #in ft/s^2
+            self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
+        
+        if self.main_window.ebrake_state==1:
+            acceleration=-8.956692913385826 #in ft/s^2
+            self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
+        
+
+
+        self.main_window.prev_vel=self.main_window.velocity
+        self.main_window.prev_acc=acceleration
+
+        # if self.main_windowprev_acc==0:
+        #     self.main_window.Acc_Velo_value_lcd.display(self.main_window.)
+        #     self.TC.curr_spd_sig.emit(int(self.main_window.velocity))
+        #     self.main_window.track_model_acc_velo.emit(int(self.main_window.velocity))
+
+        
+
+        self.main_window.Acc_Velo_value_lcd.display(self.main_window.velocity)
+        self.TC.curr_spd_sig.emit(int(self.main_window.velocity))
+        self.main_window.track_model_acc_velo.emit(int(self.main_window.velocity))
+        
+        return int(self.main_window.velocity)
         
 
 

@@ -39,6 +39,7 @@ class Main_UI(QtWidgets.QMainWindow):
 
         #CTC UI Window
         self.CTCwindow = CTC_UI()
+        self.CTCwindow.resize(900, 600)     #width, height
         self.CTC_tb = CTC_Testbench()
         self.CTC_Button.clicked.connect(self.open_CTC_UI)
 

@@ -54,12 +54,35 @@ class TrackModelMain(QMainWindow):
 
     AcutalSpeed = 0
 
+    station_lookup = {
+    "A2": "PIONEER",
+    "C9": "EDGEBROOKE",
+    "D16": "STATION",
+    "DF22": "WHITED",
+    "G31": "SOUTH BANK",
+    "I39": "CENTRAL",
+    "W141": "CENTRAL",
+    "I48": "INGLEWOOD",
+    "W132": "INGLEWOOD",
+    "I57": "OVERBROOK",
+    "W123": "OVERBROOK",
+    "K65": "GLENBURY",
+    "U114": "GLENBURY",
+    "L73": "DORMONT",
+    "T105": "DORMONT",
+    "N77": "MT LEBANON",
+    "O88": "POPLAR",
+    "P96": "CASTLE SHANNON"
+    }
+
     def __init__(self):
         super().__init__()
         self.blockStates = {}
+        station_lookup = {}
         self.blockID = None
         self.station = ""
         self.occupied_blocks = []
+        self.lastGeneratedTickets = {}
 
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track_Model/Track_Model.ui", self)
@@ -78,7 +101,7 @@ class TrackModelMain(QMainWindow):
 
         self.setup_block_buttons()
         self.block_in_1.activated[str].connect(self.block_clicked)
-        self.generateTickets()
+        #self.generateTickets()
 
         # Instantiate the Data class
         self.data = Data()
@@ -170,7 +193,9 @@ class TrackModelMain(QMainWindow):
 
     def set_clock(self, time):
         self.clock_in.display(time)
-        self.current_time = time
+
+    def get_clock(self,clock):
+        self.current_time = clock
 
     def receiveSpeedAuth_tm(self,speedAuth):
         self.trainID=speedAuth[0]
@@ -181,7 +206,7 @@ class TrackModelMain(QMainWindow):
         self.send_authority_tb.emit(str(self.Authority))
 
         self.get_block_occupancy(self.Authority, self.AcutalSpeed)
-        
+
     def update_occupied_blocks(self, block_id, is_occupied=True):
         if is_occupied:
             if block_id not in self.occupied_blocks:
@@ -278,23 +303,50 @@ class TrackModelMain(QMainWindow):
     def block_clicked(self, block_id):
         self.block_in_1.setCurrentText(block_id)
         self.block_in_2.setCurrentText(block_id) 
-
+        print(f"Block clicked: {block_id}")
         #Call the update_block_info to fetch and update the UI with block data
         self.update_block_info(block_id)
 
         #Emit a signal or perform actions needed when a block is selected
         self.block_selected_signal.emit(block_id)
 
-    def generateTickets(self):
-        if not self.station:
-            pass
+        if self.is_station(block_id):
+            self.currentStation = block_id
+            self.generateTickets(block_id, updateUI=True)
         else:
-            #Output the random numberto ticket sales block info
-            if self.current_time.toString("mm") == "00":
-                # Generate a random number between 1 and 74 for ticket sales
-                random_number = random.randint(1, 74)
-                self.ticket_out.setText(str(random_number)) 
-                self.SendTicketsales.emit([random_number])
+            self.currentStation = None
+            self.ticket_out.clear() 
+    
+    def is_station(self, block_id):
+        # Check if the block ID is in the station lookup table
+        return block_id in self.station_lookup
+
+    def onTimerTick(self):
+        # Get the current time and check if it's the start of an hour
+        currentTime = QTime.currentTime()
+        if currentTime.toString("mm") == "00":
+            self.updateHourlyTickets()
+
+    # def checkGenerateTickets(self):
+    #     for block_id in self.station_lookup:
+    #         if self.is_station(block_id):
+    #             self.generateTickets(block_id)
+
+    def updateHourlyTickets(self):
+        if self.currentStation and self.is_station(self.currentStation):
+            self.generateTickets(self.currentStation, updateUI=True, forceNewNumber=True)
+
+    def generateTickets(self, block_id, updateUI=False, forceNewNumber=False):
+        if forceNewNumber or block_id not in self.lastGeneratedTickets:
+            random_number = random.randint(1, 74)
+            self.lastGeneratedTickets[block_id] = random_number
+
+        if updateUI:
+            self.ticket_out.setText(str(self.lastGeneratedTickets[block_id]))
+
+        # Emit signal only if a new number is generated
+        if forceNewNumber:
+            self.SendTicketsales.emit([block_id, self.lastGeneratedTickets[block_id]])
 
     def get_infra_for_block(self, block_num):
         self.station = None  # Set to None initially to clearly see if it gets changed

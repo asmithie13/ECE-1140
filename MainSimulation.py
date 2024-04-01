@@ -35,6 +35,7 @@ def clock():
     #Pulling clock data for CTC and Track Model
     MainWindow.CTCwindow.displayClock(current_time)
     MainWindow.TrackModelWindow.set_clock(current_time)
+    MainWindow.TrackModelWindow.get_clock(time)
 
     #Pulling clock data for each train in existance
     for train in MainWindow.currentTrains:

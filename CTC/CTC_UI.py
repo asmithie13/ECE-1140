@@ -118,7 +118,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         BCHeader = self.BlockClosureTable.horizontalHeader()
         BCHeader.setSectionResizeMode(QHeaderView.Stretch)
         
-        self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintenance.BlocksClosed))
+        self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintenance.SwitchText))
         SPHeader = self.SwitchPositionTable.horizontalHeader()
         SPHeader.setSectionResizeMode(QHeaderView.Stretch)
 

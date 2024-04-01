@@ -548,7 +548,7 @@ class Ui_MainWindow(object):
         self.label_16 = QtWidgets.QLabel(self.verticalLayoutWidget_10)
         self.label_16.setStyleSheet("background-color: rgb(162, 162, 162);")
         self.label_16.setText("")
-        self.label_16.setPixmap(QtGui.QPixmap("bk_ad.png"))
+        self.label_16.setPixmap(QtGui.QPixmap("Train_Model/bk_ad.png"))
         self.label_16.setObjectName("label_16")
         self.verticalLayout_11.addWidget(self.label_16)
         MainWindow.setCentralWidget(self.centralwidget)

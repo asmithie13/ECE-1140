@@ -96,6 +96,7 @@ class WaysideSW(QMainWindow):
 
         wayside1Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
         self.greenWayside2Blocks = [x for x in self.allGreenBlocks if x.blockSection not in wayside1Chars]
+        self.currentBlocks = self.greenWayside2Blocks
      
         #Defines special greenblocks in wayside 1     
         for block in self.greenWayside2Blocks:
@@ -341,7 +342,7 @@ class WaysideSW(QMainWindow):
 
     def blockActions(self):
         selectedIndex = self.blockMenu.currentIndex()
-        if self.currentBlocks is None : return
+        if self.currentBlocks is None or self.currentSpecialBlocks is None : return
         selectedBlock = self.currentSpecialBlocks[selectedIndex]
 
         if selectedBlock.LIGHT and self.label_7.text() and not selectedBlock.SWITCH:

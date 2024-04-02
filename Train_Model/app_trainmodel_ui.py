@@ -415,22 +415,24 @@ class TrainCalculations:
         
         #converting sec to hours
         train_model_time_hours=train_model_time/3600
-        if self.main_window.velocity > 0:  # Check if velocity is greater than 0
-                # If the ebrake or brake is activated, set acceleration accordingly
-                if self.main_window.ebrake_state == 1:
-                    acceleration = -8.956692913385826  # in ft/s^2
-                elif self.main_window.brake_state == 1:
-                    acceleration = -3.9370078740157477  # in ft/s^2
-                
-                # Update velocity based on the current acceleration
-                self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours / 2) * (acceleration + self.main_window.prev_acc)
-                
-                # Ensure velocity does not go below 0
-                if self.main_window.velocity < 0:
-                    self.main_window.velocity = 0
-        else:
-            # If velocity is already 0, acceleration should also be 0
-            acceleration = 0
+        self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration + self.main_window.prev_acc)
+        if self.main_window.velocity>0:
+            if self.main_window.ebrake_state==1:
+                print('ebrake state entered')
+                acceleration=-8.956692913385826 #in ft/s^2
+                self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
+                if self.main_window.velocity==0:
+                    acceleration=0
+                    self.main_window.prev_vel=0
+
+            
+            elif self.main_window.brake_state==1:
+                print('service brakes entered')
+                acceleration=-3.9370078740157477 #in ft/s^2
+                self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
+                if self.main_window.velocity==0:
+                    acceleration=0
+                    self.main_window.prev_vel
         
         self.main_window.prev_vel=self.main_window.velocity
         self.main_window.prev_acc=acceleration

@@ -76,8 +76,6 @@ class TrainController(QMainWindow):
         self.curr_bool_auth_sig.connect(self.Vital_Authority.Authority_Monitor_Bool)
         self.block_passed_sig.connect(self.NonVital.BlockCounter)
         self.curr_bool_auth_sig.connect(self.Vital_Authority.Authority_Monitor_Bool)
-        
-        #CHAD FIX ME
         self.time_sig.connect(self.Timer)
 
         #connecting UI buttons to functions
@@ -85,8 +83,8 @@ class TrainController(QMainWindow):
         self.ui.buttonMan.clicked.connect(lambda : self.Control_Manual())
         self.ui.buttonAuto.clicked.connect(lambda : self.Control_Automatic())
         #self.ui.temp.valueChanged.connect(lambda : self.NonVital.Cabin_Temperature())
-        self.ui.buttonHDoff.clicked.connect(lambda : self.NonVital.Control_Headlights())
-        self.ui.buttonHDon.clicked.connect(lambda : self.NonVital.Control_Headlights())
+        self.ui.buttonHDoff.clicked.connect(lambda : self.NonVital.Control_Headlights_Off())
+        self.ui.buttonHDon.clicked.connect(lambda : self.NonVital.Control_Headlights_On())
         self.ui.lineEditAnn.textChanged['QString'].connect(self.ui.SpkrOut.setText)  # type: ignore
 
         self.ui.inputKp.valueChanged.connect(lambda : self.Vital_Power.Control_Kp())
@@ -129,7 +127,7 @@ class TrainController(QMainWindow):
       self.ui.inputKi.setDisabled(True)
       self.ui.inputKp.setDisabled(True)
 
-      self.Vital_Speed.Speed_Monitor()
+      #self.Vital_Speed.Speed_Monitor()
       #self.ui.vertSliderPow.setDisabled(True)
       #self.ui.vertSliderBrk.setDisabled(True)
 

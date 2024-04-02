@@ -111,6 +111,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Initializing Occupied Blocks Table
         self.occupiedBlocks = OccupiedBlocks()
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockDataCurrent))
+        OBHeader = self.OccupiedBlockTable.horizontalHeader()
+        OBHeader.setSectionResizeMode(QHeaderView.Stretch)
 
         #Initializing Maintance Tables
         self.Maintenance = CTC_Maintenance()
@@ -302,11 +304,12 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.newSwitchSelected(0)
 
     #function to update the clock display on the layout
-    def displayClock(self, time):
+    def displayClock(self, time_wSeconds):
+        time = time_wSeconds[0:5]
         self.CTC_clock.display(time)
         
         for i in self.trainSchedule.Scheduledata:
-            if (time == i[5]) and (int(i[1][1:]) > len(self.occupiedBlocks.currentTrains)):
+            if time_wSeconds == (i[5] + ":00"):
                 self.create_a_train.emit(i[1])
 
                 #Train ID, speed, Authority
@@ -326,14 +329,29 @@ class CTC_UI(QtWidgets.QMainWindow):
         file_dialog = QFileDialog()
         file_path, _ = file_dialog.getOpenFileName(self, "Select Schedule File", "", "CSV FIle (*.csv);;All Files (*)")
 
-        #Parse File
-        self.trainSchedule.parseScheduleFile(file_path)
-        #Update Table
-        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        #Validate user has choosen a file
+        if file_path == "":
+            #Popup a message if the user enters a block that isn't closed
+            error_msg = QMessageBox()
+            error_msg.setWindowTitle("Selection Error")
+            error_msg.setText("No Schedule File Selected")
+            error_msg.setIcon(QMessageBox.Critical)
 
-        #Disable Manual Mode and upload button
-        self.UploadButton.setEnabled(False)
-        self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
+            error_msg.exec_() 
+
+            return
+
+        #Parse File
+        correct = self.trainSchedule.parseScheduleFile(file_path)
+
+        #If file has been parsed correctly
+        if correct:
+            #Update Table
+            self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+
+            #Disable Manual Mode and upload button
+            self.UploadButton.setEnabled(False)
+            self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
     
     #Function to determine if the system is entering or exitting maintenance mode
     def maintenanceMode_button(self):

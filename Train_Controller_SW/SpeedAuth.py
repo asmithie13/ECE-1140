@@ -16,7 +16,7 @@ class Vital_Speed_Auth():
     def Control_Current_Speed(self,newSpeed):
         print("Curr Spd Tanvi :", newSpeed)
         self.ui.lcdCurSpd.display(newSpeed)
-        self.Speed_Monitor()
+        #self.Speed_Monitor()
     
     def service_brake(self):
         #send signal to brake
@@ -31,12 +31,12 @@ class Vital_Speed_Auth():
     def Control_Speed_Limit(self,spdLim):
         #update speed limit for current block
         self.ui.lcdSpdLim.display(spdLim)
-        self.Speed_Monitor()
+        #self.Speed_Monitor()
         
     def Control_Commanded_Speed(self,cmdSpd):
         #update commanded speed for from signal
         self.ui.lcdCmdSpd.display(cmdSpd)
-        self.Speed_Monitor()
+        #self.Speed_Monitor()
 
 
         #make sure we can stop in time for authority in ft
@@ -71,8 +71,8 @@ class Vital_Speed_Auth():
             #from top speed (70kph) it takes 157.535288067 m to stop with the service brake
             #from top speed (70kph) it takes 70.0156835852 m to stop with the emergency brake
 
-            self.stoppingdistanceService = (self.V_i**2)/(2*1.2)
-            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*2.73)
+            self.stoppingdistanceService = (self.V_i**2)/(2*1.2)+100
+            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*2.73)+100
 
             if self.AuthM < self.stoppubgdistanceEmergency:
                 self.ui.vertSliderBrk.setValue(0)
@@ -126,5 +126,7 @@ class Vital_Speed_Auth():
 
     def Control_Authority(self,auth):
         self.decimal_m_auth = auth
-        self.ui.lcdAuth.display(int(auth * 3.28084))
+        self.authft = round(auth * 3.28084)
+        self.ui.lcdAuth.display(self.authft)
+        print(self.authft)
         self.ui.vertSliderPow.setEnabled(True)

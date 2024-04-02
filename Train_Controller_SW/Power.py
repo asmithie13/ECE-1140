@@ -4,7 +4,7 @@ class Vital_Power():
     def __init__(self,ui, curr_power_sig):
         self.ui = ui
 
-        self.globalClock = 0
+        self.local_clock = 0
 
         self.Ki = 0
         self.Kp = 0

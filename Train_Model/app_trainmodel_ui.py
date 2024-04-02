@@ -123,43 +123,21 @@ class TrainModel_mainwindow(QMainWindow):
         
     #function to set Power LCD
     def get_power_input(self, power_input):
-        self.Power_value_lcd.display(power_input)
-<<<<<<< HEAD
-        print("power train model",power_input)
-        self.train_calculations.Calculate_acceleration(self.comm_speed)
-        self.train_calculations.calculate_force(self.comm_speed)
-=======
+        self.Power_value_lcd.display(int(power_input))
         self.train_calculations.Calculate_acceleration(self.comm_speed,self.grade, self.mass)
         self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
->>>>>>> 9ba8d04c0d66dc5110481d073841d569ad429cd9
         return power_input
 
     #sending authority to train controller [ASK LAUREN AND CHAD]
     def receiveSpeedAuth_tm(self,speedAuth):
-<<<<<<< HEAD
-        #print("train model is receiving comm speed and auth")
-=======
->>>>>>> 9ba8d04c0d66dc5110481d073841d569ad429cd9
         trainID=speedAuth[0]
         self.comm_speed=speedAuth[1]
         self.train_calculations.get_commanded_speed(float(self.comm_speed),self.grade,self.mass)
         Authority=speedAuth[2]
-<<<<<<< HEAD
-        #print("speedAuth",speedAuth)
-        #self.sendSpeedAuth.emit(speedAuth)
-        #self.main_window.cspeed_display.setText(str(Comm_Speed))
-        # self.send_com_speed_tb.emit(str(Comm_Speed))
-        # self.send_authority_tb.emit(str(Authority))
-        self.train_calculations.Calculate_acceleration(self.comm_speed)
-        self.train_calculations.calculate_force(self.comm_speed)
-        self.train_calculations.get_acceleration(self.comm_speed)
-        self.train_calculations.calculate_acc_velocity(self.comm_speed)
-=======
         self.train_calculations.Calculate_acceleration(self.comm_speed,self.grade,self.mass)
         self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
         self.train_calculations.get_acceleration(self.comm_speed,self.grade,self.mass)
         self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
->>>>>>> 9ba8d04c0d66dc5110481d073841d569ad429cd9
         self.TC.curr_cmd_spd_sig.emit(int(self.comm_speed))
         self.TC.curr_auth_sig.emit(float(Authority))
 
@@ -351,10 +329,6 @@ class TrainModel_mainwindow(QMainWindow):
             self.left_doors_value.setText('OPEN')
 
     def acc_vel_to_track_model(self,velocity):
-<<<<<<< HEAD
-        #print("tm acc vel")
-=======
->>>>>>> 9ba8d04c0d66dc5110481d073841d569ad429cd9
         velocity=self.train_calculations.calculate_acc_velocity
         self.track_model_acc_velo.emit(int(velocity))
 
@@ -403,20 +377,12 @@ class TrainCalculations:
         self.Calculate_acceleration(commanded_speed,grade, mass)
         self.calculate_acc_velocity(commanded_speed,grade,mass)
 
-<<<<<<< HEAD
-    def calculate_force(self,commanded_speed):
-        #commanded_speed=main_window.comm_speed
-        power = 1000 * (self.main_window.Power_value_lcd.value())
-        #commanded_speed = self.get_commanded_speed
-        #print("comm_speed",commanded_speed)
-=======
     def calculate_force(self,commanded_speed,grade,mass):
         #FORMULA: FORCE= MASS*g*SIN(THETA)
         #GRADE=SIN(THETA)
         theta=math.atan(grade/100)
         self.grav_force=mass*9.81*math.sin(theta)
         power = self.main_window.Power_value_lcd.value()
->>>>>>> 9ba8d04c0d66dc5110481d073841d569ad429cd9
         speed_fts = commanded_speed * (5280 / 3600)
         force = power / speed_fts
         #if train is on a slope, normal force= mgcos(theta)
@@ -473,7 +439,7 @@ class TrainCalculations:
 
         
 
-        self.main_window.Acc_Velo_value_lcd.display(self.main_window.velocity)
+        self.main_window.Acc_Velo_value_lcd.display(int(self.main_window.velocity))
         self.TC.curr_spd_sig.emit(int(self.main_window.velocity))
         self.main_window.track_model_acc_velo.emit(int(self.main_window.velocity))
         

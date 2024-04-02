@@ -280,7 +280,7 @@
                </font>
               </property>
               <property name="text">
-               <string>MANUAL</string>
+               <string>AUTOMATIC</string>
               </property>
              </widget>
             </item>

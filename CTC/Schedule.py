@@ -17,6 +17,7 @@ class Schedule():
         self.Scheduledata = []
         self.AuthorityInfo = []
         self.TrackData = TempData()
+        self.TrainNames = ["*T1"]
 
     #Function to add a single train to the schedule
     def addTrain(self, line, TrainID, Destination, ArrivalTime, Departure, DepartureTime):
@@ -32,17 +33,70 @@ class Schedule():
             headers = next(reader)      #Skip header row
             csv_file.close
 
+        if len(headers) != 4:
+            col_error = QMessageBox()
+            col_error.setWindowTitle("Input Error")
+            col_error.setText("Incorrect Number of Columns in Schedule File")
+            col_error.setIcon(QMessageBox.Critical)
+
+            col_error.exec_() 
+
+            return 0
+
         #For each row besides the header row, calculate departure data and add to schedule
         for row in reader:
+            #Check Color and departure station are valid
+            if (row[0] == 'Green') or (row[0] == 'green'):
+                line = 'Green'
+                stationExists = False
+
+                for station in self.TrackData.GreenStations:
+                    if station == row[2]:
+                        stationExists = True
+                        break
+
+            elif (row[0] == 'Red') or (row[0] == 'red'):
+                line = 'Red'
+                stationExists = False
+
+                for station in self.TrackData.RedStations:
+                    if station == row[2]:
+                        stationExists = True
+                        break
+            else:
+                #Line is not a valid color
+                line_error = QMessageBox()
+                line_error.setWindowTitle("Input Error")
+                message = row[0] + " is not a valid line color. Please fix the schedule."
+                line_error.setText(message)
+                line_error.setIcon(QMessageBox.Critical)
+
+                line_error.exec_() 
+
+                return 0
+            
+            #Destintion is not valid
+            if stationExists == False:
+                station_error = QMessageBox()
+                station_error.setWindowTitle("Input Error")
+                message = row[2] + " is not a valid destination on " + line + " line. Please fix the schedule."
+                station_error.setText(message)
+                station_error.setIcon(QMessageBox.Critical)
+
+                station_error.exec_()
+                return 0
+
             DepartureData = []
             tempArrivalTime = QTime()   #Converting ArrivalTime to QTime for easier math
-            self.calculateDeparture(row[2], tempArrivalTime.fromString(row[3]), DepartureData, row[0])
+            self.calculateDeparture(row[2], tempArrivalTime.fromString(row[3]), DepartureData, line)
             #Adding departure Data to the row data
             row.append(DepartureData[0])
             row.append(DepartureData[1])
             #Adding to Schedule
             #Line, TrainID, Destination, Arrival Time, Departure Station, Departure Time
             self.Scheduledata.append(row)
+
+        return 1
 
     def calculateDeparture(self, Destination, ArrivalTime, Departure, line):
         #Setting Departure Station
@@ -53,7 +107,7 @@ class Schedule():
         TravelTime = 0
         Authority = 0
 
-        if line == 'green':
+        if line == 'Green':
             for i in range(len(self.TrackData.GreenRouteInfo)):
                 if self.TrackData.GreenRouteInfo[i][0] == DepartureStation:
                     for j in range(i + 1, len(self.TrackData.GreenRouteInfo)):
@@ -62,9 +116,8 @@ class Schedule():
 
                         if self.TrackData.GreenRouteInfo[j][0] == Destination:
                             break
-
                     break
-        elif line == 'red':
+        elif line == 'Red':
             for i in range(len(self.TrackData.RedRouteInfo)):
                 if self.TrackData.RedRouteInfo[i][0] == DepartureStation:
                     for j in range(i + 1, len(self.TrackData.RedRouteInfo)):
@@ -98,10 +151,10 @@ class ScheduleTableModel(QtCore.QAbstractTableModel):
         if role == Qt.DisplayRole:
             return self._data[index.row()][index.column()]
         
-        if role == Qt.BackgroundRole and index.column() == 0 and self._data[index.row()][index.column()] == 'green':
+        if role == Qt.BackgroundRole and index.column() == 0 and self._data[index.row()][index.column()] == 'Green':
             # See below for the data structure.
             return QtGui.QColor('#26cf04')
-        elif role == Qt.BackgroundRole and index.column() == 0 and self._data[index.row()][index.column()] == 'red':
+        elif role == Qt.BackgroundRole and index.column() == 0 and self._data[index.row()][index.column()] == 'Red':
             return QtGui.QColor('#c31028')
     
     #Returns the row count of the table

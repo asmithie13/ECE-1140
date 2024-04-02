@@ -3,7 +3,7 @@
 #Also includes a table model class for diplaying info on the CTC UI
 
 import sys
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -12,10 +12,10 @@ from PyQt5 import uic
 #Class to manage maintenece mode for CTC
 class CTC_Maintenance():
     def __init__(self):
-        self.BlocksClosed = []
-        self.BlocksClosedIDs = []
-        self.SwitchText = []
-        self.SwitchesSet = []
+        self.BlocksClosed = []          #Block class object
+        self.BlocksClosedIDs = []       #List of lists: Line, BlockID
+        self.SwitchText = []            #Block class objects
+        self.SwitchesSet = []           #List of lists: Line, Switch, Position
 
     def addBlockClosure(self, BlockID):
         newBlockClosure = [BlockID]
@@ -33,6 +33,12 @@ class ClosedBlocksTableModel(QtCore.QAbstractTableModel):
     def data(self, index, role):
         if role == Qt.DisplayRole:
             return self._data[index.row()][index.column()]
+        
+        if role == Qt.BackgroundRole and index.column() == 1 and self._data[index.row()][index.column()] == 'Green':
+            # See below for the data structure.
+            return QtGui.QColor('#26cf04')
+        elif role == Qt.BackgroundRole and index.column() == 1 and self._data[index.row()][index.column()] == 'Red':
+            return QtGui.QColor('#c31028') 
     
     #Returns the row count of the table
     def rowCount(self, index):
@@ -66,6 +72,12 @@ class SwitchPositionTableModel(QtCore.QAbstractTableModel):
     def data(self, index, role):
         if role == Qt.DisplayRole:
             return self._data[index.row()][index.column()]
+        
+        if role == Qt.BackgroundRole and index.column() == 2 and self._data[index.row()][index.column()] == 'Green':
+            # See below for the data structure.
+            return QtGui.QColor('#26cf04')
+        elif role == Qt.BackgroundRole and index.column() == 2 and self._data[index.row()][index.column()] == 'Red':
+            return QtGui.QColor('#c31028')        
     
     #Returns the row count of the table
     def rowCount(self, index):

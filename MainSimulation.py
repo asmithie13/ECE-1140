@@ -31,9 +31,10 @@ def clock():
     global time
     time = time.addSecs(1)
     current_time = time.toString("hh:mm")
+    current_time_wSeconds = time.toString("hh:mm:ss")
 
     #Pulling clock data for CTC and Track Model
-    MainWindow.CTCwindow.displayClock(current_time)
+    MainWindow.CTCwindow.displayClock(current_time_wSeconds)
     MainWindow.TrackModelWindow.set_clock(current_time)
 
     #Pulling clock data for each train in existance
@@ -76,8 +77,12 @@ MainWindow.CTC_tb.sendOccupiedBlocks.connect(MainWindow.CTCwindow.updateOccupied
 MainWindow.CTC_tb.sendTicketSales.connect(MainWindow.CTCwindow.updateTicketSales)
 MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.CTC_tb.showDispatchInfo)
 
-#CTC to Wayside
+#CTC to Wayside SW
 MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
+
+#CTC to Wayside HW
+MainWindow.CTCwindow.sendBlockClosures.connect(MainWindow.WaysideHWwindow.getClosedBlocks)
+MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.WaysideHWwindow.handleSpeedAuthority)
 
 #CTC to MainWindow
 MainWindow.CTCwindow.create_a_train.connect(MainWindow.create_new_train)
@@ -86,6 +91,7 @@ MainWindow.CTCwindow.create_a_train.connect(MainWindow.create_new_train)
 MainWindow.WaysideSWwindow.sendSpecialBlocks.connect(MainWindow.WaysideSW_tb.updateBlockStates)
 MainWindow.WaysideSWwindow.changeModeSend.connect(MainWindow.WaysideSW_tb.receiveMode)
 MainWindow.WaysideSWwindow.sendAllBlocks.connect(MainWindow.WaysideSW_tb.receiveBlocks)
+MainWindow.WaysideSWwindow.sendTrainSpeedAuth.connect(MainWindow.WaysideSW_tb.displaySpeedAuth)
 MainWindow.WaysideSW_tb.OccBlocksChanged.connect(MainWindow.WaysideSWwindow.updateBlocks)
 MainWindow.WaysideSW_tb.tbChangeMode.connect(MainWindow.WaysideSWwindow.changeMode)
 MainWindow.WaysideSW_tb.ctcIDSpeedAuthority.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
@@ -139,7 +145,7 @@ MainWindow.TrackModelWindow.set_clock(time.toString("hh:mm"))
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
 
 #Connecting Main UI functionality signals
-MainWindow.SpeedSlider.sliderReleased.connect(updateClockSpeed)
+MainWindow.SpeedSlider.valueChanged.connect(updateClockSpeed)
 MainWindow.PauseButton.clicked.connect(pauseSim)
 
 

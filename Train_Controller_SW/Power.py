@@ -4,7 +4,7 @@ class Vital_Power():
     def __init__(self,ui, curr_power_sig):
         self.ui = ui
 
-        self.globalClock = 0
+        self.local_clock = 0
 
         self.Ki = 0
         self.Kp = 0
@@ -38,11 +38,13 @@ class Vital_Power():
         if self.ui.Ebrake.isChecked():
            self.power = 0
         
+        elif self.ui.vertSliderBrk.value() == 1:
+            self.power = 0
+        
         elif self.ui.vertSliderPow.value() == 0:
             self.power = 0
 
         else:
-            self.ui.vertSliderBrk.setValue(0)
             self.time = self.local_clock
             print("Curr Time", self.time)
             self.dt = self.time - self.prevTime

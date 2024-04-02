@@ -43,15 +43,14 @@ class Vital_Authority():
             self.stoppingdistanceService = (self.V_i**2)/(2*1.2)
             self.stoppubgdistanceEmergency = (self.V_i**2)/(2*2.73)
 
-            if self.AuthM < self.stoppingdistanceService:
-                self.ui.vertSliderBrk.setValue(1)
-                self.ui.vertSliderPow.setValue(0)
-                self.ui.vertSliderPow.setDisabled(True)
             if self.AuthM < self.stoppubgdistanceEmergency:
                 self.ui.vertSliderBrk.setValue(0)
                 self.ui.Ebrake.setChecked(True)
-            # elif self.ui.Ebrake.isChecked():
-            #     self.ui.Ebrake.setChecked(False)
+            elif self.AuthM < self.stoppingdistanceService:
+                self.ui.vertSliderBrk.setValue(1)
+                self.ui.vertSliderPow.setValue(0)
+                self.ui.vertSliderPow.setDisabled(True)
+        
 
 
     #we need to deal with whatever this is

@@ -1,0 +1,14 @@
+not SwitchOcc and SwitchRightOcc
+SWITCH
+
+SwitchOcc and not SwitchLeftOcc
+CurrentLIGHT
+
+not SwitchOcc and SwitchLeftOcc and not SwitchRightOcc
+LeftLIGHT
+
+not SwitchOcc and SwitchRightOcc
+RightLIGHT
+
+CrossingBlockOccupied
+crossingState

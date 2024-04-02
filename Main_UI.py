@@ -54,6 +54,7 @@ class Main_UI(QtWidgets.QMainWindow):
 
         #CTC UI Window
         self.CTCwindow = CTC_UI()
+        self.CTCwindow.resize(850, 600)     #width, height
         self.CTC_tb = CTC_Testbench()
         self.CTC_Button.clicked.connect(self.open_CTC_UI)
 
@@ -74,12 +75,14 @@ class Main_UI(QtWidgets.QMainWindow):
 
         #Train Model (Might need initialized per train)
         self.currentTrains = []
+        self.TrainModelButton.clicked.connect(self.open_train_model_UI)
         #self.TrainModelWindow = TrainModel_mainwindow()
         #self.TrackModel_tb = trainmodel_testbench()
         #self.TrainModelWindow.show()
-        self.TrainModelButton.clicked.connect(self.create_new_train)
+        #self.TrainModelButton.clicked.connect(self.create_new_train)
 
         #Train Controller SW (Might need initialized per train)
+        self.TrainControllerSW_Button.clicked.connect(self.open_train_controller_UI)
 
         #Train Controller HW (Might need initialized per train)
 
@@ -107,7 +110,7 @@ class Main_UI(QtWidgets.QMainWindow):
 
     def create_new_train(self, TrainID):
         #Add new train UI to list
-        self.currentTrains.append(TrainModel_mainwindow())
+        self.currentTrains.append(TrainModel_mainwindow(TrainID))
         self.currentTrains[-1].show()
 
         #Track Model to Train Model
@@ -121,6 +124,20 @@ class Main_UI(QtWidgets.QMainWindow):
         #Connect Signals to Track Model
         #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)
 
+        self.TrainSelect.addItem(TrainID)
+
+    def open_train_model_UI(self):
+        TrainID = self.TrainSelect.currentText() 
+        TrainNum = int(TrainID[1:])
+
+        self.currentTrains[TrainNum - 1].show()
+
+    def open_train_controller_UI(self):
+        TrainID = self.TrainSelect.currentText() 
+        TrainNum = int(TrainID[1:])
+
+        #Pull train controller UI
+        self.currentTrains[TrainNum - 1].TC.show()
 
 
 """

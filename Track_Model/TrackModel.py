@@ -4,6 +4,7 @@ import tkinter as tk
 import os #read other .py file
 import pandas as pd #read excel files
 import random # Generate random num of ticket sales for CTC
+import time
 
 # Using Block Class as a seperate file
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -121,13 +122,24 @@ class TrackModelMain(QMainWindow):
         self.load_default_track_layout()
 
     def get_block_occupancy(self, authority, speed_of_train):
-        for block_num in range(63, 78):  # Loop from 63 to 77 inclusive
-            if not self.process_block(block_num, speed_of_train, authority):
-                break  # Stop if process_block indicates no further movement is needed
+        self.blockID = ""
+        self.total_block_length = 0
+        self.prevblockID = ""
 
-        # After finishing the initial range, check the condition at block 77 to decide on the next steps
-        if self.get_and_set_crossing_state(77):  # Assuming this checks the necessary condition at block 77
-            for block_num in range(78, 87):  # Continue from 78 to 86 if the condition at 77 allows
+        for block_num in range(63, 86):
+            if not self.process_block(block_num, speed_of_train, authority):
+                break
+
+        if self.get_and_set_crossing_state(85):  # Check crossing state at block 76
+            for block_num in range(85, 150):  # Continue from 77 to 86 if crossing state is true
+                if not self.process_block(block_num, speed_of_train, authority):
+                    break
+
+        if self.get_and_set_crossing_state(150):  # Check crossing state at block 76
+            while self.get_and_set_crossing_state(150):
+                time.sleep(0.00001)
+        else:
+            for block_num in range(150, 76, -1):  # Continue from 77 to 86 if crossing state is true
                 if not self.process_block(block_num, speed_of_train, authority):
                     break
 
@@ -135,27 +147,30 @@ class TrackModelMain(QMainWindow):
         block_length = self.data.get_length_for_block(block_num)
         self.total_block_length += block_length
         self.speed_limit_km = self.data.get_speed_for_block(block_num)
-        distance_covered = speed_of_train * (3600 / self.speed_limit_km)
 
-        if distance_covered >= authority or self.total_block_length >= distance_covered:
+        # Convert speed to m/s from km/h and calculate the distance covered
+        distance_covered = speed_of_train * 1000 / 3600  # speed_of_train is in km/h
+
+        if distance_covered >= authority or self.total_block_length >= distance_covered or self.total_block_length >= authority:
             self.block_num_occ = int(self.data.get_block_for_block(block_num))
             self.section_occ = self.data.get_section_for_block(block_num)
             self.blockID = self.section_occ + str(self.block_num_occ)
 
             self.update_occupied_blocks(self.blockID, is_occupied=True, from_failure=False)
-            self.prevblock_block = self.block_num_occ - 1
-            self.prevblockID = self.section_occ + str(self.prevblock_block)
-
+            self.prevblockID = self.section_occ + str(self.block_num_occ - 1)
+            
             self.update_ui(self.blockID, self.prevblockID)
-            return False  # Indicates that no further movement is needed
-        return True  # Indicates that the train can continue moving
+            return True  
+
+        return False
+
 
     def get_and_set_crossing_state(self, block_num):
-        # Placeholder for logic to get and set the crossing state for the specified block
-        # Assuming there's a method in self.data to get the crossing state
-        crossing_state = self.data.get_crossing_state_for_block(block_num)
-        print(f"Crossing state for block {block_num} is {crossing_state}")
-        return crossing_state
+        block_info = self.blockStates.get(str(block_num))
+        if block_info is not None:
+            crossing_state = block_info['crossingState']
+            return crossing_state
+        return None
 
     def update_ui(self, current_block_id, previous_block_id):
         current_button = self.findChild(QPushButton, current_block_id)
@@ -167,28 +182,19 @@ class TrackModelMain(QMainWindow):
         if previous_button:
             previous_button.setStyleSheet('''QPushButton { border-style: solid; border-width: 0.5px; border-color: black; background-color: rgb(50, 205, 50); }''')
 
-    def get_and_set_crossing_state(self, block_num):
-            # Assuming self.data has a method to get the crossing state for a block
-            crossing_state = self.data.get_crossing_state_for_block(block_num)
-
-            # Set the class attribute with the fetched crossing state
-            self.crossing_state = crossing_state
-
-            # Additionally, return the crossing state if you need to use it immediately
-            return crossing_state
 
     # Recieve from Wayside
     def recieveSpecialBlocks_SW(self, specialBlock):
-        self.current_nums = []
-        self.current_light_states = []
-        self.current_crossing_states = []
-        self.current_switch_states = []
+        self.blockStates = {}  # Dictionary to hold the state of each block
 
         for block in specialBlock:
-            self.current_nums.append(block.blockNum)
-            self.current_light_states.append(block.lightState)
-            self.current_crossing_states.append(block.crossingState)
-            self.current_switch_states.append(block.switchState)
+            # Assuming 'block' has 'blockNum', 'lightState', 'crossingState', and 'switchState' attributes
+            self.blockStates[block.blockNum] = {
+                'lightState': block.lightState,
+                'crossingState': block.crossingState,
+                'switchState': block.switchState
+            }
+
 
 
     def recieveSpecialBlocks_HW(self, specialBlock):
@@ -215,8 +221,8 @@ class TrackModelMain(QMainWindow):
         self.sendSpeedAuth.emit(speedAuth)
         self.send_com_speed_tb.emit(str(self.Comm_Speed))
         self.send_authority_tb.emit(str(self.Authority))
-
-        self.get_block_occupancy(self.Authority, self.AcutalSpeed)
+        print("ACCUTAL SPEED:", self.AcutalSpeed)
+        self.get_block_occupancy(self.Authority, 100)
 
     def update_occupied_blocks(self, block_id, is_occupied=True, from_failure=False):
         # Check if the block is affected by a failure and update the list accordingly

@@ -79,7 +79,7 @@ class TrainController(QMainWindow):
         self.time_sig.connect(self.Timer)
 
         #connecting UI buttons to functions
-        self.ui.Ebrake.clicked.connect(lambda : self.Vital_Failure.Control_Emergency_Brake(0))
+        self.ui.Ebrake.clicked.connect(lambda : self.Vital_Failure.Control_Emergency_Brake(self.ui.Ebrake.isChecked()))
         self.ui.buttonMan.clicked.connect(lambda : self.Control_Manual())
         self.ui.buttonAuto.clicked.connect(lambda : self.Control_Automatic())
         #self.ui.temp.valueChanged.connect(lambda : self.NonVital.Cabin_Temperature())

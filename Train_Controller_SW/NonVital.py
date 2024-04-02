@@ -110,9 +110,9 @@ class NonVital():
     def Read_Beacon(self,beacon_info):
         print(beacon_info)
 
-    def Create_Beacon_Dictionary(self):
-        Beacon_Dictionary = 
-        { 
+    # def Create_Beacon_Dictionary(self):
+    #     Beacon_Dictionary = 
+    #     { 
 
         
     

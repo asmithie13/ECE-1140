@@ -424,6 +424,7 @@ class TrainCalculations:
                 if self.main_window.velocity==0:
                     acceleration=0
                     self.main_window.prev_vel=0
+                    
 
             
             elif self.main_window.brake_state==1:
@@ -432,10 +433,11 @@ class TrainCalculations:
                 self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
                 if self.main_window.velocity==0:
                     acceleration=0
-                    self.main_window.prev_vel
+                    self.main_window.prev_vel=0
+                    
         
         self.main_window.prev_vel=self.main_window.velocity
-        self.main_window.prev_acc=acceleration
+        
 
         # if self.main_windowprev_acc==0:
         #     self.main_window.Acc_Velo_value_lcd.display(self.main_window.)

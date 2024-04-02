@@ -200,6 +200,7 @@ class Ui_MainWindow(object):
         self.Power_value_lcd = QLCDNumber(self.verticalLayoutWidget_5)
         self.Power_value_lcd.setObjectName(u"Power_value_lcd")
         self.Power_value_lcd.setProperty("intValue", 743)
+        self.Power_value_lcd.setDigitCount(6)
 
         self.verticalLayout_6.addWidget(self.Power_value_lcd)
 
@@ -385,7 +386,7 @@ class Ui_MainWindow(object):
         self.ad_label.setObjectName(u"ad_label")
         self.ad_label.setGeometry(QRect(1010, 150, 181, 471))
         self.ad_label.setStyleSheet(u"background-color: rgb(162, 162, 162);")
-        self.ad_label.setPixmap(QPixmap(u"../../Tanvi's Tr Mod/bk_ad.png"))
+        self.ad_label.setPixmap(QPixmap(u"Train_Model/bk_ad.png"))
         self.line_2 = QFrame(self.centralwidget)
         self.line_2.setObjectName(u"line_2")
         self.line_2.setGeometry(QRect(320, 320, 21, 71))

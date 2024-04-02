@@ -19,13 +19,12 @@ class NonVital():
         self.undergroundBlocks = 0
         self.dist_next_station= 0
     
-    def Control_Headlights(self):
-
-        if(self.ui.buttonHDon.isChecked()):
-            self.ui.buttonHDoff.setChecked(False)
+    def Control_Headlights_On(self):
+            self.ui.buttonHDoff.toggle()
             self.ext_light_sig.emit(1)
-        if(self.ui.buttonHDoff.isChecked()):
-            self.ui.buttonHDon.setChecked(False)
+
+    def Control_Headlights_Off(self):
+            self.ui.buttonHDon.toggle()
             self.ext_light_sig.emit(0)
 
     def Control_Name_Next_Station(self,string):

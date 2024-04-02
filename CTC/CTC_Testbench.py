@@ -42,7 +42,7 @@ class CTC_Testbench(QtWidgets.QMainWindow):
         for i in range(len(UpdatedBlocks)):
             temp = []
             temp.append(UpdatedBlocks[i])
-            temp.append('green')
+            temp.append('Green')
             BlocksWithLineColor.append(temp)
 
         self.sendOccupiedBlocks.emit(BlocksWithLineColor)
@@ -58,8 +58,10 @@ class CTC_Testbench(QtWidgets.QMainWindow):
         self.sendTicketSales.emit(Sales)
 
     #Function to display CTC output
-    def showDispatchInfo(self, nums):
-        self.TrainLabel.setText('Test')
+    def showDispatchInfo(self, info):
+        self.TrainLabel.setText("Train ID: " + info[0])
+        self.SpeedLabel.setText("Speed: " + str(info[1]))
+        self.AuthorityLabel.setText("Authority: " + str(info[2]))
 
 
         

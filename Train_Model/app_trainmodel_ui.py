@@ -144,43 +144,8 @@ class TrainModel_mainwindow(QMainWindow):
 
 
         
-    # def TC_ebrake_activated(self,state):
-    #     self.ebrake.toggle()
-    #     if(self.ebrake.isChecked()):
-    #         self.ebrake.setCheckable(False)
-    #     #toggling ebrake state
-    #     if self.ebrake_state==1:
-    #         self.ebrake_state=0
-    #     if self.ebrake_state==0:
-    #         self.ebrake_state=1
-    #     # self.main_window.ebrake_state=state
 
-        
 
-    # def ebrake_activated(self,state):
-    #     self.ebrake.setCheckable(False)
-    #     self.TC.ebrake_sig.emit(1)
-    #     self.ebrake_state=1
-
-    # def ebrake_disabled(self,ebrake_state):
-        
-    #     print('ebrake',ebrake_state)
-    #     self.ebrake_state=ebrake_state
-    #     if self.ebrake_state == True:
-    #         print('tru condn')
-    #         #self.ebrake.toggle()
-    #         self.ebrake.setChecked(True)
-    #         self.ebrake.setCheckable(False)
-    #         if not(self.ebrake.isChecked()):
-    #             self.ebrake.setChecked(True)
-    #         else :
-    #             self.TC.ebrake_sig.emit(1)
-    #         #self.ebrake_state = 1
-    #     else :
-    #         self.ebrake.setCheckable(True)
-    #         if self.ebrake.isChecked():
-    #             self.ebrake.setChecked(False)
-    #         #self.ebrake_state = 0
     def ebrake_disabled(self, ebrake_state):
         print('ebrake', ebrake_state)
         self.ebrake_state = ebrake_state
@@ -196,20 +161,7 @@ class TrainModel_mainwindow(QMainWindow):
             self.ebrake.setEnabled(True)  # Enable the ebrake button
             self.ebrake.setChecked(False)  # Set the ebrake button to unchecked (OFF)
             
-    # def ebrake_disabled(self, ebrake_state):
-    #     print('ebrake', ebrake_state)
-    #     self.ebrake_state = ebrake_state
-    
-    #     if self.ebrake_state == True:
-    #         self.ebrake.setChecked(True)
-    #         self.ebrake.setCheckable(False)
-    #         self.TC.ebrake_sig.emit(1)
-    #     else:
-    #         self.ebrake.setCheckable(True)
-    #         self.ebrake.setChecked(False)
-            
-        
-        
+  
     def set_length(self, input_txt):
         self.length_of_vehicle_display.setText(input_txt)
 
@@ -463,23 +415,22 @@ class TrainCalculations:
         
         #converting sec to hours
         train_model_time_hours=train_model_time/3600
-        self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration + self.main_window.prev_acc)
-        
-        if self.main_window.ebrake_state==1:
-            print('ebrake state entered')
-            acceleration=-8.956692913385826 #in ft/s^2
-            self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
-            if self.main_window.velocity==0:
-                acceleration=0
-                self.main_window.prev_vel=0
-
-        
-        elif self.main_window.brake_state==1:
-            acceleration=-3.9370078740157477 #in ft/s^2
-            self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
-            if self.main_window.velocity==0:
-                acceleration=0
-                self.main_window.prev_vel
+        if self.main_window.velocity > 0:  # Check if velocity is greater than 0
+                # If the ebrake or brake is activated, set acceleration accordingly
+                if self.main_window.ebrake_state == 1:
+                    acceleration = -8.956692913385826  # in ft/s^2
+                elif self.main_window.brake_state == 1:
+                    acceleration = -3.9370078740157477  # in ft/s^2
+                
+                # Update velocity based on the current acceleration
+                self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours / 2) * (acceleration + self.main_window.prev_acc)
+                
+                # Ensure velocity does not go below 0
+                if self.main_window.velocity < 0:
+                    self.main_window.velocity = 0
+        else:
+            # If velocity is already 0, acceleration should also be 0
+            acceleration = 0
         
         self.main_window.prev_vel=self.main_window.velocity
         self.main_window.prev_acc=acceleration

@@ -3,7 +3,7 @@
 #Also includes a table model class for diplaying info on the CTC UI
 
 import sys
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -183,6 +183,12 @@ class BlocksTableModel(QtCore.QAbstractTableModel):
     def data(self, index, role):
         if role == Qt.DisplayRole:
             return self._data[index.row()][index.column()]
+        
+        if role == Qt.BackgroundRole and index.column() == 2 and self._data[index.row()][index.column()] == 'Green':
+            # See below for the data structure.
+            return QtGui.QColor('#26cf04')
+        elif role == Qt.BackgroundRole and index.column() == 2 and self._data[index.row()][index.column()] == 'Red':
+            return QtGui.QColor('#c31028')
 
     #Returns the row count of the table
     def rowCount(self, index):

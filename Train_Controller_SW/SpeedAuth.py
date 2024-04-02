@@ -12,6 +12,7 @@ class Vital_Speed_Auth():
         self.ui = ui
         self.curr_auth_signal = curr_auth_signal
         self.service_brake_sig = service_brake_sig
+        self.stopcal = 0
 
     def Control_Current_Speed(self,newSpeed):
         print("Curr Spd Tanvi :", newSpeed)
@@ -54,9 +55,13 @@ class Vital_Speed_Auth():
         
         if(not(self.ui.lcdAuth.value() <= 0) and not(self.ui.lcdCurSpd.value == 0)):
             self.ui.lcdAuth.display(self.ui.lcdAuth.value() - int(self.rate*self.time)) #auth = auth - rate*time
+            
+            
             self.decimal_m_auth = self.decimal_m_auth - float(self.rate_metric*self.time)
-        
-        # if self.ui.lcdAuth.value() > 0:
+
+
+            
+            # if self.ui.lcdAuth.value() > 0:
 
             #authority in m from ft
             
@@ -71,16 +76,23 @@ class Vital_Speed_Auth():
             #from top speed (70kph) it takes 157.535288067 m to stop with the service brake
             #from top speed (70kph) it takes 70.0156835852 m to stop with the emergency brake
 
-            self.stoppingdistanceService = (self.V_i**2)/(2*1.2)+100
-            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*2.73)+100
+            #if self.stopcal == True:
+            self.stoppingdistanceService = (self.V_i**2)/(2*1.2)
+            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*2.73)
+                
 
-            if self.AuthM < self.stoppubgdistanceEmergency:
+            if self.AuthM <= self.stoppubgdistanceEmergency:
                 self.ui.vertSliderBrk.setValue(0)
                 self.ui.Ebrake.setChecked(True)
-            elif self.AuthM < self.stoppingdistanceService:
+
+            elif self.AuthM <= self.stoppingdistanceService:
                 self.ui.vertSliderBrk.setValue(1)
                 self.ui.vertSliderPow.setValue(0)
                 self.ui.vertSliderPow.setDisabled(True)
+                #self.stopcal = True
+
+                #self.stopcal = True
+
 
             #check current speed every time speed is updated or speed limit is updated
             #if speed is greater than speed limit, send command to brake
@@ -101,7 +113,10 @@ class Vital_Speed_Auth():
             #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
             elif current_speed == (speed_limit or cmd_speed):
                 self.ui.vertSliderPow.setValue(0)
-                self.ui.vertSliderBrk.setValue(0) 
+                self.ui.vertSliderBrk.setValue(0)
+
+        # elif self.stopcal == 1:
+        #     self.ui.lcdAuth.display(self.ui.lcdAuth.value() - int(self.rate*self.time))
         
 
 

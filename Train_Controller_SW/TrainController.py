@@ -73,7 +73,7 @@ class TrainController(QMainWindow):
         self.curr_spd_lim_sig.connect(self.Vital_Speed_Auth.Control_Speed_Limit)
 
         self.curr_auth_sig.connect(self.Vital_Speed_Auth.Control_Authority)
-        self.curr_auth_sig.connect(self.Vital_Speed_Auth.Speed_Authority_Monitor)
+        #self.curr_auth_sig.connect(self.Vital_Speed_Auth.Speed_Authority_Monitor)
         self.curr_temp_sig.connect(self.NonVital.Cabin_Temperature)
         self.ebrake_sig.connect(self.Vital_Failure.Control_Emergency_Brake)
         self.pwr_fail_sig.connect(self.Vital_Failure.Control_Power_Failure)

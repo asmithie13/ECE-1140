@@ -95,7 +95,7 @@ class Main_UI(QtWidgets.QMainWindow):
 
     def create_new_train(self, TrainID):
         #Add new train UI to list
-        self.currentTrains.append(TrainModel_mainwindow())
+        self.currentTrains.append(TrainModel_mainwindow(TrainID))
         self.currentTrains[-1].show()
 
         #Track Model to Train Model

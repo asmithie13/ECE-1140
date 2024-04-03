@@ -1,3 +1,8 @@
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtCore import QObject, QDateTime
+import threading
+import time
+
 class SimulationTime(QObject):
     timeChanged = QtCore.pyqtSignal(str)
 

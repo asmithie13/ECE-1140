@@ -235,8 +235,17 @@ class WaysideSW(QMainWindow):
         current_text = self.label_7.text()
         if current_text == "MANUAL":   
             self.label_7.setText("AUTOMATIC")
-            self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
 
+            self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
+            check1 = self.currentBlocks.copy #blocks after parsed
+            self.FileParser.parsePLC()
+            check2 = self.currentBlocks.copy
+
+            if check1 != check2:
+                for block in self.currentBlocks: block.authority = False
+                print("Redundancy Check Failed")
+                return
+                
             for block in self.currentBlocks:
                 if block.LIGHT and block.lightState: block.authority = True
                 elif block.LIGHT and not block.lightState: block.authority = False
@@ -509,7 +518,15 @@ class WaysideSW(QMainWindow):
         
         self.BlockOcc.setText(" ".join(sentBlocks))
         if self.label_7.text() == "AUTOMATIC" : 
+            self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
+            check1 = self.currentBlocks.copy #blocks after parsed
             self.FileParser.parsePLC()
+            check2 = self.currentBlocks.copy
+
+            if check1 != check2:
+                for block in self.currentBlocks: block.authority = False
+                print("Redundancy Check Failed")
+                return
             
             
         self.blockActions()
@@ -534,8 +551,8 @@ class TestBench(QMainWindow):
         uic.loadUi("Wayside_SW/Wayside_Testbench.ui", self)
 
         # Buttons
-        self.speedInput.returnPressed.connect(self.sendSpeed)
-        self.authorityInput.returnPressed.connect(self.sendAuthority)
+        #self.speedInput.returnPressed.connect(self.sendSpeed)
+        #self.authorityInput.returnPressed.connect(self.sendAuthority)
         self.modeInput.clicked.connect(self.sendMode)
         self.addBlock.returnPressed.connect(self.addBlockOcc)
         self.removeBlock.returnPressed.connect(self.remBlockOcc)
@@ -599,17 +616,18 @@ class TestBench(QMainWindow):
         if not hasattr(self, 'specialBlocks'): return   #specialBlock check for initialization
 
         if isinstance(arr, list):
-            self.specialBlocks = arr
+            self.greenW2Blocks = arr
             index = self.tbBlockMenu.currentIndex()
-            selectedBlock = self.specialBlocks[index]
+            selectedBlock = self.greenW2Blocks[index]
             
 
         else:  
-            if arr > len(self.specialBlocks) - 1 or arr == -1: return 
-            selectedBlock = self.specialBlocks[arr]
+            if arr > len(self.greenW2Blocks) - 1 or arr == -1: return 
+            selectedBlock = self.greenW2Blocks[arr]
             
-        self.comSpeed.setText(str(selectedBlock.speedLimit))
-        self.authOut.setText(str(selectedBlock.authority))
+        #self.comSpeed.setText(str(selectedBlock.speedLimit))
+        #self.authOut.setText(str(selectedBlock.authority))
+        self.label_4.setText(str(selectedBlock.authority))
 
         if selectedBlock.LIGHT:
 

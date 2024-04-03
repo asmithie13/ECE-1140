@@ -143,7 +143,7 @@ class TrackController_HW(QMainWindow):
 
         '''BEGIN SERIAL COMMUNICATION'''
         serialObject.write(occupiedBlockBytes)
-        #Receiving serial response from the Raspberry Pi:
+        #Receiving serial responses from the Raspberry Pi:
         copyBlocks = self.allBlocks
         attributeList = []
         while True:
@@ -193,6 +193,7 @@ class TrackController_HW(QMainWindow):
             self.updateBooleanAuth()
             self.sendUpdatedBlocks.emit(self.allBlocks) #Change argument to copyBlocks for presentation
         
+        self.preventCollision()
         #Uncomment when hardware is not connected:
         #self.updateBooleanAuth()
         #self.sendUpdatedBlocks.emit(self.allBlocks)
@@ -410,3 +411,10 @@ class TrackController_HW(QMainWindow):
             for block in self.allBlocks:
                 if block.ID in self.LIGHT_Z150:
                     block.authority = True
+    
+    def preventCollision(self): #NOT DONE YET
+        oneDirectionOne = ['A', 'B', 'C'] #Blocks where a train coming from behind is at an index GREATER than the train-in front in self.allBlocks
+        oneDirectionTwo = ['G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] #Blocks where a train coming from behind is at an index LOWER than the train-in front in self.allBlocks
+        twoDirection = ['D', 'E', 'F',] #Bi-directional track
+
+        #self.sendUpdatedBlocks.emit(self.allBlocks)

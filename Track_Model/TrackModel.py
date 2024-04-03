@@ -126,23 +126,56 @@ class TrackModelMain(QMainWindow):
         self.total_block_length = 0
         self.prevblockID = ""
 
-        for block_num in range(63, 86):
+        for block_num in range(63, 77):
             if not self.process_block(block_num, speed_of_train, authority):
                 break
 
-        if self.get_and_set_crossing_state(85):  # Check crossing state at block 76
-            for block_num in range(85, 150):  # Continue from 77 to 86 if crossing state is true
+        if self.get_and_set_crossing_state(76):  # Check crossing state at block 76
+            for block_num in range(76, 86):  # Continue from 77 to 86 if crossing state is true
                 if not self.process_block(block_num, speed_of_train, authority):
                     break
-
-        if self.get_and_set_crossing_state(150):  # Check crossing state at block 76
-            while self.get_and_set_crossing_state(150):
-                time.sleep(0.00001)
         else:
-            for block_num in range(150, 76, -1):  # Continue from 77 to 86 if crossing state is true
+            time.sleep(0.000001)
+
+        if self.get_and_set_crossing_state(85):  # Check crossing state at block 76
+            for block_num in range(85, 100):  # Continue from 77 to 86 if crossing state is true
                 if not self.process_block(block_num, speed_of_train, authority):
                     break
 
+        if self.get_and_set_crossing_state(85):  # Check crossing state at block 150
+            while self.get_and_set_crossing_state(76):
+                time.sleep(0.00001)  # Wait until crossing state at block 150 becomes false
+
+        for block_num in range(85, 76, -1):  # Continue from 85 to 77 in reverse order
+            if not self.process_block(block_num, speed_of_train, authority):
+                break
+
+        for block_num in range(101, 150):  # Continue from 77 to 86 if crossing state is true
+            if not self.process_block(block_num, speed_of_train, authority):
+                break
+
+        if self.get_and_set_crossing_state(28):  # Check crossing state at block 76
+            time.sleep(0.00001)
+
+        for block_num in range(28, 1, -1):  # Continue from 85 to 77 in reverse order
+            if not self.process_block(block_num, speed_of_train, authority):
+                break
+        
+        if self.get_and_set_crossing_state(13): 
+            time.sleep(0.00001)  
+
+        for block_num in range(13, 28):  # Continue from 85 to 77 in reverse order
+            if not self.process_block(block_num, speed_of_train, authority):
+                break
+        
+        #WHAT HAPPEN IF SWITCH IS FALSE OR RIGHT (SAME WITH N76 TOO)
+        if self.get_and_set_crossing_state(28):  # Check crossing state at block 76
+            for block_num in range(28, 58):  # Continue from 85 to 77 in reverse order
+                if not self.process_block(block_num, speed_of_train, authority):
+                    break
+
+        #REACH YARD(FIX, I DON HAVE TO MAYBE WAIT FOR SWITCH)MAYBE
+        
     def process_block(self, block_num, speed_of_train, authority):
         block_length = self.data.get_length_for_block(block_num)
         self.total_block_length += block_length
@@ -151,7 +184,7 @@ class TrackModelMain(QMainWindow):
         # Convert speed to m/s from km/h and calculate the distance covered
         distance_covered = speed_of_train * 1000 / 3600  # speed_of_train is in km/h
 
-        if distance_covered >= authority or self.total_block_length >= distance_covered or self.total_block_length >= authority:
+        if distance_covered >= authority or self.total_block_length >= authority or authority == 0:
             self.block_num_occ = int(self.data.get_block_for_block(block_num))
             self.section_occ = self.data.get_section_for_block(block_num)
             self.blockID = self.section_occ + str(self.block_num_occ)
@@ -163,6 +196,7 @@ class TrackModelMain(QMainWindow):
             return True  
 
         return False
+
 
 
     def get_and_set_crossing_state(self, block_num):

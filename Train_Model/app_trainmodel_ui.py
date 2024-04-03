@@ -82,9 +82,10 @@ class TrainModel_mainwindow(QMainWindow):
 
         self.ebrake.setCheckable(True)
         #ebrake signals
-        self.ebrake.clicked.connect(lambda : self.ebrake_activated(1))
-        self.TC.ebrake_disable_sig.connect(self.ebrake_disabled)        
+        self.ebrake.clicked.connect(lambda: self.ebrake_disabled(self.ebrake.isChecked()))
 
+        self.TC.ebrake_disable_sig.connect(self.ebrake_disabled)        
+        
         #Initially setting the default colors
         self.bf_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
         self.bf_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
@@ -143,27 +144,24 @@ class TrainModel_mainwindow(QMainWindow):
 
 
         
-    def TC_ebrake_activated(self,state):
-        self.ebrake.toggle()
-        if(self.ebrake.isChecked()):
-            self.ebrake.setCheckable(False)
-        self.main_window.ebrake_state=state
 
-        
 
-    def ebrake_activated(self,state):
-        self.ebrake.setCheckable(False)
-        self.TC.ebrake_sig.emit(1)
-        self.ebrake_state=1
-
-    def ebrake_disabled(self,ebrake_state):
-        self.ebrake.setCheckable(True)
-        self.ebrake.toggle()
-        self.ebrake_state=0
-           
-        
-        
-        
+    def ebrake_disabled(self, ebrake_state):
+        print('ebrake', ebrake_state)
+        self.ebrake_state = ebrake_state
+    
+        # If ebrake is enabled
+        if self.ebrake_state:
+            print('true condition')
+            self.ebrake.setChecked(True)  # Set the ebrake button to checked (ON)
+            self.ebrake.setEnabled(False)  # Disable the ebrake button
+            self.TC.ebrake_sig.emit(1)  # Emit the ebrake signal with value 1
+        else:
+            print('false condition')
+            self.ebrake.setEnabled(True)  # Enable the ebrake button
+            self.ebrake.setChecked(False)  # Set the ebrake button to unchecked (OFF)
+            
+  
     def set_length(self, input_txt):
         self.length_of_vehicle_display.setText(input_txt)
 
@@ -418,19 +416,28 @@ class TrainCalculations:
         #converting sec to hours
         train_model_time_hours=train_model_time/3600
         self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration + self.main_window.prev_acc)
+        if self.main_window.velocity>0:
+            if self.main_window.ebrake_state==1:
+                print('ebrake state entered')
+                acceleration=-8.956692913385826 #in ft/s^2
+                self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
+                if self.main_window.velocity==0:
+                    acceleration=0
+                    self.main_window.prev_vel=0
+                    
 
-        if self.main_window.brake_state==1:
-            acceleration=-3.9370078740157477 #in ft/s^2
-            self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
+            
+            elif self.main_window.brake_state==1:
+                print('service brakes entered')
+                acceleration=-3.9370078740157477 #in ft/s^2
+                self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
+                if self.main_window.velocity==0:
+                    acceleration=0
+                    self.main_window.prev_vel=0
+                    
         
-        if self.main_window.ebrake_state==1:
-            acceleration=-8.956692913385826 #in ft/s^2
-            self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
-        
-
-
         self.main_window.prev_vel=self.main_window.velocity
-        self.main_window.prev_acc=acceleration
+        
 
         # if self.main_windowprev_acc==0:
         #     self.main_window.Acc_Velo_value_lcd.display(self.main_window.)

@@ -1375,13 +1375,15 @@ font: 22pt &quot;MS Shell Dlg 2&quot;;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(195, 16, 40);
-selection-color: rgb(99, 99, 99);
 </string>
     </property>
     <property name="text">
      <string>EMERGENCY BRAKE</string>
     </property>
     <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="checked">
      <bool>false</bool>
     </property>
     <property name="autoRepeat">

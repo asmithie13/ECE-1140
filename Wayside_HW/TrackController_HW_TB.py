@@ -114,7 +114,7 @@ class TrackController_HW_TB(QMainWindow):
             if tempBlock.switchState == False:
                 self.lineEditSwitch.setText("RIGHT")
             else:
-                self.lineEditSwitch.setText("LIGHT")
+                self.lineEditSwitch.setText("LEFT")
         
         if tempBlock.CROSSING == False:
             self.lineEditCrossing.setText("-")

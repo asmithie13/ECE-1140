@@ -32,7 +32,10 @@ class TrainModel_mainwindow(QMainWindow):
     velocity=0
     brake_state=0
     ebrake_state=0
-    
+    people_count=0
+    crew_count=2
+    total_cap=0
+    people_getting_off=0
     #Track Model Signals
     track_model_acc_velo = qtc.pyqtSignal(int)
 
@@ -120,6 +123,8 @@ class TrainModel_mainwindow(QMainWindow):
         total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
         self.train_calculations.set_time(total_seconds)
         self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
+        self.set_ccount(self.crew_count)
+        self.set_pcount(self.people_count)
         
         
     #function to set Power LCD
@@ -168,11 +173,11 @@ class TrainModel_mainwindow(QMainWindow):
     def set_length(self, input_txt):
         self.length_of_vehicle_display.setText(input_txt)
 
-    def set_pcount(self, input_txt):
-        self.pcount_display.setText(input_txt)
+    def set_pcount(self, people_count):
+        self.pcount_display.setText(str(self.people_count))
 
-    def set_ccount(self, input_txt):
-        self.ccount_display.setText(input_txt)
+    def set_ccount(self, crew_count):
+        self.ccount_display.setText(str(self.crew_count))
 
     def set_height(self, height):
         self.height_display.setText(height)
@@ -329,9 +334,24 @@ class TrainModel_mainwindow(QMainWindow):
             self.left_doors_value.setFixedSize(109, 97)
             self.left_doors_value.setText('OPEN')
 
+    #sending acc/velocity to track model
     def acc_vel_to_track_model(self,velocity):
         velocity=self.train_calculations.calculate_acc_velocity
         self.track_model_acc_velo.emit(int(velocity))
+
+    #random generation for people disembarking
+    def people_disemb(self, people_count):
+        self.people_getting_off=random.randint(1,people_count)
+        self.people_count=self.total_cap-self.people_getting_off
+        self.total_cap= self.people_count + self.crew_count
+    
+    def get_ticket_sales(self, tick_sales):
+        self.people_count= tick_sales
+        self.total_cap= self.people_count + self.crew_count
+    
+    
+
+
 
 
 #CLASS CONTAINING ALL TRAIN CALCULATIONS

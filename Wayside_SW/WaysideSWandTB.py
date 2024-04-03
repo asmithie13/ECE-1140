@@ -515,6 +515,9 @@ class WaysideSW(QMainWindow):
             for x in (self.green5blocks[blockNum - 1]):
                 if self.allGreenBlocks[x - 1].occupied:
                     self.allGreenBlocks[x - 1].authority = False
+                elif not self.allGreenBlocks[x - 1].occupied and self.allGreenBlocks[x - 1].lightState:
+                    self.allGreenBlocks[x - 1].authority = True
+
         
         self.BlockOcc.setText(" ".join(sentBlocks))
         if self.label_7.text() == "AUTOMATIC" : 

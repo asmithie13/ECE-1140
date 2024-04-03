@@ -616,17 +616,18 @@ class TestBench(QMainWindow):
         if not hasattr(self, 'specialBlocks'): return   #specialBlock check for initialization
 
         if isinstance(arr, list):
-            self.specialBlocks = arr
+            self.greenW2Blocks = arr
             index = self.tbBlockMenu.currentIndex()
-            selectedBlock = self.specialBlocks[index]
+            selectedBlock = self.greenW2Blocks[index]
             
 
         else:  
-            if arr > len(self.specialBlocks) - 1 or arr == -1: return 
-            selectedBlock = self.specialBlocks[arr]
+            if arr > len(self.greenW2Blocks) - 1 or arr == -1: return 
+            selectedBlock = self.greenW2Blocks[arr]
             
-        self.comSpeed.setText(str(selectedBlock.speedLimit))
-        self.authOut.setText(str(selectedBlock.authority))
+        #self.comSpeed.setText(str(selectedBlock.speedLimit))
+        #self.authOut.setText(str(selectedBlock.authority))
+        self.label_4.setText(str(selectedBlock.authority))
 
         if selectedBlock.LIGHT:
 

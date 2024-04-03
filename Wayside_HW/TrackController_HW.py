@@ -142,10 +142,10 @@ class TrackController_HW(QMainWindow):
 
         occupiedBlockBytes = occupiedBlockString.encode()
         serialObject.write(occupiedBlockBytes)
+
         '''BEGIN SERIAL COMMUNICATION'''
         #Receiving serial response from the Raspberry Pi:
-        copyBlocks = self.allBlocks #Copy of original blocks to compare
-
+        copyBlocks = self.allBlocks
         attributeList = []
         while True:
             if serialObject.in_waiting > 0:
@@ -155,7 +155,7 @@ class TrackController_HW(QMainWindow):
                 else:
                     attributeList.append(myAttribute)
                 
-        for block in copyBlocks:
+        for block in self.allBlocks:
             if block.ID == 'A1':
                 block.lightState = int(attributeList[0])
             elif block.ID == 'C12':
@@ -177,12 +177,10 @@ class TrackController_HW(QMainWindow):
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
         if copyBlocks != self.allBlocks:
             print("ERROR: HARDWARE CONTROL INCORRECT")
-        else:
-            print("SWITCH CALCULATED CORRECTLY")
-
+        
         #Ajust block-wise authority based on active red lights:
         self.updateBooleanAuth()
-        self.sendUpdatedBlocks.emit(self.allBlocks)
+        self.sendUpdatedBlocks.emit(self.allBlocks) #Change argument to copyBlocks for presentation
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)

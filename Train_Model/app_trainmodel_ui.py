@@ -110,15 +110,12 @@ class TrainModel_mainwindow(QMainWindow):
 
     #CLOCK
     def update_time(self, current_time):
-        str_time=current_time.toString("hh:mm:ss")
-        self.TC.time_sig.emit(current_time.toString("hh:mm:ss"))
-        self.Timer_calc(str_time)
-
-    def Timer_calc(self, time):
-        self.time=time
-        hours, minutes, seconds = [int(part) for part in time.split(':')]
-        total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
-        self.train_calculations.set_time(total_seconds)
+        self.TC.time_sig.emit(current_time)
+        parts = current_time.split(':')
+        hours, minutes = int(parts[0]), int(parts[1])
+        seconds, ms = map(int, parts[2].split('.'))
+        total_ms = hours*3600000 + minutes*60000 + seconds*1000 + ms
+        self.train_calculations.set_time(total_ms)
         self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
         
         
@@ -334,7 +331,6 @@ class TrainModel_mainwindow(QMainWindow):
 #CLASS CONTAINING ALL TRAIN CALCULATIONS
 class TrainCalculations:
 
-
     def __init__(self, main_window,TC):
 
         self.train_model_time =0
@@ -346,10 +342,6 @@ class TrainCalculations:
 
     def get_service_brake(self,brake):
             self.main_window.brake_state=brake
-        
-
-            
-
 
     def set_time(self,time_calc):
         self.train_model_time=time_calc
@@ -414,7 +406,7 @@ class TrainCalculations:
         train_model_time=self.get_time()
         
         #converting sec to hours
-        train_model_time_hours=train_model_time/3600
+        train_model_time_hours=train_model_time/(3600*1000)
         self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration + self.main_window.prev_acc)
         if self.main_window.velocity>0:
             if self.main_window.ebrake_state==1:

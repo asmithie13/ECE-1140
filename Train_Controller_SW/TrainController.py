@@ -1,7 +1,7 @@
 from Train_Controller_SW.mainControl import Ui_MainWindow
 from Train_Controller_SW.Power import Vital_Power
-from Train_Controller_SW.Speed import Vital_Speed
-from Train_Controller_SW.Authority import Vital_Authority
+#from Train_Controller_SW.Speed import Vital_Speed
+#from Train_Controller_SW.Authority import Vital_Authority
 from Train_Controller_SW.Failure import Vital_Failure
 from Train_Controller_SW.NonVital import NonVital
 from Train_Controller_SW.SpeedAuth import Vital_Speed_Auth
@@ -156,15 +156,17 @@ class TrainController(QMainWindow):
             self.ui.vertSliderBrk.setDisabled(False)
 
     def Timer(self, time):
-
-        hours, minutes, seconds = [int(part) for part in time.split(':')]
-        total_seconds = (hours * 3600) + (minutes * 60) + seconds
+        #NEW FORMAT hh:mm:ss.zzz
+        parts = time.split(':')
+        hours, minutes = int(parts[0]), int(parts[1])
+        seconds, ms = map(int, parts[2].split('.'))
+        total_ms = hours*3600000 + minutes*60000 + seconds*1000 + ms
         #if things go wrong, try changing the order of speed, authority, power
-        self.Vital_Power.Set_Clock(total_seconds)
+        self.Vital_Power.Set_Clock(total_ms)
         # self.Vital_Speed.Speed_Monitor()
         # self.Vital_Authority.Authority_Monitor()
         self.Vital_Speed_Auth.Speed_Authority_Monitor()
-        self.globalClock = total_seconds
+        self.globalClock = total_ms
         self.Vital_Power.calculate_power()
         #print(total_seconds)
 

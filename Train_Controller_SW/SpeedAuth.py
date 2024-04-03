@@ -45,8 +45,8 @@ class Vital_Speed_Auth():
     def Speed_Authority_Monitor(self):
 
         #calculate authority using d=r*t
-        self.rate = self.ui.lcdCurSpd.value()*1.46667 #mph to fps
-        self.rate_metric = self.ui.lcdCurSpd.value()*0.44704
+        self.rate = self.ui.lcdCurSpd.value()*0.00146667 #mph to fpms
+        self.rate_metric = self.ui.lcdCurSpd.value()*0.00044704 #mph to m,
         self.time = 1
 
         current_speed = self.ui.lcdCurSpd.value()
@@ -65,18 +65,17 @@ class Vital_Speed_Auth():
             #self.AuthM = self.ui.lcdAuth.value()*0.3048
 
             self.AuthM = self.decimal_m_auth
-        
-            #current speed in m/s from mph
-            self.V_i = self.ui.lcdCurSpd.value()*0.44704
+    
+            #current speed in m/mss from mph
+            self.V_i = self.ui.lcdCurSpd.value()*0.00044704
 
             #from top speed (70kph) it takes 157.535288067 m to stop with the service brake
             #from top speed (70kph) it takes 70.0156835852 m to stop with the emergency brake
 
             #if self.stopcal == True:
-            self.stoppingdistanceService = (self.V_i**2)/(2*1.2)
-            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*2.73)
+            self.stoppingdistanceService = (self.V_i**2)/(2*.0012)
+            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*.00273)
                 
-
             if self.AuthM <= self.stoppubgdistanceEmergency:
                 self.ui.vertSliderBrk.setValue(0)
                 self.ui.vertSliderPow.setValue(0)

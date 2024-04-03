@@ -29,23 +29,23 @@ from Train_Model.app_trainmodel_tb import *
 #Utility function to update the clock
 def clock():
     global time
-    time = time.addSecs(1)
+    time = time.addMSecs(1)
     current_time = time.toString("hh:mm")
     current_time_wSeconds = time.toString("hh:mm:ss")
+    current_time_wMSeconds = time.toString("hh:mm:ss.zzz")
 
     #Pulling clock data for CTC and Track Model
-    MainWindow.CTCwindow.displayClock(current_time_wSeconds)
+    MainWindow.CTCwindow.displayClock(current_time_wMSeconds)
     MainWindow.TrackModelWindow.set_clock(current_time)
 
     #Pulling clock data for each train in existance
     for train in MainWindow.currentTrains:
-        train.update_time(time)
+        train.update_time(current_time_wSeconds)
 
 #Modifies speed of simulation based of slider on the main UI    
 def updateClockSpeed():
         SliderValue = MainWindow.SpeedSlider.value()
-        
-        timer.setInterval(int(1000 / SliderValue))   
+        timer.setInterval(int(1000/SliderValue))   
         timer.timeout.connect(clock)
 
         if not MainWindow.PauseButton.isChecked():
@@ -128,6 +128,54 @@ MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.u
 MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieveTicketSales)
 
 
+
+#tick rate is how often the internal clock updates per second (default is 50 updates per second)
+class SimulationTime(QObject):
+
+    def init(self):
+        QObject.init(self)
+        self.sim_speed_factor = 1.0
+        self.simulation_elapsed = 0
+        self.last_update_time = QDateTime.currentDateTime()
+        self.current_time = 0
+        self.running = True
+
+    def start(self): 
+        self.running = 1
+
+    def cancel(self):
+        self.running = False
+
+    def stop(self):
+        self.sim_speed_factor = 0
+
+    def get_running(self):
+        return self.running
+
+    def set_sim_speed(self, factor: int):
+        self.sim_speed_factor = factor
+
+    def get_speed_factor(self):
+        return self.sim_speed_factor
+    
+    def updatetime(self):
+        while self.running:
+            current_time = QDateTime.currentDateTime()
+            elapsed = self.last_update_time.msecsTo(current_time)
+            self.last_update_time = current_time
+            # Increment the simulation time by the elapsed time times the speed factor
+            self.simulation_elapsed += elapsed * self.simspeedfactor / 1000.0  # Convert to seconds
+            # Format the simulation time
+            simulatedtime = QDateTime.fromMSecsSinceEpoch(int(self.simulation_elapsed * 1000))
+            self.current_time = simulatedtime.toString("hh:mm:ss.zzz") #hh:mm:ss.zzz for milliseconds
+            time.sleep(0.1) #update every 0.1 seconds
+
+    def get_curr_serial(self) -> int:
+        return int(self.current_time)
+
+    def get_curr_string(self) -> str:
+        #print(self.current_time)
+        return str(self.current_time)
 
 """Clock Initialization"""
 #Initializing Qtimer for clock

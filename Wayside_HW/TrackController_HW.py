@@ -13,7 +13,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 #Enable serial communication:
-serialObject = serial.Serial('COM8', 9600)
+#serialObject = serial.Serial('COM8', 9600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -141,11 +141,11 @@ class TrackController_HW(QMainWindow):
         occupiedBlockString += '1'
 
         occupiedBlockBytes = occupiedBlockString.encode()
-        serialObject.write(occupiedBlockBytes)
+        #serialObject.write(occupiedBlockBytes)
 
         '''BEGIN SERIAL COMMUNICATION'''
         #Receiving serial response from the Raspberry Pi:
-        copyBlocks = self.allBlocks
+        '''copyBlocks = self.allBlocks
         attributeList = []
         while True:
             if serialObject.in_waiting > 0:
@@ -171,12 +171,12 @@ class TrackController_HW(QMainWindow):
             elif block.ID == 'T108':
                 block.crossingState = int(attributeList[6])
             elif block.ID == 'Z150':
-                block.lightState = int(attributeList[7])
+                block.lightState = int(attributeList[7])'''
         
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
-        if copyBlocks != self.allBlocks:
-            print("ERROR: HARDWARE CONTROL INCORRECT")
+        #if copyBlocks != self.allBlocks:
+            #print("ERROR: HARDWARE CONTROL INCORRECT")
         
         #Ajust block-wise authority based on active red lights:
         self.updateBooleanAuth()

@@ -78,6 +78,7 @@ class Vital_Power():
         self.ui.lcdAcel.display(self.power)
         self.curr_power_sig.emit(int(self.power))
 
-    
-        #self.curr_power_sig.emit(20000) test val
-        
+    def Control_Accelleration(self):
+        if(self.ui.vertSliderPow.value() > 0):
+            self.ui.vertSliderBrk.setValue(0)
+            self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())   

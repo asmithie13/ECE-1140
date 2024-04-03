@@ -75,7 +75,7 @@ class TrainController(QMainWindow):
         self.curr_auth_sig.connect(self.Vital_Speed_Auth.Control_Authority)
         #self.curr_auth_sig.connect(self.Vital_Speed_Auth.Speed_Authority_Monitor)
         self.curr_temp_sig.connect(self.NonVital.Cabin_Temperature)
-        self.ebrake_sig.connect(self.Vital_Failure.Control_Emergency_Brake)
+        self.ebrake_sig.connect(self.ui.Ebrake.setChecked)
         self.pwr_fail_sig.connect(self.Vital_Failure.Control_Power_Failure)
         self.brk_fail_sig.connect(self.Vital_Failure.Control_Brake_Failure)
         self.sig_fail_sig.connect(self.Vital_Failure.Control_Signal_Failure)
@@ -96,7 +96,7 @@ class TrainController(QMainWindow):
 
         self.ui.inputKp.valueChanged.connect(lambda : self.Vital_Power.Control_Kp())
         self.ui.inputKi.valueChanged.connect(lambda : self.Vital_Power.Control_Ki())
-        self.ui.vertSliderPow.valueChanged.connect(lambda : self.Vital_Power.calculate_power())
+        self.ui.vertSliderPow.valueChanged.connect(lambda : self.Vital_Power.Control_Accelleration())
         #self.ui.lcdCurSpd.connect(self.Vital_Speed.Speed_Monitor)
         self.ui.vertSliderBrk.valueChanged.connect(lambda : self.Vital_Speed_Auth.service_brake())
         #self.ui.lcdAuth.valueChanged.connect(lambda :self.Vital_Authority.authTimerStart())
@@ -134,9 +134,8 @@ class TrainController(QMainWindow):
       self.ui.inputKi.setDisabled(True)
       self.ui.inputKp.setDisabled(True)
 
-      #self.Vital_Speed.Speed_Monitor()
-      #self.ui.vertSliderPow.setDisabled(True)
-      #self.ui.vertSliderBrk.setDisabled(True)
+      self.ui.vertSliderPow.setEnabled(False)
+      self.ui.vertSliderBrk.setEnabled(False)
 
     def Control_Manual(self):
         self.ui.buttonAuto.toggle()

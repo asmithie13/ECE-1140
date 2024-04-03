@@ -55,11 +55,7 @@ class Vital_Speed_Auth():
         
         if(not(self.ui.lcdAuth.value() <= 0) and not(self.ui.lcdCurSpd.value == 0)):
             self.ui.lcdAuth.display(self.ui.lcdAuth.value() - int(self.rate*self.time)) #auth = auth - rate*time
-            
-            
             self.decimal_m_auth = self.decimal_m_auth - float(self.rate_metric*self.time)
-
-
             
             # if self.ui.lcdAuth.value() > 0:
 
@@ -83,21 +79,20 @@ class Vital_Speed_Auth():
 
             if self.AuthM <= self.stoppubgdistanceEmergency:
                 self.ui.vertSliderBrk.setValue(0)
+                self.ui.vertSliderPow.setValue(0)
+                self.ui.vertSliderPow.setEnabled(False)
                 self.ui.Ebrake.setChecked(True)
 
             elif self.AuthM <= self.stoppingdistanceService:
                 self.ui.vertSliderBrk.setValue(1)
                 self.ui.vertSliderPow.setValue(0)
-                self.ui.vertSliderPow.setDisabled(True)
+                self.ui.vertSliderPow.setEnabled(False)
                 #self.stopcal = True
 
                 #self.stopcal = True
-
-
             #check current speed every time speed is updated or speed limit is updated
             #if speed is greater than speed limit, send command to brake
             #if speed is less than speed limit, send command to accelerate
-
             #our train is frictionless so it will maintain speed unless we tell it to do something else
 
             #this case is vital, will override driver input
@@ -107,13 +102,17 @@ class Vital_Speed_Auth():
             
             #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
             elif current_speed < ((speed_limit or cmd_speed) and (self.ui.buttonAuto.isChecked() == True)):
+                self.ui.vertSliderPow.setEnabled(True)
                 self.ui.vertSliderPow.setValue(100)
                 self.ui.vertSliderBrk.setValue(0)
             
             #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
-            elif current_speed == (speed_limit or cmd_speed):
+            elif current_speed == (speed_limit or cmd_speed) and (self.ui.buttonAuto.isChecked()):
                 self.ui.vertSliderPow.setValue(0)
                 self.ui.vertSliderBrk.setValue(0)
+            
+            elif self.ui.buttonMan.isChecked() :
+                self.ui.vertSliderPow.setEnabled(True)
 
         # elif self.stopcal == 1:
         #     self.ui.lcdAuth.display(self.ui.lcdAuth.value() - int(self.rate*self.time))
@@ -124,9 +123,9 @@ class Vital_Speed_Auth():
     def Authority_Monitor_Bool(self, bool_auth):
         if(bool_auth):
             self.ui.vertSliderBrk.setValue(1)
-            self.ui.vertSliderPow.setDisabled(True)
+            self.ui.vertSliderPow.setEnabled(False)
         else:
-            self.ui.vertSliderPow.setDisabled(False)
+            self.ui.vertSliderPow.setEnabled(True)
 
     #I want to move this to nonvital
     def Control_Doors(self,door):

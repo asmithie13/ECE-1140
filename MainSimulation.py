@@ -31,9 +31,10 @@ def clock():
     global time
     time = time.addSecs(1)
     current_time = time.toString("hh:mm")
+    current_time_wSeconds = time.toString("hh:mm:ss")
 
     #Pulling clock data for CTC and Track Model
-    MainWindow.CTCwindow.displayClock(current_time)
+    MainWindow.CTCwindow.displayClock(current_time_wSeconds)
     MainWindow.TrackModelWindow.set_clock(current_time)
 
     #Pulling clock data for each train in existance

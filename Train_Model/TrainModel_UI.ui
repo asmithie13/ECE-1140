@@ -256,46 +256,6 @@
      </item>
     </layout>
    </widget>
-   <widget class="QComboBox" name="Train_dropdown">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>581</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Times New Roman</family>
-      <pointsize>10</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(214, 214, 214);
-selection-color: rgb(253, 253, 253);</string>
-    </property>
-    <item>
-     <property name="text">
-      <string>Train 1</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Train 2</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Train 3</string>
-     </property>
-    </item>
-   </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
@@ -876,7 +836,7 @@ color: rgb(60, 60, 60)</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../Tanvi's Tr Mod/bk_ad.png</pixmap>
+     <pixmap>bk_ad.png</pixmap>
     </property>
    </widget>
    <widget class="Line" name="line_2">
@@ -1415,13 +1375,15 @@ font: 22pt &quot;MS Shell Dlg 2&quot;;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(195, 16, 40);
-selection-color: rgb(99, 99, 99);
 </string>
     </property>
     <property name="text">
      <string>EMERGENCY BRAKE</string>
     </property>
     <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="checked">
      <bool>false</bool>
     </property>
     <property name="autoRepeat">
@@ -1467,6 +1429,48 @@ font: 75 10pt &quot;Times New Roman&quot;;</string>
      </item>
     </layout>
    </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>0</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;TRAIN ID: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Train_ID_Label">
+    <property name="geometry">
+     <rect>
+      <x>114</x>
+      <y>0</y>
+      <width>341</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Times New Roman</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
    <zorder>line_5</zorder>
    <zorder>line_4</zorder>
    <zorder>line</zorder>
@@ -1475,7 +1479,6 @@ font: 75 10pt &quot;Times New Roman&quot;;</string>
    <zorder>line_3</zorder>
    <zorder>verticalLayoutWidget_2</zorder>
    <zorder>verticalLayoutWidget_3</zorder>
-   <zorder>Train_dropdown</zorder>
    <zorder>groupBox_2</zorder>
    <zorder>verticalLayoutWidget_5</zorder>
    <zorder>verticalLayoutWidget_6</zorder>
@@ -1493,6 +1496,8 @@ font: 75 10pt &quot;Times New Roman&quot;;</string>
    <zorder>label_3</zorder>
    <zorder>ebrake</zorder>
    <zorder>verticalLayoutWidget</zorder>
+   <zorder>label_4</zorder>
+   <zorder>Train_ID_Label</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

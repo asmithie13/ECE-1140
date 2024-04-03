@@ -153,9 +153,12 @@ class TrainModel_mainwindow(QMainWindow):
         # If ebrake is enabled
         if self.ebrake_state:
             print('true condition')
-            self.ebrake.setChecked(True)  # Set the ebrake button to checked (ON)
+            if self.ebrake.setChecked(True):
+                self.TC.ebrake_sig.emit(1)  # Emit the ebrake signal with value 1
+            else:
+                self.ebrake.setChecked(True)  # Set the ebrake button to checked (ON)
             self.ebrake.setEnabled(False)  # Disable the ebrake button
-            self.TC.ebrake_sig.emit(1)  # Emit the ebrake signal with value 1
+
         else:
             print('false condition')
             self.ebrake.setEnabled(True)  # Enable the ebrake button
@@ -485,16 +488,11 @@ class trainmodel_testbench(QMainWindow):
     def __init__(self,TC):
         super().__init__()
 
-        self.TC = TC
+        #self.TC = TC
 
         uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
 
-        #TRAIN CONTROLLER INSTANCE CREATED
-        self.TC = TrainController()
-
-        #TRAIN CONTROLLER INSTANCE CREATED
-        self.TC = TrainController()
-
+       
 
 
         #TC.service_brake_sig.connect(self.)
@@ -698,55 +696,55 @@ if __name__ == "__main__":
     #add functionality to take in Train Controller Varible
     window = TrainModel_mainwindow(1)
     TC = window.Return_TrainController()
-    window_tb = trainmodel_testbench(TC)
+    # window_tb = trainmodel_testbench(TC)
 
     # Connect the signal from MyMainWindow to trainmodel_testbench
     #sending power input signal from tb to main
-    window_tb.power_input_signal.connect(window.train_calculations.get_power)
-    #sending commanded speed from tb to main
-    #
-    # window_tb.commanded_speed_input_signal.connect(window.train_calculations.get_commanded_speed)
-    #mass signal
-    window_tb.mass_input_signal.connect(window.train_calculations.get_mass)
-    #announcement signal
-    window_tb.announcement_input_signal.connect(window.set_announcements)
-    #train selection
-    window_tb.train_sel_signal.connect(window.get_train_selection)
-    #set length
-    window_tb.length_input_signal.connect(window.set_length)
-    #set height
-    window_tb.height_input_signal.connect(window.set_height)
-    #set width
-    window_tb.width_input_signal.connect(window.set_width)
-    #set grade
-    window_tb.grade_input_signal.connect(window.set_grade)
-    #set pcount
-    window_tb.pcount_input_signal.connect(window.set_pcount)
-    #set ccount
-    window_tb.ccount_input_signal.connect(window.set_ccount)
+    # window_tb.power_input_signal.connect(window.train_calculations.get_power)
+    # #sending commanded speed from tb to main
+    # #
+    # # window_tb.commanded_speed_input_signal.connect(window.train_calculations.get_commanded_speed)
+    # #mass signal
+    # window_tb.mass_input_signal.connect(window.train_calculations.get_mass)
+    # #announcement signal
+    # window_tb.announcement_input_signal.connect(window.set_announcements)
+    # #train selection
+    # window_tb.train_sel_signal.connect(window.get_train_selection)
+    # #set length
+    # window_tb.length_input_signal.connect(window.set_length)
+    # #set height
+    # window_tb.height_input_signal.connect(window.set_height)
+    # #set width
+    # window_tb.width_input_signal.connect(window.set_width)
+    # #set grade
+    # window_tb.grade_input_signal.connect(window.set_grade)
+    # #set pcount
+    # window_tb.pcount_input_signal.connect(window.set_pcount)
+    # #set ccount
+    # window_tb.ccount_input_signal.connect(window.set_ccount)
     #set ebrake
     #window_tb.ebrake_input_signal.connect(window.change_ebrake_color)
     #estop manual
    
-    #brake_fail
-    window_tb.brake_fail_input_signal.connect(window.brake_fail_tb)
-    #signal_fail
-    window_tb.signal_fail_input_signal.connect(window.signal_fail_tb)
-    #engine_fail
-    window_tb.engine_fail_input_signal.connect(window.engine_fail_tb)
-    #cabin_temp 
-    window_tb.cabin_temp_input_signal.connect(window.set_cabin_temp)
-    #interior_lights
-    window_tb.int_lights_input_signal.connect(window.interior_lights)
-    #exterior_lights
-    window_tb.ext_lights_input_signal.connect(window.exterior_lights)
-    #right_doors
-    window_tb.right_doors_input_signal.connect(window.right_doors)
-    #left_doors
-    window_tb.left_doors_input_signal.connect(window.left_doors)
+    # #brake_fail
+    # window_tb.brake_fail_input_signal.connect(window.brake_fail_tb)
+    # #signal_fail
+    # window_tb.signal_fail_input_signal.connect(window.signal_fail_tb)
+    # #engine_fail
+    # window_tb.engine_fail_input_signal.connect(window.engine_fail_tb)
+    # #cabin_temp 
+    # window_tb.cabin_temp_input_signal.connect(window.set_cabin_temp)
+    # #interior_lights
+    # window_tb.int_lights_input_signal.connect(window.interior_lights)
+    # #exterior_lights
+    # window_tb.ext_lights_input_signal.connect(window.exterior_lights)
+    # #right_doors
+    # window_tb.right_doors_input_signal.connect(window.right_doors)
+    # #left_doors
+    # window_tb.left_doors_input_signal.connect(window.left_doors)
 
     window.show()
-    window_tb.show()
+    # window_tb.show()
 
     # # # Define the path to the mainControl.py file
     # main_control_path = "Train Controller SW/mainControl.py"

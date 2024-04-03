@@ -2,13 +2,18 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
+import time
+import serial
 import sys
 import os
 import re
 
-#Using Block Class as a seperate file
+#Using Block Class as a seperate file:
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
+
+#Enable serial communication:
+#serialObject = serial.Serial('COM8', 9600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -27,12 +32,20 @@ class TrackController_HW(QMainWindow):
         super(TrackController_HW, self).__init__()
         uic.loadUi("Wayside_HW/TrackController_HW.ui", self)
 
+        #Constant lists for blocks affected based on light color:
+        self.LIGHT_A1 = ['A1', 'A2']
+        self.LIGHT_C12 = ['C12', 'D13']
+        self.LIGHT_G29 = ['F26', 'F27', 'F28', 'G29']
+        self.LIGHT_Z150 = ['Y148', 'Y149', 'Z150']
+
         #Disable manual mode operations, as program begins in automatic operation:
         self.groupBoxManual.setEnabled(False)
 
         #Initialize an empty list to hold all blocks:
-        self.allTripleIDs = []
+        self.allTripleIDs = [] #This is unused
         self.allBlocks = readTrackFile("Wayside_HW/greenLine.csv", self.allTripleIDs)
+        for block in self.allBlocks:
+            block.Wayside = "WI"
 
         #Initialize a flag integer to determine which mode the system is currently in:
         self.modeFlag = 0 #0 = Automatic, 1 = Manual, 2 = Maintenance
@@ -121,16 +134,53 @@ class TrackController_HW(QMainWindow):
                 occupiedBlockSections.append(block.blockSection)
         occupiedBlockSections.sort()
 
-        #Pare PLC file and adjust blocks accordingly:
-        self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
-    
-        #TO-DO HERE:
-        #-Adjust block-wise authority based on lights and collisions
-        #-Move parser to RPi
-        #-Ensure vitality (Run calculation two/three times and compare)
+        #Send string with flag at end to send block occupancies serially:
+        occupiedBlockString = ""
+        for section in occupiedBlockSections:
+            occupiedBlockString += section
+        occupiedBlockString += '1'
 
-        self.sendUpdatedBlocks.emit(self.allBlocks)
+        occupiedBlockBytes = occupiedBlockString.encode()
+        #serialObject.write(occupiedBlockBytes)
+
+        '''BEGIN SERIAL COMMUNICATION'''
+        #Receiving serial response from the Raspberry Pi:
+        '''copyBlocks = self.allBlocks
+        attributeList = []
+        while True:
+            if serialObject.in_waiting > 0:
+                myAttribute = serialObject.read(serialObject.in_waiting).decode('utf-8')
+                if myAttribute == 'A':
+                    break
+                else:
+                    attributeList.append(myAttribute)
+                
+        for block in self.allBlocks:
+            if block.ID == 'A1':
+                block.lightState = int(attributeList[0])
+            elif block.ID == 'C12':
+                block.lightState = int(attributeList[1])
+            elif block.ID == 'D13':
+                block.switchState = int(attributeList[2])
+            elif block.ID == 'E19':
+                block.crossingState = int(attributeList[3])
+            elif block.ID == 'F28':
+                block.switchState = int(attributeList[4])
+            elif block.ID == 'G29':
+                block.lightState = int(attributeList[5])
+            elif block.ID == 'T108':
+                block.crossingState = int(attributeList[6])
+            elif block.ID == 'Z150':
+                block.lightState = int(attributeList[7])'''
         
+        #Parse PLC file and adjust blocks accordingly:
+        self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
+        #if copyBlocks != self.allBlocks:
+            #print("ERROR: HARDWARE CONTROL INCORRECT")
+        
+        #Ajust block-wise authority based on active red lights:
+        self.updateBooleanAuth()
+        self.sendUpdatedBlocks.emit(self.allBlocks) #Change argument to copyBlocks for presentation
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)
@@ -210,6 +260,9 @@ class TrackController_HW(QMainWindow):
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
                 block.lightState = False
                 break
+
+        #Ajust block-wise authority based on active red lights:
+        self.updateBooleanAuth()
         self.sendUpdatedBlocks.emit(self.allBlocks)
 
         self.pushButtonGreen.setEnabled(True)
@@ -224,6 +277,9 @@ class TrackController_HW(QMainWindow):
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
                 block.lightState = True
                 break
+
+        #Ajust block-wise authority based on active red lights:
+        self.updateBooleanAuth()
         self.sendUpdatedBlocks.emit(self.allBlocks)
 
         self.pushButtonRed.setEnabled(True)
@@ -291,3 +347,51 @@ class TrackController_HW(QMainWindow):
     
     def handleSpeedAuthority(self, receivedSpeedAuthority):
         self.sendSpeedAuthority.emit(receivedSpeedAuthority) #Pass-on distance-wise authority straight to train controller without changing
+    
+    def updateBooleanAuth(self):
+        #Ajust block-wise authority based on active red lights:
+        for block in self.allBlocks:
+            if block.ID == 'A1':
+                tempA1 = block.lightState
+            elif block.ID == 'C12':
+                tempC12 = block.lightState
+            elif block.ID == 'G29':
+                tempG29 = block.lightState
+            elif block.ID == 'Z150':
+                tempZ150 = block.lightState
+        
+        if tempA1 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_A1:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_A1:
+                    block.authority = True
+        
+        if tempC12 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_C12:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_C12:
+                    block.authority = True
+        
+        if tempG29 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_G29:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_G29:
+                    block.authority = True
+        
+        if tempZ150 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_Z150:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_Z150:
+                    block.authority = True

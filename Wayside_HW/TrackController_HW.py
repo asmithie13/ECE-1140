@@ -13,7 +13,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 #Enable serial communication:
-#serialObject = serial.Serial('COM8', 9600)
+serialObject = serial.Serial('COM8', 9600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -139,13 +139,12 @@ class TrackController_HW(QMainWindow):
         for section in occupiedBlockSections:
             occupiedBlockString += section
         occupiedBlockString += '1'
-
         occupiedBlockBytes = occupiedBlockString.encode()
-        #serialObject.write(occupiedBlockBytes)
 
         '''BEGIN SERIAL COMMUNICATION'''
+        serialObject.write(occupiedBlockBytes)
         #Receiving serial response from the Raspberry Pi:
-        '''copyBlocks = self.allBlocks
+        copyBlocks = self.allBlocks
         attributeList = []
         while True:
             if serialObject.in_waiting > 0:
@@ -155,7 +154,7 @@ class TrackController_HW(QMainWindow):
                 else:
                     attributeList.append(myAttribute)
                 
-        for block in self.allBlocks:
+        '''for block in copyBlocks:
             if block.ID == 'A1':
                 block.lightState = int(attributeList[0])
             elif block.ID == 'C12':
@@ -175,12 +174,28 @@ class TrackController_HW(QMainWindow):
         
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
-        #if copyBlocks != self.allBlocks:
-            #print("ERROR: HARDWARE CONTROL INCORRECT")
+        attributeListSoftware = []
+        for block in self.allBlocks:
+            if block.LIGHT == True:
+                attributeListSoftware.append(str(block.lightState))
+            elif block.SWITCH == True:
+                attributeListSoftware.append(str(block.switchState))
+            elif block.CROSSING == True:
+                attributeListSoftware.append(str(block.crossingState))
+
+        if attributeList != attributeListSoftware:
+            self.lineEditHardware.setText("ERRORS DETECTED. STOPPING ALL TRAINS.")
+            for block in self.allBlocks:
+                block.authority = False
+                self.sendUpdatedBlocks.emit(self.allBlocks)
+        else:
+            #Ajust block-wise authority based on active red lights:
+            self.updateBooleanAuth()
+            self.sendUpdatedBlocks.emit(self.allBlocks) #Change argument to copyBlocks for presentation
         
-        #Ajust block-wise authority based on active red lights:
-        self.updateBooleanAuth()
-        self.sendUpdatedBlocks.emit(self.allBlocks) #Change argument to copyBlocks for presentation
+        #Uncomment when hardware is not connected:
+        #self.updateBooleanAuth()
+        #self.sendUpdatedBlocks.emit(self.allBlocks)
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)

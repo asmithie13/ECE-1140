@@ -534,8 +534,8 @@ class TestBench(QMainWindow):
         uic.loadUi("Wayside_SW/Wayside_Testbench.ui", self)
 
         # Buttons
-        self.speedInput.returnPressed.connect(self.sendSpeed)
-        self.authorityInput.returnPressed.connect(self.sendAuthority)
+        #self.speedInput.returnPressed.connect(self.sendSpeed)
+        #self.authorityInput.returnPressed.connect(self.sendAuthority)
         self.modeInput.clicked.connect(self.sendMode)
         self.addBlock.returnPressed.connect(self.addBlockOcc)
         self.removeBlock.returnPressed.connect(self.remBlockOcc)

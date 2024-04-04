@@ -108,15 +108,18 @@ class Main_UI(QtWidgets.QMainWindow):
         self.TrackModelWindow.show()
         self.TrackModel_tb.show()
 
-    def create_new_train(self, TrainID):
+    def create_new_train(self, TrainID, line):
         #Add new train UI to list
         self.currentTrains.append(TrainModel_mainwindow(TrainID))
         self.currentTrains[-1].show()
 
+        #Track Model Dispatch Train Function
+        self.TrackModelWindow.get_train_id(TrainID, line)
+
         #Track Model to Train Model
         # [Train ID, commanded speed, authority]
         self.TrackModelWindow.sendSpeedAuth.connect(self.currentTrains[-1].receiveSpeedAuth_tm)
-
+        
         #Train Model to Track Model
         # Actual Velocity
         self.currentTrains[-1].track_model_acc_velo.connect(self.TrackModelWindow.receiveSendVelocity)

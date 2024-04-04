@@ -38,7 +38,7 @@ class TrainModel_mainwindow(QMainWindow):
     total_cap=people_count+crew_count
     people_getting_off=10
     #Track Model Signals
-    track_model_acc_velo = qtc.pyqtSignal(int)
+    track_model_acc_velo = qtc.pyqtSignal(str, int)
 
     def __init__(self,TrainID):
         super().__init__()

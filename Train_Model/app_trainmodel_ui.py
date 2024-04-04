@@ -144,17 +144,17 @@ class TrainModel_mainwindow(QMainWindow):
 
 
     def ebrake_disabled(self, ebrake_state):
-        print('ebrake', ebrake_state)
+        #print('ebrake', ebrake_state)
         self.ebrake_state = ebrake_state
     
         # If ebrake is enabled
         if self.ebrake_state:
-            print('true condition')
+            #print('true condition')
             self.ebrake.setChecked(True)  # Set the ebrake button to checked (ON)
             self.ebrake.setEnabled(False)  # Disable the ebrake button
             self.TC.ebrake_sig.emit(1)  # Emit the ebrake signal with value 1
         else:
-            print('false condition')
+            #print('false condition')
             self.ebrake.setEnabled(True)  # Enable the ebrake button
             self.ebrake.setChecked(False)  # Set the ebrake button to unchecked (OFF)
             
@@ -410,7 +410,7 @@ class TrainCalculations:
         self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration + self.main_window.prev_acc)
         if self.main_window.velocity>0:
             if self.main_window.ebrake_state==1:
-                print('ebrake state entered')
+                #('ebrake state entered')
                 acceleration=-8.956692913385826 #in ft/s^2
                 self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
                 if self.main_window.velocity==0:
@@ -420,7 +420,7 @@ class TrainCalculations:
 
             
             elif self.main_window.brake_state==1:
-                print('service brakes entered')
+                #print('service brakes entered')
                 acceleration=-3.9370078740157477 #in ft/s^2
                 self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
                 if self.main_window.velocity==0:

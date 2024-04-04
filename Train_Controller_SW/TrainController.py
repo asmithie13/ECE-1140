@@ -42,6 +42,7 @@ class TrainController(QMainWindow):
     int_light_sig = pyqtSignal(int)
     ext_light_sig = pyqtSignal(int)
     ebrake_disable_sig = pyqtSignal(bool)
+    internal_ebrake_sig = pyqtSignal(bool)
 
 
     def __init__(self):
@@ -59,7 +60,7 @@ class TrainController(QMainWindow):
         self.Vital_Power = Vital_Power(self.ui, self.curr_power_sig)
         #self.Vital_Speed = Vital_Speed(self.ui, self.service_brake_sig)
         #self.Vital_Authority = Vital_Authority(self.ui,self.curr_auth_sig)
-        self.Vital_Speed_Auth = Vital_Speed_Auth(self.ui, self.curr_auth_sig, self.service_brake_sig)
+        self.Vital_Speed_Auth = Vital_Speed_Auth(self.ui, self.curr_auth_sig, self.service_brake_sig, self.internal_ebrake_sig)
         self.Vital_Failure = Vital_Failure(self.ui, self.ebrake_sig, self.ebrake_disable_sig)
         self.NonVital = NonVital(self.ui,self.door_control_sig,self.announcement_sig,
         self.temp_control_sig,self.int_light_sig,self.ext_light_sig)
@@ -75,7 +76,7 @@ class TrainController(QMainWindow):
         self.curr_auth_sig.connect(self.Vital_Speed_Auth.Control_Authority)
         #self.curr_auth_sig.connect(self.Vital_Speed_Auth.Speed_Authority_Monitor)
         self.curr_temp_sig.connect(self.NonVital.Cabin_Temperature)
-        self.ebrake_sig.connect(self.ui.Ebrake.setChecked)
+        self.ebrake_sig.connect(self.Vital_Failure.Control_Emergency_Brake_External)
         self.pwr_fail_sig.connect(self.Vital_Failure.Control_Power_Failure)
         self.brk_fail_sig.connect(self.Vital_Failure.Control_Brake_Failure)
         self.sig_fail_sig.connect(self.Vital_Failure.Control_Signal_Failure)
@@ -84,9 +85,13 @@ class TrainController(QMainWindow):
         self.block_passed_sig.connect(self.NonVital.BlockCounter)
         #self.curr_bool_auth_sig.connect(self.Vital_Authority.Authority_Monitor_Bool)
         self.time_sig.connect(self.Timer)
+        self.internal_ebrake_sig.connect(self.Vital_Failure.Control_Emergency_Brake_Internal)
+
 
         #connecting UI buttons to functions
-        self.ui.Ebrake.clicked.connect(lambda : self.Vital_Failure.Control_Emergency_Brake(self.ui.Ebrake.isChecked()))
+        self.ui.Ebrake.clicked.connect(lambda : self.Vital_Failure.Control_Emergency_Brake_Internal(self.ui.Ebrake.isChecked()))
+        #self.ui.Ebrake.pressed.connect(lambda : self.Vital_Failure.Control_Emergency_Brake(self.ui.Ebrake.isChecked()))
+        #self.ui.Ebrake.released.connect(lambda : self.Vital_Failure.Control_Emergency_Brake(self.ui.Ebrake.isChecked()))
         self.ui.buttonMan.clicked.connect(lambda : self.Control_Manual())
         self.ui.buttonAuto.clicked.connect(lambda : self.Control_Automatic())
         #self.ui.temp.valueChanged.connect(lambda : self.NonVital.Cabin_Temperature())
@@ -157,18 +162,20 @@ class TrainController(QMainWindow):
 
     def Timer(self, time):
         #NEW FORMAT hh:mm:ss.zzz
+        #print(time)
         parts = time.split(':')
         hours, minutes = int(parts[0]), int(parts[1])
         seconds, ms = map(int, parts[2].split('.'))
         total_ms = hours*3600000 + minutes*60000 + seconds*1000 + ms
         #if things go wrong, try changing the order of speed, authority, power
         self.Vital_Power.Set_Clock(total_ms)
-        # self.Vital_Speed.Speed_Monitor()
-        # self.Vital_Authority.Authority_Monitor()
-        self.Vital_Speed_Auth.Speed_Authority_Monitor()
+        self.Vital_Speed_Auth.Set_Clock(total_ms)
         self.globalClock = total_ms
+        self.Vital_Speed_Auth.Speed_Authority_Monitor()
         self.Vital_Power.calculate_power()
         #print(total_seconds)
+
+     
 
     def Open_Main_UI(self):
         self.window = QtWidgets.QMainWindow()

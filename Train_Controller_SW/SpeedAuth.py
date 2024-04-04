@@ -8,16 +8,21 @@ from PyQt5 import QtWidgets
 class Vital_Speed_Auth():
 
     #def __init__(self,ui):
-    def __init__(self,ui,curr_auth_signal, service_brake_sig):
+    def __init__(self,ui,curr_auth_signal, service_brake_sig,ebrake_internal_sig):
         self.ui = ui
         self.curr_auth_signal = curr_auth_signal
         self.service_brake_sig = service_brake_sig
         self.stopcal = 0
+        self.local_clock = 0
+        self.time = 0
+        self.prev_time = 0
+        self.ebrake_sig = ebrake_internal_sig
 
     def Control_Current_Speed(self,newSpeed):
-        print("Curr Spd Tanvi :", newSpeed)
         self.ui.lcdCurSpd.display(newSpeed)
-        #self.Speed_Monitor()
+    
+    def Set_Clock(self, time):
+         self.local_clock = time
     
     def service_brake(self):
         #send signal to brake
@@ -43,11 +48,11 @@ class Vital_Speed_Auth():
         #make sure we can stop in time for authority in ft
     #Put this on a timer every sec based on global
     def Speed_Authority_Monitor(self):
-
         #calculate authority using d=r*t
         self.rate = self.ui.lcdCurSpd.value()*0.00146667 #mph to fpms
-        self.rate_metric = self.ui.lcdCurSpd.value()*0.00044704 #mph to m,
-        self.time = 1
+        self.rate_metric = self.ui.lcdCurSpd.value()*0.00044704 #mph to m/,ms,
+        self.time = self.local_clock - self.prev_time
+        self.prev_time = self.local_clock 
 
         current_speed = self.ui.lcdCurSpd.value()
         speed_limit = self.ui.lcdSpdLim.value()
@@ -73,19 +78,23 @@ class Vital_Speed_Auth():
             #from top speed (70kph) it takes 70.0156835852 m to stop with the emergency brake
 
             #if self.stopcal == True:
-            self.stoppingdistanceService = (self.V_i**2)/(2*.0012)
-            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*.00273)
+            self.stoppingdistanceService = (self.V_i**2)/(2*0.0012)
+            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*0.00273)
                 
             if self.AuthM <= self.stoppubgdistanceEmergency:
                 self.ui.vertSliderBrk.setValue(0)
                 self.ui.vertSliderPow.setValue(0)
                 self.ui.vertSliderPow.setEnabled(False)
                 self.ui.Ebrake.setChecked(True)
-
+                self.ebrake_sig.emit(1)
+            
             elif self.AuthM <= self.stoppingdistanceService:
                 self.ui.vertSliderBrk.setValue(1)
                 self.ui.vertSliderPow.setValue(0)
                 self.ui.vertSliderPow.setEnabled(False)
+            
+
+
                 #self.stopcal = True
 
                 #self.stopcal = True
@@ -95,14 +104,14 @@ class Vital_Speed_Auth():
             #our train is frictionless so it will maintain speed unless we tell it to do something else
 
             #this case is vital, will override driver input
-            elif current_speed > speed_limit:
+            elif (current_speed > speed_limit):
                 self.ui.vertSliderBrk.setValue(1)
                 self.ui.vertSliderPow.setValue(0)
             
             #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
             elif current_speed < ((speed_limit or cmd_speed) and (self.ui.buttonAuto.isChecked() == True)):
                 self.ui.vertSliderPow.setEnabled(True)
-                self.ui.vertSliderPow.setValue(100)
+                self.ui.vertSliderPow.setValue(50)
                 self.ui.vertSliderBrk.setValue(0)
             
             #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
@@ -141,5 +150,4 @@ class Vital_Speed_Auth():
         self.decimal_m_auth = auth
         self.authft = round(auth * 3.28084)
         self.ui.lcdAuth.display(self.authft)
-        print(self.authft)
         self.ui.vertSliderPow.setEnabled(True)

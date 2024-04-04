@@ -45,6 +45,9 @@ def pauseSim(MainWindow,sim_time):
 def update_time_slot(time_str):
     MainWindow.CTCwindow.displayClock(time_str)
     MainWindow.TrackModelWindow.set_clock(time_str)
+    for train in MainWindow.currentTrains:
+        train.update_time(time_str)
+
 
 def timer_thread(sim_time):
     sim_time.updatetime()

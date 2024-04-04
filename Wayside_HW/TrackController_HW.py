@@ -67,12 +67,19 @@ class TrackController_HW(QMainWindow):
         self.pushButtonDown.clicked.connect(self.setCrossingDown)
     
     def modeHandler(self, occupiedBlocks):
-        self.occupiedBlocks = occupiedBlocks
-        self.listOccIDs
-        for block in occupiedBlocks:
-            self.listOccIDs.append(block.ID)
-        
+        self.listOccIDs = occupiedBlocks
+        self.occupiedBlocks = []
         for block in self.allBlocks:
+            if block.ID in self.listOccIDs:
+                self.occupiedBlocks.append(block)
+
+        for block in self.allBlocks:
+            if block.ID in self.listOccIDs:
+                block.occupied = 1
+            else:
+                block.occupied = 0
+        
+        for block in self.occupiedBlocks:
             if block.ID in self.listOccIDs:
                 block.occupied = 1
             else:
@@ -139,12 +146,11 @@ class TrackController_HW(QMainWindow):
         for section in occupiedBlockSections:
             occupiedBlockString += section
         occupiedBlockString += '1'
-
         occupiedBlockBytes = occupiedBlockString.encode()
-        #serialObject.write(occupiedBlockBytes)
 
         '''BEGIN SERIAL COMMUNICATION'''
-        #Receiving serial response from the Raspberry Pi:
+        #serialObject.write(occupiedBlockBytes)
+        #Receiving serial responses from the Raspberry Pi:
         '''copyBlocks = self.allBlocks
         attributeList = []
         while True:
@@ -153,34 +159,32 @@ class TrackController_HW(QMainWindow):
                 if myAttribute == 'A':
                     break
                 else:
-                    attributeList.append(myAttribute)
-                
-        for block in self.allBlocks:
-            if block.ID == 'A1':
-                block.lightState = int(attributeList[0])
-            elif block.ID == 'C12':
-                block.lightState = int(attributeList[1])
-            elif block.ID == 'D13':
-                block.switchState = int(attributeList[2])
-            elif block.ID == 'E19':
-                block.crossingState = int(attributeList[3])
-            elif block.ID == 'F28':
-                block.switchState = int(attributeList[4])
-            elif block.ID == 'G29':
-                block.lightState = int(attributeList[5])
-            elif block.ID == 'T108':
-                block.crossingState = int(attributeList[6])
-            elif block.ID == 'Z150':
-                block.lightState = int(attributeList[7])'''
+                    attributeList.append(myAttribute)'''
         
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
-        #if copyBlocks != self.allBlocks:
-            #print("ERROR: HARDWARE CONTROL INCORRECT")
+        attributeListSoftware = []
+        for block in self.allBlocks:
+            if block.LIGHT == True:
+                attributeListSoftware.append(str(block.lightState))
+            elif block.SWITCH == True:
+                attributeListSoftware.append(str(block.switchState))
+            elif block.CROSSING == True:
+                attributeListSoftware.append(str(block.crossingState))
+
+        '''if attributeList != attributeListSoftware:
+            self.lineEditHardware.setText("ERRORS DETECTED. STOPPING ALL TRAINS.")
+            for block in self.allBlocks:
+                block.authority = False
+                self.sendUpdatedBlocks.emit(self.allBlocks)
+        else:
+            #Ajust block-wise authority based on active red lights:
+            self.updateBooleanAuth()
+            self.sendUpdatedBlocks.emit(self.allBlocks) #Change argument to copyBlocks for presentation'''
         
-        #Ajust block-wise authority based on active red lights:
-        self.updateBooleanAuth()
-        self.sendUpdatedBlocks.emit(self.allBlocks) #Change argument to copyBlocks for presentation
+        self.updateBooleanAuth() #Uncomment when hardware is not connected
+        #self.preventCollision()
+        self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)
@@ -395,3 +399,22 @@ class TrackController_HW(QMainWindow):
             for block in self.allBlocks:
                 if block.ID in self.LIGHT_Z150:
                     block.authority = True
+    
+    '''def preventCollision(self):
+        oneDirectionOne = ['A', 'B', 'C'] #Blocks where a train coming from behind is at an index GREATER than the train-in front in self.allBlocks
+        oneDirectionTwo = ['G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] #Blocks where a train coming from behind is at an index LOWER than the train-in front in self.allBlocks
+        twoDirection = ['D', 'E', 'F',] #Bi-directional track
+
+        tempSkip = []
+        for index, block in enumerate(self.allBlocks):
+            if block.blockSection in oneDirectionOne:
+                if block.ID in self.listOccIDs:
+                    self.allBlocks[index+1].authority = False
+                    tempSkip.append(self.allBlocks[index+1].ID)
+                    self.allBlocks[index+2].authority = False
+                    tempSkip.append(self.allBlocks[index+2].ID)
+                    self.allBlocks[index+3].authority = False
+                    tempSkip.append(self.allBlocks[index+3].ID)
+                else:
+                    if block.ID not in tempSkip and block.ID not in self.LIGHT_A1 and block.ID not in self.LIGHT_C12 and block.ID not in self.LIGHT_G29 and block.ID not in self.LIGHT_Z150:
+                        block.authority = True'''

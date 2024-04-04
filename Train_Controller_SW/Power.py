@@ -46,10 +46,10 @@ class Vital_Power():
 
         else:
             self.time = self.local_clock
-            print("Curr Time", self.time)
             self.dt = self.time - self.prevTime
             self.prevTime = self.time
-            self.error = float(self.ui.lcdCmdSpd.value()) * 0.44704 - float(self.ui.lcdCurSpd.value()) * 0.44704
+            self.error = float(self.ui.lcdCmdSpd.value()) * 0.00044704 - float(self.ui.lcdCurSpd.value()) * 0.00044704
+            #has dt
             self.uk = self.prevUk + (self.error + self.prevError) * self.dt / 2
             self.prevError = self.error
             self.prevUk = self.uk
@@ -78,6 +78,8 @@ class Vital_Power():
         self.ui.lcdAcel.display(self.power)
         self.curr_power_sig.emit(int(self.power))
 
-    
-        #self.curr_power_sig.emit(20000) test val
-        
+    def Control_Accelleration(self):
+        self.ui.lcdPowOut.display(self.ui.vertSliderPow.value())
+        if(self.ui.vertSliderPow.value() > 0):
+            self.ui.vertSliderBrk.setValue(0)
+            self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())   

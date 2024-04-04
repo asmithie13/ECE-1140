@@ -93,6 +93,7 @@ class TrackModelMain(QMainWindow):
         self.blockID = ""
         self.total_block_length = 0
         self.prevblockID = ""
+        self.prev_time = 0
         self.data = None  # Assuming this will be initialized with your data source
         # Add train id, line, distance from starting block, direction, and block occupancy
         self.currentTrains = []
@@ -170,9 +171,12 @@ class TrackModelMain(QMainWindow):
             block_length = self.data.get_length_for_block(block_num)
             #self.total_block_length += block_length  # Cumulative sum of block lengths
 
+            self.dt = self.local_time - self.prev_time
             self.speed_limit_km = self.data.get_speed_for_block(block_num)
 
-            speed_of_train_m = speed_of_train * 0.44704
+            speed_of_train_m = speed_of_train * 0.00044704 * self.dt
+
+            self.prev_time = self.local_time
 
             total_dis_from_beg_of_block += speed_of_train_m
             self.currentTrains[int(trainId[1:]) - 1][2] = total_dis_from_beg_of_block
@@ -201,8 +205,9 @@ class TrackModelMain(QMainWindow):
                 self.next_block_id = self.data.get_section_for_block(next_block_num)
 
                 self.occupied_blocks.clear()
-                self.occupied_blocks.append(self.next_block_id + str(next_block_num))
-                self.update_occupied_blocks()
+                if(not(self.next_block_id == None)):
+                    self.occupied_blocks.append(self.next_block_id + str(next_block_num))
+                    self.update_occupied_blocks()
                 #self.update_block_info(self.blockID)
 
                 self.currentTrains[int(trainId[1:]) - 1].pop()
@@ -398,6 +403,10 @@ class TrackModelMain(QMainWindow):
 
     def set_clock(self, time):
         self.clock_in.display(time)
+        parts = time.split(':')
+        hours, minutes = int(parts[0]), int(parts[1])
+        seconds, ms = map(int, parts[2].split('.'))
+        self.local_time = hours*3600000 + minutes*60000 + seconds*1000 + ms
 
     def get_clock(self,clock):
         self.current_time = clock

@@ -1,10 +1,11 @@
 Destination,Time From Previous Station, Authority from Previous Station
 Yard,0,0
-Shadyside,3.7,225
-Herron Ave,2.3,
-Swissville,1.5,
-Penn Station,1.8
-Steel Plaza,2.1
-First Ave,2.1
-Station Square,1.7
-South Hills Junction,2.3
+Herron Ave,2.3,515
+Swissville,1.5,1275
+Penn Station,1.8,325
+Steel Plaza,2.1,520
+First Ave,2.1,520
+Station Square,1.7,212.5
+South Hills Junction,2.3,743.2
+Shadyside,3.7,3662.5
+Yard,0,225.5

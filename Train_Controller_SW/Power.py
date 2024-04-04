@@ -1,4 +1,7 @@
 from Train_Controller_SW.mainControl import Ui_MainWindow
+import serial
+import struct
+import time
 
 class Vital_Power():
     def __init__(self,ui, curr_power_sig):
@@ -22,6 +25,9 @@ class Vital_Power():
         
         self.curr_power_sig = curr_power_sig
 
+
+        self.ser = serial.Serial('COM6', 57600)  # Replace 'COM6' with your actual port name
+
     def Control_Ki(self):
             self.ui.lcdKi.display(self.ui.inputKi.value())
             self.Ki = self.ui.inputKi.value()
@@ -33,7 +39,7 @@ class Vital_Power():
     def Set_Clock(self, time):
          self.local_clock = time
 
-    
+    """
     def calculate_power(self):
         if self.ui.Ebrake.isChecked():
            self.power = 0
@@ -77,6 +83,52 @@ class Vital_Power():
         self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
         self.ui.lcdAcel.display(self.power)
         self.curr_power_sig.emit(int(self.power))
+        """
+    
+    def calculate_power(self):
+        if self.ui.Ebrake.isChecked():
+           self.power = 0
+        
+        elif self.ui.vertSliderBrk.value() == 1:
+            self.power = 0
+        
+        elif self.ui.vertSliderPow.value() == 0:
+            self.power = 0
+
+        else:
+            self.time = self.local_clock
+            self.dt = self.time - self.prevTime
+            self.prevTime = self.time
+
+            cmd_spd = self.ui.lcdCmdSpd.value()  # commanded speed
+            cur_spd = self.ui.lcdCurSpd.value()  # current speed
+            ki = self.ui.lcdKi.value()  # integral gain
+            kp = self.ui.lcdKp.value()
+            accel_pct = self.ui.lcdPowOut.value()
+
+            # Pack the values into a byte string. The format string '6i' means six integers.
+            data = struct.pack('6i', self.dt, cmd_spd, cur_spd, ki, kp, accel_pct)
+
+            try:
+                # Send the packed data
+                self.ser.write(data)
+                #print("Sent data to Raspberry Pi")
+
+                # Wait for the response
+                while self.ser.in_waiting < 4:
+                    self.wait = True
+
+                    # Assuming the response is also an integer
+                response_data = self.ser.read(4)  # Read 4 bytes (size of an integer)
+                power = struct.unpack('i', response_data)[0]
+                #print(f"Received power from Raspberry Pi: {power}")
+            finally:
+                self.ser.close()  # Make sure to close the serial port
+                    
+            self.ui.lcdPowOut.display(self.ui.vertSliderPow.value())
+            self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
+            self.ui.lcdAcel.display(self.power)
+            self.curr_power_sig.emit(int(self.power))
 
     def Control_Accelleration(self):
         self.ui.lcdPowOut.display(self.ui.vertSliderPow.value())

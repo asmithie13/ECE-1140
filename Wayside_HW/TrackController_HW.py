@@ -13,7 +13,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 #Enable serial communication:
-#serialObject = serial.Serial('COM8', 57600)
+serialObject = serial.Serial('COM8', 57600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -147,12 +147,12 @@ class TrackController_HW(QMainWindow):
             occupiedBlockString += section
         occupiedBlockString += '1'
         occupiedBlockBytes = occupiedBlockString.encode()
-        #serialObject.write(occupiedBlockBytes)
+        serialObject.write(occupiedBlockBytes)
 
         '''BEGIN SERIAL COMMUNICATION'''
-        #serialObject.write(occupiedBlockBytes)
+        serialObject.write(occupiedBlockBytes)
         #Receiving serial responses from the Raspberry Pi:
-        '''copyBlocks = self.allBlocks
+        copyBlocks = self.allBlocks
         attributeList = []
         while True:
             if serialObject.in_waiting > 0:
@@ -163,11 +163,11 @@ class TrackController_HW(QMainWindow):
             if letter == 'A':
                 break
             else:
-                attributeList.append(letter)'''
+                attributeList.append(letter)
         
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
-        '''attributeListSoftware = []
+        attributeListSoftware = []
         for block in self.allBlocks:
             if block.LIGHT == True:
                 attributeListSoftware.append(str(block.lightState))
@@ -184,7 +184,7 @@ class TrackController_HW(QMainWindow):
         else:
             #Ajust block-wise authority based on active red lights:
             self.updateBooleanAuth()
-            self.sendUpdatedBlocks.emit(self.allBlocks)'''
+            self.sendUpdatedBlocks.emit(self.allBlocks)
         
         self.updateBooleanAuth() #Uncomment when hardware is not connected
         #self.preventCollision()

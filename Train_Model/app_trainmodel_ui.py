@@ -34,7 +34,7 @@ class TrainModel_mainwindow(QMainWindow):
     ebrake_state=0
     
     #Track Model Signals
-    track_model_acc_velo = qtc.pyqtSignal(int)
+    track_model_acc_velo = pyqtSignal(str, int)
 
     def __init__(self,TrainID):
         super().__init__()
@@ -448,7 +448,7 @@ class TrainCalculations:
 
         self.main_window.Acc_Velo_value_lcd.display(int(self.main_window.velocity))
         self.TC.curr_spd_sig.emit(int(self.main_window.velocity))
-        self.main_window.track_model_acc_velo.emit(int(self.main_window.velocity))
+        self.main_window.track_model_acc_velo.emit('T1',int(self.main_window.velocity))
         
         return int(self.main_window.velocity)
         

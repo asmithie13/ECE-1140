@@ -23,7 +23,7 @@ class CTC_UI(QtWidgets.QMainWindow):
     sendDispatchInfo = pyqtSignal(list)
     sendBlockClosures = pyqtSignal(list)
     sendSwitchPositions = pyqtSignal(list)
-    create_a_train = pyqtSignal(str)
+    create_a_train = pyqtSignal(str, str)
 
     def __init__(self):
         super(CTC_UI, self).__init__()
@@ -310,7 +310,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         
         for i in self.trainSchedule.Scheduledata:
             if time_wSeconds == (i[5] + ":00"):
-                self.create_a_train.emit(i[1])
+                self.create_a_train.emit(i[1], i[0])
 
                 #Train ID, speed, Authority
                 self.sendDispatchInfo.emit([i[1], 40, self.trainSchedule.AuthorityInfo[int(i[1][1:]) - 1]])

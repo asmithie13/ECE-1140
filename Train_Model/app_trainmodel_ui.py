@@ -23,22 +23,27 @@ class TrainModel_mainwindow(QMainWindow):
     
     #in mph
     comm_speed= 0
-    #in lbs
-    mass= 12500
+    #in kgs
+    mass= 90169.07
 
     prev_vel=0
     prev_acc=0
     grade=0
     velocity=0
+    door_state=3
     brake_state=0
     ebrake_state=0
-    
+    people_count=64
+    crew_count=2
+    total_cap=people_count+crew_count
+    people_getting_off=10
     #Track Model Signals
     track_model_acc_velo = qtc.pyqtSignal(str, int)
 
     def __init__(self,TrainID):
         super().__init__()
         uic.loadUi("Train_Model/TrainModel_UI.ui", self)
+        
         #self.main_window = main_window
         #this is added stuff for the TC
         self.TC = TrainController()
@@ -50,6 +55,7 @@ class TrainModel_mainwindow(QMainWindow):
         #CLOCK
         self.clock = Clock()
         self.clock.current_time_changed.connect(self.update_time)
+        self.people_disemb(self.people_count)
 
         #Connecting TC signals to Train Model
         self.TC.int_light_sig.connect(self.interior_lights)    
@@ -58,13 +64,9 @@ class TrainModel_mainwindow(QMainWindow):
         self.TC.announcement_sig.connect(self.set_announcements)
         self.TC.temp_control_sig.connect(self.set_cabin_temp)
         self.TC.service_brake_sig.connect(self.train_calculations.get_service_brake)
-        #self.TC.ebrake_disable_sig.connect(self.change_ebrake_color)
-
-
-        # self.train_calculations.Calculate_acceleration()
-        # self.train_calculations.calculate_force()
-        # self.train_calculations.get_acceleration()
-        # self.train_calculations.calculate_acc_velocity()
+        self.TC.door_control_sig.connect(self.door_status)
+        self.TC.ebrake_disable_sig.connect(self.ebrake_disabled)        
+        
 
         
         #changing state when sig_fail_enable/disable are clicked
@@ -80,11 +82,12 @@ class TrainModel_mainwindow(QMainWindow):
         self.en_fail_disable.clicked.connect(self.en_fail_disable_clicked)
         #self.brake_fail_input_tb.stateChanged.connect(self.brake_fail_tb)
 
-        self.ebrake.setCheckable(True)
+        
         #ebrake signals
+        self.ebrake.setCheckable(True)
         self.ebrake.clicked.connect(lambda: self.ebrake_disabled(self.ebrake.isChecked()))
 
-        self.TC.ebrake_disable_sig.connect(self.ebrake_disabled)        
+       
         
         #Initially setting the default colors
         self.bf_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
@@ -102,6 +105,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.emergency_stop_state=False
 
     def Set_Train_ID(self,TrainID):
+        self.Train_ID=TrainID
         self.Train_ID_Label.setText(str(TrainID))
 
 
@@ -120,16 +124,21 @@ class TrainModel_mainwindow(QMainWindow):
         total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
         self.train_calculations.set_time(total_seconds)
         self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
+        self.train_calculations.get_commanded_speed(self.comm_speed, self.grade, self.mass)
+        self.set_ccount(self.crew_count)
+        self.set_pcount(self.people_count)
+        
+        
         
         
     #function to set Power LCD
     def get_power_input(self, power_input):
-        self.Power_value_lcd.display(power_input)
+        self.Power_value_lcd.display(int(power_input))
         self.train_calculations.Calculate_acceleration(self.comm_speed,self.grade, self.mass)
         self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
         return power_input
 
-    #sending authority to train controller [ASK LAUREN AND CHAD]
+    #sending authority to train controller 
     def receiveSpeedAuth_tm(self,speedAuth):
         trainID=speedAuth[0]
         self.comm_speed=speedAuth[1]
@@ -139,7 +148,6 @@ class TrainModel_mainwindow(QMainWindow):
         self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
         self.train_calculations.get_acceleration(self.comm_speed,self.grade,self.mass)
         self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
-        self.TC.curr_cmd_spd_sig.emit(int(self.comm_speed))
         self.TC.curr_auth_sig.emit(float(Authority))
 
 
@@ -153,9 +161,12 @@ class TrainModel_mainwindow(QMainWindow):
         # If ebrake is enabled
         if self.ebrake_state:
             print('true condition')
-            self.ebrake.setChecked(True)  # Set the ebrake button to checked (ON)
+            if self.ebrake.setChecked(True):
+                self.TC.ebrake_sig.emit(1)  # Emit the ebrake signal with value 1
+            else:
+                self.ebrake.setChecked(True)  # Set the ebrake button to checked (ON)
             self.ebrake.setEnabled(False)  # Disable the ebrake button
-            self.TC.ebrake_sig.emit(1)  # Emit the ebrake signal with value 1
+
         else:
             print('false condition')
             self.ebrake.setEnabled(True)  # Enable the ebrake button
@@ -165,11 +176,11 @@ class TrainModel_mainwindow(QMainWindow):
     def set_length(self, input_txt):
         self.length_of_vehicle_display.setText(input_txt)
 
-    def set_pcount(self, input_txt):
-        self.pcount_display.setText(input_txt)
+    def set_pcount(self, people_count):
+        self.pcount_display.setText(str(self.people_count))
 
-    def set_ccount(self, input_txt):
-        self.ccount_display.setText(input_txt)
+    def set_ccount(self, crew_count):
+        self.ccount_display.setText(str(self.crew_count))
 
     def set_height(self, height):
         self.height_display.setText(height)
@@ -216,9 +227,13 @@ class TrainModel_mainwindow(QMainWindow):
         if state:
             self.bf_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
             self.bf_disable.setStyleSheet('')
+            self.ebrake_state=True
+            self.ebrake_disabled(self.ebrake_state)
         else:
             self.bf_enable.setStyleSheet('')
             self.bf_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.ebrake_state=False
+            self.ebrake_disabled(self.ebrake_state)
 
         self.TC.brk_fail_sig.emit(state)
 
@@ -304,31 +319,61 @@ class TrainModel_mainwindow(QMainWindow):
             self.ext_lights_value.setFixedSize(109, 97)
             self.ext_lights_value.setText('ON')
 
-    #SETTING RIGHT DOORS
-    def right_doors(self,state):
-        if state==0:
-            self.right_doors_value.setFixedSize(109, 98)
-            self.right_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-            self.right_doors_value.setText('CLOSED')
 
-        elif state==1:
-            self.right_doors_value.setFixedSize(109, 98)
-            self.right_doors_value.setText('OPEN')
-    
-    #SETTING LEFT DOORS
-    def left_doors(self,state):
-        if state==0:
-            self.left_doors_value.setFixedSize(109, 97)
-            self.left_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-            self.left_doors_value.setText('CLOSED')
 
-        elif state==1:
-            self.left_doors_value.setFixedSize(109, 97)
-            self.left_doors_value.setText('OPEN')
-
+    #sending acc/velocity to track model
     def acc_vel_to_track_model(self,velocity):
         velocity=self.train_calculations.calculate_acc_velocity
         self.track_model_acc_velo.emit(int(velocity))
+
+    #random generation for people disembarking
+    def people_disemb(self, people_count):
+        self.people_getting_off=random.randint(1,people_count)
+        self.people_count=self.total_cap-self.people_getting_off
+        self.total_cap= self.people_count + self.crew_count
+        
+    
+    def get_ticket_sales(self, tick_sales):
+        self.people_count= tick_sales
+        self.total_cap= self.people_count + self.crew_count
+
+    def door_status(self, door_state):
+        self.door_state=door_state
+        if door_state==3:
+            self.right_doors_value.setFixedSize(109, 98)
+            self.left_doors_value.setFixedSize(109, 98)
+            self.right_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.left_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.right_doors_value.setText('CLOSED')
+            self.left_doors_value.setText('CLOSED')
+        elif door_state==2:
+            self.right_doors_value.setFixedSize(109, 98)
+            self.left_doors_value.setFixedSize(109, 98)
+            self.right_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.left_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.right_doors_value.setText('OPEN')
+            self.left_doors_value.setText('OPEN')
+        elif door_state==1:
+            self.right_doors_value.setFixedSize(109, 98)
+            self.left_doors_value.setFixedSize(109, 98)
+            self.right_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.left_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.right_doors_value.setText('OPEN')
+            self.left_doors_value.setText('CLOSED')
+        elif door_state==0:
+            self.right_doors_value.setFixedSize(109, 98)
+            self.left_doors_value.setFixedSize(109, 98)
+            self.right_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.left_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+            self.right_doors_value.setText('CLOSED')
+            self.left_doors_value.setText('OPEN')
+
+
+        
+    
+    
+
+
 
 
 #CLASS CONTAINING ALL TRAIN CALCULATIONS
@@ -343,13 +388,11 @@ class TrainCalculations:
         commanded_speed=main_window.comm_speed
         mass=main_window.mass
         grade=main_window.grade
+        print("mass1", mass)
 
     def get_service_brake(self,brake):
             self.main_window.brake_state=brake
         
-
-            
-
 
     def set_time(self,time_calc):
         self.train_model_time=time_calc
@@ -361,23 +404,33 @@ class TrainCalculations:
         self.main_window.get_power_input(power_input)
 
     def get_commanded_speed(self, commanded_speed, grade, mass):
+        self.mass=mass
+        self.commanded_speed=commanded_speed/1.609  #converting kph to mph
+        self.grade=grade
         self.main_window.cspeed_display.setText(str(commanded_speed))
+        self.get_mass(commanded_speed,grade,mass)
         self.calculate_force(commanded_speed,grade,mass)
         self.Calculate_acceleration(commanded_speed,grade, mass)
         self.calculate_acc_velocity(commanded_speed,grade,mass)
         self.TC.curr_cmd_spd_sig.emit(int(commanded_speed))
 
     def get_mass(self, commanded_speed, mass, grade):
-        self.main_window.mass_display.setText(str(mass))
-        mass = mass / 2.205
-        self.main_window.mass = mass
-        self.calculate_force(commanded_speed,grade, mass)
-        self.Calculate_acceleration(commanded_speed,grade, mass)
-        self.calculate_acc_velocity(commanded_speed,grade,mass)
+        #avg mass of a person = 80 kgs
+        self.mass+=self.main_window.total_cap*80*2.205 #converting mass to pounds
+        round(self.mass,2)
+        self.commanded_speed=commanded_speed
+        self.grade=grade
+        self.main_window.mass_display.setText(str(self.mass))
+        self.calculate_force(self.commanded_speed,self.grade, self.mass)
+        self.Calculate_acceleration(self.commanded_speed,self.grade, self.mass)
+        self.calculate_acc_velocity(self.commanded_speed,self.grade, self.mass)
 
     def calculate_force(self,commanded_speed,grade,mass):
         #FORMULA: FORCE= MASS*g*SIN(THETA)
         #GRADE=SIN(THETA)
+        self.mass=mass
+        self.commanded_speed=commanded_speed
+        self.grade=grade
         theta=math.atan(grade/100)
         self.grav_force=mass*9.81*math.sin(theta)
         power = self.main_window.Power_value_lcd.value()
@@ -391,6 +444,9 @@ class TrainCalculations:
         return force
 
     def Calculate_acceleration(self,commanded_speed,grade,mass):
+        self.mass=mass
+        self.commanded_speed=commanded_speed
+        self.grade=grade
         force = self.calculate_force(commanded_speed,grade,mass)
         mass = self.main_window.mass
         acceleration = (0.3048*force)/(mass/32.2) #acc in ft/s^2
@@ -404,11 +460,17 @@ class TrainCalculations:
         return acceleration
 
     def get_acceleration(self,commanded_speed,grade,mass):
+        self.mass=mass
+        self.commanded_speed=commanded_speed
+        self.grade=grade
         acceleration = self.Calculate_acceleration(commanded_speed,grade,mass)
         self.main_window.Acceleration_value_lcd.display(acceleration)
 
 
     def calculate_acc_velocity(self,commanded_speed,grade,mass):
+        self.mass=mass
+        self.commanded_speed=commanded_speed
+        self.grade=grade
         #converting acceleration to mph^2
         acceleration = (3600 * 3600 / 5280) * self.Calculate_acceleration(commanded_speed,grade,mass)
         train_model_time=self.get_time()
@@ -485,9 +547,12 @@ class trainmodel_testbench(QMainWindow):
     def __init__(self,TC):
         super().__init__()
 
-        self.TC = TC
+        #self.TC = TC
 
         uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
+
+       
+
 
         #TC.service_brake_sig.connect(self.)
         # self.TC.curr_power_sig.connect(self.receive_power)
@@ -690,55 +755,55 @@ if __name__ == "__main__":
     #add functionality to take in Train Controller Varible
     window = TrainModel_mainwindow(1)
     TC = window.Return_TrainController()
-    window_tb = trainmodel_testbench(TC)
+    # window_tb = trainmodel_testbench(TC)
 
     # Connect the signal from MyMainWindow to trainmodel_testbench
     #sending power input signal from tb to main
-    window_tb.power_input_signal.connect(window.train_calculations.get_power)
-    #sending commanded speed from tb to main
-    #
-    # window_tb.commanded_speed_input_signal.connect(window.train_calculations.get_commanded_speed)
-    #mass signal
-    window_tb.mass_input_signal.connect(window.train_calculations.get_mass)
-    #announcement signal
-    window_tb.announcement_input_signal.connect(window.set_announcements)
-    #train selection
-    window_tb.train_sel_signal.connect(window.get_train_selection)
-    #set length
-    window_tb.length_input_signal.connect(window.set_length)
-    #set height
-    window_tb.height_input_signal.connect(window.set_height)
-    #set width
-    window_tb.width_input_signal.connect(window.set_width)
-    #set grade
-    window_tb.grade_input_signal.connect(window.set_grade)
-    #set pcount
-    window_tb.pcount_input_signal.connect(window.set_pcount)
-    #set ccount
-    window_tb.ccount_input_signal.connect(window.set_ccount)
+    # window_tb.power_input_signal.connect(window.train_calculations.get_power)
+    # #sending commanded speed from tb to main
+    # #
+    # # window_tb.commanded_speed_input_signal.connect(window.train_calculations.get_commanded_speed)
+    # #mass signal
+    # window_tb.mass_input_signal.connect(window.train_calculations.get_mass)
+    # #announcement signal
+    # window_tb.announcement_input_signal.connect(window.set_announcements)
+    # #train selection
+    # window_tb.train_sel_signal.connect(window.get_train_selection)
+    # #set length
+    # window_tb.length_input_signal.connect(window.set_length)
+    # #set height
+    # window_tb.height_input_signal.connect(window.set_height)
+    # #set width
+    # window_tb.width_input_signal.connect(window.set_width)
+    # #set grade
+    # window_tb.grade_input_signal.connect(window.set_grade)
+    # #set pcount
+    # window_tb.pcount_input_signal.connect(window.set_pcount)
+    # #set ccount
+    # window_tb.ccount_input_signal.connect(window.set_ccount)
     #set ebrake
     #window_tb.ebrake_input_signal.connect(window.change_ebrake_color)
     #estop manual
    
-    #brake_fail
-    window_tb.brake_fail_input_signal.connect(window.brake_fail_tb)
-    #signal_fail
-    window_tb.signal_fail_input_signal.connect(window.signal_fail_tb)
-    #engine_fail
-    window_tb.engine_fail_input_signal.connect(window.engine_fail_tb)
-    #cabin_temp 
-    window_tb.cabin_temp_input_signal.connect(window.set_cabin_temp)
-    #interior_lights
-    window_tb.int_lights_input_signal.connect(window.interior_lights)
-    #exterior_lights
-    window_tb.ext_lights_input_signal.connect(window.exterior_lights)
-    #right_doors
-    window_tb.right_doors_input_signal.connect(window.right_doors)
-    #left_doors
-    window_tb.left_doors_input_signal.connect(window.left_doors)
+    # #brake_fail
+    # window_tb.brake_fail_input_signal.connect(window.brake_fail_tb)
+    # #signal_fail
+    # window_tb.signal_fail_input_signal.connect(window.signal_fail_tb)
+    # #engine_fail
+    # window_tb.engine_fail_input_signal.connect(window.engine_fail_tb)
+    # #cabin_temp 
+    # window_tb.cabin_temp_input_signal.connect(window.set_cabin_temp)
+    # #interior_lights
+    # window_tb.int_lights_input_signal.connect(window.interior_lights)
+    # #exterior_lights
+    # window_tb.ext_lights_input_signal.connect(window.exterior_lights)
+    # #right_doors
+    # window_tb.right_doors_input_signal.connect(window.right_doors)
+    # #left_doors
+    # window_tb.left_doors_input_signal.connect(window.left_doors)
 
     window.show()
-    window_tb.show()
+    # window_tb.show()
 
     # # # Define the path to the mainControl.py file
     # main_control_path = "Train Controller SW/mainControl.py"

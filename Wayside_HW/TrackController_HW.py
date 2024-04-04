@@ -13,7 +13,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 #Enable serial communication:
-serialObject = serial.Serial('COM8', 9600)
+#serialObject = serial.Serial('COM8', 9600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -67,6 +67,7 @@ class TrackController_HW(QMainWindow):
         self.pushButtonDown.clicked.connect(self.setCrossingDown)
     
     def modeHandler(self, occupiedBlocks):
+        print(occupiedBlocks)
         self.listOccIDs = occupiedBlocks
         self.occupiedBlocks = []
         for block in self.allBlocks:
@@ -149,9 +150,9 @@ class TrackController_HW(QMainWindow):
         occupiedBlockBytes = occupiedBlockString.encode()
 
         '''BEGIN SERIAL COMMUNICATION'''
-        serialObject.write(occupiedBlockBytes)
+        #serialObject.write(occupiedBlockBytes)
         #Receiving serial responses from the Raspberry Pi:
-        copyBlocks = self.allBlocks
+        '''copyBlocks = self.allBlocks
         attributeList = []
         while True:
             if serialObject.in_waiting > 0:
@@ -159,11 +160,11 @@ class TrackController_HW(QMainWindow):
                 if myAttribute == 'A':
                     break
                 else:
-                    attributeList.append(myAttribute)
+                    attributeList.append(myAttribute)'''
         
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
-        attributeListSoftware = []
+        '''attributeListSoftware = []
         for block in self.allBlocks:
             if block.LIGHT == True:
                 attributeListSoftware.append(str(block.lightState))
@@ -171,6 +172,7 @@ class TrackController_HW(QMainWindow):
                 attributeListSoftware.append(str(block.switchState))
             elif block.CROSSING == True:
                 attributeListSoftware.append(str(block.crossingState))
+        print(attributeListSoftware)
 
         if attributeList != attributeListSoftware:
             self.lineEditHardware.setText("ERRORS DETECTED. STOPPING ALL TRAINS.")
@@ -180,11 +182,11 @@ class TrackController_HW(QMainWindow):
         else:
             #Ajust block-wise authority based on active red lights:
             self.updateBooleanAuth()
-            self.sendUpdatedBlocks.emit(copyBlocks) #Change argument to copyBlocks for presentation'''
+            self.sendUpdatedBlocks.emit(self.allBlocks)'''
         
-        #self.updateBooleanAuth() #Uncomment when hardware is not connected
+        self.updateBooleanAuth() #Uncomment when hardware is not connected
         #self.preventCollision()
-        #self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
+        self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)

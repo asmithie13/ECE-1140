@@ -77,9 +77,11 @@ class TrackModelMain(QMainWindow):
     }
 
     # Define the specific blocks that have features
-    LIGHT_BLOCKS = ['D14', 'G29', 'J59', 'J63', 'N77', 'O86', 'Q100', 'R101']
+    LIGHT_BLOCKS_SW = ['J59', 'J63', 'M76', 'O86', 'Q100', 'R101']
+    LIGHT_BLOCKS_HW = ['A1', 'C12', 'G29', 'Z150']
     CROSSING_BLOCKS = ['E19', 'T108']
-    SWITCH_BLOCKS = ['D13', 'F28', 'J58', 'J62', 'M76', 'N85']  # Example, adjust as needed
+    SWITCH_BLOCKS_SW = ['J58', 'J62', 'N77', 'N85'] 
+    SWITCH_BLOCKS_HW = ['D13', 'F28']
     
     def __init__(self):
         super().__init__()
@@ -331,63 +333,87 @@ class TrackModelMain(QMainWindow):
 
     # Recieve from Wayside
     def receiveSpecialBlocks_SW(self, specialBlock):
-        self.blockStates = {}  # Dictionary to hold the state of each block
-
         for block in specialBlock:
-            # Create the block_id by combining blockNum and blockSection
             block_id = f"{block.blockSection}{block.blockNum}"
-            self.blockIDs_SW.append(block_id)
+            self.blockStates[block_id] = {
+                'lineColor': block.lineColor,
+                'lightState': block.lightState,
+                'crossingState': block.crossingState,
+                'switchState': block.switchState
+            }
 
-        # Populate the blockStates dictionary with block information
-        self.blockStates[block_id] = {
-            'lineColor': block.lineColor,
-            'lightState': block.lightState,
-            'crossingState': block.crossingState,
-            'switchState': block.switchState
-        }
+    def updateUI(self):
+        for block_id in self.LIGHT_BLOCKS_SW:
+            if block_id in self.blockStates:
+                block_state = self.blockStates[block_id]
+                # Update the UI component for the light state
+                self.updateLightUI(block_id, block_state['lightState'])
+
+    def updateLightUI(self, block_id, lightState):
+        # Assuming you have a method to get the UI element for a specific block
+        lightElement = self.getLightElementForBlock(block_id)
+        if lightState:
+            lightElement.setColor("Green")  # Example method to set the color
+        else:
+            lightElement.setColor("Red")
 
 
     def receiveSpecialBlocks_HW(self, specialBlock):
-        self.blockStates = {}  # Dictionary to hold the state of each block
-
         for block in specialBlock:
-            # Create the block_id by combining blockNum and blockSection
             block_id = f"{block.blockSection}{block.blockNum}"
-            self.blockIDs_SW.append(block_id)
-
-        # Populate the blockStates dictionary with block information
-        self.blockStates[block_id] = {
-            'lineColor': block.lineColor,
-            'lightState': block.lightState,
-            'crossingState': block.crossingState,
-            'switchState': block.switchState
-        }
-
+            self.blockStates[block_id] = {
+                'lineColor': block.lineColor,
+                'lightState': block.lightState,
+                'crossingState': block.crossingState,
+                'switchState': block.switchState
+            }
 
     def update_ui_for_block(self, block_id):
         # Get the block state if it exists
         block_state = self.blockStates.get(block_id, {})
 
-        # Update light status if the block has a light
-        if block_id in self.LIGHT_BLOCKS:
-            light_state = block_state.get('lightState', 'N/A')
-            self.light_out.setText(str(light_state))
-        else:
-            self.light_out.setText('N/A')
+        # Update for SW
+        if block_id in self.LIGHT_BLOCKS_SW or block_id in self.SWITCH_BLOCKS_SW:
+            # Update light status for SW
+            if block_id in self.LIGHT_BLOCKS_SW:
+                light_state = block_state.get('lightState', 'N/A')
+                self.light_out.setText(str(light_state))
+                self.light_out.setStyleSheet("background-color: green;" if light_state == "GREEN" else "background-color: red;" if light_state == "RED" else "background-color: white;")
+            else:
+                self.light_out.setText('N/A')
+                self.light_out.setStyleSheet("background-color: white;")
 
-        # Update crossing status if the block has a crossing
+            # Update switch status for SW
+            if block_id in self.SWITCH_BLOCKS_SW:
+                switch_state = block_state.get('switchState', 'N/A')
+                self.switch_out.setText(str(switch_state))
+            else:
+                self.switch_out.setText('N/A')
+
+        # Update for HW
+        elif block_id in self.LIGHT_BLOCKS_HW or block_id in self.SWITCH_BLOCKS_HW:
+            # Update light status for HW
+            if block_id in self.LIGHT_BLOCKS_HW:
+                light_state = block_state.get('lightState', 'N/A')
+                self.light_out.setText(str(light_state))
+                self.light_out.setStyleSheet("background-color: green;" if light_state == "GREEN" else "background-color: red;" if light_state == "RED" else "background-color: white;")
+            else:
+                self.light_out.setText('N/A')
+                self.light_out.setStyleSheet("background-color: white;")
+
+            # Update switch status for HW
+            if block_id in self.SWITCH_BLOCKS_HW:
+                switch_state = block_state.get('switchState', 'N/A')
+                self.switch_out.setText(str(switch_state))
+            else:
+                self.switch_out.setText('N/A')
+
+        # Update crossing status, which is common for both HW and SW
         if block_id in self.CROSSING_BLOCKS:
             crossing_state = block_state.get('crossingState', 'N/A')
             self.cross_out.setText(str(crossing_state))
         else:
             self.cross_out.setText('N/A')
-
-        # Update switch status if the block has a switch
-        if block_id in self.SWITCH_BLOCKS:
-            switch_state = block_state.get('switchState', 'N/A')
-            self.switch_out.setText(str(switch_state))
-        else:
-            self.switch_out.setText('N/A')
 
     def load_default_track_layout(self):
         # Directly load the default track layout file
@@ -528,9 +554,14 @@ class TrackModelMain(QMainWindow):
         self.block_in_1.setCurrentText(block_id)
         self.block_in_2.setCurrentText(block_id)
         self.update_heaters_out()
+        # Reset the light_out label color to white
+        self.light_out.setStyleSheet("background-color: white;")
+
+        # Proceed with updating the UI for the clicked block
+        self.update_ui_for_block(block_id)
 
         # Check if the block has special features and update the UI accordingly
-        if block_id in self.LIGHT_BLOCKS:
+        if block_id in self.LIGHT_BLOCKS_SW:
             # Fetch the light state for this block and update the UI
             light_state = self.blockStates.get(block_id, {}).get('lightState', 'N/A')
             self.light_out.setText("GREEN" if light_state else "RED")
@@ -545,13 +576,25 @@ class TrackModelMain(QMainWindow):
         else:
             self.cross_out.setText('N/A')
 
-        if block_id in self.SWITCH_BLOCKS:
+        if block_id in self.LIGHT_BLOCKS_HW:
+            # Fetch the light state for this block and update the UI
+            light_state = self.blockStates.get(block_id, {}).get('lightState', 'N/A')
+            self.light_out.setText("GREEN" if light_state else "RED")
+            self.light_out.setStyleSheet("background-color: green;" if light_state else "background-color: red;")
+
+        if block_id in self.SWITCH_BLOCKS_SW:
             # Fetch the switch state for this block and update the UI
             switch_state = self.blockStates.get(block_id, {}).get('switchState', 'N/A')
             self.switch_out.setText("LEFT" if switch_state else "RIGHT")
         else:
             self.switch_out.setText('N/A')
 
+        if block_id in self.SWITCH_BLOCKS_HW:
+            # Fetch the switch state for this block and update the UI
+            switch_state = self.blockStates.get(block_id, {}).get('switchState', 'N/A')
+            self.switch_out.setText("LEFT" if switch_state else "RIGHT")
+        else:
+            self.switch_out.setText('N/A')
 
 
         # Continue with the rest of the block_clicked functionality

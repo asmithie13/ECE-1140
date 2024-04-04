@@ -13,7 +13,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 #Enable serial communication:
-#serialObject = serial.Serial('COM8', 9600)
+serialObject = serial.Serial('COM8', 9600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -149,9 +149,9 @@ class TrackController_HW(QMainWindow):
         occupiedBlockBytes = occupiedBlockString.encode()
 
         '''BEGIN SERIAL COMMUNICATION'''
-        #serialObject.write(occupiedBlockBytes)
+        serialObject.write(occupiedBlockBytes)
         #Receiving serial responses from the Raspberry Pi:
-        '''copyBlocks = self.allBlocks
+        copyBlocks = self.allBlocks
         attributeList = []
         while True:
             if serialObject.in_waiting > 0:
@@ -159,7 +159,7 @@ class TrackController_HW(QMainWindow):
                 if myAttribute == 'A':
                     break
                 else:
-                    attributeList.append(myAttribute)'''
+                    attributeList.append(myAttribute)
         
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
@@ -172,7 +172,7 @@ class TrackController_HW(QMainWindow):
             elif block.CROSSING == True:
                 attributeListSoftware.append(str(block.crossingState))
 
-        '''if attributeList != attributeListSoftware:
+        if attributeList != attributeListSoftware:
             self.lineEditHardware.setText("ERRORS DETECTED. STOPPING ALL TRAINS.")
             for block in self.allBlocks:
                 block.authority = False
@@ -180,11 +180,11 @@ class TrackController_HW(QMainWindow):
         else:
             #Ajust block-wise authority based on active red lights:
             self.updateBooleanAuth()
-            self.sendUpdatedBlocks.emit(self.allBlocks) #Change argument to copyBlocks for presentation'''
+            self.sendUpdatedBlocks.emit(copyBlocks) #Change argument to copyBlocks for presentation'''
         
-        self.updateBooleanAuth() #Uncomment when hardware is not connected
+        #self.updateBooleanAuth() #Uncomment when hardware is not connected
         #self.preventCollision()
-        self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
+        #self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)

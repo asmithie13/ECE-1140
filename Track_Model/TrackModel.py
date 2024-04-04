@@ -416,10 +416,9 @@ class TrackModelMain(QMainWindow):
         temp_HW = []
         temp_SW = []
 
-        # Separate the blocks into HW and SW based on the section part of the block ID
+        # Separate the blocks into HW and SW based on the first letter of the block ID
         for block_id in occupancies:
-            section = block_id.split()[0]  # Assuming block_id is in the format "Section Number" e.g., "A1"
-            if section in sections_HW:
+            if block_id[0] in sections_HW:  # Check if the first letter of the block ID is in sections_HW
                 temp_HW.append(block_id)
             else:
                 temp_SW.append(block_id)
@@ -427,6 +426,7 @@ class TrackModelMain(QMainWindow):
         # Emit the separated lists to HW and SW respectively
         self.sendBlockOcc_HW.emit(temp_HW)
         self.sendBlockOcc_SW.emit(temp_SW)
+
 
 
 

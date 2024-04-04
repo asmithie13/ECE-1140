@@ -138,7 +138,7 @@ MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieve
 MainWindow.TrackModelWindow.sendBlockOcc_SW.connect(MainWindow.WaysideSWwindow.updateBlocks)
 
 #Track Model to Wayside_HW
-
+MainWindow.TrackModelWindow.sendBlockOcc_HW.connect(MainWindow.WaysideHWwindow.modeHandler)
 
 """Clock Initialization"""
 #Initializing Qtimer for clock

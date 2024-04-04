@@ -145,9 +145,6 @@ def timer_thread(sim_time):
 #     sim_thread.wait()
 #     sys.exit(exit_code)
 
-
-
-
 if __name__ == "__main__":
     # Starting PyQt application
     app = QtWidgets.QApplication(sys.argv)

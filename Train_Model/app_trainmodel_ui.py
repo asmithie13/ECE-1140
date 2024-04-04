@@ -138,7 +138,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
         return power_input
 
-    #sending authority to train controller [ASK LAUREN AND CHAD]
+    #sending authority to train controller 
     def receiveSpeedAuth_tm(self,speedAuth):
         trainID=speedAuth[0]
         self.comm_speed=speedAuth[1]
@@ -148,7 +148,6 @@ class TrainModel_mainwindow(QMainWindow):
         self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
         self.train_calculations.get_acceleration(self.comm_speed,self.grade,self.mass)
         self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
-        self.TC.curr_cmd_spd_sig.emit(int(self.comm_speed))
         self.TC.curr_auth_sig.emit(float(Authority))
 
 

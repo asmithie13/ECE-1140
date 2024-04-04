@@ -13,7 +13,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 #Enable serial communication:
-#serialObject = serial.Serial('COM8', 9600)
+#serialObject = serial.Serial('COM8', 57600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -45,7 +45,7 @@ class TrackController_HW(QMainWindow):
         self.allTripleIDs = [] #This is unused
         self.allBlocks = readTrackFile("Wayside_HW/greenLine.csv", self.allTripleIDs)
         for block in self.allBlocks:
-            block.Wayside = "WI"
+            block.Wayside = "W1"
 
         #Initialize a flag integer to determine which mode the system is currently in:
         self.modeFlag = 0 #0 = Automatic, 1 = Manual, 2 = Maintenance
@@ -67,7 +67,6 @@ class TrackController_HW(QMainWindow):
         self.pushButtonDown.clicked.connect(self.setCrossingDown)
     
     def modeHandler(self, occupiedBlocks):
-        print(occupiedBlocks)
         self.listOccIDs = occupiedBlocks
         self.occupiedBlocks = []
         for block in self.allBlocks:
@@ -148,6 +147,7 @@ class TrackController_HW(QMainWindow):
             occupiedBlockString += section
         occupiedBlockString += '1'
         occupiedBlockBytes = occupiedBlockString.encode()
+        #serialObject.write(occupiedBlockBytes)
 
         '''BEGIN SERIAL COMMUNICATION'''
         #serialObject.write(occupiedBlockBytes)
@@ -157,10 +157,13 @@ class TrackController_HW(QMainWindow):
         while True:
             if serialObject.in_waiting > 0:
                 myAttribute = serialObject.read(serialObject.in_waiting).decode('utf-8')
-                if myAttribute == 'A':
-                    break
-                else:
-                    attributeList.append(myAttribute)'''
+                break
+        
+        for letter in myAttribute:
+            if letter == 'A':
+                break
+            else:
+                attributeList.append(letter)'''
         
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
@@ -172,7 +175,6 @@ class TrackController_HW(QMainWindow):
                 attributeListSoftware.append(str(block.switchState))
             elif block.CROSSING == True:
                 attributeListSoftware.append(str(block.crossingState))
-        print(attributeListSoftware)
 
         if attributeList != attributeListSoftware:
             self.lineEditHardware.setText("ERRORS DETECTED. STOPPING ALL TRAINS.")

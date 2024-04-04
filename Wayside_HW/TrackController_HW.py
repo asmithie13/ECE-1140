@@ -186,9 +186,9 @@ class TrackController_HW(QMainWindow):
             self.updateBooleanAuth()
             self.sendUpdatedBlocks.emit(self.allBlocks)
         
-        self.updateBooleanAuth() #Uncomment when hardware is not connected
+        #self.updateBooleanAuth() #Uncomment when hardware is not connected
         #self.preventCollision()
-        self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
+        #self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)

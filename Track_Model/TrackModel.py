@@ -136,6 +136,7 @@ class TrackModelMain(QMainWindow):
         if line == "Green":
             self.currentTrains.append([trainID, line, 0, 'increasing', 'K63'])
             self.occupied_blocks.append('K63')
+            self.update_occupied_blocks()
             self.K63.setStyleSheet('''
                 QPushButton {
                     border-style: solid;

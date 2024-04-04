@@ -126,6 +126,9 @@ MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.u
 #Track Model to CTC
 MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieveTicketSales)
 
+#Track Model to Wayside_SW
+MainWindow.TrackModelWindow.sendBlockOcc_SW.connect(MainWindow.WaysideSWwindow.updateBlocks)
+
 """Clock Initialization"""
 #Initializing Qtimer for clock
 global timer 

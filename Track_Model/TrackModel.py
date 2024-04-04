@@ -96,6 +96,8 @@ class TrackModelMain(QMainWindow):
         self.data = None  # Assuming this will be initialized with your data source
         # Add train id, line, distance from starting block, direction, and block occupancy
         self.currentTrains = []
+        self.blockIDs_SW = []
+        self.blockIDs_HW = []
 
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track_Model/Track_Model.ui", self)
@@ -161,20 +163,6 @@ class TrackModelMain(QMainWindow):
         else:
             self.heaters_out.setText("OFF")
 
-            
-    # def get_block_occupancy(self, authority, speed_of_train):
-    #     self.blockID = ""
-    #     self.total_block_length = 0
-    #     self.prevblockID = ""
-
-    #     #Start with the Yard
-    #     for block_num in range(0,0):
-    #         if self.process_block(block_num, speed_of_train):
-    #             break
-        
-    #     for block_num in range(63,100):
-    #         if self.process_block(block_num, speed_of_train):
-    #             break
         
     def process_block(self, block_num, trainId, speed_of_train):
         # Get the length of the current block
@@ -346,20 +334,34 @@ class TrackModelMain(QMainWindow):
         self.blockStates = {}  # Dictionary to hold the state of each block
 
         for block in specialBlock:
-            # Assuming 'block' has 'blockNum', 'lightState', 'crossingState', and 'switchState' attributes
-            self.blockStates[block.blockNum] = {
-                'lightState': block.lightState,
-                'crossingState': block.crossingState,
-                'switchState': block.switchState
-            }
+            # Create the block_id by combining blockNum and blockSection
+            block_id = f"{block.blockSection}{block.blockNum}"
+            self.blockIDs_SW.append(block_id)
 
-        
-
+        # Populate the blockStates dictionary with block information
+        self.blockStates[block_id] = {
+            'lineColor': block.lineColor,
+            'lightState': block.lightState,
+            'crossingState': block.crossingState,
+            'switchState': block.switchState
+        }
 
 
     def receiveSpecialBlocks_HW(self, specialBlock):
-        self.specialBlock_list = specialBlock
-        #print("i'm getting blocks", specialBlock)
+        self.blockStates = {}  # Dictionary to hold the state of each block
+
+        for block in specialBlock:
+            # Create the block_id by combining blockNum and blockSection
+            block_id = f"{block.blockSection}{block.blockNum}"
+            self.blockIDs_SW.append(block_id)
+
+        # Populate the blockStates dictionary with block information
+        self.blockStates[block_id] = {
+            'lineColor': block.lineColor,
+            'lightState': block.lightState,
+            'crossingState': block.crossingState,
+            'switchState': block.switchState
+        }
 
 
     def update_ui_for_block(self, block_id):
@@ -409,13 +411,23 @@ class TrackModelMain(QMainWindow):
         self.send_authority_tb.emit(str(self.Authority))
 
     def update_occupied_blocks(self):
-        occupancies = self.occupied_blocks
-        for i in self.occupied_block_failures:
-            occupancies.append(i)
+        occupancies = self.occupied_blocks + self.occupied_block_failures  # Combine the lists of occupied and failed blocks
+        sections_HW = ["A", "B", "C", "D", "E", "F", "G", "H", "T", "U", "V", "W", "X", "Y", "Z"]
+        temp_HW = []
+        temp_SW = []
 
-        # Emit the updated list of occupied blocks, including those affected by failures
-        print(self.occupied_blocks)
-        self.sendBlockOcc_SW.emit(occupancies)
+        # Separate the blocks into HW and SW based on the section part of the block ID
+        for block_id in occupancies:
+            section = block_id.split()[0]  # Assuming block_id is in the format "Section Number" e.g., "A1"
+            if section in sections_HW:
+                temp_HW.append(block_id)
+            else:
+                temp_SW.append(block_id)
+
+        # Emit the separated lists to HW and SW respectively
+        self.sendBlockOcc_HW.emit(temp_HW)
+        self.sendBlockOcc_SW.emit(temp_SW)
+
 
 
     #FROM TRAIN MODEL for block occupancy

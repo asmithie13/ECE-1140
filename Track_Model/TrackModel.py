@@ -77,7 +77,7 @@ class TrackModelMain(QMainWindow):
     }
 
     # Define the specific blocks that have features
-    LIGHT_BLOCKS = ['N77', 'O86', 'Q100', 'R101']
+    LIGHT_BLOCKS = ['D14', 'G29', 'J59', 'J63', 'N77', 'O86', 'Q100', 'R101']
     CROSSING_BLOCKS = ['E19', 'T108']
     SWITCH_BLOCKS = ['D13', 'F28', 'J58', 'J62', 'M76', 'N85']  # Example, adjust as needed
     

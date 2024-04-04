@@ -91,7 +91,6 @@ MainWindow.CTCwindow.create_a_train.connect(MainWindow.create_new_train)
 MainWindow.WaysideSWwindow.sendSpecialBlocks.connect(MainWindow.WaysideSW_tb.updateBlockStates)
 MainWindow.WaysideSWwindow.changeModeSend.connect(MainWindow.WaysideSW_tb.receiveMode)
 MainWindow.WaysideSWwindow.sendAllBlocks.connect(MainWindow.WaysideSW_tb.receiveBlocks)
-MainWindow.WaysideSWwindow.sendTrainSpeedAuth.connect(MainWindow.WaysideSW_tb.displaySpeedAuth)
 MainWindow.WaysideSW_tb.OccBlocksChanged.connect(MainWindow.WaysideSWwindow.updateBlocks)
 MainWindow.WaysideSW_tb.tbChangeMode.connect(MainWindow.WaysideSWwindow.changeMode)
 MainWindow.WaysideSW_tb.ctcIDSpeedAuthority.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
@@ -126,13 +125,6 @@ MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.u
 
 #Track Model to CTC
 MainWindow.TrackModelWindow.SendTicketsales.connect(MainWindow.CTCwindow.recieveTicketSales)
-
-#Track Model to Wayside SW
-MainWindow.TrackModelWindow.sendBlockOcc_SW.connect(MainWindow.WaysideSWwindow.updateBlocks)
-
-#Track Model to Wayside HW
-MainWindow.TrackModelWindow.sendBlockOcc_HW.connect(MainWindow.WaysideHW_tb.receiveOccupiedBlocks)
-
 
 """Clock Initialization"""
 #Initializing Qtimer for clock

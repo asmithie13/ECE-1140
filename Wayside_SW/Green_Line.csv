@@ -75,7 +75,7 @@ Green,L,73,100,0,40,STATION; DORMONT,Right,0,0.5
 Green,M,74,100,0,40,,,0,0.5
 Green,M,75,100,0,40,,,0,0.5
 Green,M,76,100,0,40,,,0,0.5
-Green,N,77,300,0,70,SWITCH (77-101;77-76),Left/Right,0,0.5
+Green,N,77,300,0,70,SWITCH (77-76;77-101),Left/Right,0,0.5
 Green,N,78,300,0,70,,,0,0.5
 Green,N,79,300,0,70,,,0,0.5
 Green,N,80,300,0,70,,,0,0.5

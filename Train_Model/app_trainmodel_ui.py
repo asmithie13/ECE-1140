@@ -227,9 +227,13 @@ class TrainModel_mainwindow(QMainWindow):
         if state:
             self.bf_enable.setStyleSheet('background-color: rgb(38, 207, 4);')
             self.bf_disable.setStyleSheet('')
+            self.ebrake_state=True
+            self.ebrake_disabled(self.ebrake_state)
         else:
             self.bf_enable.setStyleSheet('')
             self.bf_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
+            self.ebrake_state=False
+            self.ebrake_disabled(self.ebrake_state)
 
         self.TC.brk_fail_sig.emit(state)
 

@@ -21,6 +21,7 @@ def sort_by_number(block):
 def readTrackFile(fileName,crossingTriples):
     totalBlocks = []
     lightBlocks = {}
+    beaconTriple = [[]]
     #fileName = "Wayside SW/" + fileName
     with open(fileName, "r") as fileObject:
         readObj = csv.reader(fileObject, delimiter=",")
@@ -51,6 +52,7 @@ def readTrackFile(fileName,crossingTriples):
                     lightBlocks.update(current)
 
             tempBlock = Block(line[0],line[1],line[2],hasLightTemp,hasCrossingTemp,hasSwitchTemp,lightState,crossingState,switchState,blockId)
+            tempBlock.blockLength = line[3]
             totalBlocks.append(tempBlock)
 
             #Assign light values now
@@ -91,6 +93,44 @@ class WaysideSW(QMainWindow):
         self.greenCrossingTriplesIDS = [] #ids of red crossing blocks
         self.allGreenBlocks = readTrackFile("Wayside_SW/Green_Line.csv",self.greenCrossingTriplesIDS)
         self.specialGreenBlocksW2 = []
+
+        #beacon stuff
+        with open('greenBeacon.txt', 'w') as file:
+            beac1 = [[]]
+            beacblock1 = [x for x in self.allGreenBlocks if int(x.blockNum) >= 63 and int(x.blockNum) <= 100]
+            for block in beacblock1:
+                info = [block.ID, block.blockLength]
+                beac1.append(info)
+            file.write("beac1: " + str(beac1) + "\n")
+
+            beac2 = [[]]
+            beacblock2 = [x for x in self.allGreenBlocks if x.blockSection == "N"]
+            for block in beacblock2:
+                info = [block.ID, block.blockLength]
+                beac2.append(info)
+            file.write("beac2: " + str(beac2) + "\n")
+
+            beac3 = [[]]
+            beacblock3 = [x for x in self.allGreenBlocks if int(x.blockNum) >= 101 and int(x.blockNum) <= 150]
+            for block in beacblock3:
+                info = [block.ID, block.blockLength]
+                beac3.append(info)
+            file.write("beac3: " + str(beac3) + "\n")
+
+            beac4 = [[]]
+            beacblock4 = [x for x in self.allGreenBlocks if int(x.blockNum) >= 12 and int(x.blockNum) <= 27]
+            for block in beacblock4:
+                info = [block.ID, block.blockLength]
+                beac4.append(info)
+            file.write("beac4: " + str(beac4) + "\n")
+
+            beac5 = [[]]
+            beacblock5 = [x for x in self.allGreenBlocks if int(x.blockNum) >= 12 and int(x.blockNum) <= 57]
+            for block in beacblock5:
+                info = [block.ID, block.blockLength]
+                beac5.append(info)
+            file.write("beac5: " + str(beac5) + "\n")
+
 
         #SW in charge of W1, HW in charge of W2
 
@@ -235,8 +275,17 @@ class WaysideSW(QMainWindow):
         current_text = self.label_7.text()
         if current_text == "MANUAL":   
             self.label_7.setText("AUTOMATIC")
-            self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
 
+            self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
+            check1 = self.currentBlocks.copy #blocks after parsed
+            self.FileParser.parsePLC()
+            check2 = self.currentBlocks.copy
+
+            if check1 != check2:
+                for block in self.currentBlocks: block.authority = False
+                print("Redundancy Check Failed")
+                return
+                
             for block in self.currentBlocks:
                 if block.LIGHT and block.lightState: block.authority = True
                 elif block.LIGHT and not block.lightState: block.authority = False
@@ -506,10 +555,21 @@ class WaysideSW(QMainWindow):
             for x in (self.green5blocks[blockNum - 1]):
                 if self.allGreenBlocks[x - 1].occupied:
                     self.allGreenBlocks[x - 1].authority = False
+                elif not self.allGreenBlocks[x - 1].occupied and self.allGreenBlocks[x - 1].lightState:
+                    self.allGreenBlocks[x - 1].authority = True
+
         
         self.BlockOcc.setText(" ".join(sentBlocks))
         if self.label_7.text() == "AUTOMATIC" : 
+            self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
+            check1 = self.currentBlocks.copy #blocks after parsed
             self.FileParser.parsePLC()
+            check2 = self.currentBlocks.copy
+
+            if check1 != check2:
+                for block in self.currentBlocks: block.authority = False
+                print("Redundancy Check Failed")
+                return
             
             
         self.blockActions()
@@ -534,8 +594,8 @@ class TestBench(QMainWindow):
         uic.loadUi("Wayside_SW/Wayside_Testbench.ui", self)
 
         # Buttons
-        self.speedInput.returnPressed.connect(self.sendSpeed)
-        self.authorityInput.returnPressed.connect(self.sendAuthority)
+        #self.speedInput.returnPressed.connect(self.sendSpeed)
+        #self.authorityInput.returnPressed.connect(self.sendAuthority)
         self.modeInput.clicked.connect(self.sendMode)
         self.addBlock.returnPressed.connect(self.addBlockOcc)
         self.removeBlock.returnPressed.connect(self.remBlockOcc)
@@ -599,17 +659,18 @@ class TestBench(QMainWindow):
         if not hasattr(self, 'specialBlocks'): return   #specialBlock check for initialization
 
         if isinstance(arr, list):
-            self.specialBlocks = arr
+            self.greenW2Blocks = arr
             index = self.tbBlockMenu.currentIndex()
-            selectedBlock = self.specialBlocks[index]
+            selectedBlock = self.greenW2Blocks[index]
             
 
         else:  
-            if arr > len(self.specialBlocks) - 1 or arr == -1: return 
-            selectedBlock = self.specialBlocks[arr]
+            if arr > len(self.greenW2Blocks) - 1 or arr == -1: return 
+            selectedBlock = self.greenW2Blocks[arr]
             
-        self.comSpeed.setText(str(selectedBlock.speedLimit))
-        self.authOut.setText(str(selectedBlock.authority))
+        #self.comSpeed.setText(str(selectedBlock.speedLimit))
+        #self.authOut.setText(str(selectedBlock.authority))
+        self.label_4.setText(str(selectedBlock.authority))
 
         if selectedBlock.LIGHT:
 

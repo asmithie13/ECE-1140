@@ -21,27 +21,10 @@ class SimulationTime(QObject):
 
     def start(self):
         self.updatetime()
-
-    # def updatetime(self):
-    #     while self.running:
-    #         current_time = QtCore.QDateTime.currentDateTime()
-           
-    #         elapsed = self.last_update_time.msecsTo(current_time)
-            
-    #         self.last_update_time = current_time
-            
-    #         self.simulation_elapsed += elapsed * self.sim_speed_factor / 1000.0
-            
-    #         simulated_time = QtCore.QDateTime.fromMSecsSinceEpoch(int(self.simulation_elapsed * 1000))
-            
-    #         self.timeChanged.emit(simulated_time.toString("hh:mm:ss.zzz"))
-            
-    #         print(simulated_time.toString("hh:mm:ss.zzz"))
-    #         QtCore.QThread.msleep(1)  # Sleep for 1 millisecond
         
     def updatetime(self):
     # Set starting point to a QDateTime object representing midnight with no date (time only)
-        
+        print("clock started")
         while self.running:
             current_time = QtCore.QDateTime.currentDateTime()
         
@@ -49,12 +32,12 @@ class SimulationTime(QObject):
             
             self.last_update_time = current_time
             
-            self.simulation_elapsed += elapsed * self.sim_speed_factor / 1000.0
+            self.simulation_elapsed += elapsed * self.sim_speed_factor / 10.0
             
             # Add the elapsed simulation time to the start time
-            simulated_time = self.start_time.addMSecs(int(self.simulation_elapsed * 1000))
+            simulated_time = self.start_time.addMSecs(int(self.simulation_elapsed * 10))
             
             self.timeChanged.emit(simulated_time.toString("hh:mm:ss.zzz"))
             
-            print(simulated_time.toString("hh:mm:ss.zzz"))
-            QtCore.QThread.msleep(1)  # Sleep for 1 millisecond
+            #print(simulated_time.toString("hh:mm:ss.zzz"))
+            QtCore.QThread.msleep(100)  # Sleep for 1 millisecond

@@ -307,9 +307,10 @@ class CTC_UI(QtWidgets.QMainWindow):
     def displayClock(self, time_w_ms):
         time = time_w_ms[0:5]
         self.CTC_clock.display(time)
-        
+
         for i in self.trainSchedule.Scheduledata:
-            if time_w_ms == (i[5] + ":00.000"):
+            if (time == i[5]) and (int(i[1][1:]) > len(self.occupiedBlocks.currentTrains)):
+            
                 self.create_a_train.emit(i[1])
 
                 #Train ID, speed, Authority

@@ -52,7 +52,7 @@ class TrackController_HW_TB(QMainWindow):
         currentBlockStr = self.comboBoxOccupancies.currentText()
         for block in self.allBlocks:
             if block.ID == currentBlockStr:
-                self.occupiedBlocks.append(block)
+                self.occupiedBlocks.append(block.ID)
                 break
         self.occupiedBlocksSignal.emit(self.occupiedBlocks)
     

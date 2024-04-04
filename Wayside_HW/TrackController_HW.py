@@ -67,12 +67,19 @@ class TrackController_HW(QMainWindow):
         self.pushButtonDown.clicked.connect(self.setCrossingDown)
     
     def modeHandler(self, occupiedBlocks):
-        self.occupiedBlocks = occupiedBlocks
-        self.listOccIDs = []
-        for block in occupiedBlocks:
-            self.listOccIDs.append(block.ID)
-        
+        self.listOccIDs = occupiedBlocks
+        self.occupiedBlocks = []
         for block in self.allBlocks:
+            if block.ID in self.listOccIDs:
+                self.occupiedBlocks.append(block)
+
+        for block in self.allBlocks:
+            if block.ID in self.listOccIDs:
+                block.occupied = 1
+            else:
+                block.occupied = 0
+        
+        for block in self.occupiedBlocks:
             if block.ID in self.listOccIDs:
                 block.occupied = 1
             else:

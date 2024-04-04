@@ -4,6 +4,7 @@ import tkinter as tk
 import os #read other .py file
 import pandas as pd #read excel files
 import random # Generate random num of ticket sales for CTC
+import time
 
 # Using Block Class as a seperate file
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -52,9 +53,49 @@ class TrackModelMain(QMainWindow):
     #send authority to ttestbench
     send_authority_tb = pyqtSignal(str)
 
+    AcutalSpeed = 0
+
+    station_lookup = {
+    "A2": "PIONEER",
+    "C9": "EDGEBROOKE",
+    "D16": "STATION",
+    "DF22": "WHITED",
+    "G31": "SOUTH BANK",
+    "I39": "CENTRAL",
+    "W141": "CENTRAL",
+    "I48": "INGLEWOOD",
+    "W132": "INGLEWOOD",
+    "I57": "OVERBROOK",
+    "W123": "OVERBROOK",
+    "K65": "GLENBURY",
+    "U114": "GLENBURY",
+    "L73": "DORMONT",
+    "T105": "DORMONT",
+    "N77": "MT LEBANON",
+    "O88": "POPLAR",
+    "P96": "CASTLE SHANNON"
+    }
+
+    # Define the specific blocks that have features
+    LIGHT_BLOCKS = ['N77', 'O86', 'Q100', 'R101']
+    CROSSING_BLOCKS = ['E19', 'T108']
+    SWITCH_BLOCKS = ['D13', 'F28', 'J58', 'J62', 'M76', 'N85']  # Example, adjust as needed
+    
     def __init__(self):
         super().__init__()
         self.blockStates = {}
+        station_lookup = {}
+        self.blockID = None
+        self.station = ""
+        self.occupied_blocks = []
+        self.occupied_block_failures = []
+        self.lastGeneratedTickets = {}
+        self.blockID = ""
+        self.total_block_length = 0
+        self.prevblockID = ""
+        self.data = None  # Assuming this will be initialized with your data source
+        # Add train id, line, distance from starting block, direction, and block occupancy
+        self.currentTrains = []
 
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track_Model/Track_Model.ui", self)
@@ -63,6 +104,9 @@ class TrackModelMain(QMainWindow):
         self.set_track_failure.clicked.connect(self.set_track_circuit_failure)
         self.set_power_failure.clicked.connect(self.set_power_failure_func)
         self.reset_button.clicked.connect(self.reset_block_colors)
+
+        self.temp_in.setValue(70)  # Set the default value for temp_in spinbox
+        self.temp_in.valueChanged.connect(self.update_heaters_out)  # Connect the signal to the slot
 
         # Connect Upload Track Layout button to make upload file
         self.pushButton.clicked.connect(self.upload_track_layout) 
@@ -73,7 +117,7 @@ class TrackModelMain(QMainWindow):
 
         self.setup_block_buttons()
         self.block_in_1.activated[str].connect(self.block_clicked)
-        self.generateTickets()
+        #self.generateTickets()
 
         # Instantiate the Data class
         self.data = Data()
@@ -86,64 +130,261 @@ class TrackModelMain(QMainWindow):
         # After setting up UI elements, load the default track layout
         self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
         self.load_default_track_layout()
+        
 
-    def get_block_occupancy(self, authority, speed_limit, speed_of_train, length):
-        #initializing varibales
-        self.total_block_length = 0
-        self.iteration = 0
+    def get_train_id(self, trainID, line):
+        if line == "Green":
+            self.currentTrains.append([trainID, line, 0, 'increasing', 'K63'])
+            self.occupied_blocks.append('K63')
+            self.K63.setStyleSheet('''
+                QPushButton {
+                    border-style: solid;
+                    border-width: 0.5px;
+                    border-color: black;
+                    background-color: orange;
+                }
+            ''')
+        elif line == "Red":
+            self.currentTrains.append([trainID, line, 0, 'increasing', 'D10'])
 
-        # Convert train speed to m/s from km/h for calculation 
-        self.speed_of_train_kms = speed_of_train / 2237
-        self.length_m = length / 1000
+    def update_heaters_out(self):
+        # Get the current temperature from the spinbox
+        temp_value = self.temp_in.value()
 
-        for block_num in range(63, 65):
-            while self.total_block_length != authority:
-                if self.total_block_length <= (speed_of_train*(self.length_m*(1/(speed_limit*1000/(60*60))))):
-                    self.block_num_occ = self.data.get_block_for_block(block_num)
-                    self.section_occ = self.data.get_section_for_block(block_num)
-                    blockID = self.block_num_occ + self.section_occ
+        # Update the temp_out label to match the spinbox value
+        self.temp_out.setText(f"{temp_value}°")
+
+        # Update the heaters_out label based on the temperature
+        if temp_value <= 39.6:
+            self.heaters_out.setText("ON")
+        else:
+            self.heaters_out.setText("OFF")
+
+            
+    # def get_block_occupancy(self, authority, speed_of_train):
+    #     self.blockID = ""
+    #     self.total_block_length = 0
+    #     self.prevblockID = ""
+
+    #     #Start with the Yard
+    #     for block_num in range(0,0):
+    #         if self.process_block(block_num, speed_of_train):
+    #             break
+        
+    #     for block_num in range(63,100):
+    #         if self.process_block(block_num, speed_of_train):
+    #             break
+        
+    def process_block(self, block_num, trainId, speed_of_train):
+        # Get the length of the current block
+            total_dis_from_beg_of_block = self.currentTrains[int(trainId[1:]) - 1][2]
+            block_length = self.data.get_length_for_block(block_num)
+            #self.total_block_length += block_length  # Cumulative sum of block lengths
+
+            self.speed_limit_km = self.data.get_speed_for_block(block_num)
+
+            speed_of_train_m = speed_of_train * 0.44704
+
+            total_dis_from_beg_of_block += speed_of_train_m
+            self.currentTrains[int(trainId[1:]) - 1][2] = total_dis_from_beg_of_block
+
+            #Compare total block length with some other calculated distance
+            # distance_covered = (speed_of_train_m * (1 / (self.speed_limit_km * 1000 / (60 * 60))))
+
+            # if train moves to the next block
+            if total_dis_from_beg_of_block >= block_length:
+                #Setting train direction after switches
+                if block_num == 76:
+                    self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
+                elif block_num == 100:
+                    self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+                elif block_num == 150:
+                    self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+                elif block_num == 1:
+                    self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
+                
+                # Getting block section from excel 
+                self.section_occ = self.data.get_section_for_block(block_num)
+                self.blockID = self.section_occ + str(block_num)
+                
+                #I will send this to wayside both SW and HW
+                next_block_num = self.get_next_id(block_num, self.currentTrains[int(trainId[1:]) - 1][3], "Green")
+                self.next_block_id = self.data.get_section_for_block(next_block_num)
+
+                self.occupied_blocks.clear()
+                self.occupied_blocks.append(self.next_block_id + str(next_block_num))
+                self.update_occupied_blocks()
+                #self.update_block_info(self.blockID)
+
+                self.currentTrains[int(trainId[1:]) - 1].pop()
+                self.currentTrains[int(trainId[1:]) - 1].append(self.next_block_id + str(next_block_num))
+                
+                self.currentTrains[int(trainId[1:]) - 1][2] = speed_of_train_m - (block_length - total_dis_from_beg_of_block)
+
+                block_button = self.findChild(QPushButton, self.blockID)
+                next_button = self.findChild(QPushButton, self.next_block_id)
+
+                if block_button:
+                    # Set the color and style using setStyleSheet
+                    block_button.setStyleSheet('''
+                        QPushButton {
+                            border-style: solid;
+                            border-width: 0.5px;
+                            border-color: black;
+                            background-color: rgb(50, 205, 50);
+                        }
+                    ''')
+
+                if next_button:
+                    # Set the color and style using setStyleSheet
+                    next_button.setStyleSheet('''
+                        QPushButton {
+                            border-style: solid;
+                            border-width: 0.5px;
+                            border-color: black;
+                            background-color: orange;
+                        }
+                    ''')
+
+    def get_next_id(self, BlockNum, direction, line):
+        if line == 'Green':
+            #A1 to D13 switch block
+            if BlockNum == 1:
+                return 13
+
+            #A-C blocks, train can only come from its previous blocks, but they are in reverse number order
+            elif (BlockNum > 1) and (BlockNum <= 12):
+                return BlockNum - 1
+                
+            #D switch block
+            elif BlockNum == 13:
+                if direction == 'decreasing':
+                    return 12
+                elif direction == 'increasing':
+                    return 14
+
+            #D,E,F blocks (without the switches), bidirectional
+            elif (BlockNum > 13) and (BlockNum <= 27):
+                if direction == 'increasing':
+                    return BlockNum + 1
                 else:
-                    pass
+                    return BlockNum - 1
+                
+            #F28 switch block
+            elif BlockNum == 28:
+                if direction == 'decreasing':
+                    return 27
+                else:
+                    return 29
+                            
+            #G-I blocks, train can only come from its previous blocks
+            elif (BlockNum >= 29) and (BlockNum < 57):
+                return BlockNum + 1
+            elif BlockNum == 57:
+                return 0
+                        
+            #J Blocks are the ones we skip near the yard
+                        
+            #K-M blocks, train can only come from its previous blocks
+            elif (BlockNum >= 63) and (BlockNum <= 76):
+                return BlockNum + 1
+                        
+            elif BlockNum == 77:
+                if direction == 'increasing':
+                    return 78
+                elif direction == 'decreasing':
+                    return 101
+                
+            #Full n block, bidirectional
+            elif (BlockNum > 77) and (BlockNum <= 84):
+                if direction == 'increasing':
+                    return BlockNum + 1
+                else:
+                    return BlockNum - 1
+                    
 
-    # Adding str block id that is occupied based on failures and where the train is (might send 1) 
-    def add_block_occ(self, blockID):
-        self.block_occ_list.append(blockID)
+            #n switch on block 85, can come from N84 or Q100
+            elif BlockNum == 85:
+                if direction == 'increasing':
+                    return 86
+                elif direction == 'decreasing':
+                    return 84
+                
+            #O-Q blocks, train can only come from its previous blocks        
+            elif (BlockNum >= 86) and (BlockNum < 100):
+                return BlockNum + 1
+            
+            #Q100
+            elif BlockNum == 100:
+                return 85
 
-    def remove_block_occ(self, blockID):
-    # If exists, remove it
-        if blockID in self.block_occ_list:
-            self.block_occ_list.remove(blockID)
+            #R-Z blocks, train can only come from its previous blocks
+            elif ((BlockNum >= 101) and (BlockNum < 150)):
+                return BlockNum + 1
+
+            elif BlockNum == 150:
+                return 28
+                        
+        #Red Line                                  
+        if line == "Red":
+            #Red line train dispatch case        
+            if (BlockNum == 10):
+               return 11
+        
+
+    def get_and_set_crossing_state(self, block_num):
+        block_info = self.blockStates.get(str(block_num))
+        if block_info is not None:
+            crossing_state = block_info['crossingState']
+            return crossing_state
+        return None
 
 
-    def recieveSpecialBlocks(self, specialBlock):
+    # Recieve from Wayside
+    def receiveSpecialBlocks_SW(self, specialBlock):
+        self.blockStates = {}  # Dictionary to hold the state of each block
+
+        for block in specialBlock:
+            # Assuming 'block' has 'blockNum', 'lightState', 'crossingState', and 'switchState' attributes
+            self.blockStates[block.blockNum] = {
+                'lightState': block.lightState,
+                'crossingState': block.crossingState,
+                'switchState': block.switchState
+            }
+
+        
+
+
+
+    def receiveSpecialBlocks_HW(self, specialBlock):
         self.specialBlock_list = specialBlock
         #print("i'm getting blocks", specialBlock)
-        
 
-    #####Green Line Stations######
-    
-    #Station Glenbury - closest to Yard#
-    def station_glenbury_1(self, authority):
-        #Block ID(from yard to): Yard(J62) - K63 - K65: 50, 100, 100, 200
-        #Authority from yard(m): 450m
-        
-        self.speedLimit_m = self.speed_limit_km /1.609
-        self.speedOfTrain = self.AcutalSpeed
 
-        for block_num in range(62, 66):
-            #also dont forget to set that button orange
-            self.block_length = self.data.get_length_for_block(block_num)
-            self.block_position = self.get_block_occupancy(authority, self.speedLimit_m,self.speedOfTrain, self.block_length)
-        
-        #List of included block ID in order
-        self.blockID = ["K63", "K64", "K65"]
+    def update_ui_for_block(self, block_id):
+        # Get the block state if it exists
+        block_state = self.blockStates.get(block_id, {})
 
-        #emit signal to using self.blockID[block_position]
+        # Update light status if the block has a light
+        if block_id in self.LIGHT_BLOCKS:
+            light_state = block_state.get('lightState', 'N/A')
+            self.light_out.setText(str(light_state))
+        else:
+            self.light_out.setText('N/A')
 
-          
-    def sendBlockOcc(self):
-        self.sendBlockOcc_SW.emit(self.block_occ_list)
+        # Update crossing status if the block has a crossing
+        if block_id in self.CROSSING_BLOCKS:
+            crossing_state = block_state.get('crossingState', 'N/A')
+            self.cross_out.setText(str(crossing_state))
+        else:
+            self.cross_out.setText('N/A')
 
+        # Update switch status if the block has a switch
+        if block_id in self.SWITCH_BLOCKS:
+            switch_state = block_state.get('switchState', 'N/A')
+            self.switch_out.setText(str(switch_state))
+        else:
+            self.switch_out.setText('N/A')
 
     def load_default_track_layout(self):
         # Directly load the default track layout file
@@ -154,11 +395,9 @@ class TrackModelMain(QMainWindow):
 
     def set_clock(self, time):
         self.clock_in.display(time)
-        self.current_time = time
-        
-    #use time for calculations
-    def get_time(self):
-        return self.current_time
+
+    def get_clock(self,clock):
+        self.current_time = clock
 
     def receiveSpeedAuth_tm(self,speedAuth):
         self.trainID=speedAuth[0]
@@ -168,13 +407,25 @@ class TrackModelMain(QMainWindow):
         self.send_com_speed_tb.emit(str(self.Comm_Speed))
         self.send_authority_tb.emit(str(self.Authority))
 
-        if self.Authority == 450: #check with Abby if sent in m or what
-            self.station_glenbury_1(self.Authority)
+    def update_occupied_blocks(self):
+        occupancies = self.occupied_blocks
+        for i in self.occupied_block_failures:
+            occupancies.append(i)
 
-    #FROM TRAIN MODEL
-    def receiveSendVelocity(self, velocity):
-        self.AcutalSpeed = velocity
-        print("velocity = ", self.AcutalSpeed)
+        # Emit the updated list of occupied blocks, including those affected by failures
+        print(self.occupied_blocks)
+        self.sendBlockOcc_SW.emit(occupancies)
+
+
+    #FROM TRAIN MODEL for block occupancy
+    def receiveSendVelocity(self, train_id, velocity):
+        self.train_id = train_id
+        trainNum = int(train_id[1:])
+        thisTrain = self.currentTrains[trainNum - 1]
+
+        self.process_block(int(thisTrain[-1][1:]), train_id, velocity)
+
+        
     
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box
@@ -188,24 +439,34 @@ class TrackModelMain(QMainWindow):
         #    self.green.hide()
             
     def set_broken_rail_failure(self):
-        selected_block = self.block_in_1.currentText()
-        if selected_block:
-            button = self.findChild(QPushButton, selected_block)
+        self.selected_block = self.block_in_1.currentText()
+        if self.selected_block:
+            button = self.findChild(QPushButton, self.selected_block)
+            print(self.selected_block)
             if button:
+                self.occupied_block_failures.append(self.selected_block)
+                self.update_occupied_blocks()
                 button.setStyleSheet("background-color: grey")
+                
 
     def set_track_circuit_failure(self):
-        selected_block = self.block_in_1.currentText()
-        if selected_block:
-            button = self.findChild(QPushButton, selected_block)
+        self.selected_block = self.block_in_1.currentText()
+        if self.selected_block:
+            button = self.findChild(QPushButton, self.selected_block)
+            print(self.selected_block)
             if button:
+                self.occupied_block_failures.append(self.selected_block)
+                self.update_occupied_blocks()
                 button.setStyleSheet("background-color: yellow")
     
     def set_power_failure_func(self):
-        selected_block = self.block_in_1.currentText()
-        if selected_block:
-            button = self.findChild(QPushButton, selected_block)
+        self.selected_block = self.block_in_1.currentText()
+        if self.selected_block:
+            button = self.findChild(QPushButton, self.selected_block)
+            print(self.selected_block)
             if button:
+                self.occupied_block_failures.append(self.selected_block)
+                self.update_occupied_blocks()
                 button.setStyleSheet("background-color: tan")
 
     def reset_block_colors(self):
@@ -252,51 +513,126 @@ class TrackModelMain(QMainWindow):
 
     def block_clicked(self, block_id):
         self.block_in_1.setCurrentText(block_id)
-        self.block_in_2.setCurrentText(block_id) 
+        self.block_in_2.setCurrentText(block_id)
+        self.update_heaters_out()
 
-        #Call the update_block_info to fetch and update the UI with block data
-        self.update_block_info(block_id)
+        # Check if the block has special features and update the UI accordingly
+        if block_id in self.LIGHT_BLOCKS:
+            # Fetch the light state for this block and update the UI
+            light_state = self.blockStates.get(block_id, {}).get('lightState', 'N/A')
+            self.light_out.setText("GREEN" if light_state else "RED")
+            self.light_out.setStyleSheet("background-color: green;" if light_state else "background-color: red;")
+        else:
+            self.light_out.setText('N/A')
 
-        #Emit a signal or perform actions needed when a block is selected
-        self.block_selected_signal.emit(block_id)
+        if block_id in self.CROSSING_BLOCKS:
+            # Fetch the crossing state for this block and update the UI
+            crossing_state = self.blockStates.get(block_id, {}).get('crossingState', 'N/A')
+            self.cross_out.setText("UP" if crossing_state else "DOWN")
+        else:
+            self.cross_out.setText('N/A')
 
-    def generateTickets(self):
-        # Generate a random number between 1 and 74 for ticket sales
-        random_number = random.randint(1, 74)
-        #Output the random numberto ticket sales block info
-        self.ticket_out.setText(str(random_number))
-        self.SendTicketsales.emit([random_number])
-        
+        if block_id in self.SWITCH_BLOCKS:
+            # Fetch the switch state for this block and update the UI
+            switch_state = self.blockStates.get(block_id, {}).get('switchState', 'N/A')
+            self.switch_out.setText("LEFT" if switch_state else "RIGHT")
+        else:
+            self.switch_out.setText('N/A')
+
+
+
+        # Continue with the rest of the block_clicked functionality
+        if block_id == 'Y0':
+            # Manually set the information for the yard block
+            self.block_num_in.setText('N/A')  # Block number is 0 for the yard
+            self.section_in.setText('N/A')
+            self.speed_in.setText('0')  # Assuming speed is 0 in the yard
+            self.grade_in.setText('0')
+            self.length_in.setText('N/A')
+            self.elevation_in.setText('0')
+            self.cumm_elevation_in.setText('0')
+            self.station_in.setText('Yard')
+            self.temp_out.setText('N/A')
+            self.heaters_out.setText('N/A')
+            self.cross_out.setText('N/A')
+            self.under_out.setText('N/A')
+
+        else:
+            # Update block info for non-yard blocks
+            self.update_block_info(block_id)
+            self.block_selected_signal.emit(block_id)
+
+            if self.is_station(block_id):
+                self.currentStation = block_id
+                self.generateTickets(block_id, updateUI=True)
+            else:
+                self.currentStation = None
+                self.ticket_out.clear()
+
+
+    
+    def is_station(self, block_id):
+        # Check if the block ID is in the station lookup table
+        return block_id in self.station_lookup
+
+    # def checkGenerateTickets(self):
+    #     for block_id in self.station_lookup:
+    #         if self.is_station(block_id):
+    #             self.generateTickets(block_id)
+
+    def updateHourlyTickets(self):
+        if self.currentStation and self.is_station(self.currentStation):
+            self.generateTickets(self.currentStation, updateUI=True, forceNewNumber=True)
+
+    def generateTickets(self, block_id, updateUI=False, forceNewNumber=False):
+        if forceNewNumber or block_id not in self.lastGeneratedTickets:
+            random_number = random.randint(1, 74)
+            self.lastGeneratedTickets[block_id] = random_number
+
+        if updateUI:
+            self.ticket_out.setText(str(self.lastGeneratedTickets[block_id]))
+
+        # Emit signal only if a new number is generated
+        if forceNewNumber:
+            self.SendTicketsales.emit([block_id, self.lastGeneratedTickets[block_id]])
+
+    def get_infra_for_block(self, block_num):
+        self.station = None  # Set to None initially to clearly see if it gets changed
+        self.block_num = str(block_num)
+
+        if self.block_num == "A2":
+            self.station = "PIONEER"
+        elif self.block_num == "C9":
+            self.station = "EDGEBROOKE"
+        elif self.block_num == "D16":
+            self.station = "STATION"
+        elif self.block_num == "DF22":
+            self.station = "WHITED"
+        elif self.block_num == "G31":
+            self.station = "SOUTH BANK"
+        elif self.block_num == "I39" or self.block_num == "W141":
+            self.station = "CENTRAL"
+        elif self.block_num == "I48" or self.block_num == "W132":
+            self.station = "INGLEWOOD"
+        elif self.block_num == "I57" or self.block_num == "W123":
+            self.station = "OVERBROOK"
+        elif self.block_num == "K65" or self.block_num == "U114":
+            self.station = "GLENBURY"
+        elif self.block_num == "L73" or self.block_num == "T105":
+            self.station = "DORMONT"
+        elif self.block_num == "N77":
+            self.station = "MT LEBANON"
+        elif self.block_num == "O88":
+            self.station = "POPLAR"
+        elif self.block_num == "P96":
+            self.station = "CASTLE SHANNON"
+        else:
+            self.station = ""  
+
     
     #set temperature
     def set_temp(self, temp):
         pass
-
-    #use global clock
-    def clock(self):
-        pass
-
-    #failures:
-    def set_broken(broke):
-        broken = broke
-        #send occupancies
-
-    def set_track_circuit(fail1):
-        track_circuit = fail1
-        #send occupancies
-
-    def set_power_fail(fail2):
-        power_fail = fail2
-        #send occupancies
-
-    def get_broken(self):
-        return self.broken
-
-    def get_track_circuit(self):
-        return self.track_circuit
-
-    def get_power_fail(self):
-        return self.power_fail
 
 
     #This function is a starter connector to UI from tb for ticket sales
@@ -355,6 +691,15 @@ class TrackModelMain(QMainWindow):
         # From dropdown of "B#" take out the letter B
         block_num = int(block_text.split()[-1][1:])  
 
+
+        #Check if block is occupied currently
+        isOccupied = "False"
+        for i in self.occupied_blocks:
+            if i == block_text:
+                isOccupied = "True"
+
+        self.occupancy_in.setText(isOccupied)
+
         # Get certain data from specific block
         self.elevation_m = self.data.get_elevation_for_block(block_num)
         self.grade = self.data.get_grade_for_block(block_num)
@@ -363,6 +708,7 @@ class TrackModelMain(QMainWindow):
         self.section = self.data.get_section_for_block(block_num)
         self.speed_limit_km = self.data.get_speed_for_block(block_num)
         self.cumm_elevation_m = self.data.get_cumm_ele_for_block(block_num)
+        self.get_infra_for_block(block_text)
 
         # Math conversion from metric to imperial for track length, speed limit, and elevation.
         elevation_ft = self.elevation_m * 3.28084
@@ -385,6 +731,7 @@ class TrackModelMain(QMainWindow):
         self.block_num_in.setText(str(block_num))
         self.section_in.setText(str(self.section))
         self.speed_in.setText(speed_limit_str)
+        self.station_in.setText(self.station)
 
         # Emit the grade signal with the grade value (sig)
         self.grade_signal.emit(self.grade)
@@ -574,9 +921,6 @@ class TrackModel_tb(QMainWindow):
         # Set the text to the output text
         self.power_block_out.setText(power1)
 
-    def update_on_block_selection(self, selected_block):
-        pass
-    
 #My data class containing data from excel 
 class Data:
     def __init__(self):
@@ -721,18 +1065,6 @@ class Data:
                     return row['CUMALTIVE ELEVATION (M)']
         return None  # Return None if block number is not found or there is nothing in the Dataframe
     
-    #receive speed
-    def recieveSpeedAuthority(data):#block
-        pass
-
-    #function to send commanded speed to train model
-    def send_commandedSpeed(void):
-        pass
-
-    #function to send authority to train model
-    def send_Authority(void):
-        pass
-    
     #function to update light status from wayside
     def updateSpecialBlocks(data):
         pass
@@ -743,12 +1075,6 @@ class Data:
         #station
         pass
 
-    #calculate where train is/occupancies
-    def set_occupancies(self):
-        pass
-
-    def send_occupancies(self):
-        pass
 
 # class for fault table per block
 class TrackFaultTable(QAbstractTableModel):
@@ -780,7 +1106,6 @@ if __name__ == "__main__":
     # Connect TrackModelMain's method to emit the grade to TestBench's slot to update the grade label
     window.grade_signal.connect(window_2.update_grade_label)
 
-    window.block_selected_signal.connect(window_2.update_on_block_selection)
     window.show()
     window_2.show()
 

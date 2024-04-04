@@ -13,15 +13,17 @@ def newParse(occupiedBlockSections, allBlocks):
     fileObject = open("Wayside_HW/testOtherPLC.txt", "r")
     PLCfile = fileObject.read()
     allLines = PLCfile.split('\n')
-
+    
     for line in allLines:
         tempLine = line.split(" ")
-        if tempLine[0] == 'IF':
+        if tempLine[0] == 'IF' and tempLine[1] != 'ANY':
             logicFlag = 0
             for section in tempLine:
                 if section in occupiedBlockSections:
                     logicFlag = 1
                     break
+        elif tempLine[0] == 'IF' and tempLine[1] == 'ANY':
+            logicFlag = 1
 
         elif tempLine[0] == 'SWITCH' or tempLine[0] == 'LIGHT' or tempLine[0] == 'CROSSING':
             if logicFlag == 1:
@@ -39,8 +41,3 @@ def newParse(occupiedBlockSections, allBlocks):
             logicFlag = not logicFlag
 
     return allBlocks
-                        
-
-
-
-

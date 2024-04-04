@@ -58,9 +58,9 @@ class Vital_Speed_Auth():
         speed_limit = self.ui.lcdSpdLim.value()
         cmd_speed = self.ui.lcdCmdSpd.value()
         
-        if(not(self.ui.lcdAuth.value() <= 0) and not(self.ui.lcdCurSpd.value == 0)):
-            self.ui.lcdAuth.display(self.ui.lcdAuth.value() - int(self.rate*self.time)) #auth = auth - rate*time
+        if(not(self.decimal_m_auth <= 0) and not(self.ui.lcdCurSpd.value == 0)):
             self.decimal_m_auth = self.decimal_m_auth - float(self.rate_metric*self.time)
+            self.ui.lcdAuth.display(round(self.decimal_m_auth))
             
             # if self.ui.lcdAuth.value() > 0:
 
@@ -71,15 +71,20 @@ class Vital_Speed_Auth():
 
             self.AuthM = self.decimal_m_auth
     
-            #current speed in m/mss from mph
-            self.V_i = self.ui.lcdCurSpd.value()*0.00044704
+            #current speed in m/ms from mph
+            self.V_i = (self.ui.lcdCurSpd.value()*0.00044704)
 
             #from top speed (70kph) it takes 157.535288067 m to stop with the service brake
             #from top speed (70kph) it takes 70.0156835852 m to stop with the emergency brake
 
+        
             #if self.stopcal == True:
-            self.stoppingdistanceService = (self.V_i**2)/(2*0.0012)
-            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*0.00273)
+            self.stoppingdistanceService = (self.V_i**2)/(2*0.0000012) 
+            print("Dist Service : ", self.stoppingdistanceService)
+            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*0.00000273) 
+            print("E Stop: ", self.stoppubgdistanceEmergency)
+
+
                 
             if self.AuthM <= self.stoppubgdistanceEmergency:
                 self.ui.vertSliderBrk.setValue(0)

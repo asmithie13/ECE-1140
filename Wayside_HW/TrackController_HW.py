@@ -2,13 +2,18 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
+import time
+import serial
 import sys
 import os
 import re
 
-#Using Block Class as a seperate file
+#Using Block Class as a seperate file:
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
+
+#Enable serial communication:
+#serialObject = serial.Serial('COM8', 9600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -27,12 +32,20 @@ class TrackController_HW(QMainWindow):
         super(TrackController_HW, self).__init__()
         uic.loadUi("Wayside_HW/TrackController_HW.ui", self)
 
+        #Constant lists for blocks affected based on light color:
+        self.LIGHT_A1 = ['A1', 'A2']
+        self.LIGHT_C12 = ['C12', 'D13']
+        self.LIGHT_G29 = ['F26', 'F27', 'F28', 'G29']
+        self.LIGHT_Z150 = ['Y148', 'Y149', 'Z150']
+
         #Disable manual mode operations, as program begins in automatic operation:
         self.groupBoxManual.setEnabled(False)
 
         #Initialize an empty list to hold all blocks:
-        self.allTripleIDs = []
+        self.allTripleIDs = [] #This is unused
         self.allBlocks = readTrackFile("Wayside_HW/greenLine.csv", self.allTripleIDs)
+        for block in self.allBlocks:
+            block.Wayside = "WI"
 
         #Initialize a flag integer to determine which mode the system is currently in:
         self.modeFlag = 0 #0 = Automatic, 1 = Manual, 2 = Maintenance
@@ -54,12 +67,19 @@ class TrackController_HW(QMainWindow):
         self.pushButtonDown.clicked.connect(self.setCrossingDown)
     
     def modeHandler(self, occupiedBlocks):
-        self.occupiedBlocks = occupiedBlocks
-        self.listOccIDs
-        for block in occupiedBlocks:
-            self.listOccIDs.append(block.ID)
-        
+        self.listOccIDs = occupiedBlocks
+        self.occupiedBlocks = []
         for block in self.allBlocks:
+            if block.ID in self.listOccIDs:
+                self.occupiedBlocks.append(block)
+
+        for block in self.allBlocks:
+            if block.ID in self.listOccIDs:
+                block.occupied = 1
+            else:
+                block.occupied = 0
+        
+        for block in self.occupiedBlocks:
             if block.ID in self.listOccIDs:
                 block.occupied = 1
             else:
@@ -121,16 +141,50 @@ class TrackController_HW(QMainWindow):
                 occupiedBlockSections.append(block.blockSection)
         occupiedBlockSections.sort()
 
-        #Pare PLC file and adjust blocks accordingly:
-        self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
-    
-        #TO-DO HERE:
-        #-Adjust block-wise authority based on lights and collisions
-        #-Move parser to RPi
-        #-Ensure vitality (Run calculation two/three times and compare)
+        #Send string with flag at end to send block occupancies serially:
+        occupiedBlockString = ""
+        for section in occupiedBlockSections:
+            occupiedBlockString += section
+        occupiedBlockString += '1'
+        occupiedBlockBytes = occupiedBlockString.encode()
 
-        self.sendUpdatedBlocks.emit(self.allBlocks)
+        '''BEGIN SERIAL COMMUNICATION'''
+        #serialObject.write(occupiedBlockBytes)
+        #Receiving serial responses from the Raspberry Pi:
+        '''copyBlocks = self.allBlocks
+        attributeList = []
+        while True:
+            if serialObject.in_waiting > 0:
+                myAttribute = serialObject.read(serialObject.in_waiting).decode('utf-8')
+                if myAttribute == 'A':
+                    break
+                else:
+                    attributeList.append(myAttribute)'''
         
+        #Parse PLC file and adjust blocks accordingly:
+        self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
+        attributeListSoftware = []
+        for block in self.allBlocks:
+            if block.LIGHT == True:
+                attributeListSoftware.append(str(block.lightState))
+            elif block.SWITCH == True:
+                attributeListSoftware.append(str(block.switchState))
+            elif block.CROSSING == True:
+                attributeListSoftware.append(str(block.crossingState))
+
+        '''if attributeList != attributeListSoftware:
+            self.lineEditHardware.setText("ERRORS DETECTED. STOPPING ALL TRAINS.")
+            for block in self.allBlocks:
+                block.authority = False
+                self.sendUpdatedBlocks.emit(self.allBlocks)
+        else:
+            #Ajust block-wise authority based on active red lights:
+            self.updateBooleanAuth()
+            self.sendUpdatedBlocks.emit(self.allBlocks) #Change argument to copyBlocks for presentation'''
+        
+        self.updateBooleanAuth() #Uncomment when hardware is not connected
+        #self.preventCollision()
+        self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)
@@ -210,6 +264,9 @@ class TrackController_HW(QMainWindow):
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
                 block.lightState = False
                 break
+
+        #Ajust block-wise authority based on active red lights:
+        self.updateBooleanAuth()
         self.sendUpdatedBlocks.emit(self.allBlocks)
 
         self.pushButtonGreen.setEnabled(True)
@@ -224,6 +281,9 @@ class TrackController_HW(QMainWindow):
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
                 block.lightState = True
                 break
+
+        #Ajust block-wise authority based on active red lights:
+        self.updateBooleanAuth()
         self.sendUpdatedBlocks.emit(self.allBlocks)
 
         self.pushButtonRed.setEnabled(True)
@@ -291,3 +351,70 @@ class TrackController_HW(QMainWindow):
     
     def handleSpeedAuthority(self, receivedSpeedAuthority):
         self.sendSpeedAuthority.emit(receivedSpeedAuthority) #Pass-on distance-wise authority straight to train controller without changing
+    
+    def updateBooleanAuth(self):
+        #Ajust block-wise authority based on active red lights:
+        for block in self.allBlocks:
+            if block.ID == 'A1':
+                tempA1 = block.lightState
+            elif block.ID == 'C12':
+                tempC12 = block.lightState
+            elif block.ID == 'G29':
+                tempG29 = block.lightState
+            elif block.ID == 'Z150':
+                tempZ150 = block.lightState
+        
+        if tempA1 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_A1:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_A1:
+                    block.authority = True
+        
+        if tempC12 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_C12:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_C12:
+                    block.authority = True
+        
+        if tempG29 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_G29:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_G29:
+                    block.authority = True
+        
+        if tempZ150 == False:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_Z150:
+                    block.authority = False
+        else:
+            for block in self.allBlocks:
+                if block.ID in self.LIGHT_Z150:
+                    block.authority = True
+    
+    '''def preventCollision(self):
+        oneDirectionOne = ['A', 'B', 'C'] #Blocks where a train coming from behind is at an index GREATER than the train-in front in self.allBlocks
+        oneDirectionTwo = ['G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] #Blocks where a train coming from behind is at an index LOWER than the train-in front in self.allBlocks
+        twoDirection = ['D', 'E', 'F',] #Bi-directional track
+
+        tempSkip = []
+        for index, block in enumerate(self.allBlocks):
+            if block.blockSection in oneDirectionOne:
+                if block.ID in self.listOccIDs:
+                    self.allBlocks[index+1].authority = False
+                    tempSkip.append(self.allBlocks[index+1].ID)
+                    self.allBlocks[index+2].authority = False
+                    tempSkip.append(self.allBlocks[index+2].ID)
+                    self.allBlocks[index+3].authority = False
+                    tempSkip.append(self.allBlocks[index+3].ID)
+                else:
+                    if block.ID not in tempSkip and block.ID not in self.LIGHT_A1 and block.ID not in self.LIGHT_C12 and block.ID not in self.LIGHT_G29 and block.ID not in self.LIGHT_Z150:
+                        block.authority = True'''

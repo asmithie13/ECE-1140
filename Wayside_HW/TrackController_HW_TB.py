@@ -52,7 +52,7 @@ class TrackController_HW_TB(QMainWindow):
         currentBlockStr = self.comboBoxOccupancies.currentText()
         for block in self.allBlocks:
             if block.ID == currentBlockStr:
-                self.occupiedBlocks.append(block)
+                self.occupiedBlocks.append(block.ID)
                 break
         self.occupiedBlocksSignal.emit(self.occupiedBlocks)
     
@@ -114,7 +114,7 @@ class TrackController_HW_TB(QMainWindow):
             if tempBlock.switchState == False:
                 self.lineEditSwitch.setText("RIGHT")
             else:
-                self.lineEditSwitch.setText("LIGHT")
+                self.lineEditSwitch.setText("LEFT")
         
         if tempBlock.CROSSING == False:
             self.lineEditCrossing.setText("-")
@@ -124,4 +124,5 @@ class TrackController_HW_TB(QMainWindow):
             else:
                 self.lineEditCrossing.setText("UP")
 
+        self.lineEditBooleanAuth.setText(str(tempBlock.authority))
    

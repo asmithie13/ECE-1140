@@ -23,6 +23,12 @@ from Wayside_HW.TrackController_HW_TB import *
 import Track_Model
 from Track_Model.TrackModel import *
 
+
+# #Train Model Imports
+# import Train_Model
+# from Train_Model.app_trainmodel_ui import *
+# from Train_Model.app_trainmodel_tb import *
+
 #Train Model Imports
 import Train_Model
 from Train_Model.app_trainmodel_ui import *
@@ -169,7 +175,6 @@ if __name__ == "__main__":
     MainWindow.WaysideSWwindow.sendSpecialBlocks.connect(MainWindow.WaysideSW_tb.updateBlockStates)
     MainWindow.WaysideSWwindow.changeModeSend.connect(MainWindow.WaysideSW_tb.receiveMode)
     MainWindow.WaysideSWwindow.sendAllBlocks.connect(MainWindow.WaysideSW_tb.receiveBlocks)
-    MainWindow.WaysideSWwindow.sendTrainSpeedAuth.connect(MainWindow.WaysideSW_tb.displaySpeedAuth)
     MainWindow.WaysideSW_tb.OccBlocksChanged.connect(MainWindow.WaysideSWwindow.updateBlocks)
     MainWindow.WaysideSW_tb.tbChangeMode.connect(MainWindow.WaysideSWwindow.changeMode)
     MainWindow.WaysideSW_tb.ctcIDSpeedAuthority.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
@@ -181,7 +186,7 @@ if __name__ == "__main__":
 
     #Wayside to Track Model
     MainWindow.WaysideSWwindow.sendTrainSpeedAuth.connect(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
-    MainWindow.WaysideSWwindow.sendAllBlocks.connect(MainWindow.TrackModelWindow.recieveSpecialBlocks)
+    MainWindow.WaysideSWwindow.sendAllBlocks.connect(MainWindow.TrackModelWindow.receiveSpecialBlocks_SW)
 
     """Wayside HW Signals"""
     MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.WaysideHW_tb.receiveOccupiedBlocks)
@@ -196,17 +201,23 @@ if __name__ == "__main__":
 
     #Wayside HW to Track Model:
     MainWindow.WaysideHWwindow.sendSpeedAuthority.connect(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
+    MainWindow.WaysideHWwindow.sendUpdatedBlocks.connect(MainWindow.TrackModelWindow.receiveSpecialBlocks_HW)
 
     """Track Model Signals"""
     MainWindow.TrackModelWindow.send_com_speed_tb.connect(MainWindow.TrackModel_tb.update_commanded_speed)
     MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.update_authority)
+
+    #Track Model to Wayside_SW
+    MainWindow.TrackModelWindow.sendBlockOcc_SW.connect(MainWindow.WaysideSWwindow.updateBlocks)    # Move the sim_time instance to the new thread
+    
 
 
     # SimulationTime Setup
     sim_time = SimulationTime()  # Ensure this class inherits from QObject
     sim_thread = QtCore.QThread()  # Create a new QThread
 
-    # Move the sim_time instance to the new thread
+    
+    
     sim_time.moveToThread(sim_thread)
 
     # Connect the sim_time's start method to the thread's started signal

@@ -147,7 +147,6 @@ class TrackController_HW(QMainWindow):
             occupiedBlockString += section
         occupiedBlockString += '1'
         occupiedBlockBytes = occupiedBlockString.encode()
-        serialObject.write(occupiedBlockBytes)
 
         '''BEGIN SERIAL COMMUNICATION'''
         serialObject.write(occupiedBlockBytes)

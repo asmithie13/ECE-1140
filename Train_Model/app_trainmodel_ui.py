@@ -510,7 +510,7 @@ class TrainCalculations:
 
         self.main_window.Acc_Velo_value_lcd.display(int(self.main_window.velocity))
         self.TC.curr_spd_sig.emit(int(self.main_window.velocity))
-        self.main_window.track_model_acc_velo.emit(int(self.main_window.velocity),str(self.main_window.TrainID))
+        self.main_window.track_model_acc_velo.emit(str(self.main_window.TrainID),int(self.main_window.velocity))
         
         return int(self.main_window.velocity)
         

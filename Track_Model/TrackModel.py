@@ -141,14 +141,15 @@ class TrackModelMain(QMainWindow):
             self.currentTrains.append([trainID, line, 0, 'increasing', 'K63'])
             self.occupied_blocks.append('K63')
             self.update_occupied_blocks()
-            self.K63.setStyleSheet('''
-                QPushButton {
-                    border-style: solid;
-                    border-width: 0.5px;
-                    border-color: black;
-                    background-color: orange;
-                }
-            ''')
+            # for i in self.occupied_blocks:
+            #     self.occupied_blocks.setStyleSheet('''
+            #         QPushButton {
+            #             border-style: solid;
+            #             border-width: 0.5px;
+            #             border-color: black;
+            #             background-color: orange;
+            #         }
+            #     ''')
         elif line == "Red":
             self.currentTrains.append([trainID, line, 0, 'increasing', 'D10'])
 
@@ -160,7 +161,7 @@ class TrackModelMain(QMainWindow):
         self.temp_out.setText(f"{temp_value}°")
 
         # Update the heaters_out label based on the temperature
-        if temp_value <= 39.6:
+        if temp_value <= 32:
             self.heaters_out.setText("ON")
         else:
             self.heaters_out.setText("OFF")
@@ -212,30 +213,15 @@ class TrackModelMain(QMainWindow):
                 
                 self.currentTrains[int(trainId[1:]) - 1][2] = speed_of_train_m - (block_length - total_dis_from_beg_of_block)
 
-                block_button = self.findChild(QPushButton, self.blockID)
-                next_button = self.findChild(QPushButton, self.next_block_id)
-
-                if block_button:
-                    # Set the color and style using setStyleSheet
-                    block_button.setStyleSheet('''
-                        QPushButton {
-                            border-style: solid;
-                            border-width: 0.5px;
-                            border-color: black;
-                            background-color: rgb(50, 205, 50);
-                        }
-                    ''')
-
-                if next_button:
-                    # Set the color and style using setStyleSheet
-                    next_button.setStyleSheet('''
-                        QPushButton {
-                            border-style: solid;
-                            border-width: 0.5px;
-                            border-color: black;
-                            background-color: orange;
-                        }
-                    ''')
+    # def update_ui_for_blocks(self):
+    #     for block_id, button in self.block_buttons.items():
+    #         if block_id in self.occupied_blocks:
+    #             # This block is currently occupied by the train, so set it to orange
+    #             button.setStyleSheet("background-color: orange;")
+    #         else:
+    #             # This block is not occupied by the train, set it to the default color
+    #             button.setStyleSheet("background-color: rgb(50, 205, 50);")
+     
 
     def get_next_id(self, BlockNum, direction, line):
         if line == 'Green':

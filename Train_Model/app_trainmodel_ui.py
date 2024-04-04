@@ -105,6 +105,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.emergency_stop_state=False
 
     def Set_Train_ID(self,TrainID):
+        self.Train_ID=TrainID
         self.Train_ID_Label.setText(str(TrainID))
 
 
@@ -510,7 +511,7 @@ class TrainCalculations:
 
         self.main_window.Acc_Velo_value_lcd.display(int(self.main_window.velocity))
         self.TC.curr_spd_sig.emit(int(self.main_window.velocity))
-        self.main_window.track_model_acc_velo.emit(int(self.main_window.velocity))
+        self.main_window.track_model_acc_velo.emit(int(self.main_window.velocity),str(self.main_window.TrainID))
         
         return int(self.main_window.velocity)
         

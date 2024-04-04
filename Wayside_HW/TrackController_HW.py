@@ -111,7 +111,7 @@ class TrackController_HW(QMainWindow):
             if block.ID not in self.listOccIDs:
                 self.listOccIDs.append(block.ID)
                 self.occupiedBlocks.append(block)
-        self.modeHandler(self.occupiedBlocks)
+        self.modeHandler(self.listOccIDs)
 
     def manualMode(self):
         self.modeFlag = 1

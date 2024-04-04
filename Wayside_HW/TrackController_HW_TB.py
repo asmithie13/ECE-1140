@@ -126,3 +126,4 @@ class TrackController_HW_TB(QMainWindow):
 
         self.lineEditBooleanAuth.setText(str(tempBlock.authority))
    
+   

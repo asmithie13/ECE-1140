@@ -153,6 +153,7 @@ class TrackController_HW(QMainWindow):
         #Receiving serial responses from the Raspberry Pi:
         copyBlocks = self.allBlocks
         attributeList = []
+        
         while True:
             if serialObject.in_waiting > 0:
                 myAttribute = serialObject.read(serialObject.in_waiting).decode('utf-8')

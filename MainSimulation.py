@@ -207,13 +207,12 @@ if __name__ == "__main__":
     #Track Model to Wayside_SW
     MainWindow.TrackModelWindow.sendBlockOcc_SW.connect(MainWindow.WaysideSWwindow.updateBlocks)    # Move the sim_time instance to the new thread
     
-
+    #Track Model to Wayside_HW
+    MainWindow.TrackModelWindow.sendBlockOcc_HW.connect(MainWindow.WaysideHWwindow.modeHandler)
 
     # SimulationTime Setup
     sim_time = SimulationTime()  # Ensure this class inherits from QObject
     sim_thread = QtCore.QThread()  # Create a new QThread
-
-    
     
     sim_time.moveToThread(sim_thread)
 

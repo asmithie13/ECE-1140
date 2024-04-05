@@ -80,9 +80,9 @@ class Vital_Speed_Auth():
         
             #if self.stopcal == True:
             self.stoppingdistanceService = (self.V_i**2)/(2*0.0000012) 
-            print("Dist Service : ", self.stoppingdistanceService)
+            #print("Dist Service : ", self.stoppingdistanceService)
             self.stoppubgdistanceEmergency = (self.V_i**2)/(2*0.00000273) 
-            print("E Stop: ", self.stoppubgdistanceEmergency)
+            #print("E Stop: ", self.stoppubgdistanceEmergency)
 
 
                 

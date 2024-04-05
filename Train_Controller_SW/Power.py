@@ -26,7 +26,7 @@ class Vital_Power():
         self.curr_power_sig = curr_power_sig
 
 
-        #self.ser = serial.Serial('COM6', 57600)  # Replace 'COM6' with your actual port name
+        #self.ser = serial.Serial('COM5', 57600)  # Replace 'COM6' with your actual port name
 
     def Control_Ki(self):
             self.ui.lcdKi.display(self.ui.inputKi.value())
@@ -38,7 +38,7 @@ class Vital_Power():
 
     def Set_Clock(self, time):
          self.local_clock = time
-
+    
     def calculate_power(self):
         if self.ui.Ebrake.isChecked():
            self.power = 0
@@ -127,7 +127,8 @@ class Vital_Power():
             self.ui.lcdPowOut.display(self.ui.vertSliderPow.value())
             self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
             self.ui.lcdAcel.display(self.power)
-            self.curr_power_sig.emit(int(self.power))"""
+            self.curr_power_sig.emit(int(self.power))
+            """
 
     def Control_Accelleration(self):
         self.ui.lcdPowOut.display(self.ui.vertSliderPow.value())

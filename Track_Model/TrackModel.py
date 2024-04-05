@@ -414,7 +414,7 @@ class TrackModelMain(QMainWindow):
             print("")
 
     def set_clock(self, time):
-        self.clock_in.display(time)
+        self.clock_in.display(time[0:5])
         parts = time.split(':')
         hours, minutes = int(parts[0]), int(parts[1])
         seconds, ms = map(int, parts[2].split('.'))

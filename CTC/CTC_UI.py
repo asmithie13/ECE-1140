@@ -86,10 +86,13 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.DestinationLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ArrivalTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.MaualDispatchBox.setStyleSheet("color: rgb(120, 120, 120);")
+        #Muting Add Train Button
+        self.AddTrainButton.setStyleSheet("background-color : rgb(138, 237, 119)")             #Muted Green
 
         #Disabling Auto Mode select schedule button until auto mode is selected
         self.UploadButton.setEnabled(False)
         self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
+        self.UploadButton.setStyleSheet("background-color : rgb(138, 237, 119)")               #Muted Green
         
         #Initializing Maintenance Mode functions before Mainenance Mode has been selected
         self.inMaintenance = False
@@ -105,6 +108,11 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ChooseSwitchLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.SwitchPositionLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.MaintenanceBox.setStyleSheet("color: rgb(120, 120, 120);")
+        #Muting button colors
+        self.CloseBlockButton.setStyleSheet("background-color: rgb(245, 144, 158)")            #Muted red
+        self.ReopenBlockButton.setStyleSheet("background-color : rgb(138, 237, 119)")          #Muted Green
+        self.SetSwitchPositionButton.setStyleSheet("background-color: rgb(245, 144, 158)")     #Muted Red
+        self.ReleaseSwitchButton.setStyleSheet("background-color : rgb(138, 237, 119)")        #Muted Green
         #Seting the Swith Position Drop Down
         self.ChooseSwitchSelect.currentIndexChanged.connect(self.newSwitchSelected)
         
@@ -212,8 +220,8 @@ class CTC_UI(QtWidgets.QMainWindow):
         AverageSales = [0, 0]
         print(TicketSales)
 
-        AverageSales[0] = sum(TicketSales[0])/len(TicketSales[0])
-        AverageSales[1] = sum(TicketSales[1])/len(TicketSales[1])
+        AverageSales[0] = sum(TicketSales[0])
+        AverageSales[1] = sum(TicketSales[1])
 
         self.updateTicketSales(AverageSales)
 
@@ -222,7 +230,7 @@ class CTC_UI(QtWidgets.QMainWindow):
     def selectManualMode_button(self):
         #Disable Manual Mode button because there's no need to select it twice
         self.ManualModeButton.setEnabled(False)
-        self.ManualModeButton.setStyleSheet("background-color : blue; color: black;")
+        self.ManualModeButton.setStyleSheet("background-color : rgb(142, 140, 237); color: black;")
 
         self.TrainNameSelect.setEnabled(True)
         self.TrainNameSelect.clear()
@@ -254,7 +262,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Highlight Auto selected and disable manual select button
         self.AutoModeButton.setEnabled(False)
-        self.AutoModeButton.setStyleSheet("background-color : blue; color: black;")
+        self.AutoModeButton.setStyleSheet("background-color : rgb(142, 140, 237); color: black;")
         self.ManualModeButton.setEnabled(False)
         self.ManualModeButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
 
@@ -366,7 +374,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.inMaintenance = True
         
         #Set button color to blue to indicate selection
-        self.MaintenanceModeButton.setStyleSheet("background-color : blue; color: black;")
+        self.MaintenanceModeButton.setStyleSheet("background-color : rgb(113, 110, 250); color: black;")
 
         #Enable Maintenance Mode functions
         self.CloseBlockSelect.setEnabled(True)

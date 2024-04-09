@@ -127,7 +127,8 @@ class Vital_Power():
             self.ui.lcdPowOut.display(self.ui.vertSliderPow.value())
             self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
             self.ui.lcdAcel.display(self.power)
-            self.curr_power_sig.emit(int(self.power))"""
+            self.curr_power_sig.emit(int(self.power))
+    """
 
     def Control_Accelleration(self):
         self.ui.lcdPowOut.display(self.ui.vertSliderPow.value())

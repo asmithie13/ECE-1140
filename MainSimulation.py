@@ -46,7 +46,6 @@ def pauseSim(MainWindow,sim_time):
     else:
         sim_time.pause(0)
         MainWindow.PauseButton.setText("Pause Simulation")
-        
 
 def update_time_slot(time_str):
     MainWindow.CTCwindow.displayClock(time_str)

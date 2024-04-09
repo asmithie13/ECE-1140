@@ -83,7 +83,7 @@ class Vital_Power():
         self.ui.lcdAcel.display(self.power)
         self.curr_power_sig.emit(int(self.power))
         
- """
+    """
     def calculate_power(self):
         if self.ui.Ebrake.isChecked():
            self.power = 0

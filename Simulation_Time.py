@@ -9,7 +9,7 @@ class SimulationTime(QObject):
         self.sim_speed_factor = 1.0
         self.simulation_elapsed = 0
         self.last_update_time = QtCore.QDateTime.currentDateTime()
-        self.running = True
+        self.running = False
         self.start_time = QtCore.QDateTime(QtCore.QDate(1970, 1, 1), QtCore.QTime(0, 0, 0, 0))
 
 
@@ -20,6 +20,7 @@ class SimulationTime(QObject):
         self.running = not pause
 
     def start(self):
+        self.running = True
         self.updatetime()
         
     def updatetime(self):

@@ -149,7 +149,7 @@ class TrackController_HW(QMainWindow):
         occupiedBlockBytes = occupiedBlockString.encode()
 
         '''BEGIN SERIAL COMMUNICATION'''
-        serialObject.write(occupiedBlockBytes)
+        '''serialObject.write(occupiedBlockBytes)
         #Receiving serial responses from the Raspberry Pi:
         copyBlocks = self.allBlocks
         attributeList = []
@@ -164,10 +164,10 @@ class TrackController_HW(QMainWindow):
                 break
             else:
                 attributeList.append(letter)
-        
+        '''
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
-        attributeListSoftware = []
+        '''attributeListSoftware = []
         for block in self.allBlocks:
             if block.LIGHT == True:
                 attributeListSoftware.append(str(block.lightState))
@@ -184,11 +184,11 @@ class TrackController_HW(QMainWindow):
         else:
             #Ajust block-wise authority based on active red lights:
             self.updateBooleanAuth()
-            self.sendUpdatedBlocks.emit(self.allBlocks)
+            self.sendUpdatedBlocks.emit(self.allBlocks)'''
         
-        #self.updateBooleanAuth() #Uncomment when hardware is not connected
+        self.updateBooleanAuth() #Uncomment when hardware is not connected
         #self.preventCollision()
-        #self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
+        self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)

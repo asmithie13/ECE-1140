@@ -13,7 +13,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 #Enable serial communication:
-serialObject = serial.Serial('COM8', 57600)
+#serialObject = serial.Serial('COM8', 57600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -154,10 +154,10 @@ class TrackController_HW(QMainWindow):
         copyBlocks = self.allBlocks
         attributeList = []
         
-        while True:
-            if serialObject.in_waiting > 0:
-                myAttribute = serialObject.read(serialObject.in_waiting).decode('utf-8')
-                break
+        # while True:
+        #     if serialObject.in_waiting > 0:
+        #         myAttribute = serialObject.read(serialObject.in_waiting).decode('utf-8')
+        #         break
         
         for letter in myAttribute:
             if letter == 'A':
@@ -176,7 +176,7 @@ class TrackController_HW(QMainWindow):
             elif block.CROSSING == True:
                 attributeListSoftware.append(str(block.crossingState))
 
-        if attributeList != attributeListSoftware:
+        # if attributeList != attributeListSoftware:
             self.lineEditHardware.setText("ERRORS DETECTED. STOPPING ALL TRAINS.")
             for block in self.allBlocks:
                 block.authority = False

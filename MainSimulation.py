@@ -41,7 +41,7 @@ from Simulation_Time import *
 #Pauses simulation as a toggle function from button on the main UI
 def pauseSim(MainWindow,sim_time):
 
-    if MainWindow.PauseButton.text() == "Start":
+    if MainWindow.PauseButton.text() == "Start Simulation":
         sim_time.start()
         MainWindow.PauseButton.setText("Pause Simulation")
     elif MainWindow.PauseButton.isChecked():

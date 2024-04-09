@@ -13,7 +13,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 #Enable serial communication:
-serialObject = serial.Serial('COM8', 57600)
+#serialObject = serial.Serial('COM8', 57600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -149,21 +149,21 @@ class TrackController_HW(QMainWindow):
         occupiedBlockBytes = occupiedBlockString.encode()
 
         '''BEGIN SERIAL COMMUNICATION'''
-        serialObject.write(occupiedBlockBytes)
-        #Receiving serial responses from the Raspberry Pi:
-        copyBlocks = self.allBlocks
-        attributeList = []
+        # serialObject.write(occupiedBlockBytes)
+        # #Receiving serial responses from the Raspberry Pi:
+        # copyBlocks = self.allBlocks
+        # attributeList = []
         
-        while True:
-            if serialObject.in_waiting > 0:
-                myAttribute = serialObject.read(serialObject.in_waiting).decode('utf-8')
-                break
+        # while True:
+        #     if serialObject.in_waiting > 0:
+        #         myAttribute = serialObject.read(serialObject.in_waiting).decode('utf-8')
+        #         break
         
-        for letter in myAttribute:
-            if letter == 'A':
-                break
-            else:
-                attributeList.append(letter)
+        # for letter in myAttribute:
+        #     if letter == 'A':
+        #         break
+        #     else:
+        #         attributeList.append(letter)
         
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
@@ -176,7 +176,7 @@ class TrackController_HW(QMainWindow):
             elif block.CROSSING == True:
                 attributeListSoftware.append(str(block.crossingState))
 
-        if attributeList != attributeListSoftware:
+        # if attributeList != attributeListSoftware:
             self.lineEditHardware.setText("ERRORS DETECTED. STOPPING ALL TRAINS.")
             for block in self.allBlocks:
                 block.authority = False

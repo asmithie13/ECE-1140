@@ -11,7 +11,7 @@ class SimulationTime(QObject):
         self.last_update_time = QtCore.QDateTime.currentDateTime()
         self.running = False
         self.start_time = QtCore.QDateTime(QtCore.QDate(1970, 1, 1), QtCore.QTime(0, 0, 0, 0))
-        self.updatetime
+        
 
     def set_sim_speed(self, speed):
         self.sim_speed_factor = speed
@@ -21,12 +21,11 @@ class SimulationTime(QObject):
 
     def start(self):
         self.running = True
-        #self.updatetime()
+        self.updatetime()
         
     def updatetime(self):
     # Set starting point to a QDateTime object representing midnight with no date (time only)
         while self.running:
-            print("clock_running")
             current_time = QtCore.QDateTime.currentDateTime()
         
             elapsed = self.last_update_time.msecsTo(current_time)

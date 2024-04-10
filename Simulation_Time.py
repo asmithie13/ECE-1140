@@ -32,7 +32,7 @@ class SimulationTime(QObject):
             
             self.last_update_time = current_time
             if self.pause_sim == True :
-                self.simulation_elapsed += elapsed * self.sim_speed_factor / 10.0
+                self.simulation_elapsed += elapsed * self.sim_speed_factor / 10
             
                 # Add the elapsed simulation time to the start time
                 simulated_time = self.start_time.addMSecs(int(self.simulation_elapsed * 10))
@@ -40,4 +40,4 @@ class SimulationTime(QObject):
                 self.timeChanged.emit(simulated_time.toString("hh:mm:ss.zzz"))
             
             #print(simulated_time.toString("hh:mm:ss.zzz"))
-            QtCore.QThread.msleep(50)  # Sleep for 100 milliseconds
+            QtCore.QThread.msleep(int(50* float(1/self.sim_speed_factor)))  # Sleep for 100 milliseconds

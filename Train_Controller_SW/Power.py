@@ -40,6 +40,11 @@ class Vital_Power():
          self.local_clock = time
 
     def calculate_power(self):
+        self.time = self.local_clock
+        self.dt = self.time - self.prevTime
+        self.prevTime = self.time
+        
+        
         if self.ui.Ebrake.isChecked():
            self.power = 0
         
@@ -50,9 +55,6 @@ class Vital_Power():
             self.power = 0
 
         else:
-            self.time = self.local_clock
-            self.dt = self.time - self.prevTime
-            self.prevTime = self.time
             self.error = float(self.ui.lcdCmdSpd.value()) * 0.00044704 - float(self.ui.lcdCurSpd.value()) * 0.00044704
             #has dt
             self.uk = self.prevUk + (self.error + self.prevError) * self.dt / 2

@@ -409,7 +409,11 @@ class TrackModelMain(QMainWindow):
             print("")
 
     def set_clock(self, time):
-        self.clock_in.display(time)
+        self.clock_in.display(time[0:5])
+        parts = time.split(':')
+        hours, minutes = int(parts[0]), int(parts[1])
+        seconds, ms = map(int, parts[2].split('.'))
+        self.local_time = hours*3600000 + minutes*60000 + seconds*1000 + ms
 
     def get_clock(self,clock):
         self.current_time = clock

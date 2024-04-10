@@ -80,7 +80,7 @@ class TrackModelMain(QMainWindow):
     LIGHT_BLOCKS_SW = ['J59', 'J63', 'M76', 'O86', 'Q100', 'R101']
     LIGHT_BLOCKS_HW = ['A1', 'C12', 'G29', 'Z150']
     CROSSING_BLOCKS = ['E19', 'T108']
-    SWITCH_BLOCKS_SW = ['J58', 'J62', 'N77', 'N85'] 
+    SWITCH_BLOCKS_SW = ['N77', 'N85'] 
     SWITCH_BLOCKS_HW = ['D13', 'F28']
     
     def __init__(self):
@@ -328,21 +328,6 @@ class TrackModelMain(QMainWindow):
                 'switchState': block.switchState
             }
 
-    def updateUI(self):
-        for block_id in self.LIGHT_BLOCKS_SW:
-            if block_id in self.blockStates:
-                block_state = self.blockStates[block_id]
-                # Update the UI component for the light state
-                self.updateLightUI(block_id, block_state['lightState'])
-
-    def updateLightUI(self, block_id, lightState):
-        # Assuming you have a method to get the UI element for a specific block
-        lightElement = self.getLightElementForBlock(block_id)
-        if lightState:
-            lightElement.setColor("Green")  # Example method to set the color
-        else:
-            lightElement.setColor("Red")
-
 
     def receiveSpecialBlocks_HW(self, specialBlock):
         for block in specialBlock:
@@ -360,7 +345,7 @@ class TrackModelMain(QMainWindow):
 
         # Update for SW
         if block_id in self.LIGHT_BLOCKS_SW or block_id in self.SWITCH_BLOCKS_SW:
-            # Update light status for SW
+            # Update light status for HW
             if block_id in self.LIGHT_BLOCKS_SW:
                 light_state = block_state.get('lightState', 'N/A')
                 self.light_out.setText(str(light_state))
@@ -369,7 +354,7 @@ class TrackModelMain(QMainWindow):
                 self.light_out.setText('N/A')
                 self.light_out.setStyleSheet("background-color: white;")
 
-            # Update switch status for SW
+            # Update switch status for HW
             if block_id in self.SWITCH_BLOCKS_SW:
                 switch_state = block_state.get('switchState', 'N/A')
                 self.switch_out.setText(str(switch_state))

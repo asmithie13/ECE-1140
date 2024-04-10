@@ -479,30 +479,24 @@ class TrainCalculations:
                 #('ebrake state entered')
                 acceleration=-8.956692913385826 #in ft/s^2
                 self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
-                if self.main_window.velocity<0:
-                    acceleration=0
-                    self.main_window.prev_vel=0
-                    
+                                    
 
-            
             elif self.main_window.brake_state==1:
                 #print('service brakes entered')
                 acceleration=-3.9370078740157477 #in ft/s^2
                 self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
-                if self.main_window.velocity<0:
-                    acceleration=0
-                    self.main_window.prev_vel=0
-                    
-        
-        self.main_window.prev_vel=self.main_window.velocity
+            
+            self.main_window.prev_vel=self.main_window.velocity
+
+        elif self.main_window.velocity <= 0:
+            acceleration=0
+            self.main_window.prev_vel=0   
         
 
         # if self.main_windowprev_acc==0:
         #     self.main_window.Acc_Velo_value_lcd.display(self.main_window.)
         #     self.TC.curr_spd_sig.emit(int(self.main_window.velocity))
         #     self.main_window.track_model_acc_velo.emit(int(self.main_window.velocity))
-
-        
 
         self.main_window.Acc_Velo_value_lcd.display(int(self.main_window.velocity))
         self.TC.curr_spd_sig.emit(int(self.main_window.velocity))

@@ -60,8 +60,7 @@ class Vital_Speed_Auth():
         
         if(not(self.decimal_m_auth <= 0) and not(self.ui.lcdCurSpd.value == 0)):
             self.decimal_m_auth = self.decimal_m_auth - float(self.rate_metric*self.time)
-            self.ui.lcdAuth.display(round(self.decimal_m_auth))
-            
+            self.ui.lcdAuth.display(round(self.decimal_m_auth* 3.28084))
             # if self.ui.lcdAuth.value() > 0:
 
             #authority in m from ft
@@ -86,7 +85,7 @@ class Vital_Speed_Auth():
 
 
                 
-            if self.AuthM <= self.stoppubgdistanceEmergency:
+            if self.AuthM <= self.stoppubgdistanceEmergency and self.AuthM >= 5:
                 self.ui.vertSliderBrk.setValue(0)
                 self.ui.vertSliderPow.setValue(0)
                 self.ui.vertSliderPow.setEnabled(False)

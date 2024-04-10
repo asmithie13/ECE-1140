@@ -13,7 +13,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 #Enable serial communication:
-#serialObject = serial.Serial('COM8', 57600)
+#serialObject = serial.Serial('COM8', 9600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -52,6 +52,7 @@ class TrackController_HW(QMainWindow):
 
         #Lists to hold blocks that are currently occupied or closed by CTC:
         self.occupiedBlocks = []
+        self.occupiedBlockSections = []
         self.listOccIDs = []
         self.closedBlocks = []
 
@@ -67,24 +68,22 @@ class TrackController_HW(QMainWindow):
         self.pushButtonDown.clicked.connect(self.setCrossingDown)
     
     def modeHandler(self, occupiedBlocks):
-        self.listOccIDs = occupiedBlocks
-        self.occupiedBlocks = []
+        self.listOccIDs = occupiedBlocks #Argument received is a string of occupied block IDs
+        self.occupiedBlocks = [] #Make a list of block objects that are occupied
         for block in self.allBlocks:
             if block.ID in self.listOccIDs:
                 self.occupiedBlocks.append(block)
 
-        for block in self.allBlocks:
+        for block in self.allBlocks: #Set occupancy status in the list of all blocks
             if block.ID in self.listOccIDs:
                 block.occupied = 1
             else:
                 block.occupied = 0
         
-        for block in self.occupiedBlocks:
-            if block.ID in self.listOccIDs:
-                block.occupied = 1
-            else:
-                block.occupied = 0
+        for block in self.occupiedBlocks: #Set occupancy status in the list of all blocks
+            block.occupied = 1
         
+        self.preventCollision()
         self.sendOccupiedBlocks.emit(self.occupiedBlocks)
         listBlockIDOccupied = []
         listBlockStrOccupied = ""
@@ -141,21 +140,26 @@ class TrackController_HW(QMainWindow):
                 occupiedBlockSections.append(block.blockSection)
         occupiedBlockSections.sort()
 
+        if occupiedBlockSections == self.occupiedBlockSections: #Only proceed if there is a section occupancy change
+            return
+        else:
+            self.occupiedBlockSections = occupiedBlockSections
+
         #Send string with flag at end to send block occupancies serially:
         occupiedBlockString = ""
         for section in occupiedBlockSections:
             occupiedBlockString += section
         occupiedBlockString += '1'
         occupiedBlockBytes = occupiedBlockString.encode()
-        #serialObject.write(occupiedBlockBytes)
 
         '''BEGIN SERIAL COMMUNICATION'''
-        #serialObject.write(occupiedBlockBytes)
+        '''serialObject.write(occupiedBlockBytes)
         #Receiving serial responses from the Raspberry Pi:
-        '''copyBlocks = self.allBlocks
+        copyBlocks = self.allBlocks
         attributeList = []
+        
         while True:
-            if serialObject.in_waiting > 0:
+           if serialObject.in_waiting > 0:
                 myAttribute = serialObject.read(serialObject.in_waiting).decode('utf-8')
                 break
         
@@ -167,7 +171,7 @@ class TrackController_HW(QMainWindow):
         
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
-        '''attributeListSoftware = []
+        attributeListSoftware = []
         for block in self.allBlocks:
             if block.LIGHT == True:
                 attributeListSoftware.append(str(block.lightState))
@@ -176,7 +180,7 @@ class TrackController_HW(QMainWindow):
             elif block.CROSSING == True:
                 attributeListSoftware.append(str(block.crossingState))
 
-        if attributeList != attributeListSoftware:
+        '''if attributeList != attributeListSoftware:
             self.lineEditHardware.setText("ERRORS DETECTED. STOPPING ALL TRAINS.")
             for block in self.allBlocks:
                 block.authority = False
@@ -187,7 +191,6 @@ class TrackController_HW(QMainWindow):
             self.sendUpdatedBlocks.emit(self.allBlocks)'''
         
         self.updateBooleanAuth() #Uncomment when hardware is not connected
-        #self.preventCollision()
         self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
     
     def selectBlock(self):
@@ -404,21 +407,25 @@ class TrackController_HW(QMainWindow):
                 if block.ID in self.LIGHT_Z150:
                     block.authority = True
     
-    '''def preventCollision(self):
-        oneDirectionOne = ['A', 'B', 'C'] #Blocks where a train coming from behind is at an index GREATER than the train-in front in self.allBlocks
-        oneDirectionTwo = ['G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] #Blocks where a train coming from behind is at an index LOWER than the train-in front in self.allBlocks
-        twoDirection = ['D', 'E', 'F',] #Bi-directional track
-
+    def preventCollision(self):
+        oneDirection = ['G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] #Block sections where collisions could occur
         tempSkip = []
         for index, block in enumerate(self.allBlocks):
-            if block.blockSection in oneDirectionOne:
-                if block.ID in self.listOccIDs:
-                    self.allBlocks[index+1].authority = False
+            if block.blockSection in oneDirection:
+                if block.blockSection == 'S': #Cannot be iterated through due to being beginning of Wayside #1
+                    continue
+            
+                #If a train is about to collide with the train in front of it, set Boolean authority to zero:
+                if block.ID in self.listOccIDs and self.allBlocks[index-2].ID in self.listOccIDs:
+                    self.allBlocks[index-1].authority = False
                     tempSkip.append(self.allBlocks[index+1].ID)
-                    self.allBlocks[index+2].authority = False
+                    self.allBlocks[index-2].authority = False
                     tempSkip.append(self.allBlocks[index+2].ID)
-                    self.allBlocks[index+3].authority = False
-                    tempSkip.append(self.allBlocks[index+3].ID)
-                else:
-                    if block.ID not in tempSkip and block.ID not in self.LIGHT_A1 and block.ID not in self.LIGHT_C12 and block.ID not in self.LIGHT_G29 and block.ID not in self.LIGHT_Z150:
-                        block.authority = True'''
+                    continue
+                
+                #Otherwise, reset the Boolean authority to 1:
+                if block.ID not in tempSkip:
+                    block.authority = True
+
+
+                

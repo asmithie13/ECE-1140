@@ -96,8 +96,8 @@ if __name__ == "__main__":
 
     #Wayside to CTC
     MainWindow.WaysideSWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksG2)
-    #MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksR1)
-    #MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksR2)
+    MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksR1)
+    MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksR2)
 
     #Wayside to Track Model
     MainWindow.WaysideSWwindow.sendTrainSpeedAuth.connect(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
@@ -125,13 +125,12 @@ if __name__ == "__main__":
     #Track Model to Wayside_SW
     MainWindow.TrackModelWindow.sendBlockOcc_SW.connect(MainWindow.WaysideSWwindow.updateBlocks)    # Move the sim_time instance to the new thread
     
-
+    #Track Model to Wayside_HW
+    MainWindow.TrackModelWindow.sendBlockOcc_HW.connect(MainWindow.WaysideHWwindow.modeHandler)
 
     # SimulationTime Setup
     sim_time = SimulationTime()  # Ensure this class inherits from QObject
     sim_thread = QtCore.QThread()  # Create a new QThread
-
-    
     
     sim_time.moveToThread(sim_thread)
 

@@ -26,7 +26,7 @@ class Vital_Power():
         self.curr_power_sig = curr_power_sig
 
 
-        #self.ser = serial.Serial('COM6', 57600)  # Replace 'COM6' with your actual port name
+        #self.ser = serial.Serial('COM5', 57600)  # Replace 'COM6' with your actual port name
 
     def Control_Ki(self):
             self.ui.lcdKi.display(self.ui.inputKi.value())
@@ -38,7 +38,7 @@ class Vital_Power():
 
     def Set_Clock(self, time):
          self.local_clock = time
-
+    
     def calculate_power(self):
         self.time = self.local_clock
         self.dt = self.time - self.prevTime

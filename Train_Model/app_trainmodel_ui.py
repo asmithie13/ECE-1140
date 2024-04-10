@@ -157,7 +157,7 @@ class TrainModel_mainwindow(QMainWindow):
     
         # If ebrake is enabled
         if self.ebrake_state:
-            print('true condition')
+            #print('true condition')
             if self.ebrake.setChecked(True):
                 self.TC.ebrake_sig.emit(1)  # Emit the ebrake signal with value 1
             else:
@@ -384,7 +384,7 @@ class TrainCalculations:
         commanded_speed=main_window.comm_speed
         mass=main_window.mass
         grade=main_window.grade
-        print("mass1", mass)
+        #print("mass1", mass)
 
     def get_service_brake(self,brake):
             self.main_window.brake_state=brake

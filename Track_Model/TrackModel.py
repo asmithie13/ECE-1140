@@ -80,7 +80,7 @@ class TrackModelMain(QMainWindow):
     LIGHT_BLOCKS_SW = ['J59', 'J63', 'M76', 'O86', 'Q100', 'R101']
     LIGHT_BLOCKS_HW = ['A1', 'C12', 'G29', 'Z150']
     CROSSING_BLOCKS = ['E19', 'T108']
-    SWITCH_BLOCKS_SW = ['J58', 'J62', 'N77', 'N85'] 
+    SWITCH_BLOCKS_SW = ['N77', 'N85'] 
     SWITCH_BLOCKS_HW = ['D13', 'F28']
     
     def __init__(self):
@@ -95,7 +95,6 @@ class TrackModelMain(QMainWindow):
         self.blockID = ""
         self.total_block_length = 0
         self.prevblockID = ""
-        self.prev_time = 0
         self.data = None  # Assuming this will be initialized with your data source
         # Add train id, line, distance from starting block, direction, and block occupancy
         self.currentTrains = []
@@ -174,12 +173,9 @@ class TrackModelMain(QMainWindow):
             block_length = self.data.get_length_for_block(block_num)
             #self.total_block_length += block_length  # Cumulative sum of block lengths
 
-            self.dt = self.local_time - self.prev_time
             self.speed_limit_km = self.data.get_speed_for_block(block_num)
 
-            speed_of_train_m = speed_of_train * 0.00044704 * self.dt
-
-            self.prev_time = self.local_time
+            speed_of_train_m = speed_of_train * 0.44704
 
             total_dis_from_beg_of_block += speed_of_train_m
             self.currentTrains[int(trainId[1:]) - 1][2] = total_dis_from_beg_of_block
@@ -208,9 +204,8 @@ class TrackModelMain(QMainWindow):
                 self.next_block_id = self.data.get_section_for_block(next_block_num)
 
                 self.occupied_blocks.clear()
-                if(not(self.next_block_id == None)):
-                    self.occupied_blocks.append(self.next_block_id + str(next_block_num))
-                    self.update_occupied_blocks()
+                self.occupied_blocks.append(self.next_block_id + str(next_block_num))
+                self.update_occupied_blocks()
                 #self.update_block_info(self.blockID)
 
                 self.currentTrains[int(trainId[1:]) - 1].pop()
@@ -218,18 +213,17 @@ class TrackModelMain(QMainWindow):
                 
                 self.currentTrains[int(trainId[1:]) - 1][2] = speed_of_train_m - (block_length - total_dis_from_beg_of_block)
 
-    # def update_ui_for_blocks(self):
-    #     for block_id, button in self.block_buttons.items():
-    #         if block_id in self.occupied_blocks:
-    #             # This block is currently occupied by the train, so set it to orange
-    #             button.setStyleSheet("background-color: orange;")
-    #         else:
-    #             # This block is not occupied by the train, set it to the default color
-    #             button.setStyleSheet("background-color: rgb(50, 205, 50);")
-     
+    def get_switch_state(self, block_num):
+        # Retrieve the switch state from your blockStates dictionary or similar data structure
+        block_info = self.blockStates.get(str(block_num))
+        if block_info is not None:
+            return block_info['switchState']
+        return None 
 
     def get_next_id(self, BlockNum, direction, line):
         if line == 'Green':
+            print("Switch:",self.get_switch_state(BlockNum))
+            
             #A1 to D13 switch block
             if BlockNum == 1:
                 return 13
@@ -333,21 +327,6 @@ class TrackModelMain(QMainWindow):
                 'switchState': block.switchState
             }
 
-    def updateUI(self):
-        for block_id in self.LIGHT_BLOCKS_SW:
-            if block_id in self.blockStates:
-                block_state = self.blockStates[block_id]
-                # Update the UI component for the light state
-                self.updateLightUI(block_id, block_state['lightState'])
-
-    def updateLightUI(self, block_id, lightState):
-        # Assuming you have a method to get the UI element for a specific block
-        lightElement = self.getLightElementForBlock(block_id)
-        if lightState:
-            lightElement.setColor("Green")  # Example method to set the color
-        else:
-            lightElement.setColor("Red")
-
 
     def receiveSpecialBlocks_HW(self, specialBlock):
         for block in specialBlock:
@@ -365,7 +344,7 @@ class TrackModelMain(QMainWindow):
 
         # Update for SW
         if block_id in self.LIGHT_BLOCKS_SW or block_id in self.SWITCH_BLOCKS_SW:
-            # Update light status for SW
+            # Update light status for HW
             if block_id in self.LIGHT_BLOCKS_SW:
                 light_state = block_state.get('lightState', 'N/A')
                 self.light_out.setText(str(light_state))
@@ -374,7 +353,7 @@ class TrackModelMain(QMainWindow):
                 self.light_out.setText('N/A')
                 self.light_out.setStyleSheet("background-color: white;")
 
-            # Update switch status for SW
+            # Update switch status for HW
             if block_id in self.SWITCH_BLOCKS_SW:
                 switch_state = block_state.get('switchState', 'N/A')
                 self.switch_out.setText(str(switch_state))
@@ -445,8 +424,9 @@ class TrackModelMain(QMainWindow):
                 temp_SW.append(block_id)
 
         # Emit the separated lists to HW and SW respectively
-        self.sendBlockOcc_HW.emit(temp_HW)
         self.sendBlockOcc_SW.emit(temp_SW)
+        self.sendBlockOcc_HW.emit(temp_HW)
+
 
 
 

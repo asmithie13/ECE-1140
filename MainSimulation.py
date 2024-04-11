@@ -40,18 +40,14 @@ from Simulation_Time import *
 
 #Pauses simulation as a toggle function from button on the main UI
 def pauseSim(MainWindow,sim_time):
-
-    # if MainWindow.PauseButton.text() == "Start Simulation":
-    #     sim_time.start()
-    #     MainWindow.PauseButton.setText("Pause Simulation")
-    
     if MainWindow.PauseButton.isChecked():
         sim_time.pause(True)
         MainWindow.PauseButton.setText("Paused")
     else:
         sim_time.pause(False) 
         MainWindow.PauseButton.setText("Running")
-            
+
+#Pass the clock values to all the modules that need them            
 def update_time_slot(time_str):
     MainWindow.CTCwindow.displayClock(time_str)
     MainWindow.TrackModelWindow.set_clock(time_str)
@@ -62,6 +58,7 @@ def update_time_slot(time_str):
 def timer_thread(sim_time):
     sim_time.updatetime()
 
+#Updates the label for speed on the main UI when it changes
 def updateSpeedLabel(MainWindow, speed):
     MainWindow.CurrentSpeedLabel.setText("Current Speed: " + str(speed) + "x")
 

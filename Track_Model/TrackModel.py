@@ -213,18 +213,17 @@ class TrackModelMain(QMainWindow):
                 
                 self.currentTrains[int(trainId[1:]) - 1][2] = speed_of_train_m - (block_length - total_dis_from_beg_of_block)
 
-    # def update_ui_for_blocks(self):
-    #     for block_id, button in self.block_buttons.items():
-    #         if block_id in self.occupied_blocks:
-    #             # This block is currently occupied by the train, so set it to orange
-    #             button.setStyleSheet("background-color: orange;")
-    #         else:
-    #             # This block is not occupied by the train, set it to the default color
-    #             button.setStyleSheet("background-color: rgb(50, 205, 50);")
-     
+    def get_switch_state(self, block_num):
+        # Retrieve the switch state from your blockStates dictionary or similar data structure
+        block_info = self.blockStates.get(str(block_num))
+        if block_info is not None:
+            return block_info['switchState']
+        return None 
 
     def get_next_id(self, BlockNum, direction, line):
         if line == 'Green':
+            print("Switch:",self.get_switch_state(BlockNum))
+            
             #A1 to D13 switch block
             if BlockNum == 1:
                 return 13

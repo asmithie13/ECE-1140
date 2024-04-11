@@ -310,18 +310,18 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         for i in self.trainSchedule.Scheduledata:
             if (time == i[5]) and (int(i[1][1:]) > len(self.occupiedBlocks.currentTrains)):
-            
-                self.create_a_train.emit(i[1],i[0])
-
-                #Train ID, speed, Authority
-                self.sendDispatchInfo.emit([i[1], 40, self.trainSchedule.AuthorityInfo[int(i[1][1:]) - 1]])
-                print(i[1], "Dispatched")
-
                 #Initializing where the train starts
                 if i[0] == 'Green':
                     self.occupiedBlocks.currentTrains.append(['K63'])
                 elif i[0] == 'Red':
                     self.occupiedBlocks.currentTrains.append(['D10'])
+                
+                
+                self.create_a_train.emit(i[1],i[0])
+
+                #Train ID, speed, Authority
+                self.sendDispatchInfo.emit([i[1], 40, self.trainSchedule.AuthorityInfo[int(i[1][1:]) - 1]])
+                print(i[1], "Dispatched")
 
 
     #Define functionality for Upload File Button

@@ -114,15 +114,12 @@ class TrainModel_mainwindow(QMainWindow):
 
     #CLOCK
     def update_time(self, current_time):
-        str_time=current_time.toString("hh:mm:ss")
-        self.TC.time_sig.emit(current_time.toString("hh:mm:ss"))
-        self.Timer_calc(str_time)
-
-    def Timer_calc(self, time):
-        self.time=time
-        hours, minutes, seconds = [int(part) for part in time.split(':')]
-        total_seconds = int((hours * 3600) + (minutes * 60) + seconds)
-        self.train_calculations.set_time(total_seconds)
+        self.TC.time_sig.emit(current_time)
+        parts = current_time.split(':')
+        hours, minutes = int(parts[0]), int(parts[1])
+        seconds, ms = map(int, parts[2].split('.'))
+        total_ms = hours*3600000 + minutes*60000 + seconds*1000 + ms
+        self.train_calculations.set_time(total_ms)
         self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
         self.train_calculations.get_commanded_speed(self.comm_speed, self.grade, self.mass)
         self.set_ccount(self.crew_count)
@@ -155,12 +152,12 @@ class TrainModel_mainwindow(QMainWindow):
 
 
     def ebrake_disabled(self, ebrake_state):
-        print('ebrake', ebrake_state)
+        #print('ebrake', ebrake_state)
         self.ebrake_state = ebrake_state
     
         # If ebrake is enabled
         if self.ebrake_state:
-            print('true condition')
+            #print('true condition')
             if self.ebrake.setChecked(True):
                 self.TC.ebrake_sig.emit(1)  # Emit the ebrake signal with value 1
             else:
@@ -168,7 +165,7 @@ class TrainModel_mainwindow(QMainWindow):
             self.ebrake.setEnabled(False)  # Disable the ebrake button
 
         else:
-            print('false condition')
+            #print('false condition')
             self.ebrake.setEnabled(True)  # Enable the ebrake button
             self.ebrake.setChecked(False)  # Set the ebrake button to unchecked (OFF)
             
@@ -379,7 +376,6 @@ class TrainModel_mainwindow(QMainWindow):
 #CLASS CONTAINING ALL TRAIN CALCULATIONS
 class TrainCalculations:
 
-
     def __init__(self, main_window,TC):
 
         self.train_model_time =0
@@ -388,7 +384,7 @@ class TrainCalculations:
         commanded_speed=main_window.comm_speed
         mass=main_window.mass
         grade=main_window.grade
-        print("mass1", mass)
+        #print("mass1", mass)
 
     def get_service_brake(self,brake):
             self.main_window.brake_state=brake
@@ -476,37 +472,31 @@ class TrainCalculations:
         train_model_time=self.get_time()
         
         #converting sec to hours
-        train_model_time_hours=train_model_time/3600
+        train_model_time_hours=train_model_time/(3600*1000)
         self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration + self.main_window.prev_acc)
         if self.main_window.velocity>0:
             if self.main_window.ebrake_state==1:
-                print('ebrake state entered')
+                #('ebrake state entered')
                 acceleration=-8.956692913385826 #in ft/s^2
                 self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
-                if self.main_window.velocity==0:
-                    acceleration=0
-                    self.main_window.prev_vel=0
-                    
+                                    
 
-            
             elif self.main_window.brake_state==1:
-                print('service brakes entered')
+                #print('service brakes entered')
                 acceleration=-3.9370078740157477 #in ft/s^2
                 self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
-                if self.main_window.velocity==0:
-                    acceleration=0
-                    self.main_window.prev_vel=0
-                    
-        
-        self.main_window.prev_vel=self.main_window.velocity
+            
+            self.main_window.prev_vel=self.main_window.velocity
+
+        elif self.main_window.velocity <= 0:
+            acceleration=0
+            self.main_window.prev_vel=0   
         
 
         # if self.main_windowprev_acc==0:
         #     self.main_window.Acc_Velo_value_lcd.display(self.main_window.)
         #     self.TC.curr_spd_sig.emit(int(self.main_window.velocity))
         #     self.main_window.track_model_acc_velo.emit(int(self.main_window.velocity))
-
-        
 
         self.main_window.Acc_Velo_value_lcd.display(int(self.main_window.velocity))
         self.TC.curr_spd_sig.emit(int(self.main_window.velocity))

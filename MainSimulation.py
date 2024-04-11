@@ -47,10 +47,10 @@ def pauseSim(MainWindow,sim_time):
     
     if MainWindow.PauseButton.isChecked():
         sim_time.pause(True)
-        MainWindow.PauseButton.setText("Running")
+        MainWindow.PauseButton.setText("Paused")
     else:
         sim_time.pause(False) 
-        MainWindow.PauseButton.setText("Paused")
+        MainWindow.PauseButton.setText("Running")
             
 def update_time_slot(time_str):
     MainWindow.CTCwindow.displayClock(time_str)
@@ -62,6 +62,8 @@ def update_time_slot(time_str):
 def timer_thread(sim_time):
     sim_time.updatetime()
 
+def updateSpeedLabel(MainWindow, speed):
+    MainWindow.CurrentSpeedLabel.setText("Current Speed: " + str(speed) + "x")
 
 if __name__ == "__main__":
     # Starting PyQt application
@@ -145,6 +147,7 @@ if __name__ == "__main__":
 
     # UI connections
     MainWindow.SpeedSlider.valueChanged.connect(lambda : sim_time.set_sim_speed(MainWindow.SpeedSlider.value()))
+    MainWindow.SpeedSlider.valueChanged.connect(lambda: updateSpeedLabel(MainWindow, MainWindow.SpeedSlider.value()))
     MainWindow.PauseButton.clicked.connect(lambda : pauseSim(MainWindow, sim_time))
 
     MainWindow.show()

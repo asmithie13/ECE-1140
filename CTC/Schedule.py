@@ -95,7 +95,7 @@ class Schedule():
             #Adding to Schedule
             #Line, TrainID, Destination, Arrival Time, Departure Station, Departure Time
             self.Scheduledata.append(row)
-
+                 
         return 1
 
     def calculateDeparture(self, Destination, ArrivalTime, Departure, line):

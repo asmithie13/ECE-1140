@@ -303,26 +303,6 @@ class CTC_UI(QtWidgets.QMainWindow):
             self.ChooseSwitchSelect.addItem(i[0])
         self.newSwitchSelected(0)
 
-    #function to update the clock display on the layout
-    def displayClock(self, time_w_ms):
-        time = time_w_ms[0:5]
-        self.CTC_clock.display(time)
-
-        for i in self.trainSchedule.Scheduledata:
-            if (time == i[5]) and (int(i[1][1:]) > len(self.occupiedBlocks.currentTrains)):
-                #Initializing where the train starts
-                if i[0] == 'Green':
-                    self.occupiedBlocks.currentTrains.append(['K63'])
-                elif i[0] == 'Red':
-                    self.occupiedBlocks.currentTrains.append(['D10'])
-                
-                
-                self.create_a_train.emit(i[1],i[0])
-
-                #Train ID, speed, Authority
-                self.sendDispatchInfo.emit([i[1], 40, self.trainSchedule.AuthorityInfo[int(i[1][1:]) - 1]])
-                print(i[1], "Dispatched")
-
 
     #Define functionality for Upload File Button
     def selectScheduleFile(self):
@@ -967,13 +947,14 @@ class CTC_UI(QtWidgets.QMainWindow):
             self.ChooseSwitchSelect.addItem(i[0])
         self.newSwitchSelected(0)
 
+    
     #function to update the clock display on the layout
-    def displayClock(self, time_wSeconds):
-        time = time_wSeconds[0:5]
+    def displayClock(self, time_long):
+        time = time_long[0:5]
         self.CTC_clock.display(time)
         
         for i in self.trainSchedule.Scheduledata:
-            if time_wSeconds == (i[5] + ":00"):
+            if (time == i[5]) and (int(i[1][1:]) > len(self.occupiedBlocks.currentTrains)):
                 #Initializing where the train starts
                 if i[0] == 'Green':
                     self.occupiedBlocks.currentTrains.append(['K63'])
@@ -985,7 +966,7 @@ class CTC_UI(QtWidgets.QMainWindow):
                 #Train ID, speed, Authority
                 self.sendDispatchInfo.emit([i[1], 40, self.trainSchedule.AuthorityInfo[int(i[1][1:]) - 1]])
                 print(i[1], "Dispatched")
-
+    
 
     #Define functionality for Upload File Button
     def selectScheduleFile(self):

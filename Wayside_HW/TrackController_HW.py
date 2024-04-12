@@ -80,9 +80,7 @@ class TrackController_HW(QMainWindow):
         for block in self.allBlocks:
             if block.ID in self.listOccIDs:
                 self.occupiedBlocks.append(block)
-        for block in self.occupiedBlocks:
-            print(block.ID) #REMOVE
-
+    
         for block in self.allBlocks: #Set occupancy status in the list of all blocks
             if block.ID in self.listOccIDs:
                 block.occupied = 1
@@ -92,7 +90,7 @@ class TrackController_HW(QMainWindow):
         for block in self.occupiedBlocks: #Set occupancy status in the list of all blocks
             block.occupied = 1
         
-        self.preventCollision()
+        #self.preventCollision() #MUST REFINE FUNCTION TO NOT OVER-RIDE RED LIGHT BOOLEAN AUTHORITY
         self.sendOccupiedBlocks.emit(self.occupiedBlocks)
         listBlockIDOccupied = []
         listBlockStrOccupied = ""
@@ -121,7 +119,7 @@ class TrackController_HW(QMainWindow):
                 self.closedBlocks.remove(block)
                 self.listOccIDs.remove(block.ID)
                 self.occupiedBlocks.remove(block)
-        self.modeHandler(self.listOccIDs)    
+        self.modeHandler(self.listOccIDs)
 
     def manualMode(self):
         self.modeFlag = 1
@@ -399,8 +397,9 @@ class TrackController_HW(QMainWindow):
                 tempG29 = block.lightState
             elif block.ID == 'Z150':
                 tempZ150 = block.lightState
+        print(tempZ150)
         
-        if tempA1 == False:
+        if tempA1 == 0:
             for block in self.allBlocks:
                 if block.ID in self.LIGHT_A1:
                     block.authority = False
@@ -409,7 +408,7 @@ class TrackController_HW(QMainWindow):
                 if block.ID in self.LIGHT_A1:
                     block.authority = True
         
-        if tempC12 == False:
+        if tempC12 == 0:
             for block in self.allBlocks:
                 if block.ID in self.LIGHT_C12:
                     block.authority = False
@@ -418,7 +417,7 @@ class TrackController_HW(QMainWindow):
                 if block.ID in self.LIGHT_C12:
                     block.authority = True
         
-        if tempG29 == False:
+        if tempG29 == 0:
             for block in self.allBlocks:
                 if block.ID in self.LIGHT_G29:
                     block.authority = False
@@ -427,7 +426,7 @@ class TrackController_HW(QMainWindow):
                 if block.ID in self.LIGHT_G29:
                     block.authority = True
         
-        if tempZ150 == False:
+        if tempZ150 == 0:
             for block in self.allBlocks:
                 if block.ID in self.LIGHT_Z150:
                     block.authority = False

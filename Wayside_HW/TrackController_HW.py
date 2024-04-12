@@ -38,6 +38,11 @@ class TrackController_HW(QMainWindow):
         self.LIGHT_G29 = ['F26', 'F27', 'F28', 'G29']
         self.LIGHT_Z150 = ['Y148', 'Y149', 'Z150']
 
+        self.CHUNK_1 = ['U', 'V', 'W', 'X', 'Y', 'Z']
+        self.CHUNK_2 = ['D', 'F']
+        self.CHUNK_3 = ['A', 'B', 'C']
+        self.CHUNK_4 = ['E', 'T']
+
         #Disable manual mode operations, as program begins in automatic operation:
         self.groupBoxManual.setEnabled(False)
 
@@ -55,6 +60,8 @@ class TrackController_HW(QMainWindow):
         self.occupiedBlockSections = []
         self.listOccIDs = []
         self.closedBlocks = []
+
+        self.occChunks = []
 
         #Signals (Manual mode-related):
         self.checkBoxManual.clicked.connect(self.manualMode)
@@ -134,20 +141,34 @@ class TrackController_HW(QMainWindow):
     
     def automaticMode(self):
         #Add the sections of all occupanices to a list to be communicated serially:
+        self.occChunks.sort()
+        occupiedChunks = []
+        for block in self.occupiedBlocks:
+            if block.blockSection in self.CHUNK_1 and 1 not in occupiedChunks:
+                occupiedChunks.append(1)
+            elif block.blockSection in self.CHUNK_2 and 2 not in occupiedChunks:
+                occupiedChunks.append(2)
+            elif block.blockSection in self.CHUNK_3 and 3 not in occupiedChunks:
+                occupiedChunks.append(3)
+            elif block.blockSection in self.CHUNK_4 and 4 not in occupiedChunks:
+                occupiedChunks.append(4)
+        occupiedChunks.sort()
+
+        if occupiedChunks == self.occChunks: #Only proceed if there is a section occupancy change
+            return
+        else:
+            self.occChunks = occupiedChunks
+
         occupiedBlockSections = []
         for block in self.occupiedBlocks:
             if block.blockSection not in occupiedBlockSections:
                 occupiedBlockSections.append(block.blockSection)
         occupiedBlockSections.sort()
-
-        if occupiedBlockSections == self.occupiedBlockSections: #Only proceed if there is a section occupancy change
-            return
-        else:
-            self.occupiedBlockSections = occupiedBlockSections
+        self.occupiedBlockSections = occupiedBlockSections
 
         #Send string with flag at end to send block occupancies serially:
         occupiedBlockString = ""
-        for section in occupiedBlockSections:
+        for section in self.occupiedBlockSections:
             occupiedBlockString += section
         occupiedBlockString += '1'
         occupiedBlockBytes = occupiedBlockString.encode()
@@ -161,17 +182,21 @@ class TrackController_HW(QMainWindow):
         while True:
            if serialObject.in_waiting > 0:
                 myAttribute = serialObject.read(serialObject.in_waiting).decode('utf-8')
-                break
-        
-        for letter in myAttribute:
-            if letter == 'A':
-                break
-            else:
-                attributeList.append(letter)'''
+                if len(myAttribute) > 1:
+                    for char in myAttribute:
+                        if char == 'A':
+                            break
+                        else:
+                            attributeList.append(char)
+                else:
+                    if myAttribute == 'A':
+                            break
+                    else:
+                        attributeList.append(myAttribute)'''
         
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
-        attributeListSoftware = []
+        '''attributeListSoftware = []
         for block in self.allBlocks:
             if block.LIGHT == True:
                 attributeListSoftware.append(str(block.lightState))
@@ -180,7 +205,7 @@ class TrackController_HW(QMainWindow):
             elif block.CROSSING == True:
                 attributeListSoftware.append(str(block.crossingState))
 
-        '''if attributeList != attributeListSoftware:
+        if attributeList != attributeListSoftware:
             self.lineEditHardware.setText("ERRORS DETECTED. STOPPING ALL TRAINS.")
             for block in self.allBlocks:
                 block.authority = False

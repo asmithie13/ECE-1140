@@ -135,8 +135,19 @@ class OccupiedBlocks():
             
         #Red Line                                  
         if line == "Red":
-            #Red line train dispatch case        
-            if (BlockNum == 10):
+            """
+            #A1 switch
+            if BlockNum == 1:
+
+
+            elif (BlockNum > 1) and (BlockNum <= 27):
+                ID = self.searchBothDirections(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1)) 
+            """
+            
+            #Red line train dispatch case  
+            if BlockNum == 10:
                 for i in range(len(self.currentTrains)):
                     if self.currentTrains[i][0] == 'D10':
                         return ("T" + str(i+1))

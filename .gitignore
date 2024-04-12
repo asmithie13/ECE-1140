@@ -163,3 +163,6 @@ Wayside_SW/__pycache__/main_window_ui.cpython-312.pyc
 Wayside_SW/__pycache__/WaysideSWandTB.cpython-39.pyc
 Wayside_SW/__pycache__/WaysideSWandTB.cpython-310.pyc
 Wayside_SW/__pycache__/WaysideSWandTB.cpython-312.pyc
+Train_Model/__pycache__/app_trainmodel_tb.cpython-312.pyc
+Train_Model/__pycache__/app_trainmodel_ui.cpython-312.pyc
+Train_Model/__pycache__/clock_test.cpython-312.pyc

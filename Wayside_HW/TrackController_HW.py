@@ -455,6 +455,7 @@ class TrackController_HW(QMainWindow):
                 #Otherwise, reset the Boolean authority to 1:
                 if block.ID not in tempSkip:
                     block.authority = True
+        
 
 
                 

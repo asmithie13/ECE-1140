@@ -121,7 +121,7 @@ class TrackController_HW(QMainWindow):
                 self.closedBlocks.remove(block)
                 self.listOccIDs.remove(block.ID)
                 self.occupiedBlocks.remove(block)
-        self.modeHandler(self.listOccIDs)
+        self.modeHandler(self.listOccIDs)    
 
     def manualMode(self):
         self.modeFlag = 1

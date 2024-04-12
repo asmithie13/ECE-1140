@@ -80,6 +80,8 @@ class TrackController_HW(QMainWindow):
         for block in self.allBlocks:
             if block.ID in self.listOccIDs:
                 self.occupiedBlocks.append(block)
+        for block in self.occupiedBlocks:
+            print(block.ID) #REMOVE
 
         for block in self.allBlocks: #Set occupancy status in the list of all blocks
             if block.ID in self.listOccIDs:
@@ -95,6 +97,12 @@ class TrackController_HW(QMainWindow):
         listBlockIDOccupied = []
         listBlockStrOccupied = ""
 
+        #If a block is closed by CTC, it is recognized as "occupied" by the PLC parser:
+        for block in self.closedBlocks:
+            if block.ID not in self.listOccIDs:
+                self.listOccIDs.append(block.ID)
+                self.occupiedBlocks.append(block)
+
         for block in self.occupiedBlocks:
             listBlockIDOccupied.append(block.ID)
         listBlockIDOccupied.sort()
@@ -102,21 +110,17 @@ class TrackController_HW(QMainWindow):
             listBlockStrOccupied = listBlockStrOccupied + ID + " "
         self.lineEditOccupied.setText(listBlockStrOccupied)
 
-        #If a block is closed by CTC, it is recognized as "occupied" by the PLC parser:
-        for block in self.closedBlocks:
-            if block.ID not in self.listOccIDs:
-                self.listOccIDs.append(block.ID)
-                self.occupiedBlocks.append(block)
-
         if self.modeFlag == 0:
             self.automaticMode()
         
     def getClosedBlocks(self, closedBlocks):
-        self.closedBlocks = closedBlocks
-        for block in self.closedBlocks:
-            if block.ID not in self.listOccIDs:
-                self.listOccIDs.append(block.ID)
-                self.occupiedBlocks.append(block)
+        for block in closedBlocks:
+            if block.maintenance == 1 and block not in self.closedBlocks:
+                self.closedBlocks.append(block)
+            if block.maintenance == 0 and block in self.closedBlocks:
+                self.closedBlocks.remove(block)
+                self.listOccIDs.remove(block.ID)
+                self.occupiedBlocks.remove(block)
         self.modeHandler(self.listOccIDs)
 
     def manualMode(self):
@@ -451,6 +455,7 @@ class TrackController_HW(QMainWindow):
                 #Otherwise, reset the Boolean authority to 1:
                 if block.ID not in tempSkip:
                     block.authority = True
+        
 
 
                 

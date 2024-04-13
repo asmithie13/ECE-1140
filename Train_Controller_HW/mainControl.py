@@ -595,7 +595,7 @@ class Ui_MainWindow(object):
                 self.control_output = 0
         
             self.lcdAcel.display(self.control_output)
-            print(f"Control output set to: {self.control_output}")
+            #print(f"Control output set to: {self.control_output}")
 
         
 

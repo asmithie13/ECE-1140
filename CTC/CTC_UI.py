@@ -212,7 +212,7 @@ class CTC_UI(QtWidgets.QMainWindow):
     #TicketSales will be a list of two lists of ints, representing the sales at each station in 
     #green line and red line respectively, from Track Model
     def recieveTicketSales(self, TicketSales):
-        print("Hello")
+        #print("Hello")
         
         AverageSales = [0, 0]
         print(TicketSales)

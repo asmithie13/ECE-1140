@@ -100,6 +100,8 @@ class TrackModelMain(QMainWindow):
         self.currentTrains = []
         self.blockIDs_SW = []
         self.blockIDs_HW = []
+        self.dt = 0
+        self.prev_time = 0
 
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track_Model/Track_Model.ui", self)
@@ -173,9 +175,11 @@ class TrackModelMain(QMainWindow):
             block_length = self.data.get_length_for_block(block_num)
             #self.total_block_length += block_length  # Cumulative sum of block lengths
 
+            self.dt = self.local_time - self.prev_time
+            self.prev_time = self.local_time
             self.speed_limit_km = self.data.get_speed_for_block(block_num)
 
-            speed_of_train_m = speed_of_train * 0.44704
+            speed_of_train_m = speed_of_train * 0.00044704 * self.dt
 
             total_dis_from_beg_of_block += speed_of_train_m
             self.currentTrains[int(trainId[1:]) - 1][2] = total_dis_from_beg_of_block
@@ -222,7 +226,7 @@ class TrackModelMain(QMainWindow):
 
     def get_next_id(self, BlockNum, direction, line):
         if line == 'Green':
-            print("Switch:",self.get_switch_state(BlockNum))
+            #print("Switch:",self.get_switch_state(BlockNum))
             
             #A1 to D13 switch block
             if BlockNum == 1:
@@ -390,7 +394,9 @@ class TrackModelMain(QMainWindow):
         if os.path.exists(self.default_track_path):
             self.data.read_excel(self.default_track_path)
         else:
-            print("")
+            #filler statement so no print
+            filer = 0
+            #print("")
 
     def set_clock(self, time):
         self.clock_in.display(time[0:5])
@@ -456,7 +462,7 @@ class TrackModelMain(QMainWindow):
         self.selected_block = self.block_in_1.currentText()
         if self.selected_block:
             button = self.findChild(QPushButton, self.selected_block)
-            print(self.selected_block)
+            #print(self.selected_block)
             if button:
                 self.occupied_block_failures.append(self.selected_block)
                 self.update_occupied_blocks()
@@ -467,7 +473,7 @@ class TrackModelMain(QMainWindow):
         self.selected_block = self.block_in_1.currentText()
         if self.selected_block:
             button = self.findChild(QPushButton, self.selected_block)
-            print(self.selected_block)
+            #print(self.selected_block)
             if button:
                 self.occupied_block_failures.append(self.selected_block)
                 self.update_occupied_blocks()
@@ -477,7 +483,7 @@ class TrackModelMain(QMainWindow):
         self.selected_block = self.block_in_1.currentText()
         if self.selected_block:
             button = self.findChild(QPushButton, self.selected_block)
-            print(self.selected_block)
+            #print(self.selected_block)
             if button:
                 self.occupied_block_failures.append(self.selected_block)
                 self.update_occupied_blocks()

@@ -80,8 +80,8 @@ class TrackController_HW(QMainWindow):
         for block in self.allBlocks:
             if block.ID in self.listOccIDs:
                 self.occupiedBlocks.append(block)
-        for block in self.occupiedBlocks:
-            print(block.ID) #REMOVE
+        #for block in self.occupiedBlocks:
+            #print(block.ID) #REMOVE
 
         for block in self.allBlocks: #Set occupancy status in the list of all blocks
             if block.ID in self.listOccIDs:

@@ -63,6 +63,8 @@ class TrackController_HW(QMainWindow):
 
         self.occChunks = []
 
+        self.maintenanceSwitches = []
+
         #Signals (Manual mode-related):
         self.checkBoxManual.clicked.connect(self.manualMode)
         self.comboBoxSection.activated.connect(self.selectBlock)
@@ -90,7 +92,6 @@ class TrackController_HW(QMainWindow):
         for block in self.occupiedBlocks: #Set occupancy status in the list of all blocks
             block.occupied = 1
         
-        #self.preventCollision() #MUST REFINE FUNCTION TO NOT OVER-RIDE RED LIGHT BOOLEAN AUTHORITY
         self.sendOccupiedBlocks.emit(self.occupiedBlocks)
         listBlockIDOccupied = []
         listBlockStrOccupied = ""
@@ -107,6 +108,9 @@ class TrackController_HW(QMainWindow):
         for ID in listBlockIDOccupied:
             listBlockStrOccupied = listBlockStrOccupied + ID + " "
         self.lineEditOccupied.setText(listBlockStrOccupied)
+
+        self.setMaintenanceSwitch() #Sets any time that there is a new occupancy
+        #Must be called again after automatic mode switch positions are determined
 
         if self.modeFlag == 0:
             self.automaticMode()
@@ -160,7 +164,7 @@ class TrackController_HW(QMainWindow):
             return
         else:
             self.occChunks = occupiedChunks
-
+        
         occupiedBlockSections = []
         for block in self.occupiedBlocks:
             if block.blockSection not in occupiedBlockSections:
@@ -214,9 +218,11 @@ class TrackController_HW(QMainWindow):
                 self.sendUpdatedBlocks.emit(self.allBlocks)
         else:
             #Ajust block-wise authority based on active red lights:
+            self.setMaintenanceSwitch()
             self.updateBooleanAuth()
             self.sendUpdatedBlocks.emit(self.allBlocks)'''
         
+        self.setMaintenanceSwitch()
         self.updateBooleanAuth() #Uncomment when hardware is not connected
         self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
     
@@ -260,6 +266,11 @@ class TrackController_HW(QMainWindow):
         self.pushButtonRight.setFont(QFont("Times New Roman", 12))
         self.pushButtonUp.setFont(QFont("Times New Roman", 12))
         self.pushButtonDown.setFont(QFont("Times New Roman", 12))
+
+        tempBlockID = self.comboBoxSection.currentText() + self.comboBoxBlock.currentText()
+        for block in self.maintenanceSwitches:
+            if block.ID == tempBlockID:
+                self.frameSwitch.setEnabled(False)
 
         for block in self.allBlocks:
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
@@ -397,7 +408,6 @@ class TrackController_HW(QMainWindow):
                 tempG29 = block.lightState
             elif block.ID == 'Z150':
                 tempZ150 = block.lightState
-        print(tempZ150)
         
         if tempA1 == 0:
             for block in self.allBlocks:
@@ -435,26 +445,17 @@ class TrackController_HW(QMainWindow):
                 if block.ID in self.LIGHT_Z150:
                     block.authority = True
     
-    def preventCollision(self):
-        oneDirection = ['G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] #Block sections where collisions could occur
-        tempSkip = []
-        for index, block in enumerate(self.allBlocks):
-            if block.blockSection in oneDirection:
-                if block.blockSection == 'S': #Cannot be iterated through due to being beginning of Wayside #1
-                    continue
-            
-                #If a train is about to collide with the train in front of it, set Boolean authority to zero:
-                if block.ID in self.listOccIDs and self.allBlocks[index-2].ID in self.listOccIDs:
-                    self.allBlocks[index-1].authority = False
-                    tempSkip.append(self.allBlocks[index+1].ID)
-                    self.allBlocks[index-2].authority = False
-                    tempSkip.append(self.allBlocks[index+2].ID)
-                    continue
-                
-                #Otherwise, reset the Boolean authority to 1:
-                if block.ID not in tempSkip:
-                    block.authority = True
-        
-
-
-                
+    def getMaintenanceSwitch(self, switchPos):
+        self.maintenanceSwitches = switchPos
+        self.setMaintenanceSwitch()
+    
+    def setMaintenanceSwitch(self): #Function to set maintenance mode switch positions from CTC
+        for blockOne in self.maintenanceSwitches:
+            for blockTwo in self.allBlocks:
+                if blockOne.ID == blockTwo.ID:
+                    blockTwo.switchState = blockOne.switchState
+    
+    def preventCollision(self): #NEEDS FINISHED
+        oneDirectionOne = ['G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] #Block sections where collisions could occur
+        oneDirectionTwo = ['A', 'B', 'C'] 
+        biDirection = ['D', 'E', 'F']

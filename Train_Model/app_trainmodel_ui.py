@@ -29,6 +29,7 @@ class TrainModel_mainwindow(QMainWindow):
     prev_vel=0
     prev_acc=0
     grade=0
+    force=0
     velocity=0
     door_state=3
     brake_state=0
@@ -120,6 +121,7 @@ class TrainModel_mainwindow(QMainWindow):
         seconds, ms = map(int, parts[2].split('.'))
         total_ms = hours*3600000 + minutes*60000 + seconds*1000 + ms
         self.train_calculations.set_time(total_ms)
+        self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
         self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
         self.train_calculations.get_commanded_speed(self.comm_speed, self.grade, self.mass)
         self.set_ccount(self.crew_count)
@@ -430,10 +432,12 @@ class TrainCalculations:
         self.commanded_speed=commanded_speed #in meters/sec
         self.grade=grade
         self.g=9.81 #m/sec^2
+        self.force=self.main_window.force
     
         theta=math.atan(grade/100)
         self.grav_force=mass*9.81*math.sin(theta)
         power = self.main_window.Power_value_lcd.value()#in watts
+        
         
         #accounting for friction
         friction_coeff=0.001
@@ -451,25 +455,17 @@ class TrainCalculations:
         try: 
             if self.main_window.ebrake_state==False:
                 if self.main_window.brake_state==False:
-                    force = (power / self.commanded_speed) - self.grav_force - self.fric_force
-                else: #if service brake is on
-                    force = (power / self.commanded_speed) - self.grav_force - self.fric_force + (-1.2*mass)
-            else: #emergency brake on
-                force = (power / self.commanded_speed) - self.grav_force - self.fric_force + (-2.73*mass)
+                    self.force = (power / self.commanded_speed) - self.grav_force - self.fric_force
 
         except ZeroDivisionError: #if comm_speed is zero
              if self.main_window.ebrake_state==False:
                 if self.main_window.brake_state==False:
-                    force = power - self.grav_force 
-                else: #if service brake is on
-                    force = power - self.grav_force + (-1.2*mass)
-             else: #emergency brake on
-                force = power - self.grav_force  + (-2.73*mass)
+                    self.force = power - self.grav_force 
 
-        if force <= 0:
-            force=0
+        if self.force <= 0:
+            self.force=0
 
-        return force
+        return self.force
 
     def Calculate_acceleration(self,commanded_speed,grade,mass):
         self.mass=mass #in kg
@@ -506,17 +502,17 @@ class TrainCalculations:
         #converting sec to hours
         train_model_time_hours=train_model_time/(3600*1000) 
         self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration + self.main_window.prev_acc)
-        #if self.main_window.velocity>0:
-            # if self.main_window.ebrake_state==1:
-            #     #('ebrake state entered')
-            #     acceleration=-8.956692913385826 #in ft/s^2
-            #     self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
+        if self.main_window.velocity>0:
+            if self.main_window.ebrake_state==1:
+                #('ebrake state entered')
+                acceleration=-8.956692913385826 #in ft/s^2
+                self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
                                     
 
-            # elif self.main_window.brake_state==1:
-            #     #print('service brakes entered')
-            #     acceleration=-3.9370078740157477 #in ft/s^2
-            #     self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
+            elif self.main_window.brake_state==1:
+                #print('service brakes entered')
+                acceleration=-3.9370078740157477 #in ft/s^2
+                self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
             
         self.main_window.prev_vel=self.main_window.velocity
 

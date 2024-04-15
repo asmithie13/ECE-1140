@@ -3,6 +3,7 @@ from Train_Controller_SW.Power import Vital_Power
 from Train_Controller_SW.Failure import Vital_Failure
 from Train_Controller_SW.NonVital import NonVital
 from Train_Controller_SW.SpeedAuth import Vital_Speed_Auth
+from Train_Controller_SW.Line_Dictionary import Line_Dictionary
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -22,7 +23,8 @@ class TrainController(QMainWindow):
     pwr_fail_sig = pyqtSignal(bool)
     brk_fail_sig = pyqtSignal(bool)
     sig_fail_sig = pyqtSignal(bool)
-    beacon_info_sig = pyqtSignal(str)
+    beacon_info_sig = pyqtSignal(int)
+    block_change = pyqtSignal(bool)
     #non vital we recieve
     #underground_sig = pyqtSignal(bool)
     block_passed_sig = pyqtSignal(bool)

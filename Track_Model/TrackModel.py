@@ -273,7 +273,7 @@ class TrackModelMain(QMainWindow):
                         self.polarity = 1
                     else:
                         self.polarity = 0
-                self.send_polarity.emit(self.polarity)
+                #self.send_polarity.emit(self.polarity)
 
                 
                 # Getting block section from excel 

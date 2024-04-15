@@ -136,7 +136,7 @@ class NonVital():
         #change index 
         self.block_index += 1
         #green line parse
-        if self.line == "green" :
+        if self.line ==  1 : #green 
             self.speed_lim.emit(self.LineDictionary.green_get_speed_lim(self.block_index))
             self.Set_Underground(self.Line_Dictionary.green_get_underground(self.block_index))
             self.announcement = self.LineDictionary.get_green_station(self.block_index)
@@ -152,7 +152,7 @@ class NonVital():
 
             
         #red line parse
-        elif self.line == "red" :
+        elif self.line == 0 :
             self.ext_light_sig.emit(self.Line_Dictionary.green_get_underground(self.block_index))
             self.speed_lim.emit(self.LineDictionary.green_get_speed_lim(self.block_index))
 

@@ -174,6 +174,7 @@ class TrainController(QMainWindow):
         self.Vital_Power.calculate_power()
         #print(total_seconds)
 
+
      
 
     def Open_Main_UI(self):

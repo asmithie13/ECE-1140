@@ -6,7 +6,7 @@ from CTC import TempData
 class Line_Dictionary():
 
     ##start
-    self.green = [
+    green = [
         ['K_63', 70, False, 'N/A', 'N/A'],
         ['K_64', 70, False, 'Approching GLENBURY', 'N/A'],
         ['K_65', 70, False, 'Welcome to GLENBURY', '1'],
@@ -53,7 +53,7 @@ class Line_Dictionary():
         ['N_80', 70, False, 'N/A', 'N/A'],
         ['N_79', 70, False, 'N/A', 'N/A'],
         ['N_78', 70, False, 'Approching MT LEBANON', 'N/A'],
-        ['N_77', 70, False, 'Welcome to MT LEBANON', '2']
+        ['N_77', 70, False, 'Welcome to MT LEBANON', '2'],
         ['R_101', 26, False, 'N/A', 'N/A'], #new section
         ['S_102', 28, False, 'N/A', 'N/A'],
         ['S_103', 28, False, 'N/A', 'N/A'],
@@ -131,7 +131,7 @@ class Line_Dictionary():
         ['B_4', 45, False, 'N/A', 'N/A'],
         ['A_3', 45, False, 'Approching PINONEER', 'N/A'],
         ['A_2', 45, False, 'PIONEER', '2'],
-        ['A_1', 45, False, 'N/A', 'N/A']
+        ['A_1', 45, False, 'N/A', 'N/A'],
         ['D_13', 70, False, 'N/A', 'N/A'], #new section
         ['D_14', 70, False, 'N/A', 'N/A'],
         ['D_15', 70, False, 'Apporaching STATION', 'N/A'],
@@ -178,7 +178,7 @@ class Line_Dictionary():
         ['I_56', 30, True, 'Welcome to OVERBROOK', 'N/A'],
         ['I_57', 30, True, 'N/A', '1']
     ]
-    self.red = [
+    red = [
         ['D_10', 40, False, 'N/A', 'N/A'],
         ['D_11', 40, False, 'N/A', 'N/A'],
         ['D_12', 40, False, 'N/A', 'N/A'],
@@ -245,7 +245,7 @@ class Line_Dictionary():
         ['I_46', 70, False, 'Approching FIRST AVE', 'N/A'],
         ['H_45', 70, True, 'Welcome to FIRST AVE', '1'],
         ['H_44', 70, True, 'N/A', 'N/A'],
-        ['H_43', 70, True, 'N/A', 'N/A']
+        ['H_43', 70, True, 'N/A', 'N/A'],
         ['O_67', 55, False, 'N/A', 'N/A'], #segment 1
         ['P_68', 55, False, 'N/A', 'N/A'],
         ['P_69', 55, True, 'N/A', 'N/A'],
@@ -257,7 +257,7 @@ class Line_Dictionary():
         ['H_35', 70, True, 'Welcome to STEEL PLAZA' , '1'],
         ['H_34', 70, True, 'N/A', 'N/A'],
         ['H_33', 70, True, 'N/A', 'N/A'],
-        ['H_32', 70, True, 'N/A', 'N/A']
+        ['H_32', 70, True, 'N/A', 'N/A'],
         ['R_72', 55, False, 'N/A', 'N/A'], # segment 2
         ['S_73', 55, False, 'N/A', 'N/A'],
         ['S_74', 55, True, 'N/A', 'N/A'],
@@ -275,7 +275,7 @@ class Line_Dictionary():
         ['F_19', 70, False, 'N/A', 'N/A'],
         ['F_18', 70, False, 'N/A', 'N/A'],
         ['F_17', 55, False, 'Approching HERRON AVE', 'N/A'],
-        ['F_16', 40, False, 'Welcome to HERRON AVE', '2']
+        ['F_16', 40, False, 'Welcome to HERRON AVE', '2'],
         ['A_1', 40, False, 'N/A', 'N/A'],  #end
         ['A_2', 40, False, 'N/A', 'N/A'],
         ['A_3', 40, False, 'N/A', 'N/A'],

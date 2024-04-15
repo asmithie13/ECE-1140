@@ -284,6 +284,7 @@ class CTC_UI(QtWidgets.QMainWindow):
             self.ChooseSwitchSelect.addItem(i[0])
         self.newSwitchSelected(0)
     
+    #Sets drop down options if red line is selected
     def redLine_button(self):
         self.currentLine = 'Red'
         
@@ -337,7 +338,6 @@ class CTC_UI(QtWidgets.QMainWindow):
             error_msg.setIcon(QMessageBox.Critical)
 
             error_msg.exec_() 
-
             return
 
         #Parse File
@@ -386,7 +386,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ReopenBlockButton.setStyleSheet("background-color : rgb(38, 207, 4)")          #Green
         self.SetSwitchPositionButton.setStyleSheet("background-color: rgb(195, 16, 40)")    #Red
         self.ReleaseSwitchButton.setStyleSheet("background-color : rgb(38, 207, 4)")        #Green
-
 
     #Will indicate that the system is no longer in maintenance mode
     #Should work on the double press of the button
@@ -458,7 +457,6 @@ class CTC_UI(QtWidgets.QMainWindow):
                 self.Maintenance.SwitchText.clear()
                 self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintenance.SwitchText))
 
-
     #function to update block occupied table based on input from Wayside
     def updateOccupiedBlocks(self, arr):
         #Clear temp new block layout array
@@ -483,7 +481,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.occupiedBlocks.BlockDataCurrent = self.occupiedBlocks.BlockDataNew
 
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockDataCurrent))
-
 
     #defining manual mode add train button functionality
     def addTrain_button(self):
@@ -513,7 +510,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.trainSchedule.addTrain(self.currentLine, TrainID, Destination, ArrivalTime, Departure[0], Departure[1])
 
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
-
 
     #Function to add a block closure when in maintence mode, sets block object as occupied
     def closeBlock_button(self):
@@ -630,7 +626,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         error_msg.setIcon(QMessageBox.Critical)
 
         error_msg.exec_() 
-
 
     #Funciton to sync switch position options to current selected switch
     def newSwitchSelected(self, index):

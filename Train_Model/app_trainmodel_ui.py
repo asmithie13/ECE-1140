@@ -154,12 +154,10 @@ class TrainModel_mainwindow(QMainWindow):
 
 
     def ebrake_disabled(self, ebrake_state):
-        #print('ebrake', ebrake_state)
         self.ebrake_state = ebrake_state
     
         # If ebrake is enabled
         if self.ebrake_state:
-            #print('true condition')
             if self.ebrake.setChecked(True):
                 self.TC.ebrake_sig.emit(1)  # Emit the ebrake signal with value 1
             else:
@@ -167,7 +165,7 @@ class TrainModel_mainwindow(QMainWindow):
             self.ebrake.setEnabled(False)  # Disable the ebrake button
 
         else:
-            #print('false condition')
+
             self.ebrake.setEnabled(True)  # Enable the ebrake button
             self.ebrake.setChecked(False)  # Set the ebrake button to unchecked (OFF)
             
@@ -415,6 +413,7 @@ class TrainCalculations:
 
     def get_mass(self, commanded_speed, grade, mass):
         #avg mass of a person = 80 kgs
+        self.mass=mass
         self.mass+=self.main_window.total_cap*80*2.205 #converting mass to pounds
         round(self.mass,2)
         self.commanded_speed=commanded_speed
@@ -440,7 +439,7 @@ class TrainCalculations:
         
         
         #accounting for friction
-        friction_coeff=0.001
+        friction_coeff=0.000001
 
         #if train is on a slope, normal force= mgcos(theta)
         if(grade>0.00):
@@ -453,17 +452,10 @@ class TrainCalculations:
         #force = (power / commanded_speed)
         #if service brake and emergency stop are disabled
         try: 
-            if self.main_window.ebrake_state==False:
-                if self.main_window.brake_state==False:
-                    self.force = (power / self.commanded_speed) - self.grav_force - self.fric_force
+            self.force = (power / self.commanded_speed) - self.grav_force - self.fric_force
 
         except ZeroDivisionError: #if comm_speed is zero
-             if self.main_window.ebrake_state==False:
-                if self.main_window.brake_state==False:
-                    self.force = power - self.grav_force 
-
-        if self.force <= 0:
-            self.force=0
+            self.force = power - self.grav_force 
 
         return self.force
 
@@ -472,8 +464,12 @@ class TrainCalculations:
         self.commanded_speed=commanded_speed #in m/s
         self.grade=grade
         force = self.calculate_force(commanded_speed,grade,mass) #in kgm/s^2
-        mass = self.main_window.mass
-        acceleration = (force/mass)*3.28 #in ft/s^2
+
+        if force<0:
+            acceleration=0
+        else:
+            acceleration = (force/self.mass)*3.28 #in ft/s^2
+
         # if self.main_window.brake_state==1:
         #     acceleration=-3.9370078740157477 #in ft/s^2
         
@@ -525,7 +521,8 @@ class TrainCalculations:
         #     self.main_window.Acc_Velo_value_lcd.display(self.main_window.)
         #     self.TC.curr_spd_sig.emit(int(self.main_window.velocity))
         #     self.main_window.track_model_acc_velo.emit(int(self.main_window.velocity))
-        self.main_window.comm_speed=self.main_window.velocity
+        #
+        # self.main_window.comm_speed=self.main_window.velocity
 
         self.main_window.Acc_Velo_value_lcd.display(int(self.main_window.velocity))
         self.TC.curr_spd_sig.emit(int(self.main_window.velocity))

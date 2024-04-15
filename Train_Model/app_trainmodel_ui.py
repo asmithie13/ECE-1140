@@ -149,6 +149,17 @@ class TrainModel_mainwindow(QMainWindow):
         self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
         self.TC.curr_auth_sig.emit(float(Authority))
 
+    #sending beacon_info_sig to Train Controller
+    def receive_beacon_info(self,beacon_info):
+        self.TC.beacon_info_sig.emit(beacon_info)
+
+    #sending polarity to Train Controller
+    def receive_polarity(self,polarity):
+        self.TC.block_change.emit(polarity)
+
+    
+
+
 
         
 
@@ -186,7 +197,9 @@ class TrainModel_mainwindow(QMainWindow):
         self.width_display.setText(width)
 
     def set_grade(self, grade):
+        self.grade=grade
         self.grade_display.setText(grade)
+
 
 
     def get_train_selection(self,seltext):

@@ -274,7 +274,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Set stations selctions to green line
         self.DestinationSelect.clear()
-        self.DestinationSelect.addItems(self.TrackData.GreenStations)
+        self.DestinationSelect.addItems(self.TrackData.GreenStations[1:])
         #Setting Block selections to green line
         self.CloseBlockSelect.clear()
         self.CloseBlockSelect.addItems(self.TrackData.GreenBlockIDs)
@@ -293,7 +293,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Set stations selctions to red line
         self.DestinationSelect.clear()
-        self.DestinationSelect.addItems(self.TrackData.RedStations)
+        self.DestinationSelect.addItems(self.TrackData.RedStations[1:])
         #Setting Block selections to red line
         self.CloseBlockSelect.clear()
         self.CloseBlockSelect.addItems(self.TrackData.RedBlockIDs)

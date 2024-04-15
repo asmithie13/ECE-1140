@@ -132,7 +132,6 @@ class Line_Dictionary():
         ['A_3', 45, False, 'Approching PINONEER', 'N/A'],
         ['A_2', 45, False, 'PIONEER', '2'],
         ['A_1', 45, False, 'N/A', 'N/A']
-
         ['D_13', 70, False, 'N/A', 'N/A'], #new section
         ['D_14', 70, False, 'N/A', 'N/A'],
         ['D_15', 70, False, 'Apporaching STATION', 'N/A'],

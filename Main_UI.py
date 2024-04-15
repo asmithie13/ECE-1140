@@ -130,6 +130,16 @@ class Main_UI(QtWidgets.QMainWindow):
         self.TrainSelect.addItem(TrainID)
 
     def open_train_model_UI(self):
+        if len(self.currentTrains) == 0:
+            #Popup a message if the user enters a block that isn't closed
+            error_msg = QMessageBox()
+            error_msg.setWindowTitle("Selection Error")
+            error_msg.setText("No trains currently exist. Please dispatch a train to open the Trian Model UI.")
+            error_msg.setIcon(QMessageBox.Critical)
+
+            error_msg.exec_() 
+
+            return
         TrainID = self.TrainSelect.currentText() 
         TrainNum = int(TrainID[1:])
 

@@ -44,13 +44,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.SetSwitchPositionButton.clicked.connect(self.setSwitch_button)
         self.ReleaseSwitchButton.clicked.connect(self.releaseSwitch_button)
 
-        #Changing Button Colors
-        self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")             #Green
-        self.UploadButton.setStyleSheet("background-color : rgb(38, 207, 4)")               #Green
-        self.CloseBlockButton.setStyleSheet("background-color: rgb(195, 16, 40)")           #Red
-        self.ReopenBlockButton.setStyleSheet("background-color : rgb(38, 207, 4)")          #Green
-        self.SetSwitchPositionButton.setStyleSheet("background-color: rgb(195, 16, 40)")    #Red
-        self.ReleaseSwitchButton.setStyleSheet("background-color : rgb(38, 207, 4)")        #Green
 
         #Changing Background colors to section off UI, all light blue
         self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255);")
@@ -234,8 +227,9 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.TrainNameSelect.addItems(self.trainSchedule.TrainNames)
         self.DestinationSelect.setEnabled(True)
         self.ArrivalTimeEdit.setEnabled(True)
-        #Disable the add train button
+        #Enable the add train button
         self.AddTrainButton.setEnabled(True)
+        self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")             #Green
         #Changing label text to gray
         self.TrainNameLabel.setStyleSheet("color: black;")
         self.DestinationLabel.setStyleSheet("color: black;")
@@ -255,6 +249,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ArrivalTimeEdit.setEnabled(False)
         #Disable the add train button
         self.AddTrainButton.setEnabled(False)
+        self.AddTrainButton.setStyleSheet("background-color : rgb(138, 237, 119)")  #Muted Green
 
 
         #Highlight Auto selected and disable manual select button
@@ -355,7 +350,8 @@ class CTC_UI(QtWidgets.QMainWindow):
 
             #Disable Manual Mode and upload button
             self.UploadButton.setEnabled(False)
-            self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
+            self.UploadButton.setStyleSheet("background-color : rgb(138, 237, 119); color: rgb(120, 120, 120);")        #Muted Green
+            #self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
     
     #Function to determine if the system is entering or exitting maintenance mode
     def maintenanceMode_button(self):
@@ -385,6 +381,11 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ChooseSwitchLabel.setStyleSheet("color: black;")
         self.SwitchPositionLabel.setStyleSheet("color: black;")
         self.MaintenanceBox.setStyleSheet("color: black;")
+        #Changing button colors
+        self.CloseBlockButton.setStyleSheet("background-color: rgb(195, 16, 40)")           #Red
+        self.ReopenBlockButton.setStyleSheet("background-color : rgb(38, 207, 4)")          #Green
+        self.SetSwitchPositionButton.setStyleSheet("background-color: rgb(195, 16, 40)")    #Red
+        self.ReleaseSwitchButton.setStyleSheet("background-color : rgb(38, 207, 4)")        #Green
 
 
     #Will indicate that the system is no longer in maintenance mode
@@ -422,6 +423,11 @@ class CTC_UI(QtWidgets.QMainWindow):
             self.ChooseSwitchLabel.setStyleSheet("color: rgb(120, 120, 120);")
             self.SwitchPositionLabel.setStyleSheet("color: rgb(120, 120, 120);")
             self.MaintenanceBox.setStyleSheet("color: rgb(120, 120, 120);")
+            #Muting button colors
+            self.CloseBlockButton.setStyleSheet("background-color: rgb(245, 144, 158)")            #Muted red
+            self.ReopenBlockButton.setStyleSheet("background-color : rgb(138, 237, 119)")          #Muted Green
+            self.SetSwitchPositionButton.setStyleSheet("background-color: rgb(245, 144, 158)")     #Muted Red
+            self.ReleaseSwitchButton.setStyleSheet("background-color : rgb(138, 237, 119)")        #Muted Green
 
             #Reopen all blocks if there are any
             if len(self.Maintenance.BlocksClosed) > 0:

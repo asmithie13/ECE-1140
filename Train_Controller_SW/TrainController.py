@@ -178,9 +178,9 @@ class TrainController(QMainWindow):
      
 
     def Open_Main_UI(self):
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self.window)
+        #self.window = QtWidgets.QMainWindow()
+        #self.ui = Ui_MainWindow()
+        #self.ui.setupUi(self.window)
         self.window.show()
 
 #if __name__ == "__main__":

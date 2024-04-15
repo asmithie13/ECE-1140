@@ -153,9 +153,9 @@ class TrainModel_mainwindow(QMainWindow):
     def receive_beacon_info(self,beacon_info):
         self.TC.beacon_info_sig.emit(beacon_info)
 
-    #sending polarity to Train Controller
-    def receive_polarity(self,polarity):
-        self.TC.block_change.emit(polarity)
+    # #sending polarity to Train Controller
+    # def receive_polarity(self,polarity):
+    #     self.TC.block_change.emit(polarity)
 
     
 

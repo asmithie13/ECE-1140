@@ -121,7 +121,13 @@ class Main_UI(QtWidgets.QMainWindow):
         self.TrackModelWindow.sendSpeedAuth.connect(self.currentTrains[-1].receiveSpeedAuth_tm)
         
         # Grade for the next block
-        #self.TrackModelWindow.grade_signal.connect(self.currentTrains[-1].)
+        self.TrackModelWindow.grade_signal.connect(self.currentTrains[-1].set_grade)
+
+        #Beacon info
+        self.TrackModelWindow.send_beacon.connect(self.currentTrains[-1].receive_beacon_info)
+
+        #Polarity
+        self.TrackModelWindow.send_polarity.connect(self.currentTrains[-1].receive_polarity)
         
         #Train Model to Track Model
         # Actual Velocity

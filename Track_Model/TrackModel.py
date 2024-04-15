@@ -53,9 +53,16 @@ class TrackModelMain(QMainWindow):
     #send authority to ttestbench
     send_authority_tb = pyqtSignal(str)
 
-    grade_signal = pyqtSignal(int)
+    grade_signal = pyqtSignal(float)
+
+    send_beacon = pyqtSignal(int)
+
+    send_polarity = pyqtSignal(bool)
+
+    send_bool_auth = pyqtSignal(bool)
 
     AcutalSpeed = 0
+    
 
     station_lookup = {
     "A2": "PIONEER",
@@ -104,6 +111,7 @@ class TrackModelMain(QMainWindow):
         self.blockIDs_HW = []
         self.dt = 0
         self.prev_time = 0
+        self.polarity = 0
 
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track_Model/Track_Model.ui", self)
@@ -157,9 +165,11 @@ class TrackModelMain(QMainWindow):
         if line == "Green":
             self.currentTrains.append([trainID, line, 0, 'increasing', 'K63'])
             self.occupied_blocks.append('K63')
+            self.send_beacon.emit(0)
             self.update_occupied_blocks()
         elif line == "Red":
             self.currentTrains.append([trainID, line, 0, 'increasing', 'D10'])
+            self.send_beacon.emit(1)
 
     def update_heaters_out(self):
         # Get the current temperature from the spinbox
@@ -258,6 +268,12 @@ class TrackModelMain(QMainWindow):
                 next_block_grade = self.data.get_grade_for_block(next_block_num)  # Fetch grade for the next block
                 if next_block_grade is not None:
                     self.grade_signal.emit(next_block_grade)  # Emit the grade of the next block
+                    
+                    if self.polarity == 0:
+                        self.polarity = 1
+                    else:
+                        self.polarity = 0
+                self.send_polarity.emit(self.polarity)
 
                 
                 # Getting block section from excel 
@@ -716,8 +732,7 @@ class TrackModelMain(QMainWindow):
                 self.currentStation = None
                 self.ticket_out.clear()
 
-
-    
+  
     def is_station(self, block_id):
         # Check if the block ID is in the station lookup table
         return block_id in self.station_lookup

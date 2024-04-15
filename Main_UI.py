@@ -150,7 +150,7 @@ class Main_UI(QtWidgets.QMainWindow):
         TrainNum = int(TrainID[1:])
 
         #Pull train controller UI
-        self.currentTrains[TrainNum - 1].TC.show()
+        self.currentTrains[TrainNum - 1].TC.Open_Main_UI()
 
 
 """

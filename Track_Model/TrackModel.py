@@ -53,6 +53,8 @@ class TrackModelMain(QMainWindow):
     #send authority to ttestbench
     send_authority_tb = pyqtSignal(str)
 
+    grade_signal = pyqtSignal(int)
+
     AcutalSpeed = 0
 
     station_lookup = {
@@ -128,7 +130,7 @@ class TrackModelMain(QMainWindow):
         # Instantiate the Data class
         self.data = Data()
 
-        self.line_select.currentIndexChanged.connect(self.load_track_layout_based_on_selection)
+        #self.line_select.currentIndexChanged.connect(self.load_track_layout_based_on_selection)
 
         # Connect the comboBox to the function
         self.green_line.hide()
@@ -176,13 +178,15 @@ class TrackModelMain(QMainWindow):
         selected_option = self.line_select.currentText()
         if selected_option == "Green Line":
             self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
-            self.load_default_track_layout()
+
         elif selected_option == "Red Line":
             self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
-            self.load_default_track_layout()
+            print(self.default_track_path)
+
         else:
             print("")
         self.load_default_track_layout()
+       
     
     def load_default_track_layout(self):
         if self.default_track_path and os.path.exists(self.default_track_path):
@@ -248,7 +252,13 @@ class TrackModelMain(QMainWindow):
             #     elif block_num == 52:
             #         self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
                 
-                
+            # Calculate next block for TRAIN MODEL
+            next_block_num = self.get_next_id(block_num, self.currentTrains[int(trainId[1:]) - 1][3], "Green")
+            if next_block_num is not None:
+                next_block_grade = self.data.get_grade_for_block(next_block_num)  # Fetch grade for the next block
+                if next_block_grade is not None:
+                    self.grade_signal.emit(next_block_grade)  # Emit the grade of the next block
+
                 
                 # Getting block section from excel 
                 self.section_occ = self.data.get_section_for_block(block_num)
@@ -589,9 +599,9 @@ class TrackModelMain(QMainWindow):
             if button:
                 self.block_buttons[block_id] = button
                 button.clicked.connect(lambda checked, b_id=block_id: self.block_clicked(b_id))
-                print(f"Connected {block_id}")
+                # print(f"Connected {block_id}")
             else:
-                print(f"Button not found: {block_id}")
+                print("")
 
 
 
@@ -626,9 +636,10 @@ class TrackModelMain(QMainWindow):
             self.block_selected_signal.emit(adjusted_block_id)  # Emit signal with original block ID
         else:
             # Print debug info if no data is found
-            print(f"No data found for block {adjusted_block_id}")
+            # print(f"No data found for block {adjusted_block_id}")
+            print("")
 
-        print(f"Adjusted Block ID for fetching data: {adjusted_block_id} (Original: {block_id}, Line: {self.line_select})")
+        # print(f"Adjusted Block ID for fetching data: {adjusted_block_id} (Original: {block_id}, Line: {self.line_select})")
 
         # Update UI components to reflect the selected block
         self.block_in_1.setCurrentText(adjusted_block_id)
@@ -875,17 +886,17 @@ class TrackModelMain(QMainWindow):
 
         self.block_in_2.setCurrentText(selected_text)
 
-    def blockClicked(self, block_id):
-        #Fetch block data and update UI elements
-        block_data = self.data.get_data_for_block(block_id)
-        if block_data:
-            self.block_num_in.setText(str(block_data['block_num']))
-            self.section_in.setText(block_data['section'])
-            self.speed_in.setText(str(block_data['speed_limit_km']))
-            self.grade_in.setText(str(block_data['grade']))
-            self.length_in.setText(str(block_data['length1_m']))
-            self.elevation_in.setText(str(block_data['elevation_m']))
-            self.cumm_elevation_in.setText(str(block_data['cumm_elevation_m']))
+    # def blockClicked(self, block_id):
+    #     #Fetch block data and update UI elements
+    #     block_data = self.data.get_data_for_block(block_id)
+    #     if block_data:
+    #         self.block_num_in.setText(str(block_data['block_num']))
+    #         self.section_in.setText(block_data['section'])
+    #         self.speed_in.setText(str(block_data['speed_limit_km']))
+    #         self.grade_in.setText(str(block_data['grade']))
+    #         self.length_in.setText(str(block_data['length1_m']))
+    #         self.elevation_in.setText(str(block_data['elevation_m']))
+    #         self.cumm_elevation_in.setText(str(block_data['cumm_elevation_m']))
 
 
 
@@ -1080,8 +1091,15 @@ class Data:
     # read Excel files from DataFrame
     def read_excel(self, filename):
 
-        self.df = pd.read_excel("Track_Resources/green_line_block_info.xlsx")
-        self.df = pd.read_csv("Track_Resources/green_line_block_info.csv")
+        if filename.endswith('.xlsx'):
+            self.df = pd.read_excel(filename)
+        elif filename.endswith('.csv'):
+            try:
+                self.df = pd.read_csv(filename, error_bad_lines=False)
+            except Exception as e:
+                print(f"Failed to read CSV: {e}")
+        else:
+            print("Unsupported file format")
 
         #extract data from DataFrame of the Excel and assign to variables
         self.elevation_data = self.df.set_index('Block Number')['ELEVATION (M)'].to_dict()

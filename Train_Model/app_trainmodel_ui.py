@@ -464,11 +464,11 @@ class TrainCalculations:
         self.commanded_speed=commanded_speed #in m/s
         self.grade=grade
         force = self.calculate_force(commanded_speed,grade,mass) #in kgm/s^2
-
-        if force<0:
+        if force==0:
             acceleration=0
         else:
-            acceleration = (force/self.mass)*3.28 #in ft/s^2
+            acceleration = float((force/self.mass)*3.28) #in ft/s^2
+            #acceleration=round(acceleration,3)
 
         # if self.main_window.brake_state==1:
         #     acceleration=-3.9370078740157477 #in ft/s^2
@@ -476,7 +476,7 @@ class TrainCalculations:
         # if self.main_window.ebrake_state==1:
         #     acceleration=-8.956692913385826 #in ft/s^2
 
-        self.main_window.Acceleration_value_lcd.display(acceleration)
+        self.main_window.Acceleration_value_lcd.display("{:.3f}".format(acceleration))
         return acceleration
 
     def get_acceleration(self,commanded_speed,grade,mass):

@@ -15,6 +15,7 @@ from CTC.TempData import *
 class Schedule():
     def __init__(self):
         self.Scheduledata = []
+        self.dataSent = []
         self.AuthorityInfo = []
         self.TrackData = TempData()
         self.TrainNames = ["*T1"]
@@ -23,6 +24,7 @@ class Schedule():
     def addTrain(self, line, TrainID, Destination, ArrivalTime, Departure, DepartureTime):
         newTrain = [line, TrainID, Destination, ArrivalTime, Departure, DepartureTime]
         self.Scheduledata.append(newTrain)
+        self.dataSent.append(0)
 
     #function to parse a schedule file for automatic mode
     def parseScheduleFile(self, filepath):

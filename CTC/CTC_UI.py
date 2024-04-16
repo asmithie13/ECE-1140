@@ -309,19 +309,30 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.CTC_clock.display(time)
         self.currentTime = time
         
-        for i in self.trainSchedule.Scheduledata:
-            if (time == i[5]) and (int(i[1][1:]) > len(self.occupiedBlocks.currentTrains)):
+        for index, entry in enumerate(self.trainSchedule.Scheduledata):
+            #Dispatch a new train
+            if (time == entry[5]) and (int(entry[1][1:]) > len(self.occupiedBlocks.currentTrains)):
                 #Initializing where the train starts
-                if i[0] == 'Green':
+                if entry[0] == 'Green':
                     self.occupiedBlocks.currentTrains.append(['K63'])
-                elif i[0] == 'Red':
+                elif entry[0] == 'Red':
                     self.occupiedBlocks.currentTrains.append(['D10'])
 
-                self.create_a_train.emit(i[1], i[0])
+                self.create_a_train.emit(entry[1], entry[0])
 
                 #Train ID, speed, Authority
-                self.sendDispatchInfo.emit([i[1], 40, self.trainSchedule.AuthorityInfo[int(i[1][1:]) - 1]])
-                print(i[1], "Dispatched")
+                self.sendDispatchInfo.emit([entry[1], 40, self.trainSchedule.AuthorityInfo[index]])
+                self.trainSchedule.dataSent[index] = 1
+                print(entry[1], "Dispatched")
+
+            
+            #Send a new dispatch info if train already exists
+            elif (time == entry[5]) and (self.trainSchedule.dataSent[index] == 0):
+                self.sendDispatchInfo.emit([entry[1], 40, self.trainSchedule.AuthorityInfo[index]])
+                self.trainSchedule.dataSent[index] = 1
+                print(entry[1], "Dispatched to new station")
+
+
 
     #Define functionality for Upload File Button
     def selectScheduleFile(self):
@@ -537,7 +548,6 @@ class CTC_UI(QtWidgets.QMainWindow):
             self.trainSchedule.addTrain(self.currentLine, TrainID, Destination, ArrivalTime, Departure[0], Departure[1])
 
             self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
-
 
     #Function to create pop-up message if a train is dispatched in the past
     def trainInPastWarning(self):

@@ -34,7 +34,7 @@ class TrainModel_mainwindow(QMainWindow):
     door_state=3
     brake_state=0
     ebrake_state=0
-    people_count=64
+    people_count=0
     crew_count=2
     total_cap=people_count+crew_count
     people_getting_off=10
@@ -56,7 +56,7 @@ class TrainModel_mainwindow(QMainWindow):
         #CLOCK
         self.clock = Clock()
         self.clock.current_time_changed.connect(self.update_time)
-        self.people_disemb(self.people_count)
+        #self.people_disemb(self.people_count)
 
         #Connecting TC signals to Train Model
         self.TC.int_light_sig.connect(self.interior_lights)    

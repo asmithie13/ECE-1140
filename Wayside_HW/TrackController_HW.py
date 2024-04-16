@@ -56,7 +56,9 @@ class TrackController_HW(QMainWindow):
         self.occupiedBlocks = []
         self.occupiedBlockSections = []
         self.listOccIDs = []
+
         self.closedBlocks = []
+        self.listClosedIDs = []
 
         self.maintenanceSwitches = []
 
@@ -73,19 +75,16 @@ class TrackController_HW(QMainWindow):
     
     def modeHandler(self, occupiedBlocks):
         self.previousOccupiedBlock = self.occupiedBlocks
-        #If a block is closed by CTC, it is recognized as "occupied" by the PLC parser:
-        for block in self.closedBlocks:
-            if block.ID not in self.listOccIDs:
-                self.listOccIDs.append(block.ID)
-                block.occupied = True
-                self.occupiedBlocks.append(block)
         
         self.listOccIDs = occupiedBlocks #Argument received is a string of occupied block IDs
+        for block in self.closedBlocks:
+            self.listOccIDs.append(block.ID)
+
         self.occupiedBlocks = [] #Make a list of block objects that are occupied
         for block in self.allBlocks:
             if block.ID in self.listOccIDs:
                 self.occupiedBlocks.append(block)
-    
+        
         for block in self.allBlocks: #Set occupancy status in the list of all blocks
             if block.ID in self.listOccIDs:
                 block.occupied = 1
@@ -116,14 +115,18 @@ class TrackController_HW(QMainWindow):
         for block in closedBlocks:
             if block.maintenance == 1 and block not in self.closedBlocks:
                 self.closedBlocks.append(block)
+                self.listClosedIDs.append(block.ID)
+        
+            elif block.maintenance == 0:
+                for blockTwo in self.closedBlocks:
+                    if block.ID == blockTwo.ID:
+                        self.closedBlocks.remove(block)
+                        self.listClosedIDs.remove(block.ID)
+                        self.listOccIDs.remove(block.ID)
 
-            if block.maintenance == 0 and block in self.closedBlocks:
-                self.closedBlocks.remove(block)
-                self.listOccIDs.remove(block.ID)
-
-            for blockTwo in self.occupiedBlocks:
-                if block.ID == blockTwo.ID:
-                    self.occupiedBlocks.remove(blockTwo)
+                for blockTwo in self.occupiedBlocks:
+                    if block.ID == blockTwo.ID:
+                        self.occupiedBlocks.remove(blockTwo)
 
         self.modeHandler(self.listOccIDs)
 

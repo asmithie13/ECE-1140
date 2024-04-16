@@ -38,6 +38,7 @@ class TrainModel_mainwindow(QMainWindow):
     crew_count=2
     total_cap=people_count+crew_count
     people_getting_off=10
+    stop_bool= False
     #Track Model Signals
     track_model_acc_velo = qtc.pyqtSignal(str, int)
 
@@ -153,9 +154,16 @@ class TrainModel_mainwindow(QMainWindow):
     def receive_beacon_info(self,beacon_info):
         self.TC.beacon_info_sig.emit(beacon_info)
 
-    # #sending polarity to Train Controller
-    # def receive_polarity(self,polarity):
-    #     self.TC.block_change.emit(polarity)
+    #sending polarity to Train Controller
+    def receive_polarity(self,polarity):
+        self.TC.block_change.emit(polarity)
+    
+    def stop_at_station(self,stop_bool):
+        self.stop_bool=stop_bool
+        
+        
+
+
 
     
 

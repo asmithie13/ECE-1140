@@ -332,8 +332,6 @@ class CTC_UI(QtWidgets.QMainWindow):
                 self.trainSchedule.dataSent[index] = 1
                 print(entry[1], "Dispatched to new station")
 
-
-
     #Define functionality for Upload File Button
     def selectScheduleFile(self):
         # Open a file dialog to select a Excel File
@@ -500,14 +498,14 @@ class CTC_UI(QtWidgets.QMainWindow):
         Destination = self.DestinationSelect.currentText()
         ArrivalTime = self.ArrivalTimeEdit.time()
 
-        #Calculating Departure Info
-        Departure = []
+        #Correct train name if it is a new train
         if TrainID[0] == '*':
             tempID = TrainID[1:]
         else:
             tempID = TrainID
-
-        
+            
+        #Calculating Departure Info
+        Departure = []
         self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure, self.currentLine, tempID)
 
         #Check if time is in past

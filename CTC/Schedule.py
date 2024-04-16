@@ -90,7 +90,9 @@ class Schedule():
 
             DepartureData = []
             tempArrivalTime = QTime()   #Converting ArrivalTime to QTime for easier math
-            self.calculateDeparture(row[2], tempArrivalTime.fromString(row[3]), DepartureData, line)
+            self.calculateDeparture(row[2], tempArrivalTime.fromString(row[3]), DepartureData, line, row[1])
+            self.dataSent.append(0)
+
             #Adding departure Data to the row data
             row.append(DepartureData[0])
             row.append(DepartureData[1])

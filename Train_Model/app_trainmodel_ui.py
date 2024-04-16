@@ -198,7 +198,7 @@ class TrainModel_mainwindow(QMainWindow):
 
     def set_grade(self, grade):
         self.grade=grade
-        self.grade_display.setText(grade)
+        self.grade_display.setText(str(grade))
 
 
 

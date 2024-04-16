@@ -129,14 +129,7 @@ class Vital_Speed_Auth():
                 self.ui.vertSliderPow.setEnabled(True)
 
             else:
-<<<<<<< HEAD
                 self.stop_at_station_sig.emit(True)
-=======
-                self.stop_at_staion_sig.emit(True)
-
-
-
->>>>>>> 20d5c14a647ae62fa8e88fec439a9dc4712d2243
 
         # elif self.stopcal == 1:
         #     self.ui.lcdAuth.display(self.ui.lcdAuth.value() - int(self.rate*self.time))

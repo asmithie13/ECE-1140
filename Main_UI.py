@@ -127,7 +127,7 @@ class Main_UI(QtWidgets.QMainWindow):
         self.TrackModelWindow.send_beacon.connect(self.currentTrains[-1].receive_beacon_info)
 
         #Polarity
-        self.TrackModelWindow.send_polarity.connect(self.currentTrains[-1].receive_polarity)
+        #self.TrackModelWindow.send_polarity.connect(self.currentTrains[-1].receive_polarity)
         
         #Train Model to Track Model
         # Actual Velocity

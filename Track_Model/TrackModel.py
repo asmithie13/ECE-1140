@@ -269,10 +269,10 @@ class TrackModelMain(QMainWindow):
                 if next_block_grade is not None:
                     self.grade_signal.emit(next_block_grade)  # Emit the grade of the next block
                     
-                    if self.polarity == 0:
-                        self.polarity = 1
-                    else:
-                        self.polarity = 0
+            #         if self.polarity == 0:
+            #             self.polarity = 1
+            #         else:
+            #             self.polarity = 0
                 #self.send_polarity.emit(self.polarity)
 
                 
@@ -1098,10 +1098,8 @@ class Data:
         self.cross = None
         self.infra = None
         self.cumm_elevation = None
+        self.df = None
 
-    def set_heater(self): #based on set temp
-        pass
-    
 
     # read Excel files from DataFrame
     def read_excel(self, filename):

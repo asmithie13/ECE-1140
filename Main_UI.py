@@ -82,7 +82,7 @@ class Main_UI(QtWidgets.QMainWindow):
         #self.TrainModelButton.clicked.connect(self.create_new_train)
 
         #Train Controller SW (Might need initialized per train)
-        self.TrainControllerSW_Button.clicked.connect(self.open_train_controller_UI)
+        self.TrainController_Button.clicked.connect(self.open_train_controller_UI)
 
         #Train Controller HW (Might need initialized per train)
 
@@ -120,9 +120,19 @@ class Main_UI(QtWidgets.QMainWindow):
         # [Train ID, commanded speed, authority]
         self.TrackModelWindow.sendSpeedAuth.connect(self.currentTrains[-1].receiveSpeedAuth_tm)
         
+        # Grade for the next block
+        self.TrackModelWindow.grade_signal_tm.connect(self.currentTrains[-1].set_grade)
+
+        #Beacon info
+        self.TrackModelWindow.send_beacon.connect(self.currentTrains[-1].receive_beacon_info)
+
+        #Polarity
+        #self.TrackModelWindow.send_polarity.connect(self.currentTrains[-1].receive_polarity)
+        
         #Train Model to Track Model
         # Actual Velocity
         self.currentTrains[-1].track_model_acc_velo.connect(self.TrackModelWindow.receiveSendVelocity)
+
 
         #Connect Signals to Track Model
         #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)
@@ -130,17 +140,41 @@ class Main_UI(QtWidgets.QMainWindow):
         self.TrainSelect.addItem(TrainID)
 
     def open_train_model_UI(self):
+        #Error checking that a train actually exists
+        if len(self.currentTrains) == 0:
+            #Popup a message if the user enters a block that isn't closed
+            error_msg = QMessageBox()
+            error_msg.setWindowTitle("Selection Error")
+            error_msg.setText("No trains currently exist. Please dispatch a train to open the Trian Model UI.")
+            error_msg.setIcon(QMessageBox.Critical)
+
+            error_msg.exec_() 
+
+            return
+        
         TrainID = self.TrainSelect.currentText() 
         TrainNum = int(TrainID[1:])
 
         self.currentTrains[TrainNum - 1].show()
 
     def open_train_controller_UI(self):
+        #Error checking that a train actually exists
+        if len(self.currentTrains) == 0:
+            #Popup a message if the user enters a block that isn't closed
+            error_msg = QMessageBox()
+            error_msg.setWindowTitle("Selection Error")
+            error_msg.setText("No trains currently exist. Please dispatch a train to open the Trian Model UI.")
+            error_msg.setIcon(QMessageBox.Critical)
+
+            error_msg.exec_() 
+
+            return
+        
         TrainID = self.TrainSelect.currentText() 
         TrainNum = int(TrainID[1:])
 
         #Pull train controller UI
-        self.currentTrains[TrainNum - 1].TC.show()
+        self.currentTrains[TrainNum - 1].TC.Open_Main_UI()
 
 
 """

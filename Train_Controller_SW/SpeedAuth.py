@@ -18,6 +18,7 @@ class Vital_Speed_Auth():
         self.prev_time = 0
         self.ebrake_sig = ebrake_internal_sig
         self.stop_at_staion_sig(bool)
+        self.decimal_m_auth = 0
 
     def Control_Current_Speed(self,newSpeed):
         self.ui.lcdCurSpd.display(newSpeed)

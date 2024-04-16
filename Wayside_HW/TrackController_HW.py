@@ -37,11 +37,12 @@ class TrackController_HW(QMainWindow):
         self.LIGHT_C12 = ['C12', 'D13']
         self.LIGHT_G29 = ['F26', 'F27', 'F28', 'G29']
         self.LIGHT_Z150 = ['Y148', 'Y149', 'Z150']
+        self.ALL_LIGHT = ['A1', 'A2', 'C12', 'D13', 'F26', 'F27', 'F28', 'G29', 'Y148', 'Y149', 'Z150']
 
-        self.CHUNK_1 = ['U', 'V', 'W', 'X', 'Y', 'Z']
+        '''self.CHUNK_1 = ['U', 'V', 'W', 'X', 'Y', 'Z']
         self.CHUNK_2 = ['D', 'F']
         self.CHUNK_3 = ['A', 'B', 'C']
-        self.CHUNK_4 = ['E', 'T']
+        self.CHUNK_4 = ['E', 'T']'''
 
         #Disable manual mode operations, as program begins in automatic operation:
         self.groupBoxManual.setEnabled(False)
@@ -56,12 +57,11 @@ class TrackController_HW(QMainWindow):
         self.modeFlag = 0 #0 = Automatic, 1 = Manual, 2 = Maintenance
 
         #Lists to hold blocks that are currently occupied or closed by CTC:
+        self.previousOccupiedBlock = []
         self.occupiedBlocks = []
         self.occupiedBlockSections = []
         self.listOccIDs = []
         self.closedBlocks = []
-
-        self.occChunks = []
 
         self.maintenanceSwitches = []
 
@@ -77,6 +77,7 @@ class TrackController_HW(QMainWindow):
         self.pushButtonDown.clicked.connect(self.setCrossingDown)
     
     def modeHandler(self, occupiedBlocks):
+        self.previousOccupiedBlock = self.occupiedBlocks
         self.listOccIDs = occupiedBlocks #Argument received is a string of occupied block IDs
         self.occupiedBlocks = [] #Make a list of block objects that are occupied
         for block in self.allBlocks:
@@ -145,26 +146,7 @@ class TrackController_HW(QMainWindow):
             listSecIDs.append(block.blockSection)
         self.comboBoxSection.addItems(listSecIDs)
     
-    def automaticMode(self):
-        #Add the sections of all occupanices to a list to be communicated serially:
-        self.occChunks.sort()
-        occupiedChunks = []
-        for block in self.occupiedBlocks:
-            if block.blockSection in self.CHUNK_1 and 1 not in occupiedChunks:
-                occupiedChunks.append(1)
-            elif block.blockSection in self.CHUNK_2 and 2 not in occupiedChunks:
-                occupiedChunks.append(2)
-            elif block.blockSection in self.CHUNK_3 and 3 not in occupiedChunks:
-                occupiedChunks.append(3)
-            elif block.blockSection in self.CHUNK_4 and 4 not in occupiedChunks:
-                occupiedChunks.append(4)
-        occupiedChunks.sort()
-
-        if occupiedChunks == self.occChunks: #Only proceed if there is a section occupancy change
-            return
-        else:
-            self.occChunks = occupiedChunks
-        
+    def automaticMode(self): 
         occupiedBlockSections = []
         for block in self.occupiedBlocks:
             if block.blockSection not in occupiedBlockSections:
@@ -224,6 +206,7 @@ class TrackController_HW(QMainWindow):
         
         self.setMaintenanceSwitch()
         self.updateBooleanAuth() #Uncomment when hardware is not connected
+        self.preventCollision() #Function to prevent occupancy collisions
         self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
     
     def selectBlock(self):
@@ -459,3 +442,32 @@ class TrackController_HW(QMainWindow):
         oneDirectionOne = ['G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] #Block sections where collisions could occur
         oneDirectionTwo = ['A', 'B', 'C'] 
         biDirection = ['D', 'E', 'F']
+
+        tempSkip = []
+        for index, block in enumerate(self.allBlocks):
+            if block.blockSection in oneDirectionOne:
+                if block.occupied == True:
+                    self.allBlocks[index-1].authority = False
+                    self.allBlocks[index-2].authority = False
+                    tempSkip.append(self.allBlocks[index-1])
+                    tempSkip.append(self.allBlocks[index-2])
+                elif block.occupied == False and block.ID not in self.ALL_LIGHT:
+                    if block not in tempSkip:
+                        block.authority = True
+                    if self.allBlocks[index-1] not in tempSkip:
+                        self.allBlocks[index-1].authority = True
+                    if self.allBlocks[index-2] not in tempSkip:
+                        self.allBlocks[index-2].authority = True
+            if block.blockSection in oneDirectionTwo:
+                if block.occupied == True:
+                    self.allBlocks[index+1].authority = False
+                    self.allBlocks[index+2].authority = False
+                    tempSkip.append(self.allBlocks[index+1])
+                    tempSkip.append(self.allBlocks[index+2])
+                elif block.occupied == False and block.ID not in self.ALL_LIGHT:
+                    if block not in tempSkip:
+                        block.authority = True
+                    if self.allBlocks[index+1] not in tempSkip:
+                        self.allBlocks[index+1].authority = True
+                    if self.allBlocks[index+2] not in tempSkip:
+                        self.allBlocks[index+2].authority = True

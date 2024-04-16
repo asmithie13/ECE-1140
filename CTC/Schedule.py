@@ -98,9 +98,32 @@ class Schedule():
                  
         return 1
 
-    def calculateDeparture(self, Destination, ArrivalTime, Departure, line):
+    def calculateDeparture(self, Destination, ArrivalTime, Departure, line, TrainID):
         #Setting Departure Station
-        DepartureStation = "Yard"
+        #If the train already exists
+        if int(TrainID[1:]) <= len(self.Scheduledata):
+            ScheduledStations = []
+
+            for row in self.Scheduledata:
+                if row[1] == TrainID:
+                    ScheduledStations.append(row[2])
+
+            if line == 'Green':
+                for station in reversed(self.TrackData.GreenRouteInfo):
+                    if station[0] in ScheduledStations:
+                        DepartureStation = station[0]
+                        break
+
+            elif line == 'Red':
+                for station in reversed(self.TrackData.RedRouteInfo):
+                    if station[0] in ScheduledStations:
+                        DepartureStation = station[0]
+                        break            
+
+        #Else it's coming from the yard    
+        else:
+            DepartureStation = "Yard"
+
         Departure.append(DepartureStation)
 
         #Calculating Departure Time

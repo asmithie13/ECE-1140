@@ -491,7 +491,13 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Calculating Departure Info
         Departure = []
-        self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure, self.currentLine)
+        if TrainID[0] == '*':
+            tempID = TrainID[1:]
+        else:
+            tempID = TrainID
+
+        
+        self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure, self.currentLine, tempID)
 
         #Check if time is in past
         upperTest = QTime()

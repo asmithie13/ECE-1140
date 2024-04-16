@@ -36,7 +36,7 @@ class TrackModelMain(QMainWindow):
     #sendOccupancies = pyqtSignal(list)
 
     #send ticket sales to ctc
-    SendTicketsales = pyqtSignal(list)
+    SendTicketsales_tm = pyqtSignal(int)
 
     #send train model train id, speed, and authority
     sendSpeedAuth = pyqtSignal(list)
@@ -62,6 +62,7 @@ class TrackModelMain(QMainWindow):
     send_bool_auth = pyqtSignal(bool)
 
     AcutalSpeed = 0
+    total_blockLength = 0
     
 
     station_lookup = {
@@ -114,6 +115,7 @@ class TrackModelMain(QMainWindow):
         self.polarity = 0
         self.time = ""
         self.listStation = []
+        self.random_number  = 0
         
 
         # Load the track model straight from the UI file using uic
@@ -164,6 +166,9 @@ class TrackModelMain(QMainWindow):
         self.current_line = "Green Line"  # Default line
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
+    def train_stop(self, stop):
+        return stop
+    
     def get_train_id(self, trainID, line):
         if line == "Green":
             self.currentTrains.append([trainID, line, 0, 'increasing', 'K63'])
@@ -217,7 +222,7 @@ class TrackModelMain(QMainWindow):
             self.dt = self.local_time - self.prev_time
             self.prev_time = self.local_time
             self.speed_limit_km = self.data.get_speed_for_block(block_num)
-
+            total_blockLength += block_length 
             speed_of_train_m = speed_of_train * 0.00044704 * self.dt
 
             total_dis_from_beg_of_block += speed_of_train_m
@@ -225,6 +230,13 @@ class TrackModelMain(QMainWindow):
 
             #Compare total block length with some other calculated distance
             # distance_covered = (speed_of_train_m * (1 / (self.speed_limit_km * 1000 / (60 * 60))))
+            print("auth", self.Authority)
+            print("total block", total_dis_from_beg_of_block)
+            print("block num:", block_num)
+
+            if self.Authority == total_blockLength:
+            
+                self.generateTickets(block_num)
 
             # if train moves to the next block
             if total_dis_from_beg_of_block >= block_length:
@@ -280,7 +292,6 @@ class TrackModelMain(QMainWindow):
                 #self.send_polarity.emit(self.polarity)
                 self.grade_signal_tm.emit(self.data.get_grade_for_block(block_num))
                 print(self.data.get_grade_for_block(block_num))
-                self.generateTickets(block_num)
 
                 
                 # Getting block section from excel 
@@ -748,18 +759,22 @@ class TrackModelMain(QMainWindow):
 
 
     def generateTickets(self, block_id):
-        self.listStation  = ["A2", "C9", "D16", "F22", "G31", "I39", "W141", "I48", "W132", "I57", "W123", "K65", "U114", "L73", "T105", "N77", "O88", "P96"]
+        self.listStation  = [2, 9, 16, 22, 31, 39, 141, 48, 132, 57, 123, 65, 114, 73, 105, 77, 88, 96]
         # if forceNewNumber or block_id not in self.lastGeneratedTickets:
         #     random_number = random.randint(1, 74)
         #     self.lastGeneratedTickets[block_id] = random_number
 
-        if self.time.split(':')[1] == "00":
-            for i in self.listStation:
-                if block_id == self.listStation[i]:
-                    random_number = random.randint(1, 74)
-                    self.SendTicketsales.emit(random_number)
+        if block_id in self.listStation:
+            self.random_number = random.randint(1, 74)
+            self.SendTicketsales_tm.emit(self.random_number)
         else:
             pass
+
+        if self.time.split(':')[1] == "00":
+                if block_id in self.listStation:
+                    self.random_number = random.randint(1, 74)
+                    self.SendTicketsales_tm.emit(self.random_number)
+            
 
     def get_infra_for_block(self, block_num):
         self.station = None  # Set to None initially to clearly see if it gets changed

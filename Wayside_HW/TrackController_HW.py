@@ -435,7 +435,14 @@ class TrackController_HW(QMainWindow):
                     block.authority = True
     
     def getMaintenanceSwitch(self, switchPos):
-        self.maintenanceSwitches = switchPos
+        for block in switchPos:
+            if block.maintenance == 1:
+                self.maintenanceSwitches.append(block)
+            elif block.maintenance == 0:
+                for blockTwo in self.maintenanceSwitches:
+                    if block.ID == blockTwo.ID:
+                        self.maintenanceSwitches.remove(blockTwo)
+                
         self.setMaintenanceSwitch()
     
     def setMaintenanceSwitch(self): #Function to set maintenance mode switch positions from CTC

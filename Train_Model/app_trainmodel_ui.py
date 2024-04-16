@@ -185,6 +185,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.length_of_vehicle_display.setText(input_txt)
 
     def set_pcount(self, people_count):
+        self.people_count=people_count
         self.pcount_display.setText(str(self.people_count))
 
     def set_ccount(self, crew_count):

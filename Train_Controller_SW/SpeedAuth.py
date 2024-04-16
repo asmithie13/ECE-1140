@@ -17,11 +17,7 @@ class Vital_Speed_Auth():
         self.time = 0
         self.prev_time = 0
         self.ebrake_sig = ebrake_internal_sig
-<<<<<<< HEAD
         self.stop_at_station_sig = stop_at_station_sig
-=======
-        self.stop_at_staion_sig(bool)
->>>>>>> 20d5c14a647ae62fa8e88fec439a9dc4712d2243
         self.decimal_m_auth = 0
 
     def Control_Current_Speed(self,newSpeed):

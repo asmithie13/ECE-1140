@@ -199,6 +199,7 @@ class TrackModelMain(QMainWindow):
        
     
     def load_default_track_layout(self):
+        self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
         if self.default_track_path and os.path.exists(self.default_track_path):
             self.data.read_excel(self.default_track_path)
         else:
@@ -275,6 +276,7 @@ class TrackModelMain(QMainWindow):
             #             self.polarity = 0
                 #self.send_polarity.emit(self.polarity)
                 self.grade_signal_tm.emit(self.data.get_grade_for_block(block_num))
+                print(self.data.get_grade_for_block(block_num))
 
                 
                 # Getting block section from excel 
@@ -530,7 +532,7 @@ class TrackModelMain(QMainWindow):
            self.red_line.show()
            self.green_line.hide()
             # Now call the function to load the track layout based on the new selection
-        self.load_track_layout_based_on_selection()
+        #self.load_track_layout_based_on_selection()
 
         return self.line_select.currentText()
             
@@ -852,7 +854,7 @@ class TrackModelMain(QMainWindow):
         # Check if block_text ends with '_r' and remove it
         adjusted_block_text = block_text[:-2] if block_text.endswith('_r') else block_text
 
-        # Now extract the block number assuming the format is something like "B23" or "B23_r"
+        #Now extract the block number assuming the format is something like "B23" or "B23_r"
         block_num = int(adjusted_block_text[1:])  # Skip the letter and convert the rest to int
 
         # Check if block is currently occupied
@@ -1106,15 +1108,17 @@ class Data:
     # read Excel files from DataFrame
     def read_excel(self, filename):
 
-        if filename.endswith('.xlsx'):
-            self.df = pd.read_excel(filename)
-        elif filename.endswith('.csv'):
-            try:
-                self.df = pd.read_csv(filename, error_bad_lines=False)
-            except Exception as e:
-                print(f"Failed to read CSV: {e}")
-        else:
-            print("Unsupported file format")
+        # if filename.endswith('.xlsx'):
+        #     self.df = pd.read_excel(filename)
+        # elif filename.endswith('.csv'):
+        #     try:
+        #         self.df = pd.read_csv(filename, error_bad_lines=False)
+        #     except Exception as e:
+        #         print(f"Failed to read CSV: {e}")
+        # else:
+        #     print("Unsupported file format")
+        self.df = pd.read_excel("Track_Resources/green_line_block_info.xlsx")
+        #self.df = pd.read_csv("Track_Resources/green_line_block_info.csv")
 
         #extract data from DataFrame of the Excel and assign to variables
         self.elevation_data = self.df.set_index('Block Number')['ELEVATION (M)'].to_dict()

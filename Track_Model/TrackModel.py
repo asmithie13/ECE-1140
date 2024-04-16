@@ -112,6 +112,9 @@ class TrackModelMain(QMainWindow):
         self.dt = 0
         self.prev_time = 0
         self.polarity = 0
+        self.time = ""
+        self.listStation = []
+        
 
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track_Model/Track_Model.ui", self)
@@ -277,6 +280,7 @@ class TrackModelMain(QMainWindow):
                 #self.send_polarity.emit(self.polarity)
                 self.grade_signal_tm.emit(self.data.get_grade_for_block(block_num))
                 print(self.data.get_grade_for_block(block_num))
+                self.generateTickets(block_num)
 
                 
                 # Getting block section from excel 
@@ -475,6 +479,7 @@ class TrackModelMain(QMainWindow):
         hours, minutes = int(parts[0]), int(parts[1])
         seconds, ms = map(int, parts[2].split('.'))
         self.local_time = hours*3600000 + minutes*60000 + seconds*1000 + ms
+        self.time = time
 
     def get_clock(self,clock):
         self.current_time = clock
@@ -731,7 +736,7 @@ class TrackModelMain(QMainWindow):
 
             if self.is_station(adjusted_block_id):
                 self.currentStation = adjusted_block_id
-                self.generateTickets(adjusted_block_id, updateUI=True)
+                #self.generateTickets(adjusted_block_id, updateUI=True)
             else:
                 self.currentStation = None
                 self.ticket_out.clear()
@@ -741,26 +746,20 @@ class TrackModelMain(QMainWindow):
         # Check if the block ID is in the station lookup table
         return block_id in self.station_lookup
 
-    # def checkGenerateTickets(self):
-    #     for block_id in self.station_lookup:
-    #         if self.is_station(block_id):
-    #             self.generateTickets(block_id)
 
-    def updateHourlyTickets(self):
-        if self.currentStation and self.is_station(self.currentStation):
-            self.generateTickets(self.currentStation, updateUI=True, forceNewNumber=True)
+    def generateTickets(self, block_id):
+        self.listStation  = ["A2", "C9", "D16", "F22", "G31", "I39", "W141", "I48", "W132", "I57", "W123", "K65", "U114", "L73", "T105", "N77", "O88", "P96"]
+        # if forceNewNumber or block_id not in self.lastGeneratedTickets:
+        #     random_number = random.randint(1, 74)
+        #     self.lastGeneratedTickets[block_id] = random_number
 
-    def generateTickets(self, block_id, updateUI=False, forceNewNumber=False):
-        if forceNewNumber or block_id not in self.lastGeneratedTickets:
-            random_number = random.randint(1, 74)
-            self.lastGeneratedTickets[block_id] = random_number
-
-        if updateUI:
-            self.ticket_out.setText(str(self.lastGeneratedTickets[block_id]))
-
-        # Emit signal only if a new number is generated
-        if forceNewNumber:
-            self.SendTicketsales.emit([block_id, self.lastGeneratedTickets[block_id]])
+        if self.time.split(':')[1] == "00":
+            for i in self.listStation:
+                if block_id == self.listStation[i]:
+                    random_number = random.randint(1, 74)
+                    self.SendTicketsales.emit(random_number)
+        else:
+            pass
 
     def get_infra_for_block(self, block_num):
         self.station = None  # Set to None initially to clearly see if it gets changed
@@ -772,7 +771,7 @@ class TrackModelMain(QMainWindow):
             self.station = "EDGEBROOKE"
         elif self.block_num == "D16":
             self.station = "STATION"
-        elif self.block_num == "DF22":
+        elif self.block_num == "F22":
             self.station = "WHITED"
         elif self.block_num == "G31":
             self.station = "SOUTH BANK"

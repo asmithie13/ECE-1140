@@ -13,7 +13,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 #Enable serial communication:
-#serialObject = serial.Serial('COM8', 9600)
+serialObject = serial.Serial('COM8', 9600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -38,11 +38,6 @@ class TrackController_HW(QMainWindow):
         self.LIGHT_G29 = ['F26', 'F27', 'F28', 'G29']
         self.LIGHT_Z150 = ['Y148', 'Y149', 'Z150']
         self.ALL_LIGHT = ['A1', 'A2', 'C12', 'D13', 'F26', 'F27', 'F28', 'G29', 'Y148', 'Y149', 'Z150']
-
-        '''self.CHUNK_1 = ['U', 'V', 'W', 'X', 'Y', 'Z']
-        self.CHUNK_2 = ['D', 'F']
-        self.CHUNK_3 = ['A', 'B', 'C']
-        self.CHUNK_4 = ['E', 'T']'''
 
         #Disable manual mode operations, as program begins in automatic operation:
         self.groupBoxManual.setEnabled(False)
@@ -78,6 +73,12 @@ class TrackController_HW(QMainWindow):
     
     def modeHandler(self, occupiedBlocks):
         self.previousOccupiedBlock = self.occupiedBlocks
+        #If a block is closed by CTC, it is recognized as "occupied" by the PLC parser:
+        for block in self.closedBlocks:
+            if block.ID not in self.listOccIDs:
+                self.listOccIDs.append(block.ID)
+                block.occupied = True
+                self.occupiedBlocks.append(block)
         
         self.listOccIDs = occupiedBlocks #Argument received is a string of occupied block IDs
         self.occupiedBlocks = [] #Make a list of block objects that are occupied
@@ -98,12 +99,6 @@ class TrackController_HW(QMainWindow):
         listBlockIDOccupied = []
         listBlockStrOccupied = ""
 
-        #If a block is closed by CTC, it is recognized as "occupied" by the PLC parser:
-        for block in self.closedBlocks:
-            if block.ID not in self.listOccIDs:
-                self.listOccIDs.append(block.ID)
-                self.occupiedBlocks.append(block)
-
         for block in self.occupiedBlocks:
             listBlockIDOccupied.append(block.ID)
         listBlockIDOccupied.sort()
@@ -121,10 +116,15 @@ class TrackController_HW(QMainWindow):
         for block in closedBlocks:
             if block.maintenance == 1 and block not in self.closedBlocks:
                 self.closedBlocks.append(block)
+
             if block.maintenance == 0 and block in self.closedBlocks:
                 self.closedBlocks.remove(block)
                 self.listOccIDs.remove(block.ID)
-                self.occupiedBlocks.remove(block)
+
+            for blockTwo in self.occupiedBlocks:
+                if block.ID == blockTwo.ID:
+                    self.occupiedBlocks.remove(blockTwo)
+
         self.modeHandler(self.listOccIDs)
 
     def manualMode(self):
@@ -163,17 +163,19 @@ class TrackController_HW(QMainWindow):
         occupiedBlockBytes = occupiedBlockString.encode()
 
         '''BEGIN SERIAL COMMUNICATION'''
-        '''serialObject.write(occupiedBlockBytes)
+        serialObject.write(occupiedBlockBytes)
         #Receiving serial responses from the Raspberry Pi:
         copyBlocks = self.allBlocks
         attributeList = []
         
+        breakFlag = 0
         while True:
            if serialObject.in_waiting > 0:
                 myAttribute = serialObject.read(serialObject.in_waiting).decode('utf-8')
                 if len(myAttribute) > 1:
                     for char in myAttribute:
                         if char == 'A':
+                            breakFlag = 1
                             break
                         else:
                             attributeList.append(char)
@@ -181,11 +183,13 @@ class TrackController_HW(QMainWindow):
                     if myAttribute == 'A':
                             break
                     else:
-                        attributeList.append(myAttribute)'''
+                        attributeList.append(myAttribute)
+                if breakFlag == 1:
+                    break
         
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
-        '''attributeListSoftware = []
+        attributeListSoftware = []
         for block in self.allBlocks:
             if block.LIGHT == True:
                 attributeListSoftware.append(str(block.lightState))
@@ -203,12 +207,13 @@ class TrackController_HW(QMainWindow):
             #Ajust block-wise authority based on active red lights:
             self.setMaintenanceSwitch()
             self.updateBooleanAuth()
-            self.sendUpdatedBlocks.emit(self.allBlocks)'''
+            self.preventCollision()
+            self.sendUpdatedBlocks.emit(self.allBlocks)
         
-        self.setMaintenanceSwitch()
+        '''self.setMaintenanceSwitch()
         self.updateBooleanAuth() #Uncomment when hardware is not connected
         self.preventCollision() #Function to prevent occupancy collisions
-        self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
+        self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected'''
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)
@@ -439,7 +444,7 @@ class TrackController_HW(QMainWindow):
                 if blockOne.ID == blockTwo.ID:
                     blockTwo.switchState = blockOne.switchState
     
-    def preventCollision(self): #NEEDS FINISHED
+    def preventCollision(self):
         oneDirectionOne = ['G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] #Block sections where collisions could occur
         oneDirectionTwo = ['A', 'B', 'C'] 
         biDirection = ['D', 'E', 'F']

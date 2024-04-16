@@ -632,6 +632,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         temp.maintenance = 1
 
         self.Maintenance.SwitchesSet.append(temp)
+        self.sendSwitchPositions.emit(self.Maintenance.SwitchesSet)
     
     #Function to release a set switch positons when in maintenance mode
     def releaseSwitch_button(self):

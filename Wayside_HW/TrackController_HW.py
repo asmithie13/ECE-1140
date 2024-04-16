@@ -78,6 +78,7 @@ class TrackController_HW(QMainWindow):
     
     def modeHandler(self, occupiedBlocks):
         self.previousOccupiedBlock = self.occupiedBlocks
+        
         self.listOccIDs = occupiedBlocks #Argument received is a string of occupied block IDs
         self.occupiedBlocks = [] #Make a list of block objects that are occupied
         for block in self.allBlocks:
@@ -471,3 +472,53 @@ class TrackController_HW(QMainWindow):
                         self.allBlocks[index+1].authority = True
                     if self.allBlocks[index+2] not in tempSkip:
                         self.allBlocks[index+2].authority = True
+            if block.blockSection in biDirection:
+                if self.allBlocks[index-1] in self.previousOccupiedBlock:
+                    if block.occupied == True:
+                        self.allBlocks[index-1].authority = False
+                        self.allBlocks[index-2].authority = False
+                        tempSkip.append(self.allBlocks[index-1])
+                        tempSkip.append(self.allBlocks[index-2])
+                    elif block.occupied == False and block.ID not in self.ALL_LIGHT:
+                        if block not in tempSkip:
+                            block.authority = True
+                        if self.allBlocks[index-1] not in tempSkip:
+                            self.allBlocks[index-1].authority = True
+                        if self.allBlocks[index-2] not in tempSkip:
+                            self.allBlocks[index-2].authority = True
+                elif self.allBlocks[index+1] in self.previousOccupiedBlock:
+                    if block.occupied == True:
+                        self.allBlocks[index+1].authority = False
+                        self.allBlocks[index+2].authority = False
+                        tempSkip.append(self.allBlocks[index+1])
+                        tempSkip.append(self.allBlocks[index+2])
+                    elif block.occupied == False and block.ID not in self.ALL_LIGHT:
+                        if block not in tempSkip:
+                            block.authority = True
+                        if self.allBlocks[index+1] not in tempSkip:
+                            self.allBlocks[index+1].authority = True
+                        if self.allBlocks[index+2] not in tempSkip:
+                            self.allBlocks[index+2].authority = True
+                #The following condition indicates a track failure, since an occupancy is randomly generated...
+                #Close blocks on either side as response:
+                elif self.allBlocks[index-1] not in self.previousOccupiedBlock and self.allBlocks[index+1] not in self.previousOccupiedBlock:
+                    if block.occupied == True:
+                        self.allBlocks[index+1].authority = False
+                        self.allBlocks[index+2].authority = False
+                        tempSkip.append(self.allBlocks[index+1])
+                        tempSkip.append(self.allBlocks[index+2])
+                        self.allBlocks[index-1].authority = False
+                        self.allBlocks[index-2].authority = False
+                        tempSkip.append(self.allBlocks[index-1])
+                        tempSkip.append(self.allBlocks[index-2])
+                    elif block.occupied == False and block.ID not in self.ALL_LIGHT:
+                        if block not in tempSkip:
+                            block.authority = True
+                        if self.allBlocks[index+1] not in tempSkip:
+                            self.allBlocks[index+1].authority = True
+                        if self.allBlocks[index+2] not in tempSkip:
+                            self.allBlocks[index+2].authority = True
+                        if self.allBlocks[index-1] not in tempSkip:
+                            self.allBlocks[index-1].authority = True
+                        if self.allBlocks[index-2] not in tempSkip:
+                            self.allBlocks[index-2].authority = True

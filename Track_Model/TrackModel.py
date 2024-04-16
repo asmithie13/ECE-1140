@@ -53,7 +53,16 @@ class TrackModelMain(QMainWindow):
     #send authority to ttestbench
     send_authority_tb = pyqtSignal(str)
 
+    grade_signal_tm = pyqtSignal(float)
+
+    send_beacon = pyqtSignal(int)
+
+    send_polarity = pyqtSignal(bool)
+
+    send_bool_auth = pyqtSignal(bool)
+
     AcutalSpeed = 0
+    
 
     station_lookup = {
     "A2": "PIONEER",
@@ -102,6 +111,7 @@ class TrackModelMain(QMainWindow):
         self.blockIDs_HW = []
         self.dt = 0
         self.prev_time = 0
+        self.polarity = 0
 
         # Load the track model straight from the UI file using uic
         uic.loadUi("Track_Model/Track_Model.ui", self)
@@ -124,36 +134,42 @@ class TrackModelMain(QMainWindow):
         self.setup_block_buttons()
         self.block_in_1.activated[str].connect(self.block_clicked)
         #self.generateTickets()
-
+        self.default_track_path = None
         # Instantiate the Data class
         self.data = Data()
 
+        #self.line_select.currentIndexChanged.connect(self.load_track_layout_based_on_selection)
+
         # Connect the comboBox to the function
         self.green_line.hide()
-        #self.red_line.hide()
+        self.red_line.hide()
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
-        # After setting up UI elements, load the default track layout
-        self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
+        # self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
         self.load_default_track_layout()
         
+        # After setting up UI elements, load the default track layout
+        # if self.line_select.currentText() == "Green Line":
+        #     # self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
+        #     # self.load_default_track_layout()
+        #     print("Green!")
+        # elif self.line_select.currentText() == "Red Line":
+        #     # self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
+        #     # self.load_default_track_layout()
+        #     print("Red!")
+        
+        self.current_line = "Green Line"  # Default line
+        self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
     def get_train_id(self, trainID, line):
         if line == "Green":
             self.currentTrains.append([trainID, line, 0, 'increasing', 'K63'])
             self.occupied_blocks.append('K63')
+            self.send_beacon.emit(0)
             self.update_occupied_blocks()
-            # for i in self.occupied_blocks:
-            #     self.occupied_blocks.setStyleSheet('''
-            #         QPushButton {
-            #             border-style: solid;
-            #             border-width: 0.5px;
-            #             border-color: black;
-            #             background-color: orange;
-            #         }
-            #     ''')
         elif line == "Red":
             self.currentTrains.append([trainID, line, 0, 'increasing', 'D10'])
+            self.send_beacon.emit(1)
 
     def update_heaters_out(self):
         # Get the current temperature from the spinbox
@@ -168,6 +184,26 @@ class TrackModelMain(QMainWindow):
         else:
             self.heaters_out.setText("OFF")
 
+    def load_track_layout_based_on_selection(self):
+        selected_option = self.line_select.currentText()
+        if selected_option == "Green Line":
+            self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
+
+        elif selected_option == "Red Line":
+            self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
+            print(self.default_track_path)
+
+        else:
+            print("")
+        self.load_default_track_layout()
+       
+    
+    def load_default_track_layout(self):
+        self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
+        if self.default_track_path and os.path.exists(self.default_track_path):
+            self.data.read_excel(self.default_track_path)
+        else:
+            print("")
         
     def process_block(self, block_num, trainId, speed_of_train):
         # Get the length of the current block
@@ -198,12 +234,56 @@ class TrackModelMain(QMainWindow):
                     self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
                 elif block_num == 1:
                     self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
+
+            # #red line (might use beacon instead)
+            #     if block_num == 16:
+            #         self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
+            #     elif block_num == 1:
+            #         self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+            #     elif block_num == 14:
+            #         self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+            #     elif block_num == 28:
+            #         self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
+            #     elif block_num == 26:
+            #         self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+            #     elif block_num == 33:
+            #         self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
+            #     elif block_num == 31:
+            #         self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+            #     elif block_num == 39:
+            #         self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
+            #     elif block_num == 37:
+            #         self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+            #     elif block_num == 44:
+            #         self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
+            #     elif block_num == 42:
+            #         self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+            #     elif block_num == 53:
+            #         self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
+            #     elif block_num == 52:
+            #         self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+                
+            # Calculate next block for TRAIN MODEL
+            # next_block_num = self.get_next_id(block_num, self.currentTrains[int(trainId[1:]) - 1][3], "Green")
+            # if next_block_num is not None:
+            #     next_block_grade = self.data.get_grade_for_block(next_block_num)  # Fetch grade for the next block
+            #     if next_block_grade is not None:
+            #         self.grade_signal.emit(next_block_grade)  # Emit the grade of the next block
+                    
+            #         if self.polarity == 0:
+            #             self.polarity = 1
+            #         else:
+            #             self.polarity = 0
+                #self.send_polarity.emit(self.polarity)
+                self.grade_signal_tm.emit(self.data.get_grade_for_block(block_num))
+                print(self.data.get_grade_for_block(block_num))
+
                 
                 # Getting block section from excel 
                 self.section_occ = self.data.get_section_for_block(block_num)
                 self.blockID = self.section_occ + str(block_num)
                 
-                #I will send this to wayside both SW and HW
+                #calculate next block
                 next_block_num = self.get_next_id(block_num, self.currentTrains[int(trainId[1:]) - 1][3], "Green")
                 self.next_block_id = self.data.get_section_for_block(next_block_num)
 
@@ -229,7 +309,7 @@ class TrackModelMain(QMainWindow):
             #print("Switch:",self.get_switch_state(BlockNum))
             
             #A1 to D13 switch block
-            if BlockNum == 1:
+            if BlockNum == 1 and self.get_switch_state(13) == False:
                 return 13
 
             #A-C blocks, train can only come from its previous blocks, but they are in reverse number order
@@ -389,15 +469,6 @@ class TrackModelMain(QMainWindow):
         else:
             self.cross_out.setText('N/A')
 
-    def load_default_track_layout(self):
-        # Directly load the default track layout file
-        if os.path.exists(self.default_track_path):
-            self.data.read_excel(self.default_track_path)
-        else:
-            #filler statement so no print
-            filer = 0
-            #print("")
-
     def set_clock(self, time):
         self.clock_in.display(time[0:5])
         parts = time.split(':')
@@ -432,6 +503,7 @@ class TrackModelMain(QMainWindow):
         # Emit the separated lists to HW and SW respectively
         self.sendBlockOcc_SW.emit(temp_SW)
         self.sendBlockOcc_HW.emit(temp_HW)
+        
 
 
 
@@ -449,14 +521,20 @@ class TrackModelMain(QMainWindow):
     
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box
-        selected_option = self.line_select.currentText()
-        if selected_option == "Green Line":
+        self.selected_option = self.line_select.currentText()
+        if self.selected_option == "Green Line":
             self.green_line.show()
-        elif selected_option == "Select Line":
-            self.green_line.hide()    
-       # elif selected_option == "Red Line":
-        #    self.red_line.show()
-        #    self.green.hide()
+            self.red_line.show()
+        elif self.selected_option == "Select Line":
+            self.green_line.hide()
+            self.red_line.hide()    
+        elif self.selected_option == "Red Line":
+           self.red_line.show()
+           self.green_line.hide()
+            # Now call the function to load the track layout based on the new selection
+        #self.load_track_layout_based_on_selection()
+
+        return self.line_select.currentText()
             
     def set_broken_rail_failure(self):
         self.selected_block = self.block_in_1.currentText()
@@ -504,82 +582,134 @@ class TrackModelMain(QMainWindow):
             button.setStyleSheet(default_color)
 
     def setup_block_buttons(self):
-        #list of block IDs
-        block_ids = [
-        'A1', 'A2', 'A3', 'B4', 'B5', 'B6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12',
-        'D13', 'D14', 'D15', 'D16', 'E17', 'E18', 'E19', 'E20', 'F21', 'F22', 'F23', 'F24',
-        'F25', 'F26', 'F27', 'F28', 'G29', 'G30', 'G31', 'G32', 'H33', 'H34', 'H35', 'I36',
-        'I37', 'I38', 'I39', 'I40', 'I41', 'I42', 'I43', 'I44', 'I45', 'I46', 'I47', 'I48',
-        'I49', 'I50', 'I51', 'I52', 'I53', 'I54', 'I55', 'I56', 'I57', 'J58', 'J59', 'J60',
-        'J61', 'J62', 'K63', 'K64', 'K65', 'K66', 'K67', 'K68', 'L69', 'L70', 'L71', 'L72',
-        'L73', 'M74', 'M75', 'M76', 'N77', 'N78', 'N79', 'N80', 'N81', 'N82', 'N83', 'N84',
-        'N85', 'O86', 'O87', 'O88', 'P89', 'P90', 'P91', 'P92', 'P93', 'P94', 'P95', 'P96',
-        'P97', 'Q98', 'Q99', 'Q100', 'R101', 'S102', 'S103', 'S104', 'T105', 'T106', 'T107',
-        'T108', 'T109', 'U110', 'U111', 'U112', 'U113', 'U114', 'U115', 'U116', 'V117',
-        'V118', 'V119', 'V120', 'V121', 'W122', 'W123', 'W124', 'W125', 'W126', 'W127',
-        'W128', 'W129', 'W130', 'W131', 'W132', 'W133', 'W134', 'W135', 'W136', 'W137',
-        'W138', 'W139', 'W140', 'W141', 'W142', 'W143', 'X144', 'X145', 'X146', 'Y147',
-        'Y148', 'Y149', 'Z150', 'Y1', 'Y2', 'Y0'
+        # List of block IDs for both Green and Red Lines
+        block_ids_green = [
+            'A1', 'A2', 'A3', 'B4', 'B5', 'B6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12',
+            'D13', 'D14', 'D15', 'D16', 'E17', 'E18', 'E19', 'E20', 'F21', 'F22', 'F23', 'F24',
+            'F25', 'F26', 'F27', 'F28', 'G29', 'G30', 'G31', 'G32', 'H33', 'H34', 'H35', 'I36',
+            'I37', 'I38', 'I39', 'I40', 'I41', 'I42', 'I43', 'I44', 'I45', 'I46', 'I47', 'I48',
+            'I49', 'I50', 'I51', 'I52', 'I53', 'I54', 'I55', 'I56', 'I57', 'J58', 'J59', 'J60',
+            'J61', 'J62', 'K63', 'K64', 'K65', 'K66', 'K67', 'K68', 'L69', 'L70', 'L71', 'L72',
+            'L73', 'M74', 'M75', 'M76', 'N77', 'N78', 'N79', 'N80', 'N81', 'N82', 'N83', 'N84',
+            'N85', 'O86', 'O87', 'O88', 'P89', 'P90', 'P91', 'P92', 'P93', 'P94', 'P95', 'P96',
+            'P97', 'Q98', 'Q99', 'Q100', 'R101', 'S102', 'S103', 'S104', 'T105', 'T106', 'T107',
+            'T108', 'T109', 'U110', 'U111', 'U112', 'U113', 'U114', 'U115', 'U116', 'V117',
+            'V118', 'V119', 'V120', 'V121', 'W122', 'W123', 'W124', 'W125', 'W126', 'W127',
+            'W128', 'W129', 'W130', 'W131', 'W132', 'W133', 'W134', 'W135', 'W136', 'W137',
+            'W138', 'W139', 'W140', 'W141', 'W142', 'W143', 'X144', 'X145', 'X146', 'Y147',
+            'Y148', 'Y149', 'Z150'
         ]
+
+        block_ids_red = [
+            'A1_r', 'A2_r', 'A3_r', 'B4_r', 'B5_r', 'B6_r', 'C7_r', 'C8_r', 'C9_r', 'D10_r', 'D11_r', 'D12_r',
+            'E13_r', 'E14_r', 'E15_r', 'F16_r', 'F17_r', 'F18_r', 'F19_r', 'F20_r', 'G21_r', 'G22_r', 'G23_r',
+            'H24_r', 'H25_r', 'H26_r', 'H27_r', 'H28_r', 'H29_r', 'H30_r', 'H31_r', 'H32_r', 'H33_r', 'H34_r',
+            'H35_r', 'H36_r', 'H37_r', 'H38_r', 'H39_r', 'H40_r', 'H41_r', 'H42_r', 'H43_r', 'H44_r', 'H45_r',
+            'I46_r', 'I47_r', 'I48_r', 'J49_r', 'J50_r', 'J51_r', 'J52_r', 'J53_r', 'J54_r', 'K55_r', 'K56_r',
+            'K57_r', 'L58_r', 'L59_r', 'L60_r', 'M61_r', 'M62_r', 'M63_r', 'N64_r', 'N65_r', 'N66_r', 'O67_r',
+            'P68_r', 'P69_r', 'P70_r', 'Q71_r', 'R72_r', 'S73_r', 'S74_r', 'S75_r', 'T76_r'
+        ]
+
+        all_block_ids = block_ids_green + block_ids_red
 
         self.block_buttons = {}
 
-        for block_id in block_ids:
-                button = self.findChild(QPushButton, block_id)
-                if button:
-                    self.block_buttons[block_id] = button
-                    #pass block_id
-                    button.clicked.connect(lambda checked, b_id=block_id: self.block_clicked(b_id))
+        for block_id in all_block_ids:
+            button = self.findChild(QPushButton, block_id)
+            if button:
+                self.block_buttons[block_id] = button
+                button.clicked.connect(lambda checked, b_id=block_id: self.block_clicked(b_id))
+                # print(f"Connected {block_id}")
+            else:
+                print("")
+
+
+
+    def update_block_info_ui(self, block_data):
+        self.elevation_in.setText(str(block_data['elevation_m']))
+        self.grade_in.setText(str(block_data['grade']))
+        self.length_in.setText(str(block_data['length1_m']))
+        self.speed_in.setText(str(block_data['speed_limit_km']))
+        self.station_in.setText(self.station_lookup.get(block_data['block_num'], "N/A"))
+        self.block_num_in.setText(str(block_data['block_num']))
+        self.section_in.setText(block_data['section'])
+        self.cumm_elevation_in.setText(str(block_data['cumm_elevation_m']))
+
 
     def block_clicked(self, block_id):
-        self.block_in_1.setCurrentText(block_id)
-        self.block_in_2.setCurrentText(block_id)
+        # Update heaters and other UI elements initially
         self.update_heaters_out()
+
+        # Determine if we need to adjust block ID for Red Line blocks
+        if self.current_line == "Red Line" and block_id.endswith('_r'):
+            # Remove the '_r' suffix for data fetching
+            adjusted_block_id = block_id[:-2]
+        else:
+            adjusted_block_id = block_id
+
+        # Fetch data for the adjusted block ID
+        block_data = self.data.get_data_for_block(adjusted_block_id)
+        if block_data:
+            # If data is found, update the UI with this data
+            self.update_ui_for_block(block_data)
+            self.update_block_info_ui(block_data)  # Assuming this updates UI elements
+            self.block_selected_signal.emit(adjusted_block_id)  # Emit signal with original block ID
+        else:
+            # Print debug info if no data is found
+            # print(f"No data found for block {adjusted_block_id}")
+            print("")
+
+        # print(f"Adjusted Block ID for fetching data: {adjusted_block_id} (Original: {block_id}, Line: {self.line_select})")
+
+        # Update UI components to reflect the selected block
+        self.block_in_1.setCurrentText(adjusted_block_id)
+        self.block_in_2.setCurrentText(adjusted_block_id)
+
         # Reset the light_out label color to white
         self.light_out.setStyleSheet("background-color: white;")
 
         # Proceed with updating the UI for the clicked block
-        self.update_ui_for_block(block_id)
+        self.update_ui_for_block(adjusted_block_id)
 
         # Check if the block has special features and update the UI accordingly
-        if block_id in self.LIGHT_BLOCKS_SW:
+        if adjusted_block_id in self.LIGHT_BLOCKS_SW:
             # Fetch the light state for this block and update the UI
-            light_state = self.blockStates.get(block_id, {}).get('lightState', 'N/A')
+            light_state = self.blockStates.get(adjusted_block_id, {}).get('lightState', 'N/A')
             self.light_out.setText("GREEN" if light_state else "RED")
             self.light_out.setStyleSheet("background-color: green;" if light_state else "background-color: red;")
         else:
             self.light_out.setText('N/A')
 
-        if block_id in self.CROSSING_BLOCKS:
+        if adjusted_block_id in self.CROSSING_BLOCKS:
             # Fetch the crossing state for this block and update the UI
-            crossing_state = self.blockStates.get(block_id, {}).get('crossingState', 'N/A')
+            crossing_state = self.blockStates.get(adjusted_block_id, {}).get('crossingState', 'N/A')
             self.cross_out.setText("UP" if crossing_state else "DOWN")
         else:
             self.cross_out.setText('N/A')
 
-        if block_id in self.LIGHT_BLOCKS_HW:
+        if adjusted_block_id in self.LIGHT_BLOCKS_HW:
             # Fetch the light state for this block and update the UI
-            light_state = self.blockStates.get(block_id, {}).get('lightState', 'N/A')
+            light_state = self.blockStates.get(adjusted_block_id, {}).get('lightState', 'N/A')
             self.light_out.setText("GREEN" if light_state else "RED")
             self.light_out.setStyleSheet("background-color: green;" if light_state else "background-color: red;")
 
-        if block_id in self.SWITCH_BLOCKS_SW:
+        if adjusted_block_id in self.SWITCH_BLOCKS_SW:
             # Fetch the switch state for this block and update the UI
-            switch_state = self.blockStates.get(block_id, {}).get('switchState', 'N/A')
+            switch_state = self.blockStates.get(adjusted_block_id, {}).get('switchState', 'N/A')
             self.switch_out.setText("LEFT" if switch_state else "RIGHT")
         else:
             self.switch_out.setText('N/A')
 
-        if block_id in self.SWITCH_BLOCKS_HW:
+        if adjusted_block_id in self.SWITCH_BLOCKS_HW:
             # Fetch the switch state for this block and update the UI
-            switch_state = self.blockStates.get(block_id, {}).get('switchState', 'N/A')
+            switch_state = self.blockStates.get(adjusted_block_id, {}).get('switchState', 'N/A')
             self.switch_out.setText("LEFT" if switch_state else "RIGHT")
         else:
             self.switch_out.setText('N/A')
 
 
         # Continue with the rest of the block_clicked functionality
-        if block_id == 'Y0':
+        if adjusted_block_id == 'Y0':
             # Manually set the information for the yard block
             self.block_num_in.setText('N/A')  # Block number is 0 for the yard
             self.section_in.setText('N/A')
@@ -596,18 +726,17 @@ class TrackModelMain(QMainWindow):
 
         else:
             # Update block info for non-yard blocks
-            self.update_block_info(block_id)
-            self.block_selected_signal.emit(block_id)
+            self.update_block_info(adjusted_block_id)
+            self.block_selected_signal.emit(adjusted_block_id)
 
-            if self.is_station(block_id):
-                self.currentStation = block_id
-                self.generateTickets(block_id, updateUI=True)
+            if self.is_station(adjusted_block_id):
+                self.currentStation = adjusted_block_id
+                self.generateTickets(adjusted_block_id, updateUI=True)
             else:
                 self.currentStation = None
                 self.ticket_out.clear()
 
-
-    
+  
     def is_station(self, block_id):
         # Check if the block ID is in the station lookup table
         return block_id in self.station_lookup
@@ -722,22 +851,17 @@ class TrackModelMain(QMainWindow):
 
     #This function uses the data from the data class to update block data and output it to main UI
     def update_block_info(self, block_text):
-        # Reset the states of the buttons whenever a new block is selected
-        #self.reset_button_states()
+        # Check if block_text ends with '_r' and remove it
+        adjusted_block_text = block_text[:-2] if block_text.endswith('_r') else block_text
 
-        # From dropdown of "B#" take out the letter B
-        block_num = int(block_text.split()[-1][1:])  
+        #Now extract the block number assuming the format is something like "B23" or "B23_r"
+        block_num = int(adjusted_block_text[1:])  # Skip the letter and convert the rest to int
 
-
-        #Check if block is occupied currently
-        isOccupied = "False"
-        for i in self.occupied_blocks:
-            if i == block_text:
-                isOccupied = "True"
-
+        # Check if block is currently occupied
+        isOccupied = "True" if adjusted_block_text in self.occupied_blocks else "False"
         self.occupancy_in.setText(isOccupied)
 
-        # Get certain data from specific block
+        # Retrieve block data using the adjusted block number
         self.elevation_m = self.data.get_elevation_for_block(block_num)
         self.grade = self.data.get_grade_for_block(block_num)
         self.length1_m = self.data.get_length_for_block(block_num)
@@ -745,9 +869,8 @@ class TrackModelMain(QMainWindow):
         self.section = self.data.get_section_for_block(block_num)
         self.speed_limit_km = self.data.get_speed_for_block(block_num)
         self.cumm_elevation_m = self.data.get_cumm_ele_for_block(block_num)
-        self.get_infra_for_block(block_text)
 
-        # Math conversion from metric to imperial for track length, speed limit, and elevation.
+        # Convert metric to imperial for track length, speed limit, and elevation
         elevation_ft = self.elevation_m * 3.28084
         elevation_str = "{:.4f}".format(elevation_ft).rstrip('0').rstrip('.')
 
@@ -760,21 +883,20 @@ class TrackModelMain(QMainWindow):
         speed_limit_ft = self.speed_limit_km / 1.609344 
         speed_limit_str = "{:.4f}".format(speed_limit_ft).rstrip('0').rstrip('.')
 
-        # Update the labels with the block data and output it.
+        # Update UI with block data
         self.elevation_in.setText(elevation_str)
         self.cumm_elevation_in.setText(cumm_elevation_str)
         self.grade_in.setText(str(self.grade))
         self.length_in.setText(length_str)
-        self.block_num_in.setText(str(block_num))
+        self.block_num_in.setText(str(self.block_num))
         self.section_in.setText(str(self.section))
         self.speed_in.setText(speed_limit_str)
         self.station_in.setText(self.station)
 
-        # Emit the grade signal with the grade value (sig)
+        # Emit signals as needed
         self.grade_signal.emit(self.grade)
-
-        # Emit screen change based on block selection
         self.block_selected_signal.emit(block_text)
+
 
     #Updates block in failure based on block selection
     def update_block_in_2_based_on_block_in_1(self):
@@ -783,17 +905,17 @@ class TrackModelMain(QMainWindow):
 
         self.block_in_2.setCurrentText(selected_text)
 
-    def blockClicked(self, block_id):
-        #Fetch block data and update UI elements
-        block_data = self.data.get_data_for_block(block_id)
-        if block_data:
-            self.block_num_in.setText(str(block_data['block_num']))
-            self.section_in.setText(block_data['section'])
-            self.speed_in.setText(str(block_data['speed_limit_km']))
-            self.grade_in.setText(str(block_data['grade']))
-            self.length_in.setText(str(block_data['length1_m']))
-            self.elevation_in.setText(str(block_data['elevation_m']))
-            self.cumm_elevation_in.setText(str(block_data['cumm_elevation_m']))
+    # def blockClicked(self, block_id):
+    #     #Fetch block data and update UI elements
+    #     block_data = self.data.get_data_for_block(block_id)
+    #     if block_data:
+    #         self.block_num_in.setText(str(block_data['block_num']))
+    #         self.section_in.setText(block_data['section'])
+    #         self.speed_in.setText(str(block_data['speed_limit_km']))
+    #         self.grade_in.setText(str(block_data['grade']))
+    #         self.length_in.setText(str(block_data['length1_m']))
+    #         self.elevation_in.setText(str(block_data['elevation_m']))
+    #         self.cumm_elevation_in.setText(str(block_data['cumm_elevation_m']))
 
 
 
@@ -980,19 +1102,23 @@ class Data:
         self.cross = None
         self.infra = None
         self.cumm_elevation = None
+        self.df = None
 
-    def set_heater(self): #based on set temp
-        pass
-    
 
     # read Excel files from DataFrame
     def read_excel(self, filename):
 
-        self.df = pd.read_excel("Track_Resources/Blue_Line_Block_Info.xlsx")
-        self.df = pd.read_csv("Track_Resources/Blue_Line_Block_Info.csv")
-
+        # if filename.endswith('.xlsx'):
+        #     self.df = pd.read_excel(filename)
+        # elif filename.endswith('.csv'):
+        #     try:
+        #         self.df = pd.read_csv(filename, error_bad_lines=False)
+        #     except Exception as e:
+        #         print(f"Failed to read CSV: {e}")
+        # else:
+        #     print("Unsupported file format")
         self.df = pd.read_excel("Track_Resources/green_line_block_info.xlsx")
-        self.df = pd.read_csv("Track_Resources/green_line_block_info.csv")
+        #self.df = pd.read_csv("Track_Resources/green_line_block_info.csv")
 
         #extract data from DataFrame of the Excel and assign to variables
         self.elevation_data = self.df.set_index('Block Number')['ELEVATION (M)'].to_dict()

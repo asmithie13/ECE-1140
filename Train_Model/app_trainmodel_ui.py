@@ -469,6 +469,9 @@ class TrainCalculations:
 
         except ZeroDivisionError: #if comm_speed is zero
             self.force = power - self.grav_force 
+            
+        if power==0:
+            self.force=0
 
         return self.force
 

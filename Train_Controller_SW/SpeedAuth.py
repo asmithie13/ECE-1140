@@ -8,7 +8,7 @@ from PyQt5 import QtWidgets
 class Vital_Speed_Auth():
 
     #def __init__(self,ui):
-    def __init__(self,ui,curr_auth_signal, service_brake_sig,ebrake_internal_sig):
+    def __init__(self,ui,curr_auth_signal, service_brake_sig,ebrake_internal_sig,stop_at_station_sig):
         self.ui = ui
         self.curr_auth_signal = curr_auth_signal
         self.service_brake_sig = service_brake_sig
@@ -17,6 +17,7 @@ class Vital_Speed_Auth():
         self.time = 0
         self.prev_time = 0
         self.ebrake_sig = ebrake_internal_sig
+        self.stop_at_station_sig = stop_at_station_sig
         self.decimal_m_auth = 0
 
     def Control_Current_Speed(self,newSpeed):
@@ -126,6 +127,9 @@ class Vital_Speed_Auth():
             
             elif self.ui.buttonMan.isChecked() :
                 self.ui.vertSliderPow.setEnabled(True)
+
+            else:
+                self.stop_at_station_sig.emit(True)
 
         # elif self.stopcal == 1:
         #     self.ui.lcdAuth.display(self.ui.lcdAuth.value() - int(self.rate*self.time))

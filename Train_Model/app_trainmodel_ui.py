@@ -41,6 +41,7 @@ class TrainModel_mainwindow(QMainWindow):
     stop_bool= False
     #Track Model Signals
     track_model_acc_velo = qtc.pyqtSignal(str, int)
+    stop_at_station_sig=qtc.pyqtSignal(bool)
 
     def __init__(self,TrainID):
         super().__init__()
@@ -67,7 +68,8 @@ class TrainModel_mainwindow(QMainWindow):
         self.TC.temp_control_sig.connect(self.set_cabin_temp)
         self.TC.service_brake_sig.connect(self.train_calculations.get_service_brake)
         self.TC.door_control_sig.connect(self.door_status)
-        self.TC.ebrake_disable_sig.connect(self.ebrake_disabled)        
+        self.TC.ebrake_disable_sig.connect(self.ebrake_disabled)  
+        self.TC.stop_at_station_sig.connect(self.stop_at_station)      
         
 
         
@@ -156,7 +158,7 @@ class TrainModel_mainwindow(QMainWindow):
 
     #sending polarity to Train Controller
     def receive_polarity(self,polarity):
-        self.TC.block_change.emit(polarity)
+        self.TC.block_passed_sig.emit(polarity)
     
     def stop_at_station(self,stop_bool):
         self.stop_bool=stop_bool

@@ -234,8 +234,7 @@ class TrackModelMain(QMainWindow):
             print("total block", total_dis_from_beg_of_block)
             print("block num:", block_num)
 
-            if self.Authority == total_blockLength:
-            
+            if self.train_stop == True:
                 self.generateTickets(block_num)
 
             # if train moves to the next block

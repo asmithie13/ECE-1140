@@ -233,7 +233,7 @@ class TrackModelMain(QMainWindow):
             self.currentTrains[int(trainId[1:]) - 1][2] = total_dis_from_beg_of_block
 
 
-            print(self.stop)
+            #print(self.stop)
             if self.train_stop == True:
                 self.generateTickets(block_num)
 

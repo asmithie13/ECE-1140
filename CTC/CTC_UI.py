@@ -141,7 +141,6 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Add to list that holds occupancies by block
         self.occupiedBlocks.recievedFromWayside[0] = TempBlockList
-        #print(self.occupiedBlocks.recievedFromWayside, "G1")
 
         #Compile all occupied blocks into full list to update list
         FullBlockList = []
@@ -159,7 +158,6 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Add to list that holds occupancies by block
         self.occupiedBlocks.recievedFromWayside[1] = TempBlockList
-        #print(self.occupiedBlocks.recievedFromWayside, "G2")
 
         #Compile all occupied blocks into full list to update list
         FullBlockList = []
@@ -206,10 +204,7 @@ class CTC_UI(QtWidgets.QMainWindow):
     #TicketSales will be a list of two lists of ints, representing the sales at each station in 
     #green line and red line respectively, from Track Model
     def recieveTicketSales(self, TicketSales):
-        #print("Hello")
-        
         AverageSales = [0, 0]
-        print(TicketSales)
 
         AverageSales[0] = sum(TicketSales[0])
         AverageSales[1] = sum(TicketSales[1])

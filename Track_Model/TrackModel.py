@@ -62,6 +62,7 @@ class TrackModelMain(QMainWindow):
     send_bool_auth = pyqtSignal(bool)
 
     AcutalSpeed = 0
+
     
     
 
@@ -117,6 +118,7 @@ class TrackModelMain(QMainWindow):
         self.listStation = []
         self.random_number  = 0
         self.line = ""
+        self.stop = False
         
 
         # Load the track model straight from the UI file using uic
@@ -168,7 +170,7 @@ class TrackModelMain(QMainWindow):
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
     def train_stop(self, stop):
-        return stop
+        self.stop = stop
     
     def get_train_id(self, trainID, line):
         self.line = line
@@ -236,6 +238,7 @@ class TrackModelMain(QMainWindow):
             # print("total block", total_dis_from_beg_of_block)
             # print("block num:", block_num)
 
+            print(self.stop)
             if self.train_stop == True:
                 self.generateTickets(block_num)
 
@@ -759,8 +762,6 @@ class TrackModelMain(QMainWindow):
         if block_id in self.listStation:
             self.random_number = random.randint(1, 74)
             self.SendTicketsales_tm.emit(self.random_number)
-        else:
-            pass
 
         if self.time.split(':')[1] == "00":
                 if block_id in self.listStation:

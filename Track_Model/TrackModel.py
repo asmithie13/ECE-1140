@@ -191,7 +191,7 @@ class TrackModelMain(QMainWindow):
 
         elif selected_option == "Red Line":
             self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
-            print(self.default_track_path)
+            #print(self.default_track_path)
 
         else:
             print("")
@@ -276,7 +276,7 @@ class TrackModelMain(QMainWindow):
             #             self.polarity = 0
                 #self.send_polarity.emit(self.polarity)
                 self.grade_signal_tm.emit(self.data.get_grade_for_block(block_num))
-                print(self.data.get_grade_for_block(block_num))
+                #print(self.data.get_grade_for_block(block_num))
 
                 
                 # Getting block section from excel 
@@ -384,6 +384,9 @@ class TrackModelMain(QMainWindow):
 
             elif BlockNum == 150:
                 return 28
+        
+            elif BlockNum == 57:
+                return 0
                         
         #Red Line                                  
         if line == "Red":

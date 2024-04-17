@@ -34,12 +34,14 @@ class TrainModel_mainwindow(QMainWindow):
     door_state=3
     brake_state=0
     ebrake_state=0
-    people_count=64
+    people_count=0
     crew_count=2
     total_cap=people_count+crew_count
     people_getting_off=10
+    stop_bool= False
     #Track Model Signals
     track_model_acc_velo = qtc.pyqtSignal(str, int)
+    stop_at_station_sig=qtc.pyqtSignal(bool)
 
     def __init__(self,TrainID):
         super().__init__()
@@ -56,7 +58,7 @@ class TrainModel_mainwindow(QMainWindow):
         #CLOCK
         self.clock = Clock()
         self.clock.current_time_changed.connect(self.update_time)
-        self.people_disemb(self.people_count)
+        #self.people_disemb(self.people_count)
 
         #Connecting TC signals to Train Model
         self.TC.int_light_sig.connect(self.interior_lights)    
@@ -66,7 +68,8 @@ class TrainModel_mainwindow(QMainWindow):
         self.TC.temp_control_sig.connect(self.set_cabin_temp)
         self.TC.service_brake_sig.connect(self.train_calculations.get_service_brake)
         self.TC.door_control_sig.connect(self.door_status)
-        self.TC.ebrake_disable_sig.connect(self.ebrake_disabled)        
+        self.TC.ebrake_disable_sig.connect(self.ebrake_disabled)  
+        self.TC.stop_at_station_sig.connect(self.stop_at_station)      
         
 
         
@@ -153,9 +156,16 @@ class TrainModel_mainwindow(QMainWindow):
     def receive_beacon_info(self,beacon_info):
         self.TC.beacon_info_sig.emit(beacon_info)
 
-    # #sending polarity to Train Controller
-    # def receive_polarity(self,polarity):
-    #     self.TC.block_change.emit(polarity)
+    #sending polarity to Train Controller
+    def receive_polarity(self,polarity):
+        self.TC.block_passed_sig.emit(polarity)
+    
+    def stop_at_station(self,stop_bool):
+        self.stop_bool=stop_bool
+        
+        
+
+
 
     
 
@@ -185,6 +195,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.length_of_vehicle_display.setText(input_txt)
 
     def set_pcount(self, people_count):
+        self.people_count=people_count
         self.pcount_display.setText(str(self.people_count))
 
     def set_ccount(self, crew_count):

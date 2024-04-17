@@ -1,5 +1,5 @@
 from Train_Controller_SW.mainControl import Ui_MainWindow
-from Train_Controller_SW import Line_Dictionary
+from Train_Controller_SW.Line_Dictionary import Line_Dictionary
 
 class NonVital():
     def __init__(self,ui, door_control_sig,announcement_sig,
@@ -7,7 +7,7 @@ class NonVital():
         
         self.block_index = 0
         self.ui=ui
-        self.line
+        self.line = 0
         self.door_control_sig=door_control_sig
         self.announcement_sig=announcement_sig
         self.temp_control_sig=temp_control_sig
@@ -106,7 +106,12 @@ class NonVital():
 #         self.stationTimer.timeout.connect(lambda: self.ui.buttonDoorL.toggle(), self.ui.buttonDoorR.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
 
     def Read_Beacon(self,beacon):
-        self.line = beacon     
+        if beacon == 1:
+            self.line = 1
+        elif beacon == 0:
+            self.line = 0
+        else:
+            print("Error: Invalid Beacon")     
 
     def Set_Underground(self,underground):
         if underground == True:
@@ -153,8 +158,15 @@ class NonVital():
             
         #red line parse
         elif self.line == 0 :
-            self.ext_light_sig.emit(self.Line_Dictionary.green_get_underground(self.block_index))
-            self.speed_lim.emit(self.LineDictionary.green_get_speed_lim(self.block_index))
+            self.speed_lim.emit(self.LineDictionary.red_get_speed_lim(self.block_index))
+            self.Set_Underground(self.Line_Dictionary.red_get_underground(self.block_index))
+            self.announcement = self.LineDictionary.get_red_station(self.block_index)
+            if (self.announcement != 'N/A'):
+                if self.announcement[0:6] == "Welcome" :
+                    self.announcement_sig.emit(self.announcement)
+                    self.doors = int(self.LineDictionary.get_red_door_side(self.block_index))
+            elif self.announcement [0:10] == "Approaching" :
+                    self.announcement_sig.emit(self.announcement)
 
             
 

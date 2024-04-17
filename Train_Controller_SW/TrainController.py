@@ -89,9 +89,9 @@ class TrainController(QMainWindow):
         self.pwr_fail_sig.connect(self.Vital_Failure.Control_Power_Failure)
         self.brk_fail_sig.connect(self.Vital_Failure.Control_Brake_Failure)
         self.sig_fail_sig.connect(self.Vital_Failure.Control_Signal_Failure)
-        self.beacon_info_sig.connect(self.NonVital.Read_Beacon)    
+        self.beacon_info_sig.connect(self.NonVital.Read_Beacon)
         self.curr_bool_auth_sig.connect(self.Vital_Speed_Auth.Authority_Monitor_Bool)
-        self.block_passed_sig.connect(self.NonVital.BlockCounter)
+        self.block_passed_sig.connect(self.NonVital.Block_Changed)
         #self.curr_bool_auth_sig.connect(self.Vital_Authority.Authority_Monitor_Bool)
         self.time_sig.connect(self.Timer)
         self.internal_ebrake_sig.connect(self.Vital_Failure.Control_Emergency_Brake_Internal)
@@ -131,7 +131,7 @@ class TrainController(QMainWindow):
         #self.ui.Ebrake.stateChanged.connect(self.Vital_Failure.Control_Emergency_Brake())
 
         #temporary ADD SPEED LIM
-        self.curr_spd_lim_sig.emit(30)
+        self.ui.lcdSpdLim.display(30)
 
         ## add for doors
         self.window.show()

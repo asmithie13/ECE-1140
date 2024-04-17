@@ -1,8 +1,6 @@
 import CTC
 from CTC import TempData
 
-
-
 class Line_Dictionary():
 
     ##start
@@ -287,10 +285,10 @@ class Line_Dictionary():
         ['C_9', 40, False, 'N/A', 'N/A']
     ]
 
-    def __init__(self):
-        self.TD = TempData()
-        self.current_staton = "yard"
-        self.next_station = "yard"
+    #def __init__(self):
+        # self.TD = TempData()
+        # self.current_staton = "yard"
+        # self.next_station = "yard"
 
     #may be used if we need to tell next station from current station
     #def Get_Next_Station(self,line):

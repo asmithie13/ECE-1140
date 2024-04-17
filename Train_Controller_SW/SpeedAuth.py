@@ -17,8 +17,8 @@ class Vital_Speed_Auth():
         self.time = 0
         self.prev_time = 0
         self.ebrake_sig = ebrake_internal_sig
-        self.stop_at_station_sig = stop_at_station_sig
         self.decimal_m_auth = 0
+        self.stop_at_station_sig = stop_at_station_sig
 
     def Control_Current_Speed(self,newSpeed):
         self.ui.lcdCurSpd.display(newSpeed)
@@ -117,7 +117,7 @@ class Vital_Speed_Auth():
             #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
             elif current_speed < ((speed_limit or cmd_speed) and (self.ui.buttonAuto.isChecked() == True)):
                 self.ui.vertSliderPow.setEnabled(True)
-                self.ui.vertSliderPow.setValue(50)
+                self.ui.vertSliderPow.setValue(100)
                 self.ui.vertSliderBrk.setValue(0)
             
             #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please

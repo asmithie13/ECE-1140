@@ -134,13 +134,14 @@ class CTC_UI(QtWidgets.QMainWindow):
     """Slots to recieve Signals"""
     #BlockList will be a list of occupied block objects from wayside controllers
     def recieveOccupiedBlocksG1(self, BlockList):
-        #Parsign through block objects to pull out ID and lineColor
+        #Parsing through block objects to pull out ID and lineColor
         TempBlockList = []
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
 
         #Add to list that holds occupancies by block
         self.occupiedBlocks.recievedFromWayside[0] = TempBlockList
+        #print(self.occupiedBlocks.recievedFromWayside, "G1")
 
         #Compile all occupied blocks into full list to update list
         FullBlockList = []
@@ -151,13 +152,14 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.updateOccupiedBlocks(FullBlockList)
 
     def recieveOccupiedBlocksG2(self, BlockList):
-        #Parsign through block objects to pull out ID and lineColor
+        #Parsing through block objects to pull out ID and lineColor
         TempBlockList = []
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
 
         #Add to list that holds occupancies by block
         self.occupiedBlocks.recievedFromWayside[1] = TempBlockList
+        #print(self.occupiedBlocks.recievedFromWayside, "G2")
 
         #Compile all occupied blocks into full list to update list
         FullBlockList = []
@@ -168,7 +170,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.updateOccupiedBlocks(FullBlockList)
 
     def recieveOccupiedBlocksR1(self, BlockList):
-        #Parsign through block objects to pull out ID and lineColor
+        #Parsing through block objects to pull out ID and lineColor
         TempBlockList = []
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
@@ -185,7 +187,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.updateOccupiedBlocks(FullBlockList)
 
     def recieveOccupiedBlocksR2(self, BlockList):
-        #Parsign through block objects to pull out ID and lineColor
+        #Parsing through block objects to pull out ID and lineColor
         TempBlockList = []
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])

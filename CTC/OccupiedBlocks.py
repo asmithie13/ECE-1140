@@ -88,10 +88,11 @@ class OccupiedBlocks():
             elif BlockNum == 63:
                 #for each train
                 for i in range(len(self.currentTrains)):
-                    #for each block the train occupies
-                    if self.currentTrains[i][0] == 'K63':
-                        #return the current train if conditions are meet
-                        return ("T" + str(i+1))
+                    if len(self.currentTrains[i]) > 0:
+                        #for each block the train occupies
+                        if self.currentTrains[i][0] == 'K63':
+                            #return the current train if conditions are meet
+                            return ("T" + str(i+1))
                         
             #K-M blocks, train can only come from its previous blocks
             elif (BlockNum >= 64) and (BlockNum <= 76):
@@ -151,8 +152,9 @@ class OccupiedBlocks():
             #Red line train dispatch case  
             elif BlockNum == 10:
                 for i in range(len(self.currentTrains)):
-                    if self.currentTrains[i][0] == 'D10':
-                        return ("T" + str(i+1))
+                    if len(self.currentTrains[i]) > 0:
+                        if self.currentTrains[i][0] == 'D10':
+                            return ("T" + str(i+1))
             
             #D-E blocks       
             elif (BlockNum > 10) and (BlockNum <= 15):

@@ -280,7 +280,7 @@ class TrackModelMain(QMainWindow):
             #             self.polarity = 0
                 #self.send_polarity.emit(self.polarity)
                 self.grade_signal_tm.emit(self.data.get_grade_for_block(block_num))
-                print(self.data.get_grade_for_block(block_num))
+                #print(self.data.get_grade_for_block(block_num))
 
                 
                 # Getting block section from excel 
@@ -388,7 +388,13 @@ class TrackModelMain(QMainWindow):
 
             elif BlockNum == 150:
                 return 28
+<<<<<<< HEAD
             
+=======
+        
+            elif BlockNum == 57:
+                return 0
+>>>>>>> dc84dfadb4a4ca6d3bbb650d2108dba8aeb10028
                         
         #Red Line                                  
         if line == "Red":

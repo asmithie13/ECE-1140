@@ -134,7 +134,7 @@ class CTC_UI(QtWidgets.QMainWindow):
     """Slots to recieve Signals"""
     #BlockList will be a list of occupied block objects from wayside controllers
     def recieveOccupiedBlocksG1(self, BlockList):
-        #Parsign through block objects to pull out ID and lineColor
+        #Parsing through block objects to pull out ID and lineColor
         TempBlockList = []
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
@@ -151,7 +151,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.updateOccupiedBlocks(FullBlockList)
 
     def recieveOccupiedBlocksG2(self, BlockList):
-        #Parsign through block objects to pull out ID and lineColor
+        #Parsing through block objects to pull out ID and lineColor
         TempBlockList = []
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
@@ -168,7 +168,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.updateOccupiedBlocks(FullBlockList)
 
     def recieveOccupiedBlocksR1(self, BlockList):
-        #Parsign through block objects to pull out ID and lineColor
+        #Parsing through block objects to pull out ID and lineColor
         TempBlockList = []
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
@@ -185,7 +185,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.updateOccupiedBlocks(FullBlockList)
 
     def recieveOccupiedBlocksR2(self, BlockList):
-        #Parsign through block objects to pull out ID and lineColor
+        #Parsing through block objects to pull out ID and lineColor
         TempBlockList = []
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
@@ -204,10 +204,7 @@ class CTC_UI(QtWidgets.QMainWindow):
     #TicketSales will be a list of two lists of ints, representing the sales at each station in 
     #green line and red line respectively, from Track Model
     def recieveTicketSales(self, TicketSales):
-        #print("Hello")
-        
         AverageSales = [0, 0]
-        print(TicketSales)
 
         AverageSales[0] = sum(TicketSales[0])
         AverageSales[1] = sum(TicketSales[1])

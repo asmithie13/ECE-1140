@@ -232,11 +232,6 @@ class TrackModelMain(QMainWindow):
             total_dis_from_beg_of_block += speed_of_train_m
             self.currentTrains[int(trainId[1:]) - 1][2] = total_dis_from_beg_of_block
 
-            #Compare total block length with some other calculated distance
-            # # distance_covered = (speed_of_train_m * (1 / (self.speed_limit_km * 1000 / (60 * 60))))
-            # print("auth", self.Authority)
-            # print("total block", total_dis_from_beg_of_block)
-            # print("block num:", block_num)
 
             print(self.stop)
             if self.train_stop == True:
@@ -255,7 +250,7 @@ class TrackModelMain(QMainWindow):
                     elif block_num == 1:
                         self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
 
-            #red line (might use beacon instead)
+            #red line
                 if self.line == "Red":
                     if block_num == 16:
                         self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
@@ -398,10 +393,33 @@ class TrackModelMain(QMainWindow):
         #Red Line                                  
         if line == "Red":
             #Red line train dispatch case        
-            if (BlockNum == 10):
-               return 11
-        
-
+            if (BlockNum >= 10) and (BlockNum < 66):
+                return BlockNum + 1
+            elif (BlockNum == 66):
+                return 52
+            elif (BlockNum >= 52) and (BlockNum < 43):
+                return BlockNum - 1
+            elif (BlockNum == 43):
+                return 67
+            elif (BlockNum >=67) and (BlockNum < 71):
+                return BlockNum + 1
+            elif (BlockNum == 71):
+                return 38
+            elif (BlockNum >= 38) and (BlockNum < 32):
+                return BlockNum - 1
+            elif (BlockNum == 32):
+                return 72
+            elif (BlockNum >= 72) and (BlockNum < 76):
+                return BlockNum + 1
+            elif (BlockNum == 76):
+                return 27
+            elif (BlockNum >= 27) and (BlockNum < 16):
+                return BlockNum - 1
+            elif (BlockNum == 16):
+                return 1
+            elif (BlockNum >= 1) and (BlockNum <= 9):
+                return BlockNum + 1
+            
     def get_and_set_crossing_state(self, block_num):
         block_info = self.blockStates.get(str(block_num))
         if block_info is not None:
@@ -501,6 +519,7 @@ class TrackModelMain(QMainWindow):
     def update_occupied_blocks(self):
         occupancies = self.occupied_blocks + self.occupied_block_failures  # Combine the lists of occupied and failed blocks
         sections_HW = ["A", "B", "C", "D", "E", "F", "G", "H", "T", "U", "V", "W", "X", "Y", "Z"]
+        sections_shared = ["S103", "S104", "T105", "T106", "H34", "H35", "I36", "I37"]
         temp_HW = []
         temp_SW = []
 

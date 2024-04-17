@@ -132,12 +132,19 @@ class Main_UI(QtWidgets.QMainWindow):
         #Train Model to Track Model
         # Actual Velocity
         self.currentTrains[-1].track_model_acc_velo.connect(self.TrackModelWindow.receiveSendVelocity)
+    
+    #destroy a train object when it goes off the track, based on the TrainID string
+    def destroy_train(self, TrainID):
+        #Get train num
+        TrainNum = int(TrainID[1:]) - 1
+        
+        #Close UIs if open
+        self.currentTrains[TrainNum].TC.Close_UI()
+        self.currentTrains[TrainNum].close()
+        
+        #Delete train instance (Will also delete the train controller)
+        del self.currentTrains[TrainNum]
 
-
-        #Connect Signals to Track Model
-        #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)
-
-        self.TrainSelect.addItem(TrainID)
 
     def open_train_model_UI(self):
         #Error checking that a train actually exists

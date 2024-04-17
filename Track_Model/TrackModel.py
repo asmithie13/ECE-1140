@@ -309,7 +309,7 @@ class TrackModelMain(QMainWindow):
             #print("Switch:",self.get_switch_state(BlockNum))
             
             #A1 to D13 switch block
-            if BlockNum == 1 and self.get_switch_state(13) == False:
+            if BlockNum == 1:
                 return 13
 
             #A-C blocks, train can only come from its previous blocks, but they are in reverse number order
@@ -341,7 +341,7 @@ class TrackModelMain(QMainWindow):
             elif (BlockNum >= 29) and (BlockNum < 57):
                 return BlockNum + 1
             elif BlockNum == 57:
-                return 0
+                return 63
                         
             #J Blocks are the ones we skip near the yard
                         
@@ -385,8 +385,6 @@ class TrackModelMain(QMainWindow):
             elif BlockNum == 150:
                 return 28
         
-            elif BlockNum == 57:
-                return 0
                         
         #Red Line                                  
         if line == "Red":

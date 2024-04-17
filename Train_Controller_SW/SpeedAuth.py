@@ -117,7 +117,12 @@ class Vital_Speed_Auth():
             #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
             elif current_speed < ((speed_limit or cmd_speed) and (self.ui.buttonAuto.isChecked() == True)):
                 self.ui.vertSliderPow.setEnabled(True)
-                self.ui.vertSliderPow.setValue(100)
+                if (self.AuthM <= 15.24):
+                    self.ui.vertSliderPow.setValue(25)
+                elif self.AuthM > 324:
+                    self.ui.vertSliderPow.setValue(100)
+                else :
+                    self.ui.vertSliderPow.setValue(50)
                 self.ui.vertSliderBrk.setValue(0)
             
             #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please

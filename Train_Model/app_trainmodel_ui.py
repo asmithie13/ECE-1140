@@ -163,16 +163,6 @@ class TrainModel_mainwindow(QMainWindow):
     def stop_at_station(self,stop_bool):
         self.stop_bool=stop_bool
         
-        
-
-
-
-    
-
-
-
-        
-
 
     def ebrake_disabled(self, ebrake_state):
         self.ebrake_state = ebrake_state
@@ -408,8 +398,7 @@ class TrainCalculations:
         commanded_speed=main_window.comm_speed
         mass=main_window.mass #in lbs
         grade=main_window.grade
-        #print("mass1", mass)
-
+   
     def get_service_brake(self,brake):
             self.main_window.brake_state=brake
         
@@ -463,7 +452,7 @@ class TrainCalculations:
         
         
         #accounting for friction
-        friction_coeff=0.000001
+        friction_coeff=0.001
 
         #if train is on a slope, normal force= mgcos(theta)
         if(grade>0.00):
@@ -527,13 +516,11 @@ class TrainCalculations:
         self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration + self.main_window.prev_acc)
         if self.main_window.velocity>0:
             if self.main_window.ebrake_state==1:
-                #('ebrake state entered')
                 acceleration=-8.956692913385826 #in ft/s^2
                 self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
                                     
 
             elif self.main_window.brake_state==1:
-                #print('service brakes entered')
                 acceleration=-3.9370078740157477 #in ft/s^2
                 self.main_window.velocity = self.main_window.prev_vel + (train_model_time_hours/2)*(acceleration)
             
@@ -594,18 +581,7 @@ class trainmodel_testbench(QMainWindow):
 
         uic.loadUi("Train_Model/TrainModel_testbench.ui", self)
 
-       
-
-
-        #TC.service_brake_sig.connect(self.)
-        # self.TC.curr_power_sig.connect(self.receive_power)
-        
-        #TC.door_control_sig.connect(self.
-        # self.TC.announcement_sig.connect(self.get_announcement)
-        # self.TC.temp_control_sig.connect(self.get_cabin_temp)
-        # self.TC.int_light_sig.connect(self.interior_lights_tb)    
-        # self.TC.ext_light_sig.connect(self.exterior_lights_tb)
-        # self.TC.ebrake_disable_sig.connect(self.emit_ebrake_state)
+   
         
         self.train_sel_combo_tb.activated[str].connect(self.get_train_selection)
 
@@ -617,7 +593,7 @@ class trainmodel_testbench(QMainWindow):
 
         self.commanded_speed_input_tb.returnPressed.connect(self.get_commanded_speed)
 
-        #self.announcement_input_tb.returnPressed.connect(self.get_announcement)
+
         self.announcement_input_tb.returnPressed.connect(self.display_announcement)
 
         self.length_of_vehicle_input_tb.returnPressed.connect(self.get_length)
@@ -647,9 +623,7 @@ class trainmodel_testbench(QMainWindow):
        # self.cabin_temp_input_tb.returnPressed.connect(self.get_cabin_temp)
         self.cabin_temp_input_tb.returnPressed.connect(self.display_cabin_temp)
 
-       # self.int_lights_input_tb.returnPressed.connect(self.interior_lights_tb)
-      
-    #self.ext_lights_input_tb.returnPressed.connect(self.exterior_lights_tb)
+
        
         self.right_doors_input_tb.returnPressed.connect(self.right_doors_tb)
         

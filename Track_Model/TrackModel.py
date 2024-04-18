@@ -61,6 +61,8 @@ class TrackModelMain(QMainWindow):
 
     send_bool_auth = pyqtSignal(bool)
 
+    delete_train = pyqtSignal(str)
+
     AcutalSpeed = 0
 
     
@@ -241,7 +243,7 @@ class TrackModelMain(QMainWindow):
             if total_dis_from_beg_of_block >= block_length:
                 #Setting train direction after switches
                 if self.line == "Green":
-                    if block_num == 77:
+                    if block_num == 76:
                         self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
                     elif block_num == 100:
                         self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
@@ -298,6 +300,9 @@ class TrackModelMain(QMainWindow):
                 self.currentTrains[int(trainId[1:]) - 1].append(self.next_block_id + str(next_block_num))
                 
                 self.currentTrains[int(trainId[1:]) - 1][2] = speed_of_train_m - (block_length - total_dis_from_beg_of_block)
+                
+                if block_num == 57:
+                    self.delete_train.emit(trainId)
 
     def get_switch_state(self, block_num):
         # Retrieve the switch state from your blockStates dictionary or similar data structure
@@ -311,7 +316,7 @@ class TrackModelMain(QMainWindow):
             #print("Switch:",self.get_switch_state(BlockNum))
             
             #A1 to D13 switch block
-            if BlockNum == 1 and self.get_switch_state(13) == False:
+            if BlockNum == 1:
                 return 13
 
             #A-C blocks, train can only come from its previous blocks, but they are in reverse number order
@@ -343,7 +348,7 @@ class TrackModelMain(QMainWindow):
             elif (BlockNum >= 29) and (BlockNum < 57):
                 return BlockNum + 1
             elif BlockNum == 57:
-                return 0
+                return 63
                         
             #J Blocks are the ones we skip near the yard
                         
@@ -386,9 +391,7 @@ class TrackModelMain(QMainWindow):
 
             elif BlockNum == 150:
                 return 28
-        
-            elif BlockNum == 57:
-                return 0
+    
                         
         #Red Line                                  
         if line == "Red":

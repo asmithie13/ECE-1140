@@ -136,12 +136,9 @@ class Main_UI(QtWidgets.QMainWindow):
         # Actual Velocity
         self.currentTrains[-1].track_model_acc_velo.connect(self.TrackModelWindow.receiveSendVelocity)
 
-<<<<<<< HEAD
         #Train stops
         self. currentTrains[-1].stop_at_station_sig.connect(self.TrackModelWindow.train_stop)
 
-=======
->>>>>>> 495fc26341d26f4df4443ce7638f93531f2e4843
         #Connect Signals to Track Model
         #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)
 

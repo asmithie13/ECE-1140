@@ -143,14 +143,15 @@ class TrainModel_mainwindow(QMainWindow):
     #sending authority to train controller 
     def receiveSpeedAuth_tm(self,speedAuth):
         trainID=speedAuth[0]
-        self.comm_speed=speedAuth[1]
-        self.train_calculations.get_commanded_speed(float(self.comm_speed),self.grade,self.mass)
-        Authority=speedAuth[2]
-        self.train_calculations.Calculate_acceleration(self.comm_speed,self.grade,self.mass)
-        self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
-        self.train_calculations.get_acceleration(self.comm_speed,self.grade,self.mass)
-        self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
-        self.TC.curr_auth_sig.emit(float(Authority))
+        if trainID == self.TrainID:
+            self.comm_speed=speedAuth[1]
+            self.train_calculations.get_commanded_speed(float(self.comm_speed),self.grade,self.mass)
+            Authority=speedAuth[2]
+            self.train_calculations.Calculate_acceleration(self.comm_speed,self.grade,self.mass)
+            self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
+            self.train_calculations.get_acceleration(self.comm_speed,self.grade,self.mass)
+            self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
+            self.TC.curr_auth_sig.emit(float(Authority))
 
     #sending beacon_info_sig to Train Controller
     def receive_beacon_info(self,beacon_info):

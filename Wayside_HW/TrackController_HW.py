@@ -34,14 +34,10 @@ class TrackController_HW(QMainWindow):
 
         #Constant lists for blocks affected based on light color:
         self.LIGHT_A1 = ['A1', 'A2']
-        self.LIGHT_C12 = ['C12', 'D13']
+        self.LIGHT_C12 = ['C11', 'C12']
         self.LIGHT_G29 = ['F26', 'F27', 'F28', 'G29']
         self.LIGHT_Z150 = ['Y148', 'Y149', 'Z150']
-
-        self.CHUNK_1 = ['U', 'V', 'W', 'X', 'Y', 'Z']
-        self.CHUNK_2 = ['D', 'F']
-        self.CHUNK_3 = ['A', 'B', 'C']
-        self.CHUNK_4 = ['E', 'T']
+        self.ALL_LIGHT = ['A1', 'A2', 'C12', 'D13', 'F26', 'F27', 'F28', 'G29', 'Y148', 'Y149', 'Z150']
 
         #Disable manual mode operations, as program begins in automatic operation:
         self.groupBoxManual.setEnabled(False)
@@ -56,12 +52,17 @@ class TrackController_HW(QMainWindow):
         self.modeFlag = 0 #0 = Automatic, 1 = Manual, 2 = Maintenance
 
         #Lists to hold blocks that are currently occupied or closed by CTC:
+        self.previousOccupiedBlock = []
         self.occupiedBlocks = []
         self.occupiedBlockSections = []
         self.listOccIDs = []
-        self.closedBlocks = []
 
-        self.occChunks = []
+        self.closedBlocks = []
+        self.listClosedIDs = []
+
+        self.maintenanceSwitches = []
+
+        self.closedFlag = 0
 
         #Signals (Manual mode-related):
         self.checkBoxManual.clicked.connect(self.manualMode)
@@ -75,14 +76,21 @@ class TrackController_HW(QMainWindow):
         self.pushButtonDown.clicked.connect(self.setCrossingDown)
     
     def modeHandler(self, occupiedBlocks):
+        occupiedBlocks.sort()
+        if occupiedBlocks == self.listOccIDs and self.closedFlag == 0:
+            return
+
+        self.previousOccupiedBlock = self.occupiedBlocks
+        
         self.listOccIDs = occupiedBlocks #Argument received is a string of occupied block IDs
+        for block in self.closedBlocks:
+            self.listOccIDs.append(block.ID)
+
         self.occupiedBlocks = [] #Make a list of block objects that are occupied
         for block in self.allBlocks:
             if block.ID in self.listOccIDs:
                 self.occupiedBlocks.append(block)
-        #for block in self.occupiedBlocks:
-            #print(block.ID) #REMOVE
-
+        
         for block in self.allBlocks: #Set occupancy status in the list of all blocks
             if block.ID in self.listOccIDs:
                 block.occupied = 1
@@ -92,16 +100,9 @@ class TrackController_HW(QMainWindow):
         for block in self.occupiedBlocks: #Set occupancy status in the list of all blocks
             block.occupied = 1
         
-        self.preventCollision()
         self.sendOccupiedBlocks.emit(self.occupiedBlocks)
         listBlockIDOccupied = []
         listBlockStrOccupied = ""
-
-        #If a block is closed by CTC, it is recognized as "occupied" by the PLC parser:
-        for block in self.closedBlocks:
-            if block.ID not in self.listOccIDs:
-                self.listOccIDs.append(block.ID)
-                self.occupiedBlocks.append(block)
 
         for block in self.occupiedBlocks:
             listBlockIDOccupied.append(block.ID)
@@ -110,17 +111,31 @@ class TrackController_HW(QMainWindow):
             listBlockStrOccupied = listBlockStrOccupied + ID + " "
         self.lineEditOccupied.setText(listBlockStrOccupied)
 
+        self.setMaintenanceSwitch() #Sets any time that there is a new occupancy
+        #Must be called again after automatic mode switch positions are determined
+
+        self.closedFlag = 0
         if self.modeFlag == 0:
             self.automaticMode()
         
     def getClosedBlocks(self, closedBlocks):
+        self.closedFlag = 1
         for block in closedBlocks:
             if block.maintenance == 1 and block not in self.closedBlocks:
                 self.closedBlocks.append(block)
-            if block.maintenance == 0 and block in self.closedBlocks:
-                self.closedBlocks.remove(block)
-                self.listOccIDs.remove(block.ID)
-                self.occupiedBlocks.remove(block)
+                self.listClosedIDs.append(block.ID)
+        
+            elif block.maintenance == 0:
+                for blockTwo in self.closedBlocks:
+                    if block.ID == blockTwo.ID:
+                        self.closedBlocks.remove(block)
+                        self.listClosedIDs.remove(block.ID)
+                        self.listOccIDs.remove(block.ID)
+
+                for blockTwo in self.occupiedBlocks:
+                    if block.ID == blockTwo.ID:
+                        self.occupiedBlocks.remove(blockTwo)
+
         self.modeHandler(self.listOccIDs)
 
     def manualMode(self):
@@ -143,26 +158,7 @@ class TrackController_HW(QMainWindow):
             listSecIDs.append(block.blockSection)
         self.comboBoxSection.addItems(listSecIDs)
     
-    def automaticMode(self):
-        #Add the sections of all occupanices to a list to be communicated serially:
-        self.occChunks.sort()
-        occupiedChunks = []
-        for block in self.occupiedBlocks:
-            if block.blockSection in self.CHUNK_1 and 1 not in occupiedChunks:
-                occupiedChunks.append(1)
-            elif block.blockSection in self.CHUNK_2 and 2 not in occupiedChunks:
-                occupiedChunks.append(2)
-            elif block.blockSection in self.CHUNK_3 and 3 not in occupiedChunks:
-                occupiedChunks.append(3)
-            elif block.blockSection in self.CHUNK_4 and 4 not in occupiedChunks:
-                occupiedChunks.append(4)
-        occupiedChunks.sort()
-
-        if occupiedChunks == self.occChunks: #Only proceed if there is a section occupancy change
-            return
-        else:
-            self.occChunks = occupiedChunks
-
+    def automaticMode(self): 
         occupiedBlockSections = []
         for block in self.occupiedBlocks:
             if block.blockSection not in occupiedBlockSections:
@@ -183,12 +179,14 @@ class TrackController_HW(QMainWindow):
         copyBlocks = self.allBlocks
         attributeList = []
         
+        breakFlag = 0
         while True:
            if serialObject.in_waiting > 0:
                 myAttribute = serialObject.read(serialObject.in_waiting).decode('utf-8')
                 if len(myAttribute) > 1:
                     for char in myAttribute:
                         if char == 'A':
+                            breakFlag = 1
                             break
                         else:
                             attributeList.append(char)
@@ -196,11 +194,13 @@ class TrackController_HW(QMainWindow):
                     if myAttribute == 'A':
                             break
                     else:
-                        attributeList.append(myAttribute)'''
+                        attributeList.append(myAttribute)
+                if breakFlag == 1:
+                    break'''
         
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
-        '''attributeListSoftware = []
+        attributeListSoftware = []
         for block in self.allBlocks:
             if block.LIGHT == True:
                 attributeListSoftware.append(str(block.lightState))
@@ -209,18 +209,22 @@ class TrackController_HW(QMainWindow):
             elif block.CROSSING == True:
                 attributeListSoftware.append(str(block.crossingState))
 
-        if attributeList != attributeListSoftware:
+        '''if attributeList != attributeListSoftware:
             self.lineEditHardware.setText("ERRORS DETECTED. STOPPING ALL TRAINS.")
             for block in self.allBlocks:
                 block.authority = False
                 self.sendUpdatedBlocks.emit(self.allBlocks)
         else:
             #Ajust block-wise authority based on active red lights:
+            self.setMaintenanceSwitch()
             self.updateBooleanAuth()
+            self.preventCollision()
             self.sendUpdatedBlocks.emit(self.allBlocks)'''
         
+        self.setMaintenanceSwitch()
         self.updateBooleanAuth() #Uncomment when hardware is not connected
-        self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected
+        self.preventCollision() #Function to prevent occupancy collisions
+        self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected'''
     
     def selectBlock(self):
         self.frameLight.setEnabled(False)
@@ -262,6 +266,11 @@ class TrackController_HW(QMainWindow):
         self.pushButtonRight.setFont(QFont("Times New Roman", 12))
         self.pushButtonUp.setFont(QFont("Times New Roman", 12))
         self.pushButtonDown.setFont(QFont("Times New Roman", 12))
+
+        tempBlockID = self.comboBoxSection.currentText() + self.comboBoxBlock.currentText()
+        for block in self.maintenanceSwitches:
+            if block.ID == tempBlockID:
+                self.frameSwitch.setEnabled(False)
 
         for block in self.allBlocks:
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
@@ -400,7 +409,7 @@ class TrackController_HW(QMainWindow):
             elif block.ID == 'Z150':
                 tempZ150 = block.lightState
         
-        if tempA1 == False:
+        if tempA1 == 0:
             for block in self.allBlocks:
                 if block.ID in self.LIGHT_A1:
                     block.authority = False
@@ -409,7 +418,7 @@ class TrackController_HW(QMainWindow):
                 if block.ID in self.LIGHT_A1:
                     block.authority = True
         
-        if tempC12 == False:
+        if tempC12 == 0:
             for block in self.allBlocks:
                 if block.ID in self.LIGHT_C12:
                     block.authority = False
@@ -418,7 +427,7 @@ class TrackController_HW(QMainWindow):
                 if block.ID in self.LIGHT_C12:
                     block.authority = True
         
-        if tempG29 == False:
+        if tempG29 == 0:
             for block in self.allBlocks:
                 if block.ID in self.LIGHT_G29:
                     block.authority = False
@@ -427,7 +436,7 @@ class TrackController_HW(QMainWindow):
                 if block.ID in self.LIGHT_G29:
                     block.authority = True
         
-        if tempZ150 == False:
+        if tempZ150 == 0:
             for block in self.allBlocks:
                 if block.ID in self.LIGHT_Z150:
                     block.authority = False
@@ -436,26 +445,105 @@ class TrackController_HW(QMainWindow):
                 if block.ID in self.LIGHT_Z150:
                     block.authority = True
     
+    def getMaintenanceSwitch(self, switchPos):
+        for block in switchPos:
+            if block.maintenance == 1:
+                self.maintenanceSwitches.append(block)
+            elif block.maintenance == 0:
+                for blockTwo in self.maintenanceSwitches:
+                    if block.ID == blockTwo.ID:
+                        self.maintenanceSwitches.remove(blockTwo)
+                
+        self.setMaintenanceSwitch()
+    
+    def setMaintenanceSwitch(self): #Function to set maintenance mode switch positions from CTC
+        for blockOne in self.maintenanceSwitches:
+            for blockTwo in self.allBlocks:
+                if blockOne.ID == blockTwo.ID:
+                    blockTwo.switchState = blockOne.switchState
+    
     def preventCollision(self):
-        oneDirection = ['G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] #Block sections where collisions could occur
+        oneDirectionOne = ['G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] #Block sections where collisions could occur
+        oneDirectionTwo = ['A', 'B', 'C'] 
+        biDirection = ['D', 'E', 'F']
+
         tempSkip = []
         for index, block in enumerate(self.allBlocks):
-            if block.blockSection in oneDirection:
-                if block.blockSection == 'S': #Cannot be iterated through due to being beginning of Wayside #1
-                    continue
-            
-                #If a train is about to collide with the train in front of it, set Boolean authority to zero:
-                if block.ID in self.listOccIDs and self.allBlocks[index-2].ID in self.listOccIDs:
+            if block.blockSection in oneDirectionOne:
+                if block.occupied == True:
                     self.allBlocks[index-1].authority = False
-                    tempSkip.append(self.allBlocks[index+1].ID)
                     self.allBlocks[index-2].authority = False
-                    tempSkip.append(self.allBlocks[index+2].ID)
+                    tempSkip.append(self.allBlocks[index-1])
+                    tempSkip.append(self.allBlocks[index-2])
+                elif block.occupied == False and block.ID not in self.ALL_LIGHT:
+                    if block not in tempSkip:
+                        block.authority = True
+                    if self.allBlocks[index-1] not in tempSkip:
+                        self.allBlocks[index-1].authority = True
+                    if self.allBlocks[index-2] not in tempSkip:
+                        self.allBlocks[index-2].authority = True
+            if block.blockSection in oneDirectionTwo:
+                if block.occupied == True:
+                    self.allBlocks[index+1].authority = False
+                    self.allBlocks[index+2].authority = False
+                    tempSkip.append(self.allBlocks[index+1])
+                    tempSkip.append(self.allBlocks[index+2])
+                elif block.occupied == False and block.ID not in self.ALL_LIGHT:
+                    if block not in tempSkip:
+                        block.authority = True
+                    if self.allBlocks[index+1] not in tempSkip:
+                        self.allBlocks[index+1].authority = True
+                    if self.allBlocks[index+2] not in tempSkip:
+                        self.allBlocks[index+2].authority = True
+            if block.blockSection in biDirection:
+                if block.ID == 'D13':
                     continue
-                
-                #Otherwise, reset the Boolean authority to 1:
-                if block.ID not in tempSkip:
-                    block.authority = True
-        
-
-
-                
+                if self.allBlocks[index-1] in self.previousOccupiedBlock:
+                    if block.occupied == True:
+                        self.allBlocks[index-1].authority = False
+                        self.allBlocks[index-2].authority = False
+                        tempSkip.append(self.allBlocks[index-1])
+                        tempSkip.append(self.allBlocks[index-2])
+                    elif block.occupied == False and block.ID not in self.ALL_LIGHT:
+                        if block not in tempSkip:
+                            block.authority = True
+                        if self.allBlocks[index-1] not in tempSkip:
+                            self.allBlocks[index-1].authority = True
+                        if self.allBlocks[index-2] not in tempSkip:
+                            self.allBlocks[index-2].authority = True
+                elif self.allBlocks[index+1] in self.previousOccupiedBlock:
+                    if block.occupied == True:
+                        self.allBlocks[index+1].authority = False
+                        self.allBlocks[index+2].authority = False
+                        tempSkip.append(self.allBlocks[index+1])
+                        tempSkip.append(self.allBlocks[index+2])
+                    elif block.occupied == False and block.ID not in self.ALL_LIGHT:
+                        if block not in tempSkip:
+                            block.authority = True
+                        if self.allBlocks[index+1] not in tempSkip:
+                            self.allBlocks[index+1].authority = True
+                        if self.allBlocks[index+2] not in tempSkip:
+                            self.allBlocks[index+2].authority = True
+                #The following condition indicates a track failure, since an occupancy is randomly generated...
+                #Close blocks on either side as response:
+                elif self.allBlocks[index-1] not in self.previousOccupiedBlock and self.allBlocks[index+1] not in self.previousOccupiedBlock:
+                    if block.occupied == True:
+                        self.allBlocks[index+1].authority = False
+                        self.allBlocks[index+2].authority = False
+                        tempSkip.append(self.allBlocks[index+1])
+                        tempSkip.append(self.allBlocks[index+2])
+                        self.allBlocks[index-1].authority = False
+                        self.allBlocks[index-2].authority = False
+                        tempSkip.append(self.allBlocks[index-1])
+                        tempSkip.append(self.allBlocks[index-2])
+                    elif block.occupied == False and block.ID not in self.ALL_LIGHT:
+                        if block not in tempSkip:
+                            block.authority = True
+                        if self.allBlocks[index+1] not in tempSkip:
+                            self.allBlocks[index+1].authority = True
+                        if self.allBlocks[index+2] not in tempSkip:
+                            self.allBlocks[index+2].authority = True
+                        if self.allBlocks[index-1] not in tempSkip:
+                            self.allBlocks[index-1].authority = True
+                        if self.allBlocks[index-2] not in tempSkip:
+                            self.allBlocks[index-2].authority = True

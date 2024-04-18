@@ -119,7 +119,7 @@ class Vital_Speed_Auth():
                 self.ui.vertSliderPow.setEnabled(True)
                 if (self.AuthM <= 15.24):
                     self.ui.vertSliderPow.setValue(25)
-                elif self.AuthM > 324:
+                elif self.AuthM > 60:
                     self.ui.vertSliderPow.setValue(100)
                 else :
                     self.ui.vertSliderPow.setValue(50)

@@ -119,7 +119,7 @@ class TrackModelMain(QMainWindow):
         self.time = ""
         self.listStation = []
         self.random_number  = 0
-        self.line = ""
+        self.line_ctc= ""
         self.stop = False
         
 
@@ -175,7 +175,7 @@ class TrackModelMain(QMainWindow):
         self.stop = stop
     
     def get_train_id(self, trainID, line):
-        self.line = line
+        self.line_ctc = line
         if line == "Green":
             self.currentTrains.append([trainID, line, 0, 'increasing', 'K63'])
             self.occupied_blocks.append('K63')
@@ -184,6 +184,7 @@ class TrackModelMain(QMainWindow):
         elif line == "Red":
             self.currentTrains.append([trainID, line, 0, 'increasing', 'D10'])
             self.send_beacon.emit(1)
+            self.update_occupied_blocks()
 
 
     def update_heaters_out(self):
@@ -242,7 +243,7 @@ class TrackModelMain(QMainWindow):
             # if train moves to the next block
             if total_dis_from_beg_of_block >= block_length:
                 #Setting train direction after switches
-                if self.line == "Green":
+                if self.line_ctc== "Green":
                     if block_num == 76:
                         self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
                     elif block_num == 100:
@@ -253,7 +254,7 @@ class TrackModelMain(QMainWindow):
                         self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
 
             #red line
-                if self.line == "Red":
+                if self.line_ctc== "Red":
                     if block_num == 16:
                         self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
                     elif block_num == 76:
@@ -288,7 +289,7 @@ class TrackModelMain(QMainWindow):
                 self.blockID = self.section_occ + str(block_num)
                 
                 #calculate next block
-                next_block_num = self.get_next_id(block_num, self.currentTrains[int(trainId[1:]) - 1][3], self.line)
+                next_block_num = self.get_next_id(block_num, self.currentTrains[int(trainId[1:]) - 1][3], self.line_ctc)
                 self.next_block_id = self.data.get_section_for_block(next_block_num)
 
                 self.occupied_blocks.clear()
@@ -521,21 +522,29 @@ class TrackModelMain(QMainWindow):
 
     def update_occupied_blocks(self):
         occupancies = self.occupied_blocks + self.occupied_block_failures  # Combine the lists of occupied and failed blocks
-        sections_HW = ["A", "B", "C", "D", "E", "F", "G", "H", "T", "U", "V", "W", "X", "Y", "Z"]
-        sections_shared = ["S103", "S104", "T105", "T106", "H34", "H35", "I36", "I37"]
-        temp_HW = []
-        temp_SW = []
+        if self.line_ctc== "Green":
+            sections_HW = ["A", "B", "C", "D", "E", "F", "G", "H", "T", "U", "V", "W", "X", "Y", "Z"]
+            sections_shared = ["S103", "S104", "T105", "T106", "H34", "H35", "I36", "I37"]
+            temp_HW = []
+            temp_SW = []
 
-        # Separate the blocks into HW and SW based on the first letter of the block ID
-        for block_id in occupancies:
-            if block_id[0] in sections_HW:  # Check if the first letter of the block ID is in sections_HW
-                temp_HW.append(block_id)
-            else:
-                temp_SW.append(block_id)
+            # Separate the blocks into HW and SW based on the first letter of the block ID
+            for block_id in occupancies:
+                if block_id[0] in sections_HW:  # Check if the first letter of the block ID is in sections_HW
+                    temp_HW.append(block_id) 
+                elif block_id in sections_shared:
+                    temp_HW.append(block_id)
+                    temp_SW.append(block_id)
+                else:
+                    temp_SW.append(block_id)
+                    # Emit the separated lists to HW and SW respectively
+            self.sendBlockOcc_SW.emit(temp_SW)
+            self.sendBlockOcc_HW.emit(temp_HW)
+        elif self.line_ctc== "Red":
+            self.sendBlockOcc_SW.emit(occupancies)
 
-        # Emit the separated lists to HW and SW respectively
-        self.sendBlockOcc_SW.emit(temp_SW)
-        self.sendBlockOcc_HW.emit(temp_HW)
+
+
         
 
 

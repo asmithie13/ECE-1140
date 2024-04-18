@@ -76,6 +76,7 @@ if __name__ == "__main__":
 
     #CTC to Wayside SW
     MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
+    MainWindow.CTCwindow.sendBlockClosures.connect(MainWindow.WaysideSWwindow.blockClosures)
 
     #CTC to Wayside HW
     MainWindow.CTCwindow.sendBlockClosures.connect(MainWindow.WaysideHWwindow.getClosedBlocks)
@@ -94,8 +95,9 @@ if __name__ == "__main__":
 
     #Wayside to CTC
     MainWindow.WaysideSWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksG2)
-    MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksR1)
-    MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksR2)
+        #These need to be separate functions for each Wayside, and only send blocks for that wayside
+    #MainWindow.WaysideSWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksR1)
+    #MainWindow.WaysideSWwindow.sendOccupiedBlocks.connect(MainWindow.CTCwindow.recieveOccupiedBlocksR2)
 
     #Wayside to Track Model
     MainWindow.WaysideSWwindow.sendTrainSpeedAuth.connect(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)

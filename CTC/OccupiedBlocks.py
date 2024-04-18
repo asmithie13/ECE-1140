@@ -88,10 +88,11 @@ class OccupiedBlocks():
             elif BlockNum == 63:
                 #for each train
                 for i in range(len(self.currentTrains)):
-                    #for each block the train occupies
-                    if self.currentTrains[i][0] == 'K63':
-                        #return the current train if conditions are meet
-                        return ("T" + str(i+1))
+                    if len(self.currentTrains[i]) > 0:
+                        #for each block the train occupies
+                        if self.currentTrains[i][0] == 'K63':
+                            #return the current train if conditions are meet
+                            return ("T" + str(i+1))
                         
             #K-M blocks, train can only come from its previous blocks
             elif (BlockNum >= 64) and (BlockNum <= 76):
@@ -135,22 +136,179 @@ class OccupiedBlocks():
             
         #Red Line                                  
         if line == "Red":
-            """
             #A1 switch
             if BlockNum == 1:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 16:
+                            return ("T" + str(i+1))
 
-
-            elif (BlockNum > 1) and (BlockNum <= 27):
+            #A-C Blocks
+            elif (BlockNum > 1) and (BlockNum <= 9):
                 ID = self.searchBothDirections(BlockNum)
                 if ID != -1:
                     return ("T" + str(ID+1)) 
-            """
             
             #Red line train dispatch case  
-            if BlockNum == 10:
+            elif BlockNum == 10:
                 for i in range(len(self.currentTrains)):
-                    if self.currentTrains[i][0] == 'D10':
-                        return ("T" + str(i+1))
+                    if len(self.currentTrains[i]) > 0:
+                        if self.currentTrains[i][0] == 'D10':
+                            return ("T" + str(i+1))
+            
+            #D-E blocks       
+            elif (BlockNum > 10) and (BlockNum <= 15):
+                ID = self.searchPreviousBlock(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1))
+
+            #F-H to first switch blocks
+            elif (BlockNum >= 16) and (BlockNum < 27):
+                ID = self.searchBothDirections(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1)) 
+
+            #First H switch on block 27
+            elif BlockNum ==  27:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 26:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 28:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 76:
+                            return ("T" + str(i+1))
+                        
+            #H28-H31 to first switch blocks
+            elif (BlockNum >= 28) and (BlockNum <= 31):
+                ID = self.searchBothDirections(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1))       
+
+            #Second H switch on block 32
+            elif BlockNum ==  32:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 31:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 33:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 72:
+                            return ("T" + str(i+1))
+                        
+            #H33-H37 to first switch blocks
+            elif (BlockNum >= 33) and (BlockNum <= 37):
+                ID = self.searchBothDirections(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1))  
+
+            #Third H switch on block 38
+            elif BlockNum ==  38:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 37:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 39:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 71:
+                            return ("T" + str(i+1))
+                            
+            #H39-H42 to first switch blocks
+            elif (BlockNum >= 39) and (BlockNum <= 42):
+                ID = self.searchBothDirections(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1))  
+
+            #Fourth H switch on block 43
+            elif BlockNum ==  43:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 42:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 44:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 67:
+                            return ("T" + str(i+1))
+                        
+            #H44-J51
+            elif (BlockNum >= 44) and (BlockNum <= 51):
+                ID = self.searchBothDirections(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1)) 
+
+            #J52 switch
+            elif BlockNum ==  52:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 51:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 53:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 66:
+                            return ("T" + str(i+1))
+                        
+            #J53-N65
+            elif (BlockNum >= 53) and (BlockNum <= 65):
+                ID = self.searchBothDirections(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1)) 
+                
+            #N66
+            elif BlockNum ==  66:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 52:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 65:
+                            return ("T" + str(i+1))
+
+            #O67
+            elif BlockNum ==  67:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 43:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 68:
+                            return ("T" + str(i+1))
+            
+            #P Blocks
+            elif (BlockNum >= 68) and (BlockNum <= 70):
+                ID = self.searchBothDirections(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1)) 
+            
+            #Q71
+            elif BlockNum ==  71:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 38:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 70:
+                            return ("T" + str(i+1))
+
+            #R72
+            elif BlockNum ==  72:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 32:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 73:
+                            return ("T" + str(i+1))
+            
+            #S Blocks
+            elif (BlockNum >= 73) and (BlockNum <= 75):
+                ID = self.searchBothDirections(BlockNum)
+                if ID != -1:
+                    return ("T" + str(ID+1)) 
+            
+            #T76
+            elif BlockNum ==  76:
+                for i in range(len(self.currentTrains)):
+                    for j in self.currentTrains[i]:
+                        if int(j[1:]) == 75:
+                            return ("T" + str(i+1))
+                        elif int(j[1:]) == 27:
+                            return ("T" + str(i+1))
         
         return 'X'
 

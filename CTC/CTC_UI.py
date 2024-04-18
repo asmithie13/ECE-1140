@@ -44,22 +44,14 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.SetSwitchPositionButton.clicked.connect(self.setSwitch_button)
         self.ReleaseSwitchButton.clicked.connect(self.releaseSwitch_button)
 
-        #Changing Button Colors
-        self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")             #Green
-        self.UploadButton.setStyleSheet("background-color : rgb(38, 207, 4)")               #Green
-        self.CloseBlockButton.setStyleSheet("background-color: rgb(195, 16, 40)")           #Red
-        self.ReopenBlockButton.setStyleSheet("background-color : rgb(38, 207, 4)")          #Green
-        self.SetSwitchPositionButton.setStyleSheet("background-color: rgb(195, 16, 40)")    #Red
-        self.ReleaseSwitchButton.setStyleSheet("background-color : rgb(38, 207, 4)")        #Green
 
         #Changing Background colors to section off UI, all light blue
-        self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255);")
         self.ScheduleBox.setStyleSheet("background-color : rgb(233, 247, 255);")
         self.OccupiedBlocksBox.setStyleSheet("background-color : rgb(233, 247, 255);")
-        self.MaintenanceBox.setStyleSheet("background-color : rgb(233, 247, 255);")
 
         #Manual Dispatch Formatting
         self.ArrivalTimeEdit.setDisplayFormat("hh:mm")
+        self.currentTime = "00:00"
 
         #Importing Track Data
         self.TrackData = TempData()
@@ -67,7 +59,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         #Data to hold the current line selected
         self.currentLine = ''
 
-        #Initializing Schedule
+        #Initializing Schedule and table formattting
         self.trainSchedule = Schedule() 
         self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
         ScheduleHeader = self.ScheduleTable.horizontalHeader()
@@ -84,14 +76,13 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.TrainNameLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.DestinationLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ArrivalTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
-        self.MaualDispatchBox.setStyleSheet("color: rgb(120, 120, 120);")
+        self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255); color: rgb(120, 120, 120);") #Light blue, gray
         #Muting Add Train Button
         self.AddTrainButton.setStyleSheet("background-color : rgb(138, 237, 119)")             #Muted Green
 
         #Disabling Auto Mode select schedule button until auto mode is selected
         self.UploadButton.setEnabled(False)
-        self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
-        self.UploadButton.setStyleSheet("background-color : rgb(138, 237, 119)")               #Muted Green
+        self.UploadButton.setStyleSheet("background-color : rgb(138, 237, 119); color: rgb(120, 120, 120);")  #Muted Green
 
         #Initializing Maintenance Mode functions before Mainenance Mode has been selected
         self.inMaintenance = False
@@ -106,7 +97,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.CloseBlockPromptLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ChooseSwitchLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.SwitchPositionLabel.setStyleSheet("color: rgb(120, 120, 120);")
-        self.MaintenanceBox.setStyleSheet("color: rgb(120, 120, 120);")
+        self.MaintenanceBox.setStyleSheet("background-color : rgb(233, 247, 255); color: rgb(120, 120, 120);") #light blue, gray
         #Muting button colors
         self.CloseBlockButton.setStyleSheet("background-color: rgb(245, 144, 158)")            #Muted red
         self.ReopenBlockButton.setStyleSheet("background-color : rgb(138, 237, 119)")          #Muted Green
@@ -122,11 +113,12 @@ class CTC_UI(QtWidgets.QMainWindow):
         OBHeader.setSectionResizeMode(QHeaderView.Stretch)
 
         #Initializing Maintance Tables
+        #Block Closures
         self.Maintenance = CTC_Maintenance()
         self.BlockClosureTable.setModel(ClosedBlocksTableModel(self.Maintenance.BlocksClosed))
         BCHeader = self.BlockClosureTable.horizontalHeader()
         BCHeader.setSectionResizeMode(QHeaderView.Stretch)
-        
+        #Switch Positions
         self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintenance.SwitchText))
         SPHeader = self.SwitchPositionTable.horizontalHeader()
         SPHeader.setSectionResizeMode(QHeaderView.Stretch)
@@ -142,7 +134,7 @@ class CTC_UI(QtWidgets.QMainWindow):
     """Slots to recieve Signals"""
     #BlockList will be a list of occupied block objects from wayside controllers
     def recieveOccupiedBlocksG1(self, BlockList):
-        #Parsign through block objects to pull out ID and lineColor
+        #Parsing through block objects to pull out ID and lineColor
         TempBlockList = []
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
@@ -159,7 +151,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.updateOccupiedBlocks(FullBlockList)
 
     def recieveOccupiedBlocksG2(self, BlockList):
-        #Parsign through block objects to pull out ID and lineColor
+        #Parsing through block objects to pull out ID and lineColor
         TempBlockList = []
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
@@ -176,7 +168,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.updateOccupiedBlocks(FullBlockList)
 
     def recieveOccupiedBlocksR1(self, BlockList):
-        #Parsign through block objects to pull out ID and lineColor
+        #Parsing through block objects to pull out ID and lineColor
         TempBlockList = []
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
@@ -193,7 +185,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.updateOccupiedBlocks(FullBlockList)
 
     def recieveOccupiedBlocksR2(self, BlockList):
-        #Parsign through block objects to pull out ID and lineColor
+        #Parsing through block objects to pull out ID and lineColor
         TempBlockList = []
         for i in BlockList:
             TempBlockList.append([i.ID, i.lineColor])
@@ -212,10 +204,7 @@ class CTC_UI(QtWidgets.QMainWindow):
     #TicketSales will be a list of two lists of ints, representing the sales at each station in 
     #green line and red line respectively, from Track Model
     def recieveTicketSales(self, TicketSales):
-        #print("Hello")
-        
         AverageSales = [0, 0]
-        print(TicketSales)
 
         AverageSales[0] = sum(TicketSales[0])
         AverageSales[1] = sum(TicketSales[1])
@@ -234,13 +223,14 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.TrainNameSelect.addItems(self.trainSchedule.TrainNames)
         self.DestinationSelect.setEnabled(True)
         self.ArrivalTimeEdit.setEnabled(True)
-        #Disable the add train button
+        #Enable the add train button
         self.AddTrainButton.setEnabled(True)
+        self.AddTrainButton.setStyleSheet("background-color : rgb(38, 207, 4)")             #Green
         #Changing label text to gray
         self.TrainNameLabel.setStyleSheet("color: black;")
         self.DestinationLabel.setStyleSheet("color: black;")
         self.ArrivalTimeLabel.setStyleSheet("color: black;")
-        self.MaualDispatchBox.setStyleSheet("color: black;")
+        self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255); color: black;")
 
     #Define mutually exclusive auto/manual mode when automatic mode is selected.
     def selectAutoMode_button(self):
@@ -255,6 +245,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ArrivalTimeEdit.setEnabled(False)
         #Disable the add train button
         self.AddTrainButton.setEnabled(False)
+        self.AddTrainButton.setStyleSheet("background-color : rgb(138, 237, 119)")  #Muted Green
 
 
         #Highlight Auto selected and disable manual select button
@@ -267,7 +258,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.TrainNameLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.DestinationLabel.setStyleSheet("color: rgb(120, 120, 120);")
         self.ArrivalTimeLabel.setStyleSheet("color: rgb(120, 120, 120);")
-        self.MaualDispatchBox.setStyleSheet("color: rgb(120, 120, 120);")
+        self.MaualDispatchBox.setStyleSheet("background-color : rgb(233, 247, 255); color: rgb(120, 120, 120);")
 
     #Sets drop down options if green line is selected
     def greenLine_button(self):
@@ -279,7 +270,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Set stations selctions to green line
         self.DestinationSelect.clear()
-        self.DestinationSelect.addItems(self.TrackData.GreenStations)
+        self.DestinationSelect.addItems(self.TrackData.GreenStations[1:])
         #Setting Block selections to green line
         self.CloseBlockSelect.clear()
         self.CloseBlockSelect.addItems(self.TrackData.GreenBlockIDs)
@@ -289,6 +280,7 @@ class CTC_UI(QtWidgets.QMainWindow):
             self.ChooseSwitchSelect.addItem(i[0])
         self.newSwitchSelected(0)
     
+    #Sets drop down options if red line is selected
     def redLine_button(self):
         self.currentLine = 'Red'
         
@@ -298,7 +290,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Set stations selctions to red line
         self.DestinationSelect.clear()
-        self.DestinationSelect.addItems(self.TrackData.RedStations)
+        self.DestinationSelect.addItems(self.TrackData.RedStations[1:])
         #Setting Block selections to red line
         self.CloseBlockSelect.clear()
         self.CloseBlockSelect.addItems(self.TrackData.RedBlockIDs)
@@ -312,20 +304,30 @@ class CTC_UI(QtWidgets.QMainWindow):
     def displayClock(self, time_long):
         time = time_long[0:5]
         self.CTC_clock.display(time)
+        self.currentTime = time
         
-        for i in self.trainSchedule.Scheduledata:
-            if (time == i[5]) and (int(i[1][1:]) > len(self.occupiedBlocks.currentTrains)):
+        for index, entry in enumerate(self.trainSchedule.Scheduledata):
+            #Dispatch a new train
+            if (time == entry[5]) and (int(entry[1][1:]) > len(self.occupiedBlocks.currentTrains)):
                 #Initializing where the train starts
-                if i[0] == 'Green':
+                if entry[0] == 'Green':
                     self.occupiedBlocks.currentTrains.append(['K63'])
-                elif i[0] == 'Red':
+                elif entry[0] == 'Red':
                     self.occupiedBlocks.currentTrains.append(['D10'])
 
-                self.create_a_train.emit(i[1], i[0])
+                self.create_a_train.emit(entry[1], entry[0])
 
                 #Train ID, speed, Authority
-                self.sendDispatchInfo.emit([i[1], 40, self.trainSchedule.AuthorityInfo[int(i[1][1:]) - 1]])
-                print(i[1], "Dispatched")
+                self.sendDispatchInfo.emit([entry[1], 40, self.trainSchedule.AuthorityInfo[index]])
+                self.trainSchedule.dataSent[index] = 1
+                print(entry[1], "Dispatched")
+
+            
+            #Send a new dispatch info if train already exists
+            elif (time == entry[5]) and (self.trainSchedule.dataSent[index] == 0):
+                self.sendDispatchInfo.emit([entry[1], 40, self.trainSchedule.AuthorityInfo[index]])
+                self.trainSchedule.dataSent[index] = 1
+                print(entry[1], "Dispatched to new station")
 
     #Define functionality for Upload File Button
     def selectScheduleFile(self):
@@ -342,7 +344,6 @@ class CTC_UI(QtWidgets.QMainWindow):
             error_msg.setIcon(QMessageBox.Critical)
 
             error_msg.exec_() 
-
             return
 
         #Parse File
@@ -355,7 +356,8 @@ class CTC_UI(QtWidgets.QMainWindow):
 
             #Disable Manual Mode and upload button
             self.UploadButton.setEnabled(False)
-            self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
+            self.UploadButton.setStyleSheet("background-color : rgb(138, 237, 119); color: rgb(120, 120, 120);")        #Muted Green
+            #self.UploadButton.setStyleSheet("background-color : rgb(240, 240, 240); color: rgb(120, 120, 120);")
     
     #Function to determine if the system is entering or exitting maintenance mode
     def maintenanceMode_button(self):
@@ -384,8 +386,12 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.CloseBlockPromptLabel.setStyleSheet("color: black;")
         self.ChooseSwitchLabel.setStyleSheet("color: black;")
         self.SwitchPositionLabel.setStyleSheet("color: black;")
-        self.MaintenanceBox.setStyleSheet("color: black;")
-
+        self.MaintenanceBox.setStyleSheet("background-color : rgb(233, 247, 255); color: black;")
+        #Changing button colors
+        self.CloseBlockButton.setStyleSheet("background-color: rgb(195, 16, 40)")           #Red
+        self.ReopenBlockButton.setStyleSheet("background-color : rgb(38, 207, 4)")          #Green
+        self.SetSwitchPositionButton.setStyleSheet("background-color: rgb(195, 16, 40)")    #Red
+        self.ReleaseSwitchButton.setStyleSheet("background-color : rgb(38, 207, 4)")        #Green
 
     #Will indicate that the system is no longer in maintenance mode
     #Should work on the double press of the button
@@ -421,7 +427,12 @@ class CTC_UI(QtWidgets.QMainWindow):
             self.CloseBlockPromptLabel.setStyleSheet("color: rgb(120, 120, 120);")
             self.ChooseSwitchLabel.setStyleSheet("color: rgb(120, 120, 120);")
             self.SwitchPositionLabel.setStyleSheet("color: rgb(120, 120, 120);")
-            self.MaintenanceBox.setStyleSheet("color: rgb(120, 120, 120);")
+            self.MaintenanceBox.setStyleSheet("background-color : rgb(233, 247, 255); color: rgb(120, 120, 120);")
+            #Muting button colors
+            self.CloseBlockButton.setStyleSheet("background-color: rgb(245, 144, 158)")            #Muted red
+            self.ReopenBlockButton.setStyleSheet("background-color : rgb(138, 237, 119)")          #Muted Green
+            self.SetSwitchPositionButton.setStyleSheet("background-color: rgb(245, 144, 158)")     #Muted Red
+            self.ReleaseSwitchButton.setStyleSheet("background-color : rgb(138, 237, 119)")        #Muted Green
 
             #Reopen all blocks if there are any
             if len(self.Maintenance.BlocksClosed) > 0:
@@ -452,7 +463,6 @@ class CTC_UI(QtWidgets.QMainWindow):
                 self.Maintenance.SwitchText.clear()
                 self.SwitchPositionTable.setModel(SwitchPositionTableModel(self.Maintenance.SwitchText))
 
-
     #function to update block occupied table based on input from Wayside
     def updateOccupiedBlocks(self, arr):
         #Clear temp new block layout array
@@ -478,7 +488,6 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         self.OccupiedBlockTable.setModel(BlocksTableModel(self.occupiedBlocks.BlockDataCurrent))
 
-
     #defining manual mode add train button functionality
     def addTrain_button(self):
         #Getting User entered Info
@@ -486,28 +495,66 @@ class CTC_UI(QtWidgets.QMainWindow):
         Destination = self.DestinationSelect.currentText()
         ArrivalTime = self.ArrivalTimeEdit.time()
 
-        #Add a new train name option if required
-        if TrainID == self.trainSchedule.TrainNames[0]:
-            TrainID = self.trainSchedule.TrainNames[0][1:]
-            self.trainSchedule.TrainNames[0] = TrainID
-            newID = "*T" + str(int(self.trainSchedule.TrainNames[0][1:]) + 1)
-            self.trainSchedule.TrainNames.insert(0,newID)
+        #Correct train name if it is a new train
+        if TrainID[0] == '*':
+            tempID = TrainID[1:]
+        else:
+            tempID = TrainID
             
-            #reset train name options
-            self.TrainNameSelect.clear()
-            self.TrainNameSelect.addItems(self.trainSchedule.TrainNames)
-
         #Calculating Departure Info
         Departure = []
-        self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure, self.currentLine)
+        self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure, self.currentLine, tempID)
 
-        #Adding all schedule info to the schedule
-        ArrivalTime = ArrivalTime.toString("hh:mm")
-        #Line, TrainID, Destination, Arrival Time, Departure Station, Departure Time
-        self.trainSchedule.addTrain(self.currentLine, TrainID, Destination, ArrivalTime, Departure[0], Departure[1])
+        #Check if time is in past
+        upperTest = QTime()
+        upperTest = upperTest.fromString(self.currentTime)
+        lowerTest = upperTest.addSecs(-60 * 60 * 6)
+        testTime = QTime()
+        testTime = testTime.fromString(Departure[1])
 
-        self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+        #If current time and lower limit split midnight
+        if not (upperTest > lowerTest):
+            if ((testTime > QTime(0, 0, 0)) and (testTime< upperTest)) or ((testTime <= QTime(23, 59, 59)) and (testTime > lowerTest)):
+                response = self.trainInPastWarning()
+            else:
+                response = QMessageBox.Ok
+        #Else check if value is in between normally
+        else:
+            if((lowerTest < testTime) and (testTime < upperTest)):
+                self.trainInPastWarning()
+            else:
+                response = QMessageBox.Ok
 
+        if response == QMessageBox.Ok:
+            #Add a new train name option if required
+            if TrainID == self.trainSchedule.TrainNames[0]:
+                TrainID = self.trainSchedule.TrainNames[0][1:]
+                self.trainSchedule.TrainNames[0] = TrainID
+                newID = "*T" + str(int(self.trainSchedule.TrainNames[0][1:]) + 1)
+                self.trainSchedule.TrainNames.insert(0,newID)
+                    
+                #reset train name options
+                self.TrainNameSelect.clear()
+            self.TrainNameSelect.addItems(self.trainSchedule.TrainNames)
+
+            #Adding all schedule info to the schedule
+            ArrivalTime = ArrivalTime.toString("hh:mm")
+            #Line, TrainID, Destination, Arrival Time, Departure Station, Departure Time
+            self.trainSchedule.addTrain(self.currentLine, TrainID, Destination, ArrivalTime, Departure[0], Departure[1])
+
+            self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
+
+    #Function to create pop-up message if a train is dispatched in the past
+    def trainInPastWarning(self):
+        error_msg = QMessageBox()
+        error_msg.setWindowTitle("Timing Warning")
+        error_msg.setText("Dispatch Time of this train appears to be in the past")
+        error_msg.setIcon(QMessageBox.Warning)
+        error_msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+
+        exitMode = error_msg.exec_()
+
+        return exitMode
 
     #Function to add a block closure when in maintence mode, sets block object as occupied
     def closeBlock_button(self):
@@ -596,6 +643,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         temp.maintenance = 1
 
         self.Maintenance.SwitchesSet.append(temp)
+        self.sendSwitchPositions.emit(self.Maintenance.SwitchesSet)
     
     #Function to release a set switch positons when in maintenance mode
     def releaseSwitch_button(self):
@@ -624,7 +672,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         error_msg.setIcon(QMessageBox.Critical)
 
         error_msg.exec_() 
-
 
     #Funciton to sync switch position options to current selected switch
     def newSwitchSelected(self, index):

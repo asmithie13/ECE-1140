@@ -155,17 +155,17 @@ class TrackModelMain(QMainWindow):
         self.red_line.hide()
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
-        # self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
-        self.load_default_track_layout()
+        # # self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
+        # self.load_default_track_layout()
         
-        # After setting up UI elements, load the default track layout
-        if self.line_select.currentText() == "Green Line":
-            self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
-            self.load_default_track_layout()
-            # print("Green!")
-        elif self.line_select.currentText() == "Red Line":
-            self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
-            self.load_default_track_layout()
+        # # After setting up UI elements, load the default track layout
+        # if self.line_ctc == "Green Line":
+        #     self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
+        #     self.load_default_track_layout()
+        #     # print("Green!")
+        # elif self.line_ctc == "Red Line":
+        #     self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
+        #     self.load_default_track_layout()
             # print("Red!")
         
         #self.current_line = "Green Line"  # Default line
@@ -181,10 +181,14 @@ class TrackModelMain(QMainWindow):
             self.occupied_blocks.append('K63')
             self.send_beacon.emit(0)
             self.update_occupied_blocks()
+            self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
+            self.load_default_track_layout()
         elif line == "Red":
             self.currentTrains.append([trainID, line, 0, 'increasing', 'D10'])
             self.occupied_blocks.append('D10')
             self.send_beacon.emit(1)
+            self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
+            self.load_default_track_layout()
             self.update_occupied_blocks()
 
 
@@ -202,14 +206,12 @@ class TrackModelMain(QMainWindow):
             self.heaters_out.setText("OFF")
 
     def load_track_layout_based_on_selection(self):
-        selected_option = self.line_select.currentText()
-        if selected_option == "Green Line":
+        if self.line_ctc == "Green Line":
             self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
 
-        elif selected_option == "Red Line":
+        elif self.line_ctc == "Red Line":
             self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
             #print(self.default_track_path)
-
         else:
             print("")
         self.load_default_track_layout()
@@ -223,73 +225,77 @@ class TrackModelMain(QMainWindow):
         
     def process_block(self, block_num, trainId, speed_of_train):
         # Get the length of the current block
-            total_dis_from_beg_of_block = self.currentTrains[int(trainId[1:]) - 1][2]
-            block_length = self.data.get_length_for_block(block_num)
-            #self.total_block_length += block_length  # Cumulative sum of block lengths
+        #print(trainId)
+        total_dis_from_beg_of_block = self.currentTrains[int(trainId[1:]) - 1][2]
+        block_length = self.data.get_length_for_block(block_num)
+        #self.total_block_length += block_length  # Cumulative sum of block lengths
 
-            self.dt = self.local_time - self.prev_time
-            self.prev_time = self.local_time
-            self.speed_limit_km = self.data.get_speed_for_block(block_num) 
-            speed_of_train_m = speed_of_train * 0.00044704 * self.dt
+        self.dt = self.local_time - self.prev_time
+        self.prev_time = self.local_time
+        self.speed_limit_km = self.data.get_speed_for_block(block_num) 
+        speed_of_train_m = speed_of_train * 0.00044704 * self.dt
 
-            total_dis_from_beg_of_block += speed_of_train_m
-            self.currentTrains[int(trainId[1:]) - 1][2] = total_dis_from_beg_of_block
+        total_dis_from_beg_of_block += speed_of_train_m
+        self.currentTrains[int(trainId[1:]) - 1][2] = total_dis_from_beg_of_block
 
 
-            #print(self.stop)
-            if self.train_stop == True:
-                self.generateTickets(block_num)
+        #print(self.stop)
+        if self.train_stop == True:
+            self.generateTickets(block_num)
 
-            # if train moves to the next block
-            if total_dis_from_beg_of_block >= block_length:
-                #Setting train direction after switches
-                if self.line_ctc== "Green":
-                    if block_num == 76:
-                        self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
-                    elif block_num == 100:
-                        self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
-                    elif block_num == 150:
-                        self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
-                    elif block_num == 1:
-                        self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
+        # if train moves to the next block
+        if total_dis_from_beg_of_block >= block_length:
+            #Setting train direction after switches
+            if self.line_ctc== "Green":
+                if block_num == 76:
+                    self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
+                elif block_num == 100:
+                    self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+                elif block_num == 150:
+                    self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+                elif block_num == 1:
+                    self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
 
-            #red line
-                if self.line_ctc== "Red":
-                    if block_num == 16:
-                        self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
-                    elif block_num == 76:
-                        self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
-                    elif block_num == 71:
-                        self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
-                    elif block_num == 66:
-                        self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
-                    elif block_num == 1:
-                        self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
-                    
+        #red line
+            if self.line_ctc== "Red":
+                if block_num == 16:
+                    self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
+                elif block_num == 76:
+                    self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+                elif block_num == 71:
+                    self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+                elif block_num == 66:
+                    self.currentTrains[int(trainId[1:]) - 1][3] = 'decreasing'
+                elif block_num == 1:
+                    self.currentTrains[int(trainId[1:]) - 1][3] = 'increasing'
                 
+            
+            
+        # Calculate next block for TRAIN MODEL
+        # next_block_num = self.get_next_id(block_num, self.currentTrains[int(trainId[1:]) - 1][3], "Green")
+        # if next_block_num is not None:
+        #     next_block_grade = self.data.get_grade_for_block(next_block_num)  # Fetch grade for the next block
+        #     if next_block_grade is not None:
+        #         self.grade_signal.emit(next_block_grade)  # Emit the grade of the next block
                 
-            # Calculate next block for TRAIN MODEL
-            # next_block_num = self.get_next_id(block_num, self.currentTrains[int(trainId[1:]) - 1][3], "Green")
-            # if next_block_num is not None:
-            #     next_block_grade = self.data.get_grade_for_block(next_block_num)  # Fetch grade for the next block
-            #     if next_block_grade is not None:
-            #         self.grade_signal.emit(next_block_grade)  # Emit the grade of the next block
-                    
-            #         if self.polarity == 0:
-            #             self.polarity = 1
-            #         else:
-            #             self.polarity = 0
-                #self.send_polarity.emit(self.polarity)
-                self.grade_signal_tm.emit(self.data.get_grade_for_block(block_num))
-                #print(self.data.get_grade_for_block(block_num))
+        #         if self.polarity == 0:
+        #             self.polarity = 1
+        #         else:
+        #             self.polarity = 0
+            #self.send_polarity.emit(self.polarity)
+            self.grade_signal_tm.emit(self.data.get_grade_for_block(block_num))
+            #print(self.data.get_grade_for_block(block_num))
 
-                
-                # Getting block section from excel 
-                self.section_occ = self.data.get_section_for_block(block_num)
-                self.blockID = self.section_occ + str(block_num)
-                
-                #calculate next block
-                next_block_num = self.get_next_id(block_num, self.currentTrains[int(trainId[1:]) - 1][3], self.line_ctc)
+            
+            # Getting block section from excel 
+            self.section_occ = self.data.get_section_for_block(block_num)
+            self.blockID = self.section_occ + str(block_num)
+            
+            #calculate next block
+            next_block_num = self.get_next_id(block_num, self.currentTrains[int(trainId[1:]) - 1][3], self.line_ctc)
+            if next_block_num == -1:
+                self.delete_train.emit(trainId)
+            else:
                 self.next_block_id = self.data.get_section_for_block(next_block_num)
 
                 self.occupied_blocks.clear()
@@ -301,9 +307,7 @@ class TrackModelMain(QMainWindow):
                 self.currentTrains[int(trainId[1:]) - 1].append(self.next_block_id + str(next_block_num))
                 
                 self.currentTrains[int(trainId[1:]) - 1][2] = speed_of_train_m - (block_length - total_dis_from_beg_of_block)
-                
-                if block_num == 57:
-                    self.delete_train.emit(trainId)
+                        
 
     def get_switch_state(self, block_num):
         # Retrieve the switch state from your blockStates dictionary or similar data structure
@@ -349,7 +353,7 @@ class TrackModelMain(QMainWindow):
             elif (BlockNum >= 29) and (BlockNum < 57):
                 return BlockNum + 1
             elif BlockNum == 57:
-                return 63
+                return -1
                         
             #J Blocks are the ones we skip near the yard
                         
@@ -546,9 +550,6 @@ class TrackModelMain(QMainWindow):
 
 
 
-        
-
-
 
 
 
@@ -574,8 +575,8 @@ class TrackModelMain(QMainWindow):
         elif self.selected_option == "Red Line":
            self.red_line.show()
            self.green_line.hide()
-            # Now call the function to load the track layout based on the new selection
-        self.load_track_layout_based_on_selection()
+        # Now call the function to load the track layout based on the new selection
+        #self.load_track_layout_based_on_selection()
 
         return self.line_select.currentText()
             

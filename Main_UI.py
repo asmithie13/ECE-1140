@@ -149,12 +149,15 @@ class Main_UI(QtWidgets.QMainWindow):
         #Get train num
         TrainNum = int(TrainID[1:]) - 1
         
-        #Close UIs if open
-        self.currentTrains[TrainNum].TC.Close_UI()
-        self.currentTrains[TrainNum].close()
-        
-        #Delete train instance (Will also delete the train controller)
-        del self.currentTrains[TrainNum]
+        if TrainNum < len(self.currentTrains): 
+            if self.currentTrains[TrainNum] != 0:
+                #Close UIs if open
+                self.currentTrains[TrainNum].TC.Close_UI()
+                self.currentTrains[TrainNum].close()
+                
+                #Delete train instance (Will also delete the train controller)
+                del self.currentTrains[TrainNum]
+                self.currentTrains.insert(TrainNum, 0)
 
 
     def open_train_model_UI(self):

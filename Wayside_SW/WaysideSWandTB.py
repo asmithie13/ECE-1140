@@ -540,9 +540,13 @@ class WaysideSW(QMainWindow):
 
     def updateBlocks(self,new_data):
         sentBlocks = new_data
-        self.occupiedBlocks.clear()
+        for block in self.occupiedBlocks:
+            if not block.maintenance:
+                self.occupiedBlocks.remove(block)
 
-        for block in self.currentBlocks: block.occupied = False
+        for block in self.currentBlocks: 
+            if not block.maintenance:
+                block.occupied = False
 
         for block_id in sentBlocks:
             for block in self.currentBlocks:
@@ -579,6 +583,26 @@ class WaysideSW(QMainWindow):
 
     def receiveSpeedAuth(self,initialTrainSpeedAuthority):
         self.sendTrainSpeedAuth.emit(initialTrainSpeedAuthority)
+
+    def blockClosures(self,closedBlocks):
+        for block in closedBlocks:
+            if block.lineColor == "Green" and block.Wayside == "2":
+                if block.maintance:
+                    self.allGreenBlocks[int(block.blockNum) - 1].occupied = True
+                    self.occupiedBlocks.append(block)
+                elif not block.occupied:
+                    self.allGreenBlocks[int(block.blockNum) - 1].occupied = False
+                    self.occupiedBlocks.remove(block)
+            elif block.lineColor == "Red":
+                if block.maintance:
+                    self.allGreenBlocks[int(block.blockNum) - 1].occupied = True
+                    self.occupiedBlocks.append(block)
+                elif not block.occupied:
+                    self.allGreenBlocks[int(block.blockNum) - 1].occupied = False
+                    self.occupiedBlocks.remove(block)
+
+        names = [x.ID for x in self.occupiedBlocks]
+        self.BlockOcc.setText(" ".join(names))
         
 class TestBench(QMainWindow):
 

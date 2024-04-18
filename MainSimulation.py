@@ -76,6 +76,7 @@ if __name__ == "__main__":
 
     #CTC to Wayside SW
     MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.WaysideSWwindow.receiveSpeedAuth)
+    MainWindow.CTCwindow.sendBlockClosures.connect(MainWindow.WaysideSWwindow.blockClosures)
 
     #CTC to Wayside HW
     MainWindow.CTCwindow.sendBlockClosures.connect(MainWindow.WaysideHWwindow.getClosedBlocks)

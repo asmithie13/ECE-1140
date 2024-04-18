@@ -120,6 +120,15 @@ class Main_UI(QtWidgets.QMainWindow):
         # [Train ID, commanded speed, authority]
         self.TrackModelWindow.sendSpeedAuth.connect(self.currentTrains[-1].receiveSpeedAuth_tm)
         
+        # Grade for the next block
+        self.TrackModelWindow.grade_signal_tm.connect(self.currentTrains[-1].set_grade)
+
+        #Beacon info
+        self.TrackModelWindow.send_beacon.connect(self.currentTrains[-1].receive_beacon_info)
+
+        #Polarity
+        #self.TrackModelWindow.send_polarity.connect(self.currentTrains[-1].receive_polarity)
+        
         #Train Model to Track Model
         # Actual Velocity
         self.currentTrains[-1].track_model_acc_velo.connect(self.TrackModelWindow.receiveSendVelocity)
@@ -128,6 +137,19 @@ class Main_UI(QtWidgets.QMainWindow):
         #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)
 
         self.TrainSelect.addItem(TrainID)
+    
+    #destroy a train object when it goes off the track, based on the TrainID string
+    def destroy_train(self, TrainID):
+        #Get train num
+        TrainNum = int(TrainID[1:]) - 1
+        
+        #Close UIs if open
+        self.currentTrains[TrainNum].TC.Close_UI()
+        self.currentTrains[TrainNum].close()
+        
+        #Delete train instance (Will also delete the train controller)
+        del self.currentTrains[TrainNum]
+
 
     def open_train_model_UI(self):
         #Error checking that a train actually exists

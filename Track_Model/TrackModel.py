@@ -159,16 +159,16 @@ class TrackModelMain(QMainWindow):
         self.load_default_track_layout()
         
         # After setting up UI elements, load the default track layout
-        # if self.line_select.currentText() == "Green Line":
-        #     # self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
-        #     # self.load_default_track_layout()
-        #     print("Green!")
-        # elif self.line_select.currentText() == "Red Line":
-        #     # self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
-        #     # self.load_default_track_layout()
-        #     print("Red!")
+        if self.line_select.currentText() == "Green Line":
+            self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
+            self.load_default_track_layout()
+            # print("Green!")
+        elif self.line_select.currentText() == "Red Line":
+            self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
+            self.load_default_track_layout()
+            # print("Red!")
         
-        self.current_line = "Green Line"  # Default line
+        #self.current_line = "Green Line"  # Default line
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
     def train_stop(self, stop):
@@ -183,6 +183,7 @@ class TrackModelMain(QMainWindow):
             self.update_occupied_blocks()
         elif line == "Red":
             self.currentTrains.append([trainID, line, 0, 'increasing', 'D10'])
+            self.occupied_blocks.append('D10')
             self.send_beacon.emit(1)
             self.update_occupied_blocks()
 
@@ -215,7 +216,6 @@ class TrackModelMain(QMainWindow):
        
     
     def load_default_track_layout(self):
-        self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
         if self.default_track_path and os.path.exists(self.default_track_path):
             self.data.read_excel(self.default_track_path)
         else:
@@ -574,7 +574,7 @@ class TrackModelMain(QMainWindow):
            self.red_line.show()
            self.green_line.hide()
             # Now call the function to load the track layout based on the new selection
-        #self.load_track_layout_based_on_selection()
+        self.load_track_layout_based_on_selection()
 
         return self.line_select.currentText()
             
@@ -683,7 +683,7 @@ class TrackModelMain(QMainWindow):
         self.update_heaters_out()
 
         # Determine if we need to adjust block ID for Red Line blocks
-        if self.current_line == "Red Line" and block_id.endswith('_r'):
+        if self.line_ctc == "Red Line" and block_id.endswith('_r'):
             # Remove the '_r' suffix for data fetching
             adjusted_block_id = block_id[:-2]
         else:
@@ -696,10 +696,6 @@ class TrackModelMain(QMainWindow):
             self.update_ui_for_block(block_data)
             self.update_block_info_ui(block_data)  # Assuming this updates UI elements
             self.block_selected_signal.emit(adjusted_block_id)  # Emit signal with original block ID
-        else:
-            # Print debug info if no data is found
-            # print(f"No data found for block {adjusted_block_id}")
-            print("")
 
         # print(f"Adjusted Block ID for fetching data: {adjusted_block_id} (Original: {block_id}, Line: {self.line_select})")
 
@@ -1146,17 +1142,15 @@ class Data:
     # read Excel files from DataFrame
     def read_excel(self, filename):
 
-        # if filename.endswith('.xlsx'):
-        #     self.df = pd.read_excel(filename)
-        # elif filename.endswith('.csv'):
-        #     try:
-        #         self.df = pd.read_csv(filename, error_bad_lines=False)
-        #     except Exception as e:
-        #         print(f"Failed to read CSV: {e}")
-        # else:
-        #     print("Unsupported file format")
-        self.df = pd.read_excel("Track_Resources/green_line_block_info.xlsx")
-        #self.df = pd.read_csv("Track_Resources/green_line_block_info.csv")
+        if filename.endswith('.xlsx'):
+            self.df = pd.read_excel(filename)
+        elif filename.endswith('.csv'):
+            try:
+                self.df = pd.read_csv(filename, error_bad_lines=False)
+            except Exception as e:
+                print(f"")
+        else:
+            print("")
 
         #extract data from DataFrame of the Excel and assign to variables
         self.elevation_data = self.df.set_index('Block Number')['ELEVATION (M)'].to_dict()

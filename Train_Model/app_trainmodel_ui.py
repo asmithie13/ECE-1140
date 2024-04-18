@@ -460,7 +460,7 @@ class TrainCalculations:
         #if train is on a slope, normal force= mgcos(theta)
         if(grade>0.00):
             self.norm_force=mass*0.00000981*math.cos(theta) #in kgm/ms^2
-            print("grade bog")
+            
         else:
             self.norm_force=mass*0.00000981 #in kgm/ms^2
 
@@ -470,7 +470,7 @@ class TrainCalculations:
         #if service brake and emergency stop are disabled
         try:
             self.force = (power / self.commanded_speed) - self.grav_force - self.fric_force #in kgm/ms^2
-            print("force",self.force)
+            
 
         except ZeroDivisionError: #if comm_speed is zero
              self.force = power - self.grav_force 

@@ -457,7 +457,7 @@ class TrainCalculations:
         power = self.main_window.Power_value_lcd.value()#in watts= kgm^2/ms^3
         
         #accounting for friction
-        friction_coeff=0.000001
+        friction_coeff=0.2
 
         #if train is on a slope, normal force= mgcos(theta)
         if(self.grade>0.00):
@@ -475,13 +475,13 @@ class TrainCalculations:
         except ZeroDivisionError: #if comm_speed is zero
              self.force = float(power - self.grav_force)
 
-        if self.main_window.ebrake_state==1:
-            self.force = float((power / self.commanded_speed) - self.grav_force - self.fric_force - self.mass*(2.73/1000000))#in kgm/ms^2
-            print("ebrake")
+        # if self.main_window.ebrake_state==1:
+        #     self.force = float((power / self.commanded_speed) - self.grav_force  - self.mass*(2.73/1000000))#in kgm/ms^2
+        #     print("ebrake")
         
-        if self.main_window.brake_state==1:
-            self.force = float((power / self.commanded_speed) - self.grav_force - self.fric_force - self.mass*(1.2/1000000))#in kgm/ms^2
-            print("serv")
+        # if self.main_window.brake_state==1:
+        #     self.force = float((power / self.commanded_speed) - self.grav_force  - self.mass*(1.2/1000000))#in kgm/ms^2
+        #     print("serv")
 
         return float(self.force)
 
@@ -492,10 +492,14 @@ class TrainCalculations:
         force = self.calculate_force(self.commanded_speed,self.grade,self.mass) #in kgm/ms^2
         acceleration = (force/self.mass)*3.281 #in ft/ms^2
         
-        if acceleration==0:
-            self.main_window.Acceleration_value_lcd.display("{:.2f}".format(acceleration)) #in ft/s^2
+        if self.main_window.ebrake_state==1:
+            acceleration=-8.956692913385826/1000000 #in ft/ms^2
+        
+        if self.main_window.brake_state==1:
+            acceleration=-3.9370078740157477/1000000 #in ft/ms^2
+           
 
-        self.main_window.Acceleration_value_lcd.display("{:.2f}".format(acceleration)) #in ft/s^2
+        self.main_window.Acceleration_value_lcd.display("{:.2f}".format(acceleration)) #in ft/ms^2
 
         return acceleration
 

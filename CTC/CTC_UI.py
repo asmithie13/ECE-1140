@@ -566,10 +566,25 @@ class CTC_UI(QtWidgets.QMainWindow):
             for i in self.TrackData.GreenBlocks:
                 if i.ID == BlockToClose:
                     temp = i
+                    
+                    #Set Wayside
+                    W1_Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
+                    if temp.blockSection in W1_Chars:
+                        temp.Wayside = "W1"
+                    else:
+                        temp.Wayside = "W2"
+
         else:   #line selection is red, find corresponding red line block
             for i in self.TrackData.RedBlocks:
                 if i.ID == BlockToClose:
                     temp = i
+
+                    #Set Wayside
+                    W1_Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+                    if temp.blockSection in W1_Chars:
+                        temp.Wayside = "W1"
+                    else:
+                        temp.Wayside = "W2"
 
         #Add to list of strings for diplaying on CTC UI
         self.Maintenance.BlocksClosedIDs.append([BlockToClose, temp.lineColor])
@@ -625,10 +640,25 @@ class CTC_UI(QtWidgets.QMainWindow):
             for i in self.TrackData.GreenBlocks:
                 if i.blockNum == switchToSet:
                     temp = i
+                                        
+                    #Set Wayside
+                    W1_Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
+                    if temp.blockSection in W1_Chars:
+                        temp.Wayside = "W1"
+                    else:
+                        temp.Wayside = "W2"
+
         else:   #line selection is red, find corresponding red line block
             for i in self.TrackData.RedBlocks:
                 if i.blockNum == switchToSet:
                     temp = i
+
+                    #Set Wayside
+                    W1_Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+                    if temp.blockSection in W1_Chars:
+                        temp.Wayside = "W1"
+                    else:
+                        temp.Wayside = "W2"
 
         #Add to list of strings for displaying on CTC UI
         self.Maintenance.SwitchText.append([switchToSet, positionToSet, temp.lineColor])

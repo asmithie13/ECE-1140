@@ -541,6 +541,7 @@ class TrackModelMain(QMainWindow):
             self.sendBlockOcc_SW.emit(temp_SW)
             self.sendBlockOcc_HW.emit(temp_HW)
         elif self.line_ctc== "Red":
+            #print(occupancies)
             self.sendBlockOcc_SW.emit(occupancies)
 
 

@@ -14,7 +14,7 @@ class TrainController(QMainWindow):
     #signals declaered here
 
     #vital signals we recieve
-    curr_spd_sig = pyqtSignal(int)
+    curr_spd_sig = pyqtSignal(float)
     curr_auth_sig = pyqtSignal(float)
     curr_bool_auth_sig  = pyqtSignal(bool)
     curr_cmd_spd_sig = pyqtSignal(int)
@@ -123,12 +123,6 @@ class TrainController(QMainWindow):
 
         #these may conflict with the one above
         self.ui.lineEditAnn.editingFinished.connect(lambda : self.announcement_sig.emit(self.ui.lineEditAnn.text()))
-
-        #these probably don't work
-        #self.ui.BrkFail.stateChanged.connect(self.Vital_Failure.Control_Brake_Failure())
-        #self.ui.PwrFail.stateChanged.connect(self.Vital_Failure.Control_Power_Failure())
-        #self.ui.SigFail.stateChanged.connect(self.Vital_Failure.Control_Signal_Failure())
-        #self.ui.Ebrake.stateChanged.connect(self.Vital_Failure.Control_Emergency_Brake())
 
         #temporary ADD SPEED LIM
         self.ui.lcdSpdLim.display(30)

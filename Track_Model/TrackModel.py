@@ -21,6 +21,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5 import QtGui as qtg 
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QGraphicsItem
+from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QRectF, Qt
 from PyQt5 import QtGui
 
@@ -309,8 +310,19 @@ class TrackModelMain(QMainWindow):
             #print("Switch:",self.get_switch_state(BlockNum))
             
             #A1 to D13 switch block
-            if BlockNum == 1 and self.get_switch_state(13) == False:
-                return 13
+            if BlockNum == 1:
+                if self.get_switch_state(13) == False:
+                    return 13
+                else:
+                    #Error Message
+                    error_msg = QMessageBox()
+                    error_msg.setWindowTitle("Train Crashed!")
+                    error_msg.setText("Switch was not in the correct position")
+                    error_msg.setIcon(QMessageBox.Critical)
+
+                    error_msg.exec_() 
+
+                    return 1
 
             #A-C blocks, train can only come from its previous blocks, but they are in reverse number order
             elif (BlockNum > 1) and (BlockNum <= 12):

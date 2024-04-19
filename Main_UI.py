@@ -89,15 +89,15 @@ class Main_UI(QtWidgets.QMainWindow):
 
     def open_CTC_UI(self):
         self.CTCwindow.show()
-        self.CTC_tb.show()
+        #self.CTC_tb.show()
 
     def open_waysideSW_UI(self):
         self.WaysideSWwindow.show()
-        self.WaysideSW_tb.show() 
+        #self.WaysideSW_tb.show() 
     
     def open_waysideHW_UI(self):
         self.WaysideHWwindow.show()
-        self.WaysideHW_tb.show()
+        #self.WaysideHW_tb.show()
 
     def open_track_model_UI(self):
         # Define the path to the mainControl.py file
@@ -106,7 +106,7 @@ class Main_UI(QtWidgets.QMainWindow):
         # Run mainControl.py as a separate process
         #subprocess.Popen(["python", track_model_path])
         self.TrackModelWindow.show()
-        self.TrackModel_tb.show()
+        #self.TrackModel_tb.show()
 
     def create_new_train(self, TrainID, line):
         #Add new train UI to list

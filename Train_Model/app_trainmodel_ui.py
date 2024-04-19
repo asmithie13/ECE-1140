@@ -458,13 +458,19 @@ class TrainCalculations:
         self.g=9.81 #m/sec^2
         #self.force=self.main_window.force
        
+       
     
         theta=math.atan(grade/100)
         self.grav_force=mass*9.81*math.sin(theta)
         power = self.main_window.Power_value_lcd.value()#in watts
- 
-        self.main_window.force = (power / self.commanded_speed) #- self.grav_force 
+        try:
+            self.main_window.force = (power / self.main_window.velocity) - self.grav_force 
+        except ZeroDivisionError:
+            self.main_window.velocity=0.1
+            self.main_window.force = (power / self.main_window.velocity) - self.grav_force 
 
+    
+    
         return self.main_window.force
 
     def Calculate_acceleration(self,commanded_speed,grade,mass):
@@ -511,12 +517,14 @@ class TrainCalculations:
                 #('ebrake state entered')
                 self.main_window.a_n=-8.956692913385826 #in ft/s^2
                 self.main_window.velocity = self.main_window.prev_vel + ((train_model_time_sec-self.main_window.prev_time)/2)*(self.main_window.a_n)
+                self.main_window.Acceleration_value_lcd.display("{:.3f}".format(self.main_window.a_n))
                                     
 
             elif self.main_window.brake_state==1:
                 #print('service brakes entered')
                 self.main_window.a_n=-3.9370078740157477 #in ft/s^2
                 self.main_window.velocity = self.main_window.prev_vel + ((train_model_time_sec-self.main_window.prev_time)/2)*(self.main_window.a_n)
+                self.main_window.Acceleration_value_lcd.display("{:.3f}".format(self.main_window.a_n))
             
         self.main_window.prev_vel=self.main_window.velocity
         self.main_window.prev_time=train_model_time_sec
@@ -532,17 +540,17 @@ class TrainCalculations:
         #     self.main_window.track_model_acc_velo.emit(int(self.main_window.velocity))
         #
         # self.main_window.comm_speed=self.main_window.velocity
+
         #ft/sec to mph
         self.velocity_mph=(self.main_window.velocity)/1.467
 
 
 
-        self.main_window.Acc_Velo_value_lcd.display(int(self.velocity_mph))
-        self.main_window.Acceleration_value_lcd.display("{:.3f}".format(self.main_window.a_n))
-        self.TC.curr_spd_sig.emit(int(self.velocity_mph))
-        self.main_window.track_model_acc_velo.emit(str(self.main_window.TrainID),int(self.velocity_mph))
+        self.main_window.Acc_Velo_value_lcd.display("{:.3f}".format(self.velocity_mph))
+        self.TC.curr_spd_sig.emit("{:.3f}".format(self.velocity_mph))
+        self.main_window.track_model_acc_velo.emit(str(self.main_window.TrainID),"{:.3f}".format(self.velocity_mph))
         
-        return int(self.main_window.velocity)
+        return (self.main_window.velocity)
         
 
 

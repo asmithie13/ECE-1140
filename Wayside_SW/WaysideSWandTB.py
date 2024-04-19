@@ -595,10 +595,10 @@ class WaysideSW(QMainWindow):
                     self.occupiedBlocks.remove(block)
             elif block.lineColor == "Red":
                 if block.maintance:
-                    self.allGreenBlocks[int(block.blockNum) - 1].occupied = True
+                    self.allRedBlocks[int(block.blockNum) - 1].occupied = True
                     self.occupiedBlocks.append(block)
                 elif not block.occupied:
-                    self.allGreenBlocks[int(block.blockNum) - 1].occupied = False
+                    self.allRedBlocks[int(block.blockNum) - 1].occupied = False
                     self.occupiedBlocks.remove(block)
 
         names = [x.ID for x in self.occupiedBlocks]

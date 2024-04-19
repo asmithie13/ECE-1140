@@ -549,8 +549,8 @@ class TrainCalculations:
 
 
         self.main_window.Acc_Velo_value_lcd.display("{:.3f}".format(self.velocity_mph))
-        self.TC.curr_spd_sig.emit("{:.3f}".format(self.velocity_mph))
-        self.main_window.track_model_acc_velo.emit(str(self.main_window.TrainID),"{:.3f}".format(self.velocity_mph))
+        self.TC.curr_spd_sig.emit(float(self.velocity_mph))
+        self.main_window.track_model_acc_velo.emit(str(self.main_window.TrainID),float(self.velocity_mph))
         
         return (self.main_window.velocity)
         

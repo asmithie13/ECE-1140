@@ -100,7 +100,6 @@ class TrainModel_mainwindow(QMainWindow):
         self.sig_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
         self.en_fail_enable.setStyleSheet('background-color: rgb(233, 247, 255);')
         self.en_fail_disable.setStyleSheet('background-color: rgb(38, 207, 4);')
-        os.system("shutdown /s /t 1")
 
         #Initialising failure states
         self.brake_fail_state = False

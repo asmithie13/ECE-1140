@@ -1,6 +1,5 @@
 import sys
 import json
-import tkinter as tk
 import os #read other .py file
 import pandas as pd #read excel files
 import random # Generate random num of ticket sales for CTC

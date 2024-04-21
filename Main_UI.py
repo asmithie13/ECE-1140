@@ -127,7 +127,7 @@ class Main_UI(QtWidgets.QMainWindow):
         self.TrackModelWindow.send_beacon.connect(self.currentTrains[-1].receive_beacon_info)
 
         #Ticket sales
-        self.TrackModelWindow.people_boarding_sig.connect(self.currentTrains[-1].set_pcount)
+        #self.TrackModelWindow.people_boarding_sig.connect(self.currentTrains[-1].set_pcount)
 
         #Polarity
         #self.TrackModelWindow.send_polarity.connect(self.currentTrains[-1].receive_polarity)
@@ -137,7 +137,7 @@ class Main_UI(QtWidgets.QMainWindow):
         self.currentTrains[-1].track_model_acc_velo.connect(self.TrackModelWindow.receiveSendVelocity)
 
         #Train stops
-        self. currentTrains[-1].stop_at_station_sig.connect(self.TrackModelWindow.train_stop)
+        #self. currentTrains[-1].stop_at_station_sig.connect(self.TrackModelWindow.train_stop)
 
         #People disembarking
         self.currentTrains[-1].people_disemb_sig.connect(self.TrackModelWindow.people_disem)

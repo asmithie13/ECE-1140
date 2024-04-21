@@ -505,25 +505,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         Departure = []
         self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure, self.currentLine, tempID)
 
-        #Check if time is in past
-        upperTest = QTime()
-        upperTest = upperTest.fromString(self.currentTime)
-        lowerTest = upperTest.addSecs(-60 * 60 * 6)
-        testTime = QTime()
-        testTime = testTime.fromString(Departure[1])
-
-        #If current time and lower limit split midnight
-        if not (upperTest > lowerTest):
-            if ((testTime > QTime(0, 0, 0)) and (testTime< upperTest)) or ((testTime <= QTime(23, 59, 59)) and (testTime > lowerTest)):
-                response = self.trainInPastWarning()
-            else:
-                response = QMessageBox.Ok
-        #Else check if value is in between normally
-        else:
-            if((lowerTest < testTime) and (testTime < upperTest)):
-                self.trainInPastWarning()
-            else:
-                response = QMessageBox.Ok
+        response = self.trainSchedule.timingCheck(Departure, self.currentTime)
 
         if response == QMessageBox.Ok:
             #Add a new train name option if required
@@ -543,18 +525,6 @@ class CTC_UI(QtWidgets.QMainWindow):
             self.trainSchedule.addTrain(self.currentLine, TrainID, Destination, ArrivalTime, Departure[0], Departure[1])
 
             self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
-
-    #Function to create pop-up message if a train is dispatched in the past
-    def trainInPastWarning(self):
-        error_msg = QMessageBox()
-        error_msg.setWindowTitle("Timing Warning")
-        error_msg.setText("Dispatch Time of this train appears to be in the past")
-        error_msg.setIcon(QMessageBox.Warning)
-        error_msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-
-        exitMode = error_msg.exec_()
-
-        return exitMode
 
     #Function to add a block closure when in maintence mode, sets block object as occupied
     def closeBlock_button(self):

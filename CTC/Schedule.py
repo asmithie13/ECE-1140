@@ -163,9 +163,49 @@ class Schedule():
 
         self.AuthorityInfo.append(Authority)
 
+    def timingCheck(self, Departure, currentTime):
+        #Initialize response variable
+        response = QMessageBox.Ok
+
+        
+        #Check if time is in past
+        upperTest = QTime()
+        upperTest = upperTest.fromString(currentTime)
+        lowerTest = upperTest.addSecs(-60 * 60 * 6)
+        testTime = QTime()
+        testTime = testTime.fromString(Departure[1])
+
+        #If current time and lower limit split midnight
+        if not (upperTest > lowerTest):
+            if ((testTime > QTime(0, 0, 0)) and (testTime< upperTest)) or ((testTime <= QTime(23, 59, 59)) and (testTime > lowerTest)):
+                response = self.trainInPastWarning()
+        #Else check if value is in between normally
+        else:
+            if((lowerTest < testTime) and (testTime < upperTest)):
+                response = self.trainInPastWarning()
+
+
+        #Check for multi-stop dispatch collisions
 
 
 
+        #Check for initial dispatch order issues
+
+
+        #Check if train conflicts with a previous stop
+        return response
+
+    #Function to create pop-up message if a train is dispatched in the past
+    def trainInPastWarning(self):
+        error_msg = QMessageBox()
+        error_msg.setWindowTitle("Timing Warning")
+        error_msg.setText("Dispatch Time of this train appears to be in the past")
+        error_msg.setIcon(QMessageBox.Warning)
+        error_msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+
+        exitMode = error_msg.exec_()
+
+        return exitMode
         
 #Table class to initialize a Pyqt5 table object that will display the schedule
 class ScheduleTableModel(QtCore.QAbstractTableModel):

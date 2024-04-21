@@ -25,13 +25,7 @@ class MyMainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-<<<<<<< HEAD
-    win = Window()
-    win.show()
-    sys.exit(app.exec())
-=======
     app.setStyle("windows")
     window = MyMainWindow()
     window.show()
     sys.exit(app.exec_())
->>>>>>> 53bc2745fa76d57570e1d82fd3d95da0815226a2

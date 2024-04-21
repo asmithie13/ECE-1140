@@ -1,0 +1,6 @@
+matplotlib==3.8.3
+pandas==2.2.2
+PyQt5==5.15.10
+PyQt5_sip==12.13.0
+pyserial==3.5
+PySide6==6.7.0

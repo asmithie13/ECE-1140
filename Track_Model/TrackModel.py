@@ -172,17 +172,17 @@ class TrackModelMain(QMainWindow):
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
         # # self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
-        # self.load_default_track_layout()
+        self.load_default_track_layout()
         
-        # # After setting up UI elements, load the default track layout
-        # if self.line_ctc == "Green Line":
-        #     self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
-        #     self.load_default_track_layout()
-        #     # print("Green!")
-        # elif self.line_ctc == "Red Line":
-        #     self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
-        #     self.load_default_track_layout()
-            # print("Red!")
+        # After setting up UI elements, load the default track layout
+        if self.line_ctc == "Green Line":
+            self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
+            self.load_default_track_layout()
+            # print("Green!")
+        elif self.line_ctc == "Red Line":
+            self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
+            self.load_default_track_layout()
+            #print("Red!")
         
         #self.current_line = "Green Line"  # Default line
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
@@ -222,10 +222,11 @@ class TrackModelMain(QMainWindow):
             self.heaters_out.setText("OFF")
 
     def load_track_layout_based_on_selection(self):
-        if self.line_ctc == "Green Line":
+        selected_option = self.line_select.currentText()
+        if selected_option == "Green Line":
             self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
 
-        elif self.line_ctc == "Red Line":
+        elif selected_option == "Red Line":
             self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
             #print(self.default_track_path)
         else:
@@ -342,7 +343,7 @@ class TrackModelMain(QMainWindow):
         if line == 'Green':
             #A1 to D13 switch block
             if BlockNum == 1:
-                if str(self.get_switch_state_green(13)) == "0":
+                if self.get_switch_state_green(13) == False:
                     return 13
                 else:
                     #Error Message
@@ -351,7 +352,6 @@ class TrackModelMain(QMainWindow):
                     error_msg.setText("Switch was not in the correct position")
                     error_msg.setIcon(QMessageBox.Critical)
                     error_msg.exec_() 
-
                     return 1
 
             #A-C blocks, train can only come from its previous blocks, but they are in reverse number order
@@ -361,7 +361,16 @@ class TrackModelMain(QMainWindow):
             #D switch block
             elif BlockNum == 13:
                 if direction == 'decreasing':
-                    return 12
+                    if self.get_switch_state_green(13) == True:
+                        return 12
+                    else:
+                        #Error Message
+                        error_msg = QMessageBox()
+                        error_msg.setWindowTitle("Train Crashed!")
+                        error_msg.setText("Switch was not in the correct position")
+                        error_msg.setIcon(QMessageBox.Critical)
+                        error_msg.exec_() 
+                        return 13
                 elif direction == 'increasing':
                     return 14
 
@@ -377,7 +386,16 @@ class TrackModelMain(QMainWindow):
                 if direction == 'decreasing':
                     return 27
                 else:
-                    return 29
+                    if self.get_switch_state_green(28) == True:
+                        return 29
+                    else:
+                        #Error Message
+                        error_msg = QMessageBox()
+                        error_msg.setWindowTitle("Train Crashed!")
+                        error_msg.setText("Switch was not in the correct position")
+                        error_msg.setIcon(QMessageBox.Critical)
+                        error_msg.exec_() 
+                        return 28
                             
             #G-I blocks, train can only come from its previous blocks
             elif (BlockNum >= 29) and (BlockNum < 57):
@@ -425,8 +443,16 @@ class TrackModelMain(QMainWindow):
                 return BlockNum + 1
 
             elif BlockNum == 150:
-                return 28
-        
+                if self.get_switch_state_green(28) == False:
+                    return 28
+                else:
+                    #Error Message
+                    error_msg = QMessageBox()
+                    error_msg.setWindowTitle("Train Crashed!")
+                    error_msg.setText("Switch was not in the correct position")
+                    error_msg.setIcon(QMessageBox.Critical)
+                    error_msg.exec_() 
+                    return 150
                         
         #Red Line                                  
         if line == "Red":
@@ -606,7 +632,7 @@ class TrackModelMain(QMainWindow):
            self.red_line.show()
            self.green_line.hide()
         # Now call the function to load the track layout based on the new selection
-        #self.load_track_layout_based_on_selection()
+        self.load_track_layout_based_on_selection()
 
         return self.line_select.currentText()
             

@@ -559,7 +559,7 @@ class Ui_MainWindow(object):
         self.Speed_Limit.setText(_translate("MainWindow", "Speed Limit (mph)"))
         self.Commanded_Speed.setText(_translate("MainWindow", "Commanded Speed (mph)"))
         self.Current_Speed.setText(_translate("MainWindow", "Current Speed (mph)"))
-        self.groupBox_3.setTitle(_translate("MainWindow", "Power"))
+        self.groupBox_3.setTitle(_translate("MainWindow", "FOR TRAIN ENGINEER ONLY"))
         self.label_4.setText(_translate("MainWindow", "Kp"))
         self.label_3.setText(_translate("MainWindow", "Ki"))
 

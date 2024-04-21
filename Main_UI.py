@@ -139,6 +139,9 @@ class Main_UI(QtWidgets.QMainWindow):
         #Train stops
         self. currentTrains[-1].stop_at_station_sig.connect(self.TrackModelWindow.train_stop)
 
+        #People disembarking
+        self.currentTrains[-1].people_disemb_sig.connect(self.TrackModelWindow.people_disem)
+
         #Connect Signals to Track Model
         #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)
 

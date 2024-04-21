@@ -36,7 +36,10 @@ class TrackModelMain(QMainWindow):
     #sendOccupancies = pyqtSignal(list)
 
     #send ticket sales to ctc
-    SendTicketsales_tm = pyqtSignal(int)
+    SendTicketsales = pyqtSignal(int)
+
+    #send people boarding
+    people_boarding_sig = pyqtSignal(int)
 
     #send train model train id, speed, and authority
     sendSpeedAuth = pyqtSignal(list)
@@ -134,6 +137,7 @@ class TrackModelMain(QMainWindow):
         self.time = ""
         self.listStation = []
         self.random_number  = 0
+        self.people_boarding = 0
         self.line_ctc= ""
         self.stop = False
         self.switch_green = ""
@@ -188,7 +192,6 @@ class TrackModelMain(QMainWindow):
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
     def train_stop(self, stop):
-        print("autho stop:",stop)
         self.stop = stop
     
     def get_train_id(self, trainID, line):
@@ -258,8 +261,8 @@ class TrackModelMain(QMainWindow):
 
 
         #print(self.stop)
-        print("did it stop",self.train_stop)
-        if self.train_stop == True:
+        print("did it stop",self.stop)
+        if self.stop == True:
             self.generateTickets(block_num)
 
         # if train moves to the next block
@@ -608,7 +611,9 @@ class TrackModelMain(QMainWindow):
 
 
 
-
+    def people_disem(self, people):
+        self.people_dissem  = people
+        #output to UI
 
 
     #FROM TRAIN MODEL for block occupancy
@@ -846,9 +851,13 @@ class TrackModelMain(QMainWindow):
         #     random_number = random.randint(1, 74)
         #     self.lastGeneratedTickets[block_id] = random_number
 
+        #overbroke is hte last station for green line 
         if block_id in self.listStation_green:
             self.random_number = random.randint(1, 74)
-            self.SendTicketsales_tm.emit(self.random_number)
+            self.people_boarding += random.randint(1,self.random_number)
+            self.people_boarding_sig.emit(self.people_boarding)
+
+            #self.SendTicketsales.emit(self.random_number)
 
         # if self.time.split(':')[1] == "00":
         #         if block_id in self.listStation:

@@ -531,12 +531,15 @@ class TrainCalculations:
                 self.main_window.Acceleration_value_lcd.display("{:.3f}".format(self.main_window.a_n))
             
         self.main_window.prev_vel=self.main_window.velocity
-        self.main_window.prev_time=train_model_time_sec
+       
 
         if self.main_window.velocity <= 0:
             acceleration=0
-            self.main_window.prev_vel=0   
-        
+            self.main_window.velocity=0
+            self.main_window.prev_vel=0
+            
+  
+        self.main_window.prev_time=train_model_time_sec
 
         # if self.main_windowprev_acc==0:
         #     self.main_window.Acc_Velo_value_lcd.display(self.main_window.)

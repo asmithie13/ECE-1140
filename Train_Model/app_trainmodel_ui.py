@@ -44,6 +44,7 @@ class TrainModel_mainwindow(QMainWindow):
     people_getting_off=10
     stop_bool= False
     #Track Model Signals
+    stop_at_station_sig = qtc.pyqtSignal(bool)
     track_model_acc_velo = qtc.pyqtSignal(str, int)
     people_disemb_sig=qtc.pyqtSignal(int)
 

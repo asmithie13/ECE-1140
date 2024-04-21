@@ -8,17 +8,18 @@ from PyQt5 import QtWidgets
 class Vital_Speed_Auth():
 
     #def __init__(self,ui):
-    def __init__(self,ui,curr_auth_signal, service_brake_sig,ebrake_internal_sig,stop_at_station_sig):
+    def __init__(self,ui,curr_auth_signal, service_brake_sig,ebrake_internal_sig,stop_at_station_sig,NonVital):
         self.ui = ui
         self.curr_auth_signal = curr_auth_signal
         self.service_brake_sig = service_brake_sig
         self.stopcal = 0
-        self.local_clock = 0
+        self.local_clock = 0,
         self.time = 0
         self.prev_time = 0
         self.ebrake_sig = ebrake_internal_sig
         self.decimal_m_auth = 0
         self.stop_at_station_sig = stop_at_station_sig
+        self.NonVital = NonVital
 
     def Control_Current_Speed(self,newSpeed):
         self.ui.lcdCurSpd.display(newSpeed)
@@ -133,13 +134,15 @@ class Vital_Speed_Auth():
             elif self.ui.buttonMan.isChecked() :
                 self.ui.vertSliderPow.setEnabled(True)
 
-        elif:
-            
-            self.stop_at_station_sig.emit(True)
+        elif self.AuthM < 1 and self.ui.lcdCurSpd == 0:
+            if self.NonVital.arrived == True:
+                ## add timer 
+                self.stop_at_station_sig.emit(1)
+                if self.ui.buttonAuto.isChecked():
+                    self.Emit_Doors()
 
-        # elif self.stopcal == 1:
-        #     self.ui.lcdAuth.display(self.ui.lcdAuth.value() - int(self.rate*self.time))
-        
+        else :
+            self.stop_at_station_sig.emit(0)
 
 
     #we need to deal with whatever this is
@@ -165,4 +168,5 @@ class Vital_Speed_Auth():
         self.decimal_m_auth = auth
         self.authft = round(auth * 3.28084)
         self.ui.lcdAuth.display(self.authft)
-        self.ui.vertSliderPow.setEnabled(True)
+        if self.decimal_m_auth > 0 :
+            self.ui.vertSliderPow.setEnabled(True)

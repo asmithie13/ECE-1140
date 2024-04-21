@@ -219,8 +219,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ManualModeButton.setStyleSheet("background-color : rgb(142, 140, 237); color: black;") #light blue
         
         self.TrainNameSelect.setEnabled(True)
-        self.TrainNameSelect.clear()
-        self.TrainNameSelect.addItems(self.trainSchedule.TrainNames)
         self.DestinationSelect.setEnabled(True)
         self.ArrivalTimeEdit.setEnabled(True)
         #Enable the add train button
@@ -268,6 +266,9 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.GreenLineButton.setStyleSheet("background-color : rgb(38, 207, 4)")     #Green
         self.RedLineButton.setStyleSheet("background-color : white")
 
+        #Set Train ID selcections to green line
+        self.TrainNameSelect.clear()
+        self.TrainNameSelect.addItems(self.trainSchedule.GreenTrainNames)
         #Set stations selctions to green line
         self.DestinationSelect.clear()
         self.DestinationSelect.addItems(self.TrackData.GreenStations[1:])
@@ -288,6 +289,9 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.RedLineButton.setStyleSheet("background-color: rgb(195, 16, 40)")     #Red
         self.GreenLineButton.setStyleSheet("background-color : white")
 
+        #Set Train ID selcections to green line
+        self.TrainNameSelect.clear()
+        self.TrainNameSelect.addItems(self.trainSchedule.RedTrainNames)
         #Set stations selctions to red line
         self.DestinationSelect.clear()
         self.DestinationSelect.addItems(self.TrackData.RedStations[1:])
@@ -514,10 +518,31 @@ class CTC_UI(QtWidgets.QMainWindow):
                 self.trainSchedule.TrainNames[0] = TrainID
                 newID = "*T" + str(int(self.trainSchedule.TrainNames[0][1:]) + 1)
                 self.trainSchedule.TrainNames.insert(0, newID)
-                    
-                #reset train name options
-                self.TrainNameSelect.clear()
-            self.TrainNameSelect.addItems(self.trainSchedule.TrainNames)
+                
+                #Add green or red line train name
+                if self.currentLine == 'Green':
+                    #Set new new train option for red trains
+                    self.trainSchedule.RedTrainNames.pop(0)
+                    self.trainSchedule.RedTrainNames.insert(0, newID)
+                    #Solidiy train options for green trains
+                    self.trainSchedule.GreenTrainNames[0] = TrainID
+                    self.trainSchedule.GreenTrainNames.insert(0, newID)
+
+                    #reset train name options
+                    self.TrainNameSelect.clear()
+                    self.TrainNameSelect.addItems(self.trainSchedule.GreenTrainNames)
+
+                elif self.currentLine == 'Red':
+                    #Set new new train option for green trains
+                    self.trainSchedule.GreenTrainNames.pop(0)
+                    self.trainSchedule.GreenTrainNames.insert(0, newID)
+                    #Solidiy train options for green trains
+                    self.trainSchedule.RedTrainNames[0] = TrainID
+                    self.trainSchedule.RedTrainNames.insert(0, newID)
+
+                    #reset train name options
+                    self.TrainNameSelect.clear()
+                    self.TrainNameSelect.addItems(self.trainSchedule.RedTrainNames)
 
             #Adding all schedule info to the schedule
             ArrivalTime = ArrivalTime.toString("hh:mm")

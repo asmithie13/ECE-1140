@@ -28,6 +28,8 @@ class Schedule():
 
         #Current train names to display for user
         self.TrainNames = ["*T1"]
+        self.GreenTrainNames = ["*T1"]
+        self.RedTrainNames = ["*T1"]
 
     #Function to add a single train to the schedule
     def addTrain(self, line, TrainID, Destination, ArrivalTime, Departure, DepartureTime):

@@ -592,7 +592,7 @@ class TrackModelMain(QMainWindow):
             sections_shared = ["S103", "S104", "T105", "T106", "H34", "H35", "I36", "I37"]
             temp_HW = []
             temp_SW = []
-
+            print(occupancies)
             # Separate the blocks into HW and SW based on the first letter of the block ID
             for block_id in occupancies:
                 if block_id[0] in sections_HW:  # Check if the first letter of the block ID is in sections_HW

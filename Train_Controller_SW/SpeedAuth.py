@@ -170,3 +170,5 @@ class Vital_Speed_Auth():
         self.ui.lcdAuth.display(self.authft)
         if self.decimal_m_auth > 0 :
             self.ui.vertSliderPow.setEnabled(True)
+            self.NonVital.doors = 0
+            self.NonVital.Emit_Doors()

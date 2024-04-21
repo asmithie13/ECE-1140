@@ -97,7 +97,6 @@ class NonVital():
             self.ui.buttonDoorL.setChecked(True)
 
 
-
     def Block_Changed(self,bool):
         #change index 
         self.block_index += 1

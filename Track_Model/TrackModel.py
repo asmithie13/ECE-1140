@@ -293,8 +293,8 @@ class TrackModelMain(QMainWindow):
                 
             
             
-        # Calculate next block for TRAIN MODEL
-        # next_block_num = self.get_next_id(block_num, self.currentTrains[int(trainId[1:]) - 1][3], "Green")
+        # #Calculate next block for TRAIN MODEL
+        # #next_block_num = self.get_next_id(block_num, self.currentTrains[int(trainId[1:]) - 1][3], "Green")
         # if next_block_num is not None:
         #     next_block_grade = self.data.get_grade_for_block(next_block_num)  # Fetch grade for the next block
         #     if next_block_grade is not None:
@@ -304,9 +304,9 @@ class TrackModelMain(QMainWindow):
         #             self.polarity = 1
         #         else:
         #             self.polarity = 0
-            #self.send_polarity.emit(self.polarity)
-            self.grade_signal_tm.emit(self.data.get_grade_for_block(block_num))
-            #print(self.data.get_grade_for_block(block_num))
+        #     self.send_polarity.emit(self.polarity)
+        #     self.grade_signal_tm.emit(self.data.get_grade_for_block(block_num))
+        #     #print(self.data.get_grade_for_block(block_num))
 
             
             # Getting block section from excel 

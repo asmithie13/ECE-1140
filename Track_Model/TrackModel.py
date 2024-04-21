@@ -352,7 +352,7 @@ class TrackModelMain(QMainWindow):
             elif (BlockNum >= 29) and (BlockNum < 57):
                 return BlockNum + 1
             elif BlockNum == 57:
-                return 0
+                return 63
                         
             #J Blocks are the ones we skip near the yard
                         
@@ -396,8 +396,6 @@ class TrackModelMain(QMainWindow):
             elif BlockNum == 150:
                 return 28
         
-            elif BlockNum == 57:
-                return 0
                         
         #Red Line                                  
         if line == "Red":

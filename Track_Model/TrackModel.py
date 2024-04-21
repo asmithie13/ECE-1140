@@ -65,7 +65,22 @@ class TrackModelMain(QMainWindow):
 
     AcutalSpeed = 0
 
-    
+    block_ids_green = [
+    'A1', 'A2', 'A3', 'B4', 'B5', 'B6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12',
+    'D13', 'D14', 'D15', 'D16', 'E17', 'E18', 'E19', 'E20', 'F21', 'F22', 'F23', 'F24',
+    'F25', 'F26', 'F27', 'F28', 'G29', 'G30', 'G31', 'G32', 'H33', 'H34', 'H35', 'I36',
+    'I37', 'I38', 'I39', 'I40', 'I41', 'I42', 'I43', 'I44', 'I45', 'I46', 'I47', 'I48',
+    'I49', 'I50', 'I51', 'I52', 'I53', 'I54', 'I55', 'I56', 'I57', 'J58', 'J59', 'J60',
+    'J61', 'J62', 'K63', 'K64', 'K65', 'K66', 'K67', 'K68', 'L69', 'L70', 'L71', 'L72',
+    'L73', 'M74', 'M75', 'M76', 'N77', 'N78', 'N79', 'N80', 'N81', 'N82', 'N83', 'N84',
+    'N85', 'O86', 'O87', 'O88', 'P89', 'P90', 'P91', 'P92', 'P93', 'P94', 'P95', 'P96',
+    'P97', 'Q98', 'Q99', 'Q100', 'R101', 'S102', 'S103', 'S104', 'T105', 'T106', 'T107',
+    'T108', 'T109', 'U110', 'U111', 'U112', 'U113', 'U114', 'U115', 'U116', 'V117',
+    'V118', 'V119', 'V120', 'V121', 'W122', 'W123', 'W124', 'W125', 'W126', 'W127',
+    'W128', 'W129', 'W130', 'W131', 'W132', 'W133', 'W134', 'W135', 'W136', 'W137',
+    'W138', 'W139', 'W140', 'W141', 'W142', 'W143', 'X144', 'X145', 'X146', 'Y147',
+    'Y148', 'Y149', 'Z150'
+    ]
     
 
     station_lookup = {
@@ -121,6 +136,7 @@ class TrackModelMain(QMainWindow):
         self.random_number  = 0
         self.line_ctc= ""
         self.stop = False
+        self.switch_green = ""
         
 
         # Load the track model straight from the UI file using uic
@@ -309,22 +325,24 @@ class TrackModelMain(QMainWindow):
                 self.currentTrains[int(trainId[1:]) - 1][2] = speed_of_train_m - (block_length - total_dis_from_beg_of_block)
                         
 
-    # def get_switch_state(self, block_num):
-    #     # Retrieve the switch state from your blockStates dictionary or similar data structure
-    #     block_state = self.blockStates.get(block_num, {})
-    #     block_info = self.blockStates.get(str(block_num))
-    #     if block_info is not None:
-    #         return block_info['switchState']
-    #     return None 
+    def get_switch_state_green(self, block_num):
+        #Convert block number to string
+        block_num_str = str(block_num)
+
+        #Find the block ID that ends with the block number string
+        block_id = next((id for id in self.block_ids_green if id.endswith(block_num_str)), None)
+        if block_id:
+            # Retrieve the switch state from your blockStates dictionary or similar data structure
+            block_state = self.blockStates.get(block_id, {})
+            return block_state.get('switchState', 'N/A')
+        else:
+            return 'N/A'
 
     def get_next_id(self, BlockNum, direction, line):
         if line == 'Green':
-            #print("Switch:",self.get_switch_state(BlockNum))
-            
             #A1 to D13 switch block
             if BlockNum == 1:
-                print(self.blockStates.get(BlockNum, {}))
-                if self.blockStates.get(BlockNum, {}) == False:
+                if str(self.get_switch_state_green(13)) == "0":
                     return 13
                 else:
                     #Error Message
@@ -332,7 +350,6 @@ class TrackModelMain(QMainWindow):
                     error_msg.setWindowTitle("Train Crashed!")
                     error_msg.setText("Switch was not in the correct position")
                     error_msg.setIcon(QMessageBox.Critical)
-
                     error_msg.exec_() 
 
                     return 1

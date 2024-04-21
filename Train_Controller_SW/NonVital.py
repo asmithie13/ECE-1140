@@ -3,8 +3,7 @@ from Train_Controller_SW.Line_Dictionary import Line_Dictionary
 
 class NonVital():
     def __init__(self,ui, door_control_sig,announcement_sig,
-    temp_control_sig,int_light_sig,ext_light_sig,internal_speed_lim_sig):
-        
+    temp_control_sig,int_light_sig,ext_light_sig,internal_speed_lim_sig,):
         self.block_index = 0
         self.ui=ui
         self.line = 0
@@ -148,13 +147,10 @@ class NonVital():
             if (self.announcement != 'N/A'):
                 if self.announcement[0:6] == "Welcome" :
                     self.announcement_sig.emit(self.announcement)
-                    self.doors = int(self.LineDictionary.get_green_door_side(self.block_index))
+                    self.arrived = True
+                    #self.doors = int(self.LineDictionary.get_green_door_side(self.block_index))
             elif self.announcement [0:10] == "Approaching" :
                     self.announcement_sig.emit(self.announcement)
-
-        
-                
-
             
         #red line parse
         elif self.line == 0 :

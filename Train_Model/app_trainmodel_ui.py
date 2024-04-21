@@ -170,6 +170,7 @@ class TrainModel_mainwindow(QMainWindow):
     
     def stop_at_station(self,stop_bool):
         self.stop_bool=stop_bool
+        self.stop_at_station_sig.emit(stop_bool)
         
         
 

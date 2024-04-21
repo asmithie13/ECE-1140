@@ -495,9 +495,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.vertSliderPow.setDisabled(True)
-
-
-
+        self.vertSliderBrk.setValue(1)
 
         self.retranslateUi(MainWindow)
         """

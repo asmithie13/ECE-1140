@@ -367,14 +367,14 @@ class TrainModel_mainwindow(QMainWindow):
             self.left_doors_value.setFixedSize(109, 98)
             self.right_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
             self.left_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-            self.right_doors_value.setText('CLOSED')
-            self.left_doors_value.setText('CLOSED')
+            self.right_doors_value.setText('OPEN')
+            self.left_doors_value.setText('OPEN')
         elif door_state==2:
             self.right_doors_value.setFixedSize(109, 98)
             self.left_doors_value.setFixedSize(109, 98)
             self.right_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
             self.left_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-            self.right_doors_value.setText('OPEN')
+            self.right_doors_value.setText('CLOSED')
             self.left_doors_value.setText('OPEN')
         elif door_state==1:
             self.right_doors_value.setFixedSize(109, 98)
@@ -389,7 +389,7 @@ class TrainModel_mainwindow(QMainWindow):
             self.right_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
             self.left_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
             self.right_doors_value.setText('CLOSED')
-            self.left_doors_value.setText('OPEN')
+            self.left_doors_value.setText('CLOSED')
 
 
         

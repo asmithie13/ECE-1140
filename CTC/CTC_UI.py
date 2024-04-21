@@ -505,7 +505,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         Departure = []
         self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure, self.currentLine, tempID)
 
-        response = self.trainSchedule.timingCheck(Departure, self.currentTime)
+        response = self.trainSchedule.timingCheck(Departure, self.currentTime, tempID)
 
         if response == QMessageBox.Ok:
             #Add a new train name option if required
@@ -513,7 +513,7 @@ class CTC_UI(QtWidgets.QMainWindow):
                 TrainID = self.trainSchedule.TrainNames[0][1:]
                 self.trainSchedule.TrainNames[0] = TrainID
                 newID = "*T" + str(int(self.trainSchedule.TrainNames[0][1:]) + 1)
-                self.trainSchedule.TrainNames.insert(0,newID)
+                self.trainSchedule.TrainNames.insert(0, newID)
                     
                 #reset train name options
                 self.TrainNameSelect.clear()

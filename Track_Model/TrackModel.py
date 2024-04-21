@@ -188,6 +188,7 @@ class TrackModelMain(QMainWindow):
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
     def train_stop(self, stop):
+        print("autho stop:",stop)
         self.stop = stop
     
     def get_train_id(self, trainID, line):
@@ -257,6 +258,7 @@ class TrackModelMain(QMainWindow):
 
 
         #print(self.stop)
+        print("did it stop",self.train_stop)
         if self.train_stop == True:
             self.generateTickets(block_num)
 
@@ -839,19 +841,19 @@ class TrackModelMain(QMainWindow):
 
 
     def generateTickets(self, block_id):
-        self.listStation  = [2, 9, 16, 22, 31, 39, 141, 48, 132, 57, 123, 65, 114, 73, 105, 77, 88, 96]
+        self.listStation_green  = [2, 9, 16, 22, 31, 39, 141, 48, 132, 57, 123, 65, 114, 73, 105, 77, 88, 96]
         # if forceNewNumber or block_id not in self.lastGeneratedTickets:
         #     random_number = random.randint(1, 74)
         #     self.lastGeneratedTickets[block_id] = random_number
 
-        if block_id in self.listStation:
+        if block_id in self.listStation_green:
             self.random_number = random.randint(1, 74)
             self.SendTicketsales_tm.emit(self.random_number)
 
-        if self.time.split(':')[1] == "00":
-                if block_id in self.listStation:
-                    self.random_number = random.randint(1, 74)
-                    self.SendTicketsales_tm.emit(self.random_number)
+        # if self.time.split(':')[1] == "00":
+        #         if block_id in self.listStation:
+        #             self.random_number = random.randint(1, 74)
+        #             self.SendTicketsales_tm.emit(self.random_number)
             
 
     def get_infra_for_block(self, block_num):

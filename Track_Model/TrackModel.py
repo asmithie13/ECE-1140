@@ -304,9 +304,9 @@ class TrackModelMain(QMainWindow):
         #             self.polarity = 1
         #         else:
         #             self.polarity = 0
-            #self.send_polarity.emit(self.polarity)
-            self.grade_signal_tm.emit(self.data.get_grade_for_block(block_num))
-            #print(self.data.get_grade_for_block(block_num))
+        #     self.send_polarity.emit(self.polarity)
+        #     self.grade_signal_tm.emit(self.data.get_grade_for_block(block_num))
+        #     #print(self.data.get_grade_for_block(block_num))
 
             
             # Getting block section from excel 

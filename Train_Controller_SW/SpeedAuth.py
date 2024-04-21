@@ -20,6 +20,7 @@ class Vital_Speed_Auth():
         self.decimal_m_auth = 0
         self.stop_at_station_sig = stop_at_station_sig
         self.NonVital = NonVital
+        self.bool_auth_enabled
 
     def Control_Current_Speed(self,newSpeed):
         self.ui.lcdCurSpd.display(newSpeed)
@@ -86,9 +87,11 @@ class Vital_Speed_Auth():
             self.stoppubgdistanceEmergency = (self.V_i**2)/(2*0.00000273) 
             #print("E Stop: ", self.stoppubgdistanceEmergency)
 
+            if self.bool_auth_enabled == 1:
+                self.ui.vertSliderBrk.setValue(1)
+                self.ui.vertSliderPow.setEnabled(False)
 
-                
-            if self.AuthM <= self.stoppubgdistanceEmergency and self.AuthM >= 5:
+            elif self.AuthM <= self.stoppubgdistanceEmergency and self.AuthM >= 5:
                 self.ui.vertSliderBrk.setValue(0)
                 self.ui.vertSliderPow.setValue(0)
                 self.ui.vertSliderPow.setEnabled(False)
@@ -99,8 +102,8 @@ class Vital_Speed_Auth():
                 self.ui.vertSliderBrk.setValue(1)
                 self.ui.vertSliderPow.setValue(0)
                 self.ui.vertSliderPow.setEnabled(False)
-            
 
+    
 
                 #self.stopcal = True
 
@@ -134,7 +137,7 @@ class Vital_Speed_Auth():
             elif self.ui.buttonMan.isChecked() :
                 self.ui.vertSliderPow.setEnabled(True)
 
-        elif self.AuthM < 1 and self.ui.lcdCurSpd == 0:
+        elif self.decimal_m_auth < 1 and self.ui.lcdCurSpd == 0:
             if self.NonVital.arrived == True:
                 ## add timer 
                 self.stop_at_station_sig.emit(1)
@@ -147,11 +150,7 @@ class Vital_Speed_Auth():
 
     #we need to deal with whatever this is
     def Authority_Monitor_Bool(self, bool_auth):
-        if(bool_auth):
-            self.ui.vertSliderBrk.setValue(1)
-            self.ui.vertSliderPow.setEnabled(False)
-        else:
-            self.ui.vertSliderPow.setEnabled(True)
+        self.bool_auth_enabled = bool_auth
 
     #I want to move this to nonvital
     def Control_Doors(self,door):

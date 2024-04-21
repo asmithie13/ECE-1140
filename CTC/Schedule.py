@@ -209,11 +209,19 @@ class Schedule():
                     response = self.multiStopConflict(trainID)
 
 
-
         #Check for initial dispatch order issues
+        #If it is a new train
+        if int(trainID[1:]) == len(self.TrainNames):
+            #Get last train ID
+            lastID = "T" +  str((int(trainID[1:]) - 1))
 
+            for i in self.Scheduledata:
+                tempTime = tempTime.fromString(i[5])
+                #If the entry is for the last ID and the time is 
+                if (i[1] == lastID) and (testTime < tempTime):
+                    self.orderOfDispatchConflict(trainID, lastID)
+                    break
 
-        #Check if train conflicts with a previous stop
         return response
 
     #Function to create pop-up message if a train is dispatched in the past
@@ -228,10 +236,23 @@ class Schedule():
 
         return exitMode
     
+    #Function to create pop-up message if a train dispatch time conflicts with a previous stop
     def multiStopConflict(self, trainID):
         error_msg = QMessageBox()
         error_msg.setWindowTitle("Timing Warning")
         error_msg.setText("Departure Time of " + trainID + " appears to conflict with previously scheduled stops")
+        error_msg.setIcon(QMessageBox.Warning)
+        error_msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+
+        exitMode = error_msg.exec_()
+
+        return exitMode
+    
+    #Funciton to create a pop-up message if a train is set to dispatch out of order
+    def orderOfDispatchConflict(self, trainID, prevTrainID):
+        error_msg = QMessageBox()
+        error_msg.setWindowTitle("Timing Warning")
+        error_msg.setText(trainID + " should not be dispatched before " + prevTrainID)
         error_msg.setIcon(QMessageBox.Warning)
         error_msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
 

@@ -360,7 +360,7 @@ font: 75 10pt &quot;Times New Roman&quot;;</string>
      <item>
       <widget class="QLCDNumber" name="Power_value_lcd">
        <property name="intValue" stdset="0">
-        <number>743</number>
+        <number>0</number>
        </property>
       </widget>
      </item>

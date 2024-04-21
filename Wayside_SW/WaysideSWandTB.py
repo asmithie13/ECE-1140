@@ -564,6 +564,7 @@ class WaysideSW(QMainWindow):
 
         
         self.BlockOcc.setText(" ".join(sentBlocks))
+        #ADD CODE HERE FOR MAITANCE
         if self.label_7.text() == "AUTOMATIC" : 
             self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
             check1 = self.currentBlocks.copy #blocks after parsed
@@ -586,19 +587,19 @@ class WaysideSW(QMainWindow):
 
     def blockClosures(self,closedBlocks):
         for block in closedBlocks:
-            if block.lineColor == "Green" and block.Wayside == "2":
-                if block.maintance:
+            if block.lineColor == "Green" and block.Wayside == "W2":
+                if block.maintenance:
                     self.allGreenBlocks[int(block.blockNum) - 1].occupied = True
                     self.occupiedBlocks.append(block)
-                elif not block.occupied:
+                elif not block.maintenance:
                     self.allGreenBlocks[int(block.blockNum) - 1].occupied = False
                     self.occupiedBlocks.remove(block)
             elif block.lineColor == "Red":
-                if block.maintance:
-                    self.allGreenBlocks[int(block.blockNum) - 1].occupied = True
+                if block.maintenance:
+                    self.allRedBlocks[int(block.blockNum) - 1].occupied = True
                     self.occupiedBlocks.append(block)
-                elif not block.occupied:
-                    self.allGreenBlocks[int(block.blockNum) - 1].occupied = False
+                elif not block.maintenance:
+                    self.allRedBlocks[int(block.blockNum) - 1].occupied = False
                     self.occupiedBlocks.remove(block)
 
         names = [x.ID for x in self.occupiedBlocks]

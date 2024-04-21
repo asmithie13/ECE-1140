@@ -14,11 +14,22 @@ from CTC.TempData import *
 #Schedule class, holds schedule data and defines methods for editing the schedule
 class Schedule():
     def __init__(self):
+        #line, TrainID, Destination, ArrivalTime, Departure, DepartureTime
         self.Scheduledata = []
+
+        #Holds zero if the dispatch info has been sent for a given train, 1 if it has
         self.dataSent = []
+
+        #Holds the Authority for each dispatch instance
         self.AuthorityInfo = []
+
+        #Track data for station and timing info
         self.TrackData = TempData()
+
+        #Current train names to display for user
         self.TrainNames = ["*T1"]
+        self.GreenTrainNames = ["*T1"]
+        self.RedTrainNames = ["*T1"]
 
     #Function to add a single train to the schedule
     def addTrain(self, line, TrainID, Destination, ArrivalTime, Departure, DepartureTime):
@@ -102,6 +113,7 @@ class Schedule():
                  
         return 1
 
+    #Calculates the correct departure station and time from the given information from the dispatcher
     def calculateDeparture(self, Destination, ArrivalTime, Departure, line, TrainID):
         #Setting Departure Station
         #If the train already exists
@@ -163,9 +175,92 @@ class Schedule():
 
         self.AuthorityInfo.append(Authority)
 
+    #Used to perform timing checks on dispatch times
+    def timingCheck(self, Departure, currentTime, trainID):
+        #Initialize response variable
+        response = QMessageBox.Ok
+
+        
+        #Check if time is in past
+        upperTest = QTime()
+        upperTest = upperTest.fromString(currentTime)
+        lowerTest = upperTest.addSecs(-60 * 60 * 6)
+        testTime = QTime()
+        testTime = testTime.fromString(Departure[1])
+
+        #If current time and lower limit split midnight
+        if not (upperTest > lowerTest):
+            if ((testTime > QTime(0, 0, 0)) and (testTime< upperTest)) or ((testTime <= QTime(23, 59, 59)) and (testTime > lowerTest)):
+                response = self.trainInPastWarning(trainID)
+        #Else check if value is in between normally
+        else:
+            if((lowerTest < testTime) and (testTime < upperTest)):
+                response = self.trainInPastWarning(trainID)
 
 
+        #Check for multi-stop dispatch collisions
+        tempTime = QTime()
 
+        #for each entry in the current schedule
+        for i in self.Scheduledata:
+            #If the new trainID is the same as the ID on the entry
+            if i[1] == trainID:
+                tempTime = tempTime.fromString(i[3])
+
+                if testTime < tempTime:
+                    response = self.multiStopConflict(trainID)
+
+
+        #Check for initial dispatch order issues
+        #If it is a new train
+        if int(trainID[1:]) == len(self.TrainNames):
+            #Get last train ID
+            lastID = "T" +  str((int(trainID[1:]) - 1))
+
+            for i in self.Scheduledata:
+                tempTime = tempTime.fromString(i[5])
+                #If the entry is for the last ID and the time is 
+                if (i[1] == lastID) and (testTime < tempTime):
+                    self.orderOfDispatchConflict(trainID, lastID)
+                    break
+
+        return response
+
+    #Function to create pop-up message if a train is dispatched in the past
+    def trainInPastWarning(self, trainID):
+        error_msg = QMessageBox()
+        error_msg.setWindowTitle("Timing Warning")
+        error_msg.setText("Departure Time of " + trainID + " appears to be in the past")
+        error_msg.setIcon(QMessageBox.Warning)
+        error_msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+
+        exitMode = error_msg.exec_()
+
+        return exitMode
+    
+    #Function to create pop-up message if a train dispatch time conflicts with a previous stop
+    def multiStopConflict(self, trainID):
+        error_msg = QMessageBox()
+        error_msg.setWindowTitle("Timing Warning")
+        error_msg.setText("Departure Time of " + trainID + " appears to conflict with previously scheduled stops")
+        error_msg.setIcon(QMessageBox.Warning)
+        error_msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+
+        exitMode = error_msg.exec_()
+
+        return exitMode
+    
+    #Funciton to create a pop-up message if a train is set to dispatch out of order
+    def orderOfDispatchConflict(self, trainID, prevTrainID):
+        error_msg = QMessageBox()
+        error_msg.setWindowTitle("Timing Warning")
+        error_msg.setText(trainID + " should not be dispatched before " + prevTrainID)
+        error_msg.setIcon(QMessageBox.Warning)
+        error_msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+
+        exitMode = error_msg.exec_()
+
+        return exitMode
         
 #Table class to initialize a Pyqt5 table object that will display the schedule
 class ScheduleTableModel(QtCore.QAbstractTableModel):

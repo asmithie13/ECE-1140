@@ -219,8 +219,6 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.ManualModeButton.setStyleSheet("background-color : rgb(142, 140, 237); color: black;") #light blue
         
         self.TrainNameSelect.setEnabled(True)
-        self.TrainNameSelect.clear()
-        self.TrainNameSelect.addItems(self.trainSchedule.TrainNames)
         self.DestinationSelect.setEnabled(True)
         self.ArrivalTimeEdit.setEnabled(True)
         #Enable the add train button
@@ -268,6 +266,9 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.GreenLineButton.setStyleSheet("background-color : rgb(38, 207, 4)")     #Green
         self.RedLineButton.setStyleSheet("background-color : white")
 
+        #Set Train ID selcections to green line
+        self.TrainNameSelect.clear()
+        self.TrainNameSelect.addItems(self.trainSchedule.GreenTrainNames)
         #Set stations selctions to green line
         self.DestinationSelect.clear()
         self.DestinationSelect.addItems(self.TrackData.GreenStations[1:])
@@ -288,6 +289,9 @@ class CTC_UI(QtWidgets.QMainWindow):
         self.RedLineButton.setStyleSheet("background-color: rgb(195, 16, 40)")     #Red
         self.GreenLineButton.setStyleSheet("background-color : white")
 
+        #Set Train ID selcections to green line
+        self.TrainNameSelect.clear()
+        self.TrainNameSelect.addItems(self.trainSchedule.RedTrainNames)
         #Set stations selctions to red line
         self.DestinationSelect.clear()
         self.DestinationSelect.addItems(self.TrackData.RedStations[1:])
@@ -505,25 +509,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         Departure = []
         self.trainSchedule.calculateDeparture(Destination, ArrivalTime, Departure, self.currentLine, tempID)
 
-        #Check if time is in past
-        upperTest = QTime()
-        upperTest = upperTest.fromString(self.currentTime)
-        lowerTest = upperTest.addSecs(-60 * 60 * 6)
-        testTime = QTime()
-        testTime = testTime.fromString(Departure[1])
-
-        #If current time and lower limit split midnight
-        if not (upperTest > lowerTest):
-            if ((testTime > QTime(0, 0, 0)) and (testTime< upperTest)) or ((testTime <= QTime(23, 59, 59)) and (testTime > lowerTest)):
-                response = self.trainInPastWarning()
-            else:
-                response = QMessageBox.Ok
-        #Else check if value is in between normally
-        else:
-            if((lowerTest < testTime) and (testTime < upperTest)):
-                self.trainInPastWarning()
-            else:
-                response = QMessageBox.Ok
+        response = self.trainSchedule.timingCheck(Departure, self.currentTime, tempID)
 
         if response == QMessageBox.Ok:
             #Add a new train name option if required
@@ -531,11 +517,32 @@ class CTC_UI(QtWidgets.QMainWindow):
                 TrainID = self.trainSchedule.TrainNames[0][1:]
                 self.trainSchedule.TrainNames[0] = TrainID
                 newID = "*T" + str(int(self.trainSchedule.TrainNames[0][1:]) + 1)
-                self.trainSchedule.TrainNames.insert(0,newID)
-                    
-                #reset train name options
-                self.TrainNameSelect.clear()
-            self.TrainNameSelect.addItems(self.trainSchedule.TrainNames)
+                self.trainSchedule.TrainNames.insert(0, newID)
+                
+                #Add green or red line train name
+                if self.currentLine == 'Green':
+                    #Set new new train option for red trains
+                    self.trainSchedule.RedTrainNames.pop(0)
+                    self.trainSchedule.RedTrainNames.insert(0, newID)
+                    #Solidiy train options for green trains
+                    self.trainSchedule.GreenTrainNames[0] = TrainID
+                    self.trainSchedule.GreenTrainNames.insert(0, newID)
+
+                    #reset train name options
+                    self.TrainNameSelect.clear()
+                    self.TrainNameSelect.addItems(self.trainSchedule.GreenTrainNames)
+
+                elif self.currentLine == 'Red':
+                    #Set new new train option for green trains
+                    self.trainSchedule.GreenTrainNames.pop(0)
+                    self.trainSchedule.GreenTrainNames.insert(0, newID)
+                    #Solidiy train options for green trains
+                    self.trainSchedule.RedTrainNames[0] = TrainID
+                    self.trainSchedule.RedTrainNames.insert(0, newID)
+
+                    #reset train name options
+                    self.TrainNameSelect.clear()
+                    self.TrainNameSelect.addItems(self.trainSchedule.RedTrainNames)
 
             #Adding all schedule info to the schedule
             ArrivalTime = ArrivalTime.toString("hh:mm")
@@ -543,18 +550,6 @@ class CTC_UI(QtWidgets.QMainWindow):
             self.trainSchedule.addTrain(self.currentLine, TrainID, Destination, ArrivalTime, Departure[0], Departure[1])
 
             self.ScheduleTable.setModel(ScheduleTableModel(self.trainSchedule.Scheduledata))
-
-    #Function to create pop-up message if a train is dispatched in the past
-    def trainInPastWarning(self):
-        error_msg = QMessageBox()
-        error_msg.setWindowTitle("Timing Warning")
-        error_msg.setText("Dispatch Time of this train appears to be in the past")
-        error_msg.setIcon(QMessageBox.Warning)
-        error_msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-
-        exitMode = error_msg.exec_()
-
-        return exitMode
 
     #Function to add a block closure when in maintence mode, sets block object as occupied
     def closeBlock_button(self):

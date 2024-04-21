@@ -44,8 +44,9 @@ class TrainModel_mainwindow(QMainWindow):
     people_getting_off=10
     stop_bool= False
     #Track Model Signals
+    stop_at_station_sig = qtc.pyqtSignal(bool)
     track_model_acc_velo = qtc.pyqtSignal(str, int)
-    stop_at_station_sig=qtc.pyqtSignal(bool)
+    people_disemb_sig=qtc.pyqtSignal(int)
 
     def __init__(self,TrainID):
         super().__init__()
@@ -352,6 +353,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.people_getting_off=random.randint(1,people_count)
         self.people_count=self.total_cap-self.people_getting_off
         self.total_cap= self.people_count + self.crew_count
+        self.people_disemb_sig.emit(self.people_getting_off)
         
     
     def get_ticket_sales(self, tick_sales):

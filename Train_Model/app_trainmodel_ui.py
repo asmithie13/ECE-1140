@@ -45,7 +45,7 @@ class TrainModel_mainwindow(QMainWindow):
     stop_bool= False
     #Track Model Signals
     stop_at_station_sig = qtc.pyqtSignal(bool)
-    track_model_acc_velo = qtc.pyqtSignal(str, int)
+    track_model_acc_velo = qtc.pyqtSignal(str, float)
     people_disemb_sig=qtc.pyqtSignal(int)
 
     def __init__(self,TrainID):
@@ -367,14 +367,14 @@ class TrainModel_mainwindow(QMainWindow):
             self.left_doors_value.setFixedSize(109, 98)
             self.right_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
             self.left_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-            self.right_doors_value.setText('CLOSED')
-            self.left_doors_value.setText('CLOSED')
+            self.right_doors_value.setText('OPEN')
+            self.left_doors_value.setText('OPEN')
         elif door_state==2:
             self.right_doors_value.setFixedSize(109, 98)
             self.left_doors_value.setFixedSize(109, 98)
             self.right_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
             self.left_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-            self.right_doors_value.setText('OPEN')
+            self.right_doors_value.setText('CLOSED')
             self.left_doors_value.setText('OPEN')
         elif door_state==1:
             self.right_doors_value.setFixedSize(109, 98)
@@ -389,7 +389,7 @@ class TrainModel_mainwindow(QMainWindow):
             self.right_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
             self.left_doors_value.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
             self.right_doors_value.setText('CLOSED')
-            self.left_doors_value.setText('OPEN')
+            self.left_doors_value.setText('CLOSED')
 
 
         
@@ -555,7 +555,7 @@ class TrainCalculations:
 
         self.main_window.Acc_Velo_value_lcd.display("{:.2f}".format(self.velocity_mph))
         self.TC.curr_spd_sig.emit(float(self.velocity_mph))
-        self.main_window.track_model_acc_velo.emit(str(self.main_window.TrainID),float(self.velocity_mph))
+        self.main_window.track_model_acc_velo.emit(str(self.main_window.TrainID), self.velocity_mph)
         
         return (self.main_window.velocity)
         

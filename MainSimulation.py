@@ -51,7 +51,8 @@ def update_time_slot(time_str):
     MainWindow.CTCwindow.displayClock(time_str)
     MainWindow.TrackModelWindow.set_clock(time_str)
     for train in MainWindow.currentTrains:
-        train.update_time(time_str)
+        if train != 0:
+            train.update_time(time_str)
 
 
 def timer_thread(sim_time):
@@ -121,6 +122,7 @@ if __name__ == "__main__":
     """Track Model Signals"""
     MainWindow.TrackModelWindow.send_com_speed_tb.connect(MainWindow.TrackModel_tb.update_commanded_speed)
     MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.update_authority)
+    MainWindow.TrackModelWindow.delete_train.connect(MainWindow.destroy_train)
 
     #Track Model to Wayside_SW
     MainWindow.TrackModelWindow.sendBlockOcc_SW.connect(MainWindow.WaysideSWwindow.updateBlocks)    # Move the sim_time instance to the new thread

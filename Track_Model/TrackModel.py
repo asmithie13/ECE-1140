@@ -309,12 +309,13 @@ class TrackModelMain(QMainWindow):
                 self.currentTrains[int(trainId[1:]) - 1][2] = speed_of_train_m - (block_length - total_dis_from_beg_of_block)
                         
 
-    def get_switch_state(self, block_num):
-        # Retrieve the switch state from your blockStates dictionary or similar data structure
-        block_info = self.blockStates.get(str(block_num))
-        if block_info is not None:
-            return block_info['switchState']
-        return None 
+    # def get_switch_state(self, block_num):
+    #     # Retrieve the switch state from your blockStates dictionary or similar data structure
+    #     block_state = self.blockStates.get(block_num, {})
+    #     block_info = self.blockStates.get(str(block_num))
+    #     if block_info is not None:
+    #         return block_info['switchState']
+    #     return None 
 
     def get_next_id(self, BlockNum, direction, line):
         if line == 'Green':
@@ -322,7 +323,8 @@ class TrackModelMain(QMainWindow):
             
             #A1 to D13 switch block
             if BlockNum == 1:
-                if self.get_switch_state(13) == False:
+                print(self.blockStates.get(BlockNum, {}))
+                if self.blockStates.get(BlockNum, {}) == False:
                     return 13
                 else:
                     #Error Message

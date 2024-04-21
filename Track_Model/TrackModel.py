@@ -261,7 +261,7 @@ class TrackModelMain(QMainWindow):
 
 
         #print(self.stop)
-        print("did it stop",self.stop)
+        #print("did it stop",self.stop)
         if self.stop == True:
             self.generateTickets(block_num)
 

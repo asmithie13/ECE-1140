@@ -60,13 +60,15 @@ class TrackModelMain(QMainWindow):
 
     send_beacon = pyqtSignal(int)
 
-    send_polarity = pyqtSignal(bool)
+    send_polarity = pyqtSignal(str, bool)
 
-    send_bool_auth = pyqtSignal(bool)
+    send_bool_auth = pyqtSignal(str, bool)
 
     delete_train = pyqtSignal(str)
 
+
     AcutalSpeed = 0
+    train_ID = ""
 
     block_ids_green = [
     'A1', 'A2', 'A3', 'B4', 'B5', 'B6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12',
@@ -121,6 +123,7 @@ class TrackModelMain(QMainWindow):
         self.blockID = None
         self.station = ""
         self.occupied_blocks = []
+        self.prev_occupied_blocks = []
         self.occupied_block_failures = []
         self.lastGeneratedTickets = {}
         self.blockID = ""
@@ -502,7 +505,19 @@ class TrackModelMain(QMainWindow):
                 'lineColor': block.lineColor,
                 'lightState': block.lightState,
                 'crossingState': block.crossingState,
-                'switchState': block.switchState
+                'switchState': block.switchState,
+                'authority' : block.authority
+            }
+
+    def receiveSpecialBlocks_SW_red(self, specialBlock):
+        for block in specialBlock:
+            block_id = f"{block.blockSection}{block.blockNum}"
+            self.blockStates[block_id] = {
+                'lineColor': block.lineColor,
+                'lightState': block.lightState,
+                'crossingState': block.crossingState,
+                'switchState': block.switchState,
+                'authority' : block.authority
             }
 
 
@@ -513,8 +528,29 @@ class TrackModelMain(QMainWindow):
                 'lineColor': block.lineColor,
                 'lightState': block.lightState,
                 'crossingState': block.crossingState,
-                'switchState': block.switchState
+                'switchState': block.switchState,
+                'authority' : block.authority
             }
+
+    def get_send_bool_auth(self, train_id, block_id):
+        # Get the block state if it exists
+        block_state = self.blockStates.get(block_id, {})
+
+        # Extract the authority value from the block state dictionary
+        authority_value = block_state.get('authority', None)
+
+        print(authority_value)
+        # Check if the authority exists and is explicitly set to a boolean
+        if authority_value == True:
+            #Ensure the value is a boolean (depends on how data is received)
+            is_authorized = bool(authority_value)  # Convert to boolean (assumes non-None means True)
+
+            #emit the boolean authority
+            self.send_bool_auth.emit(train_id, is_authorized)
+
+        else:
+            #return false = stop the train!
+            self.send_bool_auth.emit(self.train_ID, False) 
 
     def update_ui_for_block(self, block_id):
         # Get the block state if it exists
@@ -575,16 +611,69 @@ class TrackModelMain(QMainWindow):
         self.current_time = clock
 
     def receiveSpeedAuth_tm(self,speedAuth):
-        self.trainID=speedAuth[0]
+        self.train_ID=speedAuth[0]
         self.Comm_Speed=speedAuth[1]
         self.Authority=speedAuth[2]
         self.sendSpeedAuth.emit(speedAuth)
         self.send_com_speed_tb.emit(str(self.Comm_Speed))
         self.send_authority_tb.emit(str(self.Authority))
+    def initialize_train_tracking(self):
+        self.occupied_blocks = []
+        self.prev_occupied_blocks = []
+        for train in self.currentTrains:  # Assuming currentTrains holds info about each train
+            self.occupied_blocks.append(train.initial_block)  # Example attribute
+            self.prev_occupied_blocks.append('')  # Initialize with empty strings or None
+
+
+    def update_block_colors(self):
+        # Check if the length of prev_occupied_blocks matches occupied_blocks
+        if len(self.prev_occupied_blocks) != len(self.occupied_blocks):
+            # Adjust prev_occupied_blocks to match the current number of trains
+            self.prev_occupied_blocks = [''] * len(self.occupied_blocks)
+
+        for i, block_id in enumerate(self.occupied_blocks):
+            if block_id:  # Ensure there's a current block to process
+                # Update the current block to orange
+                self.update_block_color(block_id, "orange")
+
+                # Check and update the previous block to green, if there was a previous block
+                if i < len(self.prev_occupied_blocks) and self.prev_occupied_blocks[i]:
+                    self.update_block_color(self.prev_occupied_blocks[i], "green")
+
+                # Update previous block tracker for the current train
+                self.prev_occupied_blocks[i] = block_id
+
+
+
+
+    def update_block_color(self, block_id, color):
+        # This method would update the block's color in the UI
+        button = self.findChild(QPushButton, block_id)
+        if button:
+            color_style = {
+                "orange": """
+                    QPushButton {
+                        border-style: solid;
+                        border-width: 0.5px;
+                        border-color: black;
+                        background-color: orange;
+                    }
+                """,
+                "green": """
+                    QPushButton {
+                        border-style: solid;
+                        border-width: 0.5px;
+                        border-color: black;
+                        background-color: rgb(50, 205, 50);
+                    }
+                """
+            }
+            button.setStyleSheet(color_style[color])
+
+
 
     def update_occupied_blocks(self):
-        occupancies = self.occupied_blocks + self.occupied_block_failures  # Combine the lists of occupied and failed blocks
-
+        occupancies = self.occupied_blocks + self.occupied_block_failures  #Combine the lists of occupied and failed blocks
         if self.line_ctc== "Green":
             sections_HW = ["A", "B", "C", "D", "E", "F", "G", "H", "T", "U", "V", "W", "X", "Y", "Z"]
             sections_shared = ["S103", "S104", "T105", "T106", "H34", "H35", "I36", "I37"]
@@ -603,9 +692,22 @@ class TrackModelMain(QMainWindow):
                     # Emit the separated lists to HW and SW respectively
             self.sendBlockOcc_SW.emit(temp_SW)
             self.sendBlockOcc_HW.emit(temp_HW)
+            self.update_block_colors()
+            if self.train_ID:
+                if self.occupied_blocks:
+                    #print(self.train_ID[1:])
+                    self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
+
+                # emit polarity to train model!
+                self.send_polarity.emit(self.train_ID, True)
+
         elif self.line_ctc== "Red":
             #print(occupancies)
             self.sendBlockOcc_SW.emit(occupancies)
+
+            self.send_polarity.emit(self.train_ID, True)
+
+           #self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + self.train_ID[1] - 1])
 
 
 

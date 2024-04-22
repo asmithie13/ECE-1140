@@ -20,7 +20,7 @@ class Vital_Speed_Auth():
         self.decimal_m_auth = 0
         self.stop_at_station_sig = stop_at_station_sig
         self.NonVital = NonVital
-        self.bool_auth_enabled
+        self.bool_auth_enabled = 0
 
     def Control_Current_Speed(self,newSpeed):
         self.ui.lcdCurSpd.display(newSpeed)

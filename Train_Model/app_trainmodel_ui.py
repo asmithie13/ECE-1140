@@ -32,7 +32,7 @@ class TrainModel_mainwindow(QMainWindow):
     a_n=0
     prev_time=0
     prev_acc=0
-    cabin_temp=0
+    cabin_temp=68
     grade=0
     force=0
     velocity=0
@@ -137,6 +137,9 @@ class TrainModel_mainwindow(QMainWindow):
         
         self.set_ccount(self.crew_count)
         self.set_pcount(self.people_count)
+        if total_ms % 60000 == 0:  # Call set_cabin_temp every minute
+            print("yes")
+            self.set_cabin_temp(self.cabin_temp)
         
         
         
@@ -224,8 +227,9 @@ class TrainModel_mainwindow(QMainWindow):
 
     def set_cabin_temp(self,cabin_temp):
        self.cabin_temp=cabin_temp
+       self.cabin_temp=random.randint(self.cabin_temp-2,self.cabin_temp+2)
        self.cabin_temp_value.setFixedSize(279, 98)
-       self.cabin_temp_value.setText(self.cabin_temp+' F')
+       self.cabin_temp_value.setText(str(self.cabin_temp)+' F')
 
        self.TC.curr_temp_sig.emit(cabin_temp)
 

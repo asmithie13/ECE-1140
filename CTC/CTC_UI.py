@@ -476,11 +476,45 @@ class CTC_UI(QtWidgets.QMainWindow):
         for i in range(len(self.occupiedBlocks.currentTrains)):
             self.occupiedBlocks.newTrains.append([])
 
+        flags = [0, 0, 0, 0, 0, 0]
+        doubleBlocks = ['S103', 'S104', 'T105', 'T106', 'I36', 'I37']
+
         #Adding TrainID, Block ID, and line color to an array
         for block in arr:
             #Getting train ID
             TrainID = self.occupiedBlocks.matchOccupanciesToTrains(block[0], block[1])
-            self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+            if block[1] == 'Green':
+                if block[0] == 'S103' and flags[0] == 0:
+                    flags[0] = 1
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+                elif block[0]== 'S104' and flags[1] == 0:
+                    flags[1] = 1
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+                
+                elif block[0]== 'T105' and flags[2] == 0:
+                    flags[2] = 1
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+                elif block[0]== 'T106' and flags[3] == 0:
+                    flags[3] = 1
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+                elif block[0]== 'I36' and flags[4] == 0:
+                    flags[4] = 1
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+                elif block[0]== 'I37' and flags[5] == 0:
+                    flags[5] = 1
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+                elif not (block[0] in doubleBlocks): 
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+            else:
+                self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+
 
             #If it's a train, add to updated train list
             if TrainID != 'X':

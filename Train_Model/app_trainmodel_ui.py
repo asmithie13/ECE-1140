@@ -32,6 +32,7 @@ class TrainModel_mainwindow(QMainWindow):
     a_n=0
     prev_time=0
     prev_acc=0
+    cabin_temp=0
     grade=0
     force=0
     velocity=0
@@ -222,8 +223,10 @@ class TrainModel_mainwindow(QMainWindow):
         self.ann_out_label.setText(ann_text)
 
     def set_cabin_temp(self,cabin_temp):
+       self.cabin_temp=cabin_temp
        self.cabin_temp_value.setFixedSize(279, 98)
-       self.cabin_temp_value.setText(cabin_temp+' F')
+       self.cabin_temp_value.setText(self.cabin_temp+' F')
+
        self.TC.curr_temp_sig.emit(cabin_temp)
 
     #bf_enable_clicked
@@ -529,6 +532,8 @@ class TrainCalculations:
                 self.main_window.a_n=-3.9370078740157477 #in ft/s^2
                 self.main_window.velocity = self.main_window.prev_vel + ((train_model_time_sec-self.main_window.prev_time)/2)*(self.main_window.a_n)
                 self.main_window.Acceleration_value_lcd.display("{:.3f}".format(self.main_window.a_n))
+                if self.main_window.velocity<0.1:
+                    self.main_window.velocity=0
             
         self.main_window.prev_vel=self.main_window.velocity
        

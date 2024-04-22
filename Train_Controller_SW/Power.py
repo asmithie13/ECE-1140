@@ -61,9 +61,9 @@ class Vital_Power():
             self.prevError = self.error
             self.prevUk = self.uk
 
-            self.power0 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.lcdPowOut.value()) / 100.0)
-            self.power1 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.lcdPowOut.value()) / 100.0)  
-            self.power2 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.lcdPowOut.value()) / 100.0)
+            self.power0 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.vertSliderPow.value()) / 100.0)
+            self.power1 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.vertSliderPow.value()) / 100.0)  
+            self.power2 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.vertSliderPow.value()) / 100.0)
 
             if(self.power0 == self.power1 or self.power1 == self.power2 or self.power0 == self.power2):
                 if(self.power0 == self.power1):
@@ -75,14 +75,14 @@ class Vital_Power():
             else: 
                 self.power = 0
             
-            if self.power > 120000:
-                self.power = 120000
+            if self.power > 120000000:
+                self.power = 120000000
             elif self.power < 0:
                 self.power = 0
         
         self.ui.lcdPowOut.display(self.ui.vertSliderPow.value())
         self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
-        self.ui.lcdAcel.display(self.power)
+        self.ui.lcdAcel.display(self.power/1000)
         self.curr_power_sig.emit(int(self.power))
         
     """

@@ -60,7 +60,7 @@ class TrackModelMain(QMainWindow):
 
     send_beacon = pyqtSignal(int)
 
-    send_polarity = pyqtSignal(str, bool)
+    send_polarity = pyqtSignal(list, bool)
 
     send_bool_auth = pyqtSignal(str, bool)
 
@@ -213,7 +213,7 @@ class TrackModelMain(QMainWindow):
             self.occupied_blocks.append('D10')
             self.dt.append(0.0)
             self.prev_time.append(0.0)
-            self.send_beacon.emit(1)
+            #self.send_beacon.emit(1)
             self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
             self.load_default_track_layout()
             self.update_occupied_blocks()
@@ -270,6 +270,11 @@ class TrackModelMain(QMainWindow):
 
         # if train moves to the next block
         if total_dis_from_beg_of_block >= block_length:
+
+            print(trainId, True)
+            #emit signal for polarity
+            self.send_polarity.emit(trainId, True)
+
             #Setting train direction after switches
             if self.line_ctc== "Green":
                 if block_num == 76:
@@ -351,12 +356,6 @@ class TrackModelMain(QMainWindow):
                 if self.get_switch_state_green(13) == False:
                     return 13
                 else:
-                    #Error Message
-                    error_msg = QMessageBox()
-                    error_msg.setWindowTitle("Train Crashed!")
-                    error_msg.setText("Switch was not in the correct position")
-                    error_msg.setIcon(QMessageBox.Critical)
-                    error_msg.exec_() 
                     return 1
 
             #A-C blocks, train can only come from its previous blocks, but they are in reverse number order
@@ -369,12 +368,6 @@ class TrackModelMain(QMainWindow):
                     if self.get_switch_state_green(13) == True:
                         return 12
                     else:
-                        #Error Message
-                        error_msg = QMessageBox()
-                        error_msg.setWindowTitle("Train Crashed!")
-                        error_msg.setText("Switch was not in the correct position")
-                        error_msg.setIcon(QMessageBox.Critical)
-                        error_msg.exec_() 
                         return 13
                 elif direction == 'increasing':
                     return 14
@@ -394,12 +387,6 @@ class TrackModelMain(QMainWindow):
                     if self.get_switch_state_green(28) == True:
                         return 29
                     else:
-                        #Error Message
-                        error_msg = QMessageBox()
-                        error_msg.setWindowTitle("Train Crashed!")
-                        error_msg.setText("Switch was not in the correct position")
-                        error_msg.setIcon(QMessageBox.Critical)
-                        error_msg.exec_() 
                         return 28
                             
             #G-I blocks, train can only come from its previous blocks
@@ -418,7 +405,13 @@ class TrackModelMain(QMainWindow):
                 if direction == 'increasing':
                     return 78
                 elif direction == 'decreasing':
-                    return 101
+                    if self.get_switch_state_green(77) == False:
+                        return 101
+                    elif self.get_switch_state_green(77) == True:
+                        return 76
+                    else:
+                        return 77
+
                 
             #Full n block, bidirectional
             elif (BlockNum > 77) and (BlockNum <= 84):
@@ -431,7 +424,10 @@ class TrackModelMain(QMainWindow):
             #n switch on block 85, can come from N84 or Q100
             elif BlockNum == 85:
                 if direction == 'increasing':
-                    return 86
+                    if self.get_switch_state_green(85) == True:
+                        return 86
+                    else:
+                        return 85
                 elif direction == 'decreasing':
                     return 84
                 
@@ -441,7 +437,10 @@ class TrackModelMain(QMainWindow):
             
             #Q100
             elif BlockNum == 100:
-                return 85
+                if self.get_switch_state_green(85) == False:
+                    return 85
+                else:
+                    return 100
 
             #R-Z blocks, train can only come from its previous blocks
             elif ((BlockNum >= 101) and (BlockNum < 150)):
@@ -450,13 +449,7 @@ class TrackModelMain(QMainWindow):
             elif BlockNum == 150:
                 if self.get_switch_state_green(28) == False:
                     return 28
-                else:
-                    #Error Message
-                    error_msg = QMessageBox()
-                    error_msg.setWindowTitle("Train Crashed!")
-                    error_msg.setText("Switch was not in the correct position")
-                    error_msg.setIcon(QMessageBox.Critical)
-                    error_msg.exec_() 
+                else: 
                     return 150
                         
         #Red Line                                  
@@ -538,66 +531,20 @@ class TrackModelMain(QMainWindow):
 
         # Extract the authority value from the block state dictionary
         authority_value = block_state.get('authority', None)
-
-        print(authority_value)
+        #print(train_id,block_id, authority_value)
+        #print(authority_value)
         # Check if the authority exists and is explicitly set to a boolean
         if authority_value == True:
             #Ensure the value is a boolean (depends on how data is received)
             is_authorized = bool(authority_value)  # Convert to boolean (assumes non-None means True)
 
+            
             #emit the boolean authority
             self.send_bool_auth.emit(train_id, is_authorized)
 
         else:
             #return false = stop the train!
             self.send_bool_auth.emit(self.train_ID, False) 
-
-    def update_ui_for_block(self, block_id):
-        # Get the block state if it exists
-        block_state = self.blockStates.get(block_id, {})
-
-        # Update for SW
-        if block_id in self.LIGHT_BLOCKS_SW or block_id in self.SWITCH_BLOCKS_SW:
-            # Update light status for HW
-            if block_id in self.LIGHT_BLOCKS_SW:
-                light_state = block_state.get('lightState', 'N/A')
-                self.light_out.setText(str(light_state))
-                self.light_out.setStyleSheet("background-color: green;" if light_state == "GREEN" else "background-color: red;" if light_state == "RED" else "background-color: white;")
-            else:
-                self.light_out.setText('N/A')
-                self.light_out.setStyleSheet("background-color: white;")
-
-            # Update switch status for HW
-            if block_id in self.SWITCH_BLOCKS_SW:
-                switch_state = block_state.get('switchState', 'N/A')
-                self.switch_out.setText(str(switch_state))
-            else:
-                self.switch_out.setText('N/A')
-
-        # Update for HW
-        elif block_id in self.LIGHT_BLOCKS_HW or block_id in self.SWITCH_BLOCKS_HW:
-            # Update light status for HW
-            if block_id in self.LIGHT_BLOCKS_HW:
-                light_state = block_state.get('lightState', 'N/A')
-                self.light_out.setText(str(light_state))
-                self.light_out.setStyleSheet("background-color: green;" if light_state == "GREEN" else "background-color: red;" if light_state == "RED" else "background-color: white;")
-            else:
-                self.light_out.setText('N/A')
-                self.light_out.setStyleSheet("background-color: white;")
-
-            # Update switch status for HW
-            if block_id in self.SWITCH_BLOCKS_HW:
-                switch_state = block_state.get('switchState', 'N/A')
-                self.switch_out.setText(str(switch_state))
-            else:
-                self.switch_out.setText('N/A')
-
-        # Update crossing status, which is common for both HW and SW
-        if block_id in self.CROSSING_BLOCKS:
-            crossing_state = block_state.get('crossingState', 'N/A')
-            self.cross_out.setText(str(crossing_state))
-        else:
-            self.cross_out.setText('N/A')
 
     def set_clock(self, time):
         self.clock_in.display(time[0:5])
@@ -693,13 +640,17 @@ class TrackModelMain(QMainWindow):
             self.sendBlockOcc_SW.emit(temp_SW)
             self.sendBlockOcc_HW.emit(temp_HW)
             self.update_block_colors()
+
             if self.train_ID:
                 if self.occupied_blocks:
                     #print(self.train_ID[1:])
                     self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
 
+                #for i in self.currentTrains:
+                #signal.emit([i[0], value])
+
                 # emit polarity to train model!
-                self.send_polarity.emit(self.train_ID, True)
+                #self.send_polarity.emit(self.train_ID, True)
 
         elif self.line_ctc== "Red":
             #print(occupancies)
@@ -854,6 +805,7 @@ class TrackModelMain(QMainWindow):
         else:
             adjusted_block_id = block_id
 
+        #print(adjusted_block_id)
         # Fetch data for the adjusted block ID
         block_data = self.data.get_data_for_block(adjusted_block_id)
         if block_data:
@@ -872,7 +824,7 @@ class TrackModelMain(QMainWindow):
         self.light_out.setStyleSheet("background-color: white;")
 
         # Proceed with updating the UI for the clicked block
-        self.update_ui_for_block(adjusted_block_id)
+        #self.update_ui_for_block(adjusted_block_id)
 
         # Check if the block has special features and update the UI accordingly
         if adjusted_block_id in self.LIGHT_BLOCKS_SW:
@@ -900,15 +852,13 @@ class TrackModelMain(QMainWindow):
             # Fetch the switch state for this block and update the UI
             switch_state = self.blockStates.get(adjusted_block_id, {}).get('switchState', 'N/A')
             self.switch_out.setText("LEFT" if switch_state else "RIGHT")
-        else:
-            self.switch_out.setText('N/A')
-
-        if adjusted_block_id in self.SWITCH_BLOCKS_HW:
+        elif adjusted_block_id in self.SWITCH_BLOCKS_HW:
             # Fetch the switch state for this block and update the UI
             switch_state = self.blockStates.get(adjusted_block_id, {}).get('switchState', 'N/A')
             self.switch_out.setText("LEFT" if switch_state else "RIGHT")
         else:
             self.switch_out.setText('N/A')
+
 
 
         # Continue with the rest of the block_clicked functionality

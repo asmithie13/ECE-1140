@@ -26,20 +26,6 @@ import Track_Model
 from Track_Model.TrackModel import *
 
 #Train Model Imports
-
-
-# import Train_Model
-# from Train_Model.app_trainmodel_ui import *
-# from Train_Model.app_trainmodel_tb import *
-
-#import Train_Model
-#from Train_Model.app_trainmodel_ui import *
-#from Train_Model.app_trainmodel_tb import *
-
-#import Train_Model
-#from Train_Model.app_trainmodel_ui import *
-#from Train_Model.app_trainmodel_tb import *
-
 import Train_Model
 from Train_Model.app_trainmodel_ui import *
 from Train_Model.app_trainmodel_tb import *
@@ -126,12 +112,21 @@ class Main_UI(QtWidgets.QMainWindow):
         #Beacon info
         self.TrackModelWindow.send_beacon.connect(self.currentTrains[-1].receive_beacon_info)
 
+        #Ticket sales
+        #self.TrackModelWindow.people_boarding_sig.connect(self.currentTrains[-1].set_pcount)
+
         #Polarity
         #self.TrackModelWindow.send_polarity.connect(self.currentTrains[-1].receive_polarity)
         
         #Train Model to Track Model
         # Actual Velocity
         self.currentTrains[-1].track_model_acc_velo.connect(self.TrackModelWindow.receiveSendVelocity)
+
+        #Train stops
+        #self. currentTrains[-1].stop_at_station_sig.connect(self.TrackModelWindow.train_stop)
+
+        #People disembarking
+        self.currentTrains[-1].people_disemb_sig.connect(self.TrackModelWindow.people_disem)
 
         #Connect Signals to Track Model
         #self.currentTrains[-1].sendSignalToTrack.(self.TrackModelWindow.recieveSignalFromTrain)
@@ -143,12 +138,15 @@ class Main_UI(QtWidgets.QMainWindow):
         #Get train num
         TrainNum = int(TrainID[1:]) - 1
         
-        #Close UIs if open
-        self.currentTrains[TrainNum].TC.Close_UI()
-        self.currentTrains[TrainNum].close()
-        
-        #Delete train instance (Will also delete the train controller)
-        del self.currentTrains[TrainNum]
+        if TrainNum < len(self.currentTrains): 
+            if self.currentTrains[TrainNum] != 0:
+                #Close UIs if open
+                self.currentTrains[TrainNum].TC.Close_UI()
+                self.currentTrains[TrainNum].close()
+                
+                #Delete train instance (Will also delete the train controller)
+                del self.currentTrains[TrainNum]
+                self.currentTrains.insert(TrainNum, 0)
 
 
     def open_train_model_UI(self):

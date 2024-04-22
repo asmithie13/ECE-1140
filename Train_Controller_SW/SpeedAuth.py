@@ -8,17 +8,19 @@ from PyQt5 import QtWidgets
 class Vital_Speed_Auth():
 
     #def __init__(self,ui):
-    def __init__(self,ui,curr_auth_signal, service_brake_sig,ebrake_internal_sig,stop_at_station_sig):
+    def __init__(self,ui,curr_auth_signal, service_brake_sig,ebrake_internal_sig,stop_at_station_sig,NonVital):
         self.ui = ui
         self.curr_auth_signal = curr_auth_signal
         self.service_brake_sig = service_brake_sig
         self.stopcal = 0
-        self.local_clock = 0
+        self.local_clock = 0,
         self.time = 0
         self.prev_time = 0
         self.ebrake_sig = ebrake_internal_sig
         self.decimal_m_auth = 0
         self.stop_at_station_sig = stop_at_station_sig
+        self.NonVital = NonVital
+        self.bool_auth_enabled
 
     def Control_Current_Speed(self,newSpeed):
         self.ui.lcdCurSpd.display(newSpeed)
@@ -85,9 +87,11 @@ class Vital_Speed_Auth():
             self.stoppubgdistanceEmergency = (self.V_i**2)/(2*0.00000273) 
             #print("E Stop: ", self.stoppubgdistanceEmergency)
 
+            if self.bool_auth_enabled == 1:
+                self.ui.vertSliderBrk.setValue(1)
+                self.ui.vertSliderPow.setEnabled(False)
 
-                
-            if self.AuthM <= self.stoppubgdistanceEmergency and self.AuthM >= 5:
+            elif self.AuthM <= self.stoppubgdistanceEmergency and self.AuthM >= 5:
                 self.ui.vertSliderBrk.setValue(0)
                 self.ui.vertSliderPow.setValue(0)
                 self.ui.vertSliderPow.setEnabled(False)
@@ -98,8 +102,8 @@ class Vital_Speed_Auth():
                 self.ui.vertSliderBrk.setValue(1)
                 self.ui.vertSliderPow.setValue(0)
                 self.ui.vertSliderPow.setEnabled(False)
-            
 
+    
 
                 #self.stopcal = True
 
@@ -117,7 +121,12 @@ class Vital_Speed_Auth():
             #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
             elif current_speed < ((speed_limit or cmd_speed) and (self.ui.buttonAuto.isChecked() == True)):
                 self.ui.vertSliderPow.setEnabled(True)
-                self.ui.vertSliderPow.setValue(100)
+                if (self.AuthM <= 15.24):
+                    self.ui.vertSliderPow.setValue(25)
+                elif self.AuthM > 60:
+                    self.ui.vertSliderPow.setValue(100)
+                else :
+                    self.ui.vertSliderPow.setValue(50)
                 self.ui.vertSliderBrk.setValue(0)
             
             #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
@@ -128,21 +137,20 @@ class Vital_Speed_Auth():
             elif self.ui.buttonMan.isChecked() :
                 self.ui.vertSliderPow.setEnabled(True)
 
-            else:
-                self.stop_at_station_sig.emit(True)
+        elif self.decimal_m_auth < 1 and self.ui.lcdCurSpd == 0:
+            if self.NonVital.arrived == True:
+                ## add timer 
+                self.stop_at_station_sig.emit(1)
+                if self.ui.buttonAuto.isChecked():
+                    self.Emit_Doors()
 
-        # elif self.stopcal == 1:
-        #     self.ui.lcdAuth.display(self.ui.lcdAuth.value() - int(self.rate*self.time))
-        
+        else :
+            self.stop_at_station_sig.emit(0)
 
 
     #we need to deal with whatever this is
     def Authority_Monitor_Bool(self, bool_auth):
-        if(bool_auth):
-            self.ui.vertSliderBrk.setValue(1)
-            self.ui.vertSliderPow.setEnabled(False)
-        else:
-            self.ui.vertSliderPow.setEnabled(True)
+        self.bool_auth_enabled = bool_auth
 
     #I want to move this to nonvital
     def Control_Doors(self,door):
@@ -159,4 +167,7 @@ class Vital_Speed_Auth():
         self.decimal_m_auth = auth
         self.authft = round(auth * 3.28084)
         self.ui.lcdAuth.display(self.authft)
-        self.ui.vertSliderPow.setEnabled(True)
+        if self.decimal_m_auth > 0 :
+            self.ui.vertSliderPow.setEnabled(True)
+            self.NonVital.doors = 0
+            self.NonVital.Emit_Doors()

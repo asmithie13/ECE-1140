@@ -454,15 +454,15 @@ class Ui_MainWindow(object):
         self.lcdKi = QtWidgets.QLCDNumber(self.groupBox_3)
         self.lcdKi.setFrameShape(QtWidgets.QFrame.Box)
         self.lcdKi.setSmallDecimalPoint(True)
-        self.lcdKi.setDigitCount(4)
+        self.lcdKi.setDigitCount(6)
         self.lcdKi.setObjectName("lcdKi")
         self.lcdKi.display(2)
         self.gridLayout_3.addWidget(self.lcdKi, 0, 0, 1, 1)
         self.lcdKp = QtWidgets.QLCDNumber(self.groupBox_3)
         self.lcdKp.setSmallDecimalPoint(True)
-        self.lcdKp.setDigitCount(4)
+        self.lcdKp.setDigitCount(6)
         self.lcdKp.setObjectName("lcdKp")
-        self.lcdKp.display(100)
+        self.lcdKp.display(2000)
         self.gridLayout_3.addWidget(self.lcdKp, 0, 1, 1, 1)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
@@ -472,7 +472,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.label_4)
         self.inputKp = QtWidgets.QDoubleSpinBox(self.groupBox_3)
         self.inputKp.setObjectName("inputKp")
-        self.inputKp.setMaximum(9999)
+        self.inputKp.setMaximum(999999)
         self.horizontalLayout_4.addWidget(self.inputKp)
         self.gridLayout_3.addLayout(self.horizontalLayout_4, 2, 1, 1, 1)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
@@ -483,9 +483,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.label_3)
         self.inputKi = QtWidgets.QDoubleSpinBox(self.groupBox_3)
         self.inputKi.setObjectName("inputKi")
-        self.inputKi.setMaximum(9999)
+        self.inputKi.setMaximum(999999)
         self.inputKi.setValue(2)
-        self.inputKp.setValue(100)
+        self.inputKp.setValue(2000)
         self.horizontalLayout_3.addWidget(self.inputKi)
         self.gridLayout_3.addLayout(self.horizontalLayout_3, 2, 0, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox_3, 0, 1, 1, 2)
@@ -495,6 +495,8 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.vertSliderPow.setDisabled(True)
+        self.vertSliderBrk.setValue(1)
+        
 
 
 

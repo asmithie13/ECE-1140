@@ -23,11 +23,6 @@ from Wayside_HW.TrackController_HW_TB import *
 import Track_Model
 from Track_Model.TrackModel import *
 
-# #Train Model Imports
-# import Train_Model
-# from Train_Model.app_trainmodel_ui import *
-# from Train_Model.app_trainmodel_tb import *
-
 #Train Model Imports
 import Train_Model
 from Train_Model.app_trainmodel_ui import *
@@ -51,7 +46,8 @@ def update_time_slot(time_str):
     MainWindow.CTCwindow.displayClock(time_str)
     MainWindow.TrackModelWindow.set_clock(time_str)
     for train in MainWindow.currentTrains:
-        train.update_time(time_str)
+        if train != 0:
+            train.update_time(time_str)
 
 
 def timer_thread(sim_time):
@@ -121,6 +117,7 @@ if __name__ == "__main__":
     """Track Model Signals"""
     MainWindow.TrackModelWindow.send_com_speed_tb.connect(MainWindow.TrackModel_tb.update_commanded_speed)
     MainWindow.TrackModelWindow.send_authority_tb.connect(MainWindow.TrackModel_tb.update_authority)
+    MainWindow.TrackModelWindow.delete_train.connect(MainWindow.destroy_train)
 
     #Track Model to Wayside_SW
     MainWindow.TrackModelWindow.sendBlockOcc_SW.connect(MainWindow.WaysideSWwindow.updateBlocks)    # Move the sim_time instance to the new thread
@@ -142,6 +139,8 @@ if __name__ == "__main__":
 
     # Start the thread
     sim_thread.start()
+    sim_time.pause(True)
+    update_time_slot("00:00:00.000")
 
     # UI connections
     MainWindow.SpeedSlider.valueChanged.connect(lambda : sim_time.set_sim_speed(MainWindow.SpeedSlider.value()))

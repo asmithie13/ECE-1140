@@ -98,6 +98,7 @@ if __name__ == "__main__":
     #Wayside to Track Model
     MainWindow.WaysideSWwindow.sendTrainSpeedAuth.connect(MainWindow.TrackModelWindow.receiveSpeedAuth_tm)
     MainWindow.WaysideSWwindow.sendAllBlocks.connect(MainWindow.TrackModelWindow.receiveSpecialBlocks_SW)
+    MainWindow.WaysideSWwindow.sendGreenSwitchPos.connect(MainWindow.TrackModelWindow.receiveSpecialBlocks_SW)
 
     """Wayside HW Signals"""
     MainWindow.WaysideHWwindow.sendOccupiedBlocks.connect(MainWindow.WaysideHW_tb.receiveOccupiedBlocks)

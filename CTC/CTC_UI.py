@@ -329,7 +329,7 @@ class CTC_UI(QtWidgets.QMainWindow):
             
             #Send a new dispatch info if train already exists
             elif (time == entry[5]) and (self.trainSchedule.dataSent[index] == 0):
-                self.sendDispatchInfo.emit([entry[1], 40, self.trainSchedule.AuthorityInfo[index]])
+                self.sendDispatchInfo.emit([entry[1], 70, self.trainSchedule.AuthorityInfo[index]])
                 self.trainSchedule.dataSent[index] = 1
                 print(entry[1], "Dispatched to new station")
 

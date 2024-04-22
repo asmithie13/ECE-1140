@@ -32,6 +32,7 @@ class TrainModel_mainwindow(QMainWindow):
     a_n=0
     prev_time=0
     prev_acc=0
+    cabin_temp=0
     grade=0
     force=0
     velocity=0
@@ -222,8 +223,10 @@ class TrainModel_mainwindow(QMainWindow):
         self.ann_out_label.setText(ann_text)
 
     def set_cabin_temp(self,cabin_temp):
+       self.cabin_temp=cabin_temp
        self.cabin_temp_value.setFixedSize(279, 98)
-       self.cabin_temp_value.setText(cabin_temp+' F')
+       self.cabin_temp_value.setText(self.cabin_temp+' F')
+
        self.TC.curr_temp_sig.emit(cabin_temp)
 
     #bf_enable_clicked

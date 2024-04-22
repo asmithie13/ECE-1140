@@ -59,10 +59,10 @@ class Vital_Speed_Auth():
         self.prev_time = self.local_clock 
 
         current_speed = self.ui.lcdCurSpd.value()
-        speed_limit = self.ui.lcdSpdLim.value()
+        speed_limit = float(self.ui.lcdSpdLim.value())
         cmd_speed = self.ui.lcdCmdSpd.value()
         
-        if(not(self.decimal_m_auth <= 0) and not(self.ui.lcdCurSpd.value == 0)):
+        if(not(self.ui.lcdCurSpd.value == 0)):
             self.decimal_m_auth = self.decimal_m_auth - float(self.rate_metric*self.time)
             self.ui.lcdAuth.display(round(self.decimal_m_auth* 3.28084))
             # if self.ui.lcdAuth.value() > 0:
@@ -70,8 +70,6 @@ class Vital_Speed_Auth():
             #authority in m from ft
             
             # in order to get most accurate stopping distance we use this
-            #self.AuthM = self.ui.lcdAuth.value()*0.3048
-
             self.AuthM = self.decimal_m_auth
     
             #current speed in m/ms from mph
@@ -82,9 +80,11 @@ class Vital_Speed_Auth():
 
         
             #if self.stopcal == True:
-            self.stoppingdistanceService = (self.V_i**2)/(2*0.0000012) 
+            self.stoppingdistanceService = (self.V_i**2)/(2*0.000012)   
+            print("Stopping Distance :",self.stoppingdistanceService)
+            print(self.stoppingdistanceService)
             #print("Dist Service : ", self.stoppingdistanceService)
-            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*0.00000273) 
+            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*0.0000273) 
             #print("E Stop: ", self.stoppubgdistanceEmergency)
 
             if self.bool_auth_enabled == 1:
@@ -98,16 +98,11 @@ class Vital_Speed_Auth():
                 self.ui.Ebrake.setChecked(True)
                 self.ebrake_sig.emit(1)
             
-            elif self.AuthM <= self.stoppingdistanceService:
+            elif (self.AuthM <= self.stoppingdistanceService) or (self.AuthM < 0 and self.ui.lcdCurSpd.value > 0) :
                 self.ui.vertSliderBrk.setValue(1)
                 self.ui.vertSliderPow.setValue(0)
                 self.ui.vertSliderPow.setEnabled(False)
 
-    
-
-                #self.stopcal = True
-
-                #self.stopcal = True
             #check current speed every time speed is updated or speed limit is updated
             #if speed is greater than speed limit, send command to brake
             #if speed is less than speed limit, send command to accelerate
@@ -117,20 +112,24 @@ class Vital_Speed_Auth():
             elif (current_speed > speed_limit):
                 self.ui.vertSliderBrk.setValue(1)
                 self.ui.vertSliderPow.setValue(0)
+
+            elif (current_speed > cmd_speed):
+                self.ui.vertSliderBrk.setValue(1)
+                self.ui.vertSliderPow.setValue(0)
             
             #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
-            elif current_speed < ((speed_limit or cmd_speed) and (self.ui.buttonAuto.isChecked() == True)):
+            elif (((current_speed < speed_limit) or (current_speed < cmd_speed)) and (self.ui.buttonAuto.isChecked())):
                 self.ui.vertSliderPow.setEnabled(True)
-                if (self.AuthM <= 15.24):
+                if (self.AuthM <= 50):
                     self.ui.vertSliderPow.setValue(25)
                 elif self.AuthM > 60:
                     self.ui.vertSliderPow.setValue(100)
-                else :
+                elif 50 < self.AuthM  < 100:
                     self.ui.vertSliderPow.setValue(50)
                 self.ui.vertSliderBrk.setValue(0)
             
             #this case only is used in automatic mode, if we are in manual mode the train driver can drive how they please
-            elif current_speed == (speed_limit or cmd_speed) and (self.ui.buttonAuto.isChecked()):
+            elif (current_speed == speed_limit) or (current_speed == cmd_speed) and (self.ui.buttonAuto.isChecked()):
                 self.ui.vertSliderPow.setValue(0)
                 self.ui.vertSliderBrk.setValue(0)
             

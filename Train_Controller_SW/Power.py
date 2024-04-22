@@ -57,7 +57,7 @@ class Vital_Power():
         else:
             self.error = float(self.ui.lcdCmdSpd.value()) * 0.00044704 - float(self.ui.lcdCurSpd.value()) * 0.00044704
             #has dt
-            self.uk = self.prevUk + (self.error + self.prevError) * self.dt / 2
+            self.uk = self.prevUk + (self.error + self.prevError) * (self.dt / 2)
             self.prevError = self.error
             self.prevUk = self.uk
 

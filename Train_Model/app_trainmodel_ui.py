@@ -171,6 +171,8 @@ class TrainModel_mainwindow(QMainWindow):
 
     #sending polarity to Train Controller
     def receive_polarity(self,polarity):
+        trainID=polarity[0]
+        block_change=polarity[1]
         self.TC.block_passed_sig.emit(polarity)
     
     def stop_at_station(self,stop_bool):

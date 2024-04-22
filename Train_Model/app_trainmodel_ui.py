@@ -170,10 +170,11 @@ class TrainModel_mainwindow(QMainWindow):
         self.TC.beacon_info_sig.emit(beacon_info)
 
     #sending polarity to Train Controller
-    def receive_polarity(self,polarity):
-        trainID=polarity[0]
-        block_change=polarity[1]
-        self.TC.block_passed_sig.emit(polarity)
+    def receive_polarity(self,trainID,polarity):
+        block_change=polarity
+        if trainID == self.TrainID:
+            self.TC.block_passed_sig.emit(block_change)
+       
     
     def stop_at_station(self,stop_bool):
         self.stop_bool=stop_bool

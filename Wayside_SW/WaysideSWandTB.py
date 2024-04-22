@@ -71,6 +71,8 @@ class WaysideSW(QMainWindow):
     changeModeSend = pyqtSignal(bool)
     sendOccupiedBlocks = pyqtSignal(list)   #Send list of occupied blocks to CTC
     sendTrainSpeedAuth = pyqtSignal(list) #Send commanded speed to track model
+    sendGreenSwitchPos = pyqtSignal(list)
+    sendRedSwitchPos = pyqtSignal(list)
 
     #signal to send all blocks to testbench
     sendAllBlocks = pyqtSignal(list)
@@ -137,7 +139,9 @@ class WaysideSW(QMainWindow):
         wayside1Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
         self.greenWayside2Blocks = [x for x in self.allGreenBlocks if x.blockSection not in wayside1Chars]
         self.currentBlocks = self.greenWayside2Blocks
-     
+
+        self.sendGreenSwitchPos.emit(self.greenWayside2Blocks)
+                                     
         #Defines special greenblocks in wayside 1     
         for block in self.greenWayside2Blocks:
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocksW2.append(block)
@@ -203,6 +207,8 @@ class WaysideSW(QMainWindow):
 
         #Create Parser Object
         self.currentSwitchBlocksNums = [['5','6','11']]
+
+        self.sendRedSwitchPos.emit(self.allRedBlocks)
 
         #self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)  #Currently testing red object
         self.FileParser = Parser(None,self.currentSwitchBlocksNums,self.currentBlocks)
@@ -290,6 +296,9 @@ class WaysideSW(QMainWindow):
                 if block.LIGHT and block.lightState: block.authority = True
                 elif block.LIGHT and not block.lightState: block.authority = False
 
+            
+            self.sendGreenSwitchPos.emit(self.greenWayside2Blocks)
+            self.sendRedSwitchPos.emit(self.allRedBlocks)
             self.blockActions()
             self.sendAllBlocks.emit(self.currentBlocks)
             self.changeModeSend.emit(False)
@@ -537,6 +546,9 @@ class WaysideSW(QMainWindow):
             self.label_11.setText(letter1 + self.currentTriple[1])
         self.sendSpecialBlocks.emit(self.currentBlocks)
         self.sendAllBlocks.emit(self.currentBlocks)
+
+        self.sendGreenSwitchPos.emit(self.greenWayside2Blocks)
+        self.sendRedSwitchPos.emit(self.allRedBlocks)
 
     def updateBlocks(self,new_data):
         sentBlocks = new_data

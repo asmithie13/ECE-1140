@@ -136,7 +136,7 @@ class WaysideSW(QMainWindow):
 
         #SW in charge of W1, HW in charge of W2
 
-        wayside1Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
+        wayside1Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]
         self.greenWayside2Blocks = [x for x in self.allGreenBlocks if x.blockSection not in wayside1Chars]
         self.currentBlocks = self.greenWayside2Blocks
 

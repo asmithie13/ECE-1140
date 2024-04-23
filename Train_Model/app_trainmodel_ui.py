@@ -177,7 +177,7 @@ class TrainModel_mainwindow(QMainWindow):
     def receive_bool_auth(self,trainID,bool_auth):
         if trainID == self.TrainID:
             self.TC.curr_bool_auth_sig.emit(bool_auth)
-        pass
+        
 
     
         

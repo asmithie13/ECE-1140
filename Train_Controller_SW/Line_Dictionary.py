@@ -176,6 +176,43 @@ class Line_Dictionary():
         ['I_56', 30, True, 'Welcome to OVERBROOK', 'N/A'],
         ['I_57', 30, True, 'N/A', '1']
     ]
+    green_station = ["Glenbury", 
+                     "Dormont", 
+                     "Mt Lebanon",
+                     "Poplar",
+                     "Castle Shannon",
+                     "Mt Lebanon",
+                     "Dormont",
+                     "Glenbury",
+                     "Overbrook",
+                     "Inglewood",
+                     "Central",
+                     "Whited",
+                     "Station",
+                     "Edgebrook",
+                     "Pioneer",
+                     "Station",
+                     "Whited",
+                     "South Bank",
+                     "Central",
+                     "Inglewood",
+                     "Overbrook"]
+    
+    red_station =  ["Herron",
+     "Swissvile",
+     "Penn Station"
+     "Steel Plaza"
+     "First Ave"
+     "Station Square"
+     "South Hills"
+     "Station Square"
+     "First Ave"
+     "Steel Plaza"
+     "Penn Station"
+     "Swissville"
+     "Herron"
+     "Shadyside"]
+
     red = [
         ['D_10', 40, False, 'N/A', 'N/A'],
         ['D_11', 40, False, 'N/A', 'N/A'],

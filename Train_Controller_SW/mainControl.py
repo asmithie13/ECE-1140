@@ -554,7 +554,7 @@ class Ui_MainWindow(object):
         self.Announcement.setText(_translate("MainWindow", "Annoucement :"))
         self.lineEditAnn.setPlaceholderText(_translate("MainWindow", "Annoucement"))
         self.CurrentOutput.setText(_translate("MainWindow", "Current Output : "))
-        self.CurrentStation.setText(_translate("MainWindow", "Current Station : "))
+        self.CurrentStation.setText(_translate("MainWindow", "Next Station : "))
         self.SpeakerOuputs.setText(_translate("MainWindow", "Speaker Outputs"))
         self.CurStatOut.setText(_translate("MainWindow", "Yard"))
         self.DistanceTillStop.setText(_translate("MainWindow", "Distance until Stop (ft)"))

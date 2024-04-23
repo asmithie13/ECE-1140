@@ -486,7 +486,7 @@ class Ui_MainWindow(object):
         self.inputKi.setMaximum(999999)
         # NOTE THESE VALUES ARE FLIPPED
         self.inputKi.setValue(8000)
-        self.inputKp.setValue(2)
+        self.inputKp.setValue(10)
         self.horizontalLayout_3.addWidget(self.inputKi)
         self.gridLayout_3.addLayout(self.horizontalLayout_3, 2, 0, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox_3, 0, 1, 1, 2)
@@ -551,8 +551,8 @@ class Ui_MainWindow(object):
         self.buttonHDoff.setText(_translate("MainWindow", "Off"))
         self.label.setText(_translate("MainWindow", "Headlights"))
         self.label_14.setText(_translate("MainWindow", "Cabin Temp °F"))
-        self.Announcement.setText(_translate("MainWindow", "Annoucement :"))
-        self.lineEditAnn.setPlaceholderText(_translate("MainWindow", "Annoucement"))
+        self.Announcement.setText(_translate("MainWindow", "Announcement :"))
+        self.lineEditAnn.setPlaceholderText(_translate("MainWindow", ""))
         self.CurrentOutput.setText(_translate("MainWindow", "Current Output : "))
         self.CurrentStation.setText(_translate("MainWindow", "Next Station : "))
         self.SpeakerOuputs.setText(_translate("MainWindow", "Speaker Outputs"))
@@ -564,7 +564,7 @@ class Ui_MainWindow(object):
         self.Speed_Limit.setText(_translate("MainWindow", "Speed Limit (mph)"))
         self.Commanded_Speed.setText(_translate("MainWindow", "Commanded Speed (mph)"))
         self.Current_Speed.setText(_translate("MainWindow", "Current Speed (mph)"))
-        self.groupBox_3.setTitle(_translate("MainWindow", "Power"))
+        self.groupBox_3.setTitle(_translate("MainWindow", "FOR TRAIN ENGINEER ONLY"))
         self.label_4.setText(_translate("MainWindow", "Ki"))
         self.label_3.setText(_translate("MainWindow", "Kp"))
 

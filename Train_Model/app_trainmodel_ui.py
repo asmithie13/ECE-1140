@@ -138,7 +138,6 @@ class TrainModel_mainwindow(QMainWindow):
         self.set_ccount(self.crew_count)
         self.set_pcount(self.people_count)
         if total_ms % 60000 == 0:  # Call set_cabin_temp every minute
-            print("yes")
             self.set_cabin_temp(self.cabin_temp)
         
         

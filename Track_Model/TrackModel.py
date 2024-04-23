@@ -289,7 +289,7 @@ class TrackModelMain(QMainWindow):
         #red line
             if self.line_ctc== "Red":
                 if block_num == 1:
-                    self.currentTrains[trainIndex][3] = 'increasing'
+                    self.currentTrains[trainIndex][3] = 'decreasing'
                 elif block_num == 16:
                     self.currentTrains[trainIndex][3] = 'increasing'
                 elif block_num == 10:
@@ -497,11 +497,13 @@ class TrackModelMain(QMainWindow):
             elif (BlockNum >= 27) and (BlockNum < 16):
                 return BlockNum - 1
             
-            elif (BlockNum == 16):
-                
+            elif (BlockNum == 15):
+                # if direction == 'increasing':
+                #     if self.get_switch_state(28, line_color="Red") == True:
                 return 1
             
             elif (BlockNum >= 1) and (BlockNum <= 9):
+                # if self.get_switch_state(15, line_color="Red") == True:
                 return BlockNum + 1
             
     def get_and_set_crossing_state(self, block_num):

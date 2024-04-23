@@ -37,7 +37,7 @@ class TrainModel_mainwindow(QMainWindow):
     force=0
     velocity=0
     door_state=3
-    brake_state=0
+    brake_state=1
     ebrake_state=0
     people_count=0
     crew_count=2
@@ -549,7 +549,7 @@ class TrainCalculations:
                 self.main_window.a_n=-3.9370078740157477 #in ft/s^2
                 self.main_window.velocity = self.main_window.prev_vel + ((train_model_time_sec-self.main_window.prev_time)/2)*(self.main_window.a_n + self.a_n_prev)
                 self.main_window.Acceleration_value_lcd.display("{:.3f}".format(self.main_window.a_n))
-                if self.main_window.velocity<0.1:
+                if self.main_window.velocity<=0.1:
                     self.main_window.velocity=0
 
             

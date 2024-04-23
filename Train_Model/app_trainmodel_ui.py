@@ -173,6 +173,15 @@ class TrainModel_mainwindow(QMainWindow):
         block_change=polarity
         if trainID == self.TrainID:
             self.TC.block_passed_sig.emit(block_change)
+    
+    def receive_bool_auth(self,trainID,bool_auth):
+        if trainID == self.TrainID:
+            bool_a=bool_auth
+        pass
+
+    
+        
+        
        
     
     def stop_at_station(self,stop_bool):

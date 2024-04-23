@@ -20,7 +20,7 @@ class Vital_Speed_Auth():
         self.decimal_m_auth = 0
         self.stop_at_station_sig = stop_at_station_sig
         self.NonVital = NonVital
-        self.bool_auth_enabled = False
+        self.bool_auth_enabled = True
 
     def Control_Current_Speed(self,newSpeed):
         self.ui.lcdCurSpd.display("{:.2f}".format(newSpeed))
@@ -87,7 +87,7 @@ class Vital_Speed_Auth():
             self.stoppubgdistanceEmergency = (self.V_i**2)/(2*2.73) 
             #print("E Stop: ", self.stoppubgdistanceEmergency)
 
-            if self.bool_auth_enabled == 1:
+            if self.bool_auth_enabled == False:
                 self.ui.vertSliderBrk.setValue(1)
                 self.ui.vertSliderPow.setEnabled(False)
 

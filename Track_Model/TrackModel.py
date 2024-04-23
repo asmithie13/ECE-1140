@@ -288,8 +288,15 @@ class TrackModelMain(QMainWindow):
 
         #red line
             if self.line_ctc== "Red":
-                if block_num == 16:
+                if block_num == 1:
                     self.currentTrains[trainIndex][3] = 'increasing'
+                elif block_num == 16:
+                    self.currentTrains[trainIndex][3] = 'increasing'
+                elif block_num == 10:
+                    self.currentTrains[trainIndex][3] = 'increasing'
+                elif block_num == 28:
+                    self.currentTrains[trainIndex][3] = 'increasing'
+
                 elif block_num == 76:
                     self.currentTrains[trainIndex][3] = 'decreasing'
                 elif block_num == 71:
@@ -336,24 +343,26 @@ class TrackModelMain(QMainWindow):
                 self.currentTrains[trainIndex][2] = speed_of_train_m - (block_length - total_dis_from_beg_of_block)
                         
 
-    def get_switch_state_green(self, block_num):
-        #Convert block number to string
+    def get_switch_state(self, block_num, line_color=None):
+        # Convert block number to string if not already
         block_num_str = str(block_num)
 
-        #Find the block ID that ends with the block number string
-        block_id = next((id for id in self.block_ids_green if id.endswith(block_num_str)), None)
+        # Attempt to find the block ID in the block states dictionary
+        block_id = next((id for id, val in self.blockStates.items() if id.endswith(block_num_str) and (line_color is None or val.get('lineColor') == line_color)), None)
+
         if block_id:
-            # Retrieve the switch state from your blockStates dictionary or similar data structure
+            # Retrieve the switch state from your blockStates dictionary
             block_state = self.blockStates.get(block_id, {})
             return block_state.get('switchState', 'N/A')
         else:
             return 'N/A'
 
+    
     def get_next_id(self, BlockNum, direction, line):
         if line == 'Green':
             #A1 to D13 switch block
             if BlockNum == 1:
-                if self.get_switch_state_green(13) == False:
+                if self.get_switch_state(13,line_color="Green") == False:
                     return 13
                 else:
                     return 1
@@ -365,7 +374,7 @@ class TrackModelMain(QMainWindow):
             #D switch block
             elif BlockNum == 13:
                 if direction == 'decreasing':
-                    if self.get_switch_state_green(13) == True:
+                    if self.get_switch_state(13,line_color="Green") == True:
                         return 12
                     else:
                         return 13
@@ -384,7 +393,7 @@ class TrackModelMain(QMainWindow):
                 if direction == 'decreasing':
                     return 27
                 else:
-                    if self.get_switch_state_green(28) == True:
+                    if self.get_switch_state(28,line_color="Green") == True:
                         return 29
                     else:
                         return 28
@@ -405,9 +414,9 @@ class TrackModelMain(QMainWindow):
                 if direction == 'increasing':
                     return 78
                 elif direction == 'decreasing':
-                    if self.get_switch_state_green(77) == False:
+                    if self.get_switch_state(77,line_color="Green") == False:
                         return 101
-                    elif self.get_switch_state_green(77) == True:
+                    elif self.get_switch_state(77,line_color="Green") == True:
                         return 76
                     else:
                         return 77
@@ -424,7 +433,7 @@ class TrackModelMain(QMainWindow):
             #n switch on block 85, can come from N84 or Q100
             elif BlockNum == 85:
                 if direction == 'increasing':
-                    if self.get_switch_state_green(85) == True:
+                    if self.get_switch_state(85,line_color="Green") == True:
                         return 86
                     else:
                         return 85
@@ -437,7 +446,7 @@ class TrackModelMain(QMainWindow):
             
             #Q100
             elif BlockNum == 100:
-                if self.get_switch_state_green(85) == False:
+                if self.get_switch_state(85, line_color="Green") == False:
                     return 85
                 else:
                     return 100
@@ -447,7 +456,7 @@ class TrackModelMain(QMainWindow):
                 return BlockNum + 1
 
             elif BlockNum == 150:
-                if self.get_switch_state_green(28) == False:
+                if self.get_switch_state(28, line_color="Green") == False:
                     return 28
                 else: 
                     return 150
@@ -457,28 +466,41 @@ class TrackModelMain(QMainWindow):
             #Red line train dispatch case        
             if (BlockNum >= 10) and (BlockNum < 66):
                 return BlockNum + 1
+            
             elif (BlockNum == 66):
                 return 52
+            
             elif (BlockNum >= 52) and (BlockNum < 43):
                 return BlockNum - 1
+            
             elif (BlockNum == 43):
                 return 67
+            
             elif (BlockNum >=67) and (BlockNum < 71):
                 return BlockNum + 1
+            
             elif (BlockNum == 71):
                 return 38
+            
             elif (BlockNum >= 38) and (BlockNum < 32):
                 return BlockNum - 1
+            
             elif (BlockNum == 32):
                 return 72
+            
             elif (BlockNum >= 72) and (BlockNum < 76):
                 return BlockNum + 1
+            
             elif (BlockNum == 76):
                 return 27
+            
             elif (BlockNum >= 27) and (BlockNum < 16):
                 return BlockNum - 1
+            
             elif (BlockNum == 16):
+                
                 return 1
+            
             elif (BlockNum >= 1) and (BlockNum <= 9):
                 return BlockNum + 1
             

@@ -55,7 +55,7 @@ class Vital_Speed_Auth():
         #calculate authority using d=r*t
         self.rate = self.ui.lcdCurSpd.value()*0.00146667 #mph to fpms
         self.rate_metric = self.ui.lcdCurSpd.value()*0.00044704 #mph to m/,ms,
-        self.time = self.local_clock - self.prev_time
+        self.time = (self.local_clock - self.prev_time)
         self.prev_time = self.local_clock 
 
         current_speed = self.ui.lcdCurSpd.value()
@@ -73,18 +73,18 @@ class Vital_Speed_Auth():
             self.AuthM = self.decimal_m_auth
     
             #current speed in m/ms from mph
-            self.V_i = (self.ui.lcdCurSpd.value()*0.00044704)
+            self.V_i = (self.ui.lcdCurSpd.value()*0.44704)
 
             #from top speed (70kph) it takes 157.535288067 m to stop with the service brake
             #from top speed (70kph) it takes 70.0156835852 m to stop with the emergency brake
 
         
             #if self.stopcal == True:
-            self.stoppingdistanceService = (self.V_i**2)/(2*0.000012)   
-            print("Stopping Distance :",self.stoppingdistanceService)
-            print(self.stoppingdistanceService)
+            self.stoppingdistanceService = (self.V_i**2)/(2*1.2)   
+            #print("Stopping Distance :",self.stoppingdistanceService)
+            #print(self.stoppingdistanceService)
             #print("Dist Service : ", self.stoppingdistanceService)
-            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*0.0000273) 
+            self.stoppubgdistanceEmergency = (self.V_i**2)/(2*2.73) 
             #print("E Stop: ", self.stoppubgdistanceEmergency)
 
             if self.bool_auth_enabled == 1:

@@ -129,7 +129,6 @@ class TrainModel_mainwindow(QMainWindow):
         seconds, ms = map(int, parts[2].split('.'))
         total_ms = hours*3600000 + minutes*60000 + seconds*1000 + ms
         self.train_calculations.set_time(total_ms)
-        
         self.mass=self.train_calculations.get_mass(self.comm_speed,self.grade,self.mass)
         self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
         self.train_calculations.Calculate_acceleration(self.comm_speed,self.grade,self.mass)
@@ -524,7 +523,7 @@ class TrainCalculations:
         train_model_time=self.get_time()
         
         #converting sec to hours
-        train_model_time_sec=train_model_time/(1000)  #in seconds
+        train_model_time_sec=train_model_time/(1000.0)  #in seconds
         self.main_window.velocity = self.main_window.prev_vel + ((train_model_time_sec-self.main_window.prev_time)/2)*(self.main_window.a_n + self.a_n_prev)
         if self.main_window.velocity>0:
             if self.main_window.ebrake_state==1:
@@ -562,7 +561,6 @@ class TrainCalculations:
 
         #ft/sec to mph
         self.velocity_mph=(self.main_window.velocity)/1.467
-
 
         self.main_window.Acc_Velo_value_lcd.display("{:.2f}".format(self.velocity_mph))
         self.TC.curr_spd_sig.emit(float(self.velocity_mph))

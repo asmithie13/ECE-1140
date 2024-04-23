@@ -8,7 +8,7 @@ grav_force=mass_kgs*9.81*math.sin(theta) #in kgm/ms^2
 prev_vel=0
 a_n_prev=0
 velocity=0
-dt=160
+dt= 160
 
 while(1):
     try:
@@ -22,8 +22,9 @@ while(1):
     a_n = force/mass_kgs*3.281 #in ft/ms^2
     print("Acceleration", a_n)
 
-    current_speed= prev_vel + ((dt)/2)*(a_n + a_n_prev)
+    velocity = prev_vel + ((dt)/2)*(a_n + a_n_prev)
 
-    print("Current Speed", current_speed)
+    print("Current Speed", velocity)
     a_n_prev=a_n 
+    prev_vel = velocity
 

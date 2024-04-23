@@ -543,6 +543,7 @@ class TrainCalculations:
                 self.main_window.Acceleration_value_lcd.display("{:.3f}".format(self.main_window.a_n))
                 if self.main_window.velocity<0.1:
                     self.main_window.velocity=0
+
             
         self.main_window.prev_vel=self.main_window.velocity
        

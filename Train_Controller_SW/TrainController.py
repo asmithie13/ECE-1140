@@ -24,7 +24,7 @@ class TrainController(QMainWindow):
     brk_fail_sig = pyqtSignal(bool)
     sig_fail_sig = pyqtSignal(bool)
     beacon_info_sig = pyqtSignal(int)
-    block_change = pyqtSignal(bool)
+    #block_change = pyqtSignal(bool)
     #non vital we recieve
     #underground_sig = pyqtSignal(bool)
     block_passed_sig = pyqtSignal(bool)

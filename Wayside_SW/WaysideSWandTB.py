@@ -369,7 +369,7 @@ class WaysideSW(QMainWindow):
             
 
         if selectedIndex == 0 and self.selectRedLine.isChecked():
-            self.currentBlocks = self.redWayside1Blocks
+            self.currentBlocks = self.allRedBlocks
             self.currentSpecialBlocks = self.specialRedBlocksW1
             self.blockMenu.setDisabled(False)
 
@@ -381,10 +381,10 @@ class WaysideSW(QMainWindow):
             self.currentSwitchBlocksNums = self.redCrossingTriplesIDS
 
             self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)
-            self.sendAllBlocks.emit(self.redWayside1Blocks)
+            self.sendAllBlocks.emit(self.allRedBlocks)
 
         if selectedIndex == 1 and self.selectRedLine.isChecked():
-            self.currentBlocks = self.redWayside2Blocks
+            self.currentBlocks = self.allRedBlocks
             self.currentSpecialBlocks = self.specialRedBlocksW2
             self.blockMenu.setDisabled(False)
 
@@ -396,7 +396,7 @@ class WaysideSW(QMainWindow):
             self.currentSwitchBlocksNums = self.redCrossingTriplesIDS
 
             self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)
-            self.sendAllBlocks.emit(self.redWayside2Blocks)
+            self.sendAllBlocks.emit(self.allRedBlocks)
 
     def blockActions(self):
         selectedIndex = self.blockMenu.currentIndex()

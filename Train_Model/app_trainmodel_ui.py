@@ -129,7 +129,6 @@ class TrainModel_mainwindow(QMainWindow):
         seconds, ms = map(int, parts[2].split('.'))
         total_ms = hours*3600000 + minutes*60000 + seconds*1000 + ms
         self.train_calculations.set_time(total_ms)
-        
         self.mass=self.train_calculations.get_mass(self.comm_speed,self.grade,self.mass)
         self.train_calculations.calculate_force(self.comm_speed,self.grade,self.mass)
         self.train_calculations.Calculate_acceleration(self.comm_speed,self.grade,self.mass)
@@ -138,6 +137,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.set_ccount(self.crew_count)
         self.set_pcount(self.people_count)
         if total_ms % 60000 == 0:  # Call set_cabin_temp every minute
+            #print("yes")
             self.set_cabin_temp(self.cabin_temp)
         
         
@@ -478,6 +478,9 @@ class TrainCalculations:
         self.commanded_speed=commanded_speed #in meters/sec
         self.grade=grade
         self.g=9.81 #m/sec^2
+        #velocity in ft/s
+        #ft to m div by 3.281
+
         #self.force=self.main_window.force
        
        
@@ -486,11 +489,11 @@ class TrainCalculations:
         self.grav_force=mass*9.81*math.sin(theta)
         power = self.main_window.Power_value_lcd.value()#in watts
         try:
-            self.main_window.force = (power / self.main_window.velocity) - self.grav_force 
+            self.main_window.force = (power / (self.main_window.velocity/3.281)) - self.grav_force 
         except ZeroDivisionError:
-            self.main_window.velocity=0.1
-            self.main_window.force = (power / self.main_window.velocity) - self.grav_force 
-
+            # self.main_window.velocity=0.1
+            # self.main_window.force = (power / self.main_window.velocity) - self.grav_force 
+            self.main_window.force = 1000
     
     
         return self.main_window.force
@@ -499,16 +502,15 @@ class TrainCalculations:
         self.mass=mass #in kg
         self.commanded_speed=commanded_speed #in m/s
         self.grade=grade
+        acceleration=0  
         #force = self.calculate_force(self.commanded_speed,self.grade,mass) #in kgm/s^2
-        
-        acceleration = float((self.main_window.force/self.mass)*3.281) #in ft/s^2
-            #acceleration=round(acceleration,3)
+        if self.main_window.brake_state==0:
+            acceleration = float((self.main_window.force/self.mass)*3.281) #in ft/s^2
+            if acceleration>1.6:
+                acceleration=1.64
+                #acceleration=round(acceleration,3)
+          
 
-        # if self.main_window.brake_state==1:
-        #     acceleration=-3.9370078740157477 #in ft/s^2
-        
-        # if self.main_window.ebrake_state==1:
-        #     acceleration=-8.956692913385826 #in ft/s^2
 
         self.main_window.Acceleration_value_lcd.display("{:.3f}".format(acceleration))
         return acceleration
@@ -532,23 +534,24 @@ class TrainCalculations:
         train_model_time=self.get_time()
         
         #converting sec to hours
-        train_model_time_sec=train_model_time/(1000)  #in seconds
-        self.main_window.velocity = self.main_window.prev_vel + ((train_model_time_sec-self.main_window.prev_time)/2)*(self.main_window.a_n + self.a_n_prev)
+        train_model_time_sec=train_model_time/(1000.0)  #in seconds
+        self.main_window.velocity = self.main_window.prev_vel + ((train_model_time_sec-self.main_window.prev_time))*(self.main_window.a_n + self.a_n_prev)
         if self.main_window.velocity>0:
             if self.main_window.ebrake_state==1:
                 #('ebrake state entered')
                 self.main_window.a_n=-8.956692913385826 #in ft/s^2
-                self.main_window.velocity = self.main_window.prev_vel + ((train_model_time_sec-self.main_window.prev_time)/2)*(self.main_window.a_n)
+                self.main_window.velocity = self.main_window.prev_vel + ((train_model_time_sec-self.main_window.prev_time))*(self.main_window.a_n + self.a_n_prev)
                 self.main_window.Acceleration_value_lcd.display("{:.3f}".format(self.main_window.a_n))
                                     
 
             elif self.main_window.brake_state==1:
                 #print('service brakes entered')
                 self.main_window.a_n=-3.9370078740157477 #in ft/s^2
-                self.main_window.velocity = self.main_window.prev_vel + ((train_model_time_sec-self.main_window.prev_time)/2)*(self.main_window.a_n)
+                self.main_window.velocity = self.main_window.prev_vel + ((train_model_time_sec-self.main_window.prev_time)/2)*(self.main_window.a_n + self.a_n_prev)
                 self.main_window.Acceleration_value_lcd.display("{:.3f}".format(self.main_window.a_n))
                 if self.main_window.velocity<0.1:
                     self.main_window.velocity=0
+
             
         self.main_window.prev_vel=self.main_window.velocity
        
@@ -570,8 +573,6 @@ class TrainCalculations:
 
         #ft/sec to mph
         self.velocity_mph=(self.main_window.velocity)/1.467
-
-
 
         self.main_window.Acc_Velo_value_lcd.display("{:.2f}".format(self.velocity_mph))
         self.TC.curr_spd_sig.emit(float(self.velocity_mph))

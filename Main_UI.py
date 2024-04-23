@@ -116,8 +116,11 @@ class Main_UI(QtWidgets.QMainWindow):
         #Ticket sales
         #self.TrackModelWindow.people_boarding_sig.connect(self.currentTrains[-1].set_pcount)
 
+        #Boolean auth
+        #self.TrackModelWindow.send_bool_auth.connect(self.currentTrains[-1].
+                                                     
         #Polarity
-        self.TrackModelWindow.send_polarity.connect(self.currentTrains[-1].receive_polarity)
+        #self.TrackModelWindow.send_polarity.connect(self.currentTrains[-1].receive_polarity)
         
         #Train Model to Track Model
         # Actual Velocity

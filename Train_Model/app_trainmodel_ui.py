@@ -174,6 +174,7 @@ class TrainModel_mainwindow(QMainWindow):
         block_change=polarity
         if trainID == self.TrainID:
             self.TC.block_passed_sig.emit(block_change)
+            print("polarity received")
        
     
     def stop_at_station(self,stop_bool):

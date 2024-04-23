@@ -60,7 +60,7 @@ class TrackModelMain(QMainWindow):
 
     send_beacon = pyqtSignal(int)
 
-    send_polarity = pyqtSignal(list, bool)
+    send_polarity = pyqtSignal(str, bool)
 
     send_bool_auth = pyqtSignal(str, bool)
 
@@ -213,7 +213,7 @@ class TrackModelMain(QMainWindow):
             self.occupied_blocks.append('D10')
             self.dt.append(0.0)
             self.prev_time.append(0.0)
-            #self.send_beacon.emit(1)
+            self.send_beacon.emit(1)
             self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
             self.load_default_track_layout()
             self.update_occupied_blocks()
@@ -271,7 +271,7 @@ class TrackModelMain(QMainWindow):
         # if train moves to the next block
         if total_dis_from_beg_of_block >= block_length:
 
-            print(trainId, True)
+            #print(trainId, True)
             #emit signal for polarity
             self.send_polarity.emit(trainId, True)
 
@@ -537,7 +537,6 @@ class TrackModelMain(QMainWindow):
         if authority_value == True:
             #Ensure the value is a boolean (depends on how data is received)
             is_authorized = bool(authority_value)  # Convert to boolean (assumes non-None means True)
-
             
             #emit the boolean authority
             self.send_bool_auth.emit(train_id, is_authorized)

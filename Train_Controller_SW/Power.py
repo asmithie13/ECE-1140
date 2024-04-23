@@ -22,7 +22,7 @@ class Vital_Power():
         self.prevError = 0
         self.prevUk = 0
         self.prevTime = 0
-        
+
         self.curr_power_sig = curr_power_sig
 
 
@@ -41,7 +41,7 @@ class Vital_Power():
     
     def calculate_power(self):
         self.time = self.local_clock
-        self.dt = self.time - self.prevTime
+        self.dt = (self.time - self.prevTime)/1000
         self.prevTime = self.time
         
         
@@ -57,13 +57,13 @@ class Vital_Power():
         else:
             self.error = float(self.ui.lcdCmdSpd.value()) * 0.00044704 - float(self.ui.lcdCurSpd.value()) * 0.00044704
             #has dt
-            self.uk = self.prevUk + (self.error + self.prevError) * self.dt / 2
+            self.uk = self.prevUk + (self.error + self.prevError) * (self.dt / 2)
             self.prevError = self.error
             self.prevUk = self.uk
 
-            self.power0 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.lcdPowOut.value()) / 100.0)
-            self.power1 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.lcdPowOut.value()) / 100.0)  
-            self.power2 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.lcdPowOut.value()) / 100.0)
+            self.power0 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.vertSliderPow.value()) / 100.0)
+            self.power1 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.vertSliderPow.value()) / 100.0)  
+            self.power2 = (float(self.ui.lcdKp.value()) * self.error + float(self.ui.lcdKi.value()) * self.uk) * (float(self.ui.vertSliderPow.value()) / 100.0)
 
             if(self.power0 == self.power1 or self.power1 == self.power2 or self.power0 == self.power2):
                 if(self.power0 == self.power1):
@@ -75,7 +75,7 @@ class Vital_Power():
             else: 
                 self.power = 0
             
-            if self.power > 120000:
+            if self.power > 120000: 
                 self.power = 120000
             elif self.power < 0:
                 self.power = 0
@@ -84,7 +84,7 @@ class Vital_Power():
         self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
         self.ui.lcdAcel.display(self.power)
         self.curr_power_sig.emit(int(self.power))
-        
+
     """
     def calculate_power(self):
         if self.ui.Ebrake.isChecked():

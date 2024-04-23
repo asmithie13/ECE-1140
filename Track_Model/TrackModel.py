@@ -555,7 +555,7 @@ class TrackModelMain(QMainWindow):
 
         # Extract the authority value from the block state dictionary
         authority_value = block_state.get('authority', None)
-        print(train_id,block_id, authority_value)
+        #print(train_id,block_id, authority_value)
         #print(authority_value)
         # Check if the authority exists and is explicitly set to a boolean
         if authority_value == True:

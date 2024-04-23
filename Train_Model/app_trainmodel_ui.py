@@ -137,7 +137,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.set_ccount(self.crew_count)
         self.set_pcount(self.people_count)
         if total_ms % 60000 == 0:  # Call set_cabin_temp every minute
-            print("yes")
+            #print("yes")
             self.set_cabin_temp(self.cabin_temp)
         
         
@@ -479,9 +479,9 @@ class TrainCalculations:
         try:
             self.main_window.force = (power / self.main_window.velocity) - self.grav_force 
         except ZeroDivisionError:
-            self.main_window.velocity=0.1
-            self.main_window.force = (power / self.main_window.velocity) - self.grav_force 
-
+            # self.main_window.velocity=0.1
+            # self.main_window.force = (power / self.main_window.velocity) - self.grav_force 
+            self.main_window.force = 1000
     
     
         return self.main_window.force
@@ -490,16 +490,15 @@ class TrainCalculations:
         self.mass=mass #in kg
         self.commanded_speed=commanded_speed #in m/s
         self.grade=grade
+        acceleration=0  
         #force = self.calculate_force(self.commanded_speed,self.grade,mass) #in kgm/s^2
-        
-        acceleration = float((self.main_window.force/self.mass)*3.281) #in ft/s^2
-            #acceleration=round(acceleration,3)
+        if self.main_window.brake_state==0:
+            acceleration = float((self.main_window.force/self.mass)*3.281) #in ft/s^2
+            if acceleration>1.6:
+                acceleration=1.64
+                #acceleration=round(acceleration,3)
+          
 
-        # if self.main_window.brake_state==1:
-        #     acceleration=-3.9370078740157477 #in ft/s^2
-        
-        # if self.main_window.ebrake_state==1:
-        #     acceleration=-8.956692913385826 #in ft/s^2
 
         self.main_window.Acceleration_value_lcd.display("{:.3f}".format(acceleration))
         return acceleration

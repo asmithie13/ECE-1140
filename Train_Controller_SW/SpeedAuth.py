@@ -23,7 +23,7 @@ class Vital_Speed_Auth():
         self.bool_auth_enabled = False
 
     def Control_Current_Speed(self,newSpeed):
-        self.ui.lcdCurSpd.display(newSpeed)
+        self.ui.lcdCurSpd.display("{:.2f}".format(newSpeed))
     
     def Set_Clock(self, time):
          self.local_clock = time

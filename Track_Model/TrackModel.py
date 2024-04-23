@@ -572,22 +572,14 @@ class TrackModelMain(QMainWindow):
 
 
     def update_block_colors(self):
-        # Check if the length of prev_occupied_blocks matches occupied_blocks
-        if len(self.prev_occupied_blocks) != len(self.occupied_blocks):
-            # Adjust prev_occupied_blocks to match the current number of trains
-            self.prev_occupied_blocks = [''] * len(self.occupied_blocks)
+        # Reset all blocks to green first
+        for block_id in self.block_ids_green:  # Assuming block_ids_green contains all block IDs
+            self.update_block_color(block_id, "green")
+        
+        # Update current occupied blocks to orange
+        for block_id in self.occupied_blocks:
+            self.update_block_color(block_id, "orange")
 
-        for i, block_id in enumerate(self.occupied_blocks):
-            if block_id:  # Ensure there's a current block to process
-                # Update the current block to orange
-                self.update_block_color(block_id, "orange")
-
-                # Check and update the previous block to green, if there was a previous block
-                if i < len(self.prev_occupied_blocks) and self.prev_occupied_blocks[i]:
-                    self.update_block_color(self.prev_occupied_blocks[i], "green")
-
-                # Update previous block tracker for the current train
-                self.prev_occupied_blocks[i] = block_id
 
 
 
@@ -617,6 +609,17 @@ class TrackModelMain(QMainWindow):
             button.setStyleSheet(color_style[color])
 
 
+    def move_train_to_block(self, train_id, new_block_id):
+        # Find the train and update its current block
+        for train in self.currentTrains:
+            if train[0] == train_id:
+                # Optionally, set the previous block to green if needed
+                self.update_block_color(train[-1], "green")
+                # Update the train's current block
+                train[-1] = new_block_id
+                # Set the new block to orange
+                self.update_block_color(new_block_id, "orange")
+                break
 
     def update_occupied_blocks(self):
         occupancies = self.occupied_blocks + self.occupied_block_failures  #Combine the lists of occupied and failed blocks

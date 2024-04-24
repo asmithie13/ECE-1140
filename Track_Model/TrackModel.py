@@ -620,6 +620,9 @@ class TrackModelMain(QMainWindow):
 
 
     def update_block_color(self, block_id, color):
+        if self.line_ctc == 'Red':
+            block_id += '_r'
+        
         button = self.findChild(QPushButton, block_id)
         if button:
             color_style = {
@@ -674,12 +677,20 @@ class TrackModelMain(QMainWindow):
         for train in self.currentTrains:
             if train[0] == train_id:
                 # Optionally, set the previous block to green if needed
-                self.update_block_color(train[-1], "green")
-                # Update the train's current block
-                train[-1] = new_block_id
-                # Set the new block to orange
-                self.update_block_color(new_block_id, "orange")
-                break
+                if self.line_ctc == 'Red':
+                    self.update_block_color(train[-1], "red")
+                    # Update the train's current block
+                    train[-1] = new_block_id
+                    # Set the new block to orange
+                    self.update_block_color(new_block_id, "orange")
+                    break
+                else:
+                    self.update_block_color(train[-1], "green")
+                    # Update the train's current block
+                    train[-1] = new_block_id
+                    # Set the new block to orange
+                    self.update_block_color(new_block_id, "orange")
+                    break
 
     def update_occupied_blocks(self):
         occupancies = self.occupied_blocks + self.occupied_block_failures  #Combine the lists of occupied and failed blocks

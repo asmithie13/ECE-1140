@@ -140,6 +140,8 @@ class WaysideSW(QMainWindow):
         self.greenWayside2Blocks = [x for x in self.allGreenBlocks if x.blockSection not in wayside1Chars]
         self.currentBlocks = self.greenWayside2Blocks
 
+        for block in self.greenWayside2Blocks: print(block.ID)
+
         self.sendGreenSwitchPos.emit(self.greenWayside2Blocks)
                                      
         #Defines special greenblocks in wayside 1     
@@ -147,45 +149,7 @@ class WaysideSW(QMainWindow):
             if block.LIGHT or block.CROSSING or block.SWITCH : self.specialGreenBlocksW2.append(block)
             block.Wayside = "W2"
             
-        #2D array of blocks within 5 blocks of each other
-        self.green5blocks = []
-
-        for block in self.allGreenBlocks:
-            tempList = []
-            for x in range(5,-1,-1): 
-                temp1 = int(block.blockNum) - x - 1
-                if temp1 < 1: continue
-                tempList.append(temp1)
-            for x in range(5): 
-                temp2 = int(block.blockNum) + x + 1
-                if temp2 > len(self.allGreenBlocks): continue
-                tempList.append(temp2)
-            self.green5blocks.append(tempList)
-
-        switch1 = [5,4,3,2,1,12,13,14,15,16]
-        switch2 = [24,25,26,27,28,150,149,148,147,146]
-        switch3 = [72,73,74,75,76,101,102,103,104,105]
-        switch4 = [81,82,83,84,85,100,101,102,103,104]
-
-        # Define the pattern
-        pattern = [slice(i, i + 5) for i in range(1,6)]
-
-        # Apply the pattern to each switch
-        new_switch1 = [switch1[s] for s in pattern]
-        new_switch2 = [switch2[s] for s in pattern]
-        new_switch3 = [switch3[s] for s in pattern]
-        new_switch4 = [switch4[s] for s in pattern]
-
-        # Apply the pattern to each switch
-        switches = [switch1, switch2, switch3, switch4]
-
-        for switch, pattern in zip(switches, [new_switch1, new_switch2, new_switch3, new_switch4]):
-            for index, arr in zip(switch, pattern):
-                for x in arr:
-                    if x not in self.green5blocks[index - 1]:
-                        self.green5blocks[index - 1].append(x)
-
-       
+        
 
         #Defines Red line blocks
         self.redCrossingTriplesIDS = [] #ids of red crossing blocks
@@ -293,10 +257,8 @@ class WaysideSW(QMainWindow):
                 return
                 
             for block in self.currentBlocks:
-                if block.LIGHT and block.lightState: block.authority = True
-                elif block.LIGHT and not block.lightState: block.authority = False
+                self.handleLights(block)
 
-            
             self.sendGreenSwitchPos.emit(self.greenWayside2Blocks)
             self.sendRedSwitchPos.emit(self.allRedBlocks)
             self.blockActions()
@@ -565,15 +527,6 @@ class WaysideSW(QMainWindow):
                 if block_id == block.ID:
                     block.occupied = True
                     self.occupiedBlocks.append(block)
-
-        for block in sentBlocks:
-            blockNum = int(block[1:])
-            for x in (self.green5blocks[blockNum - 1]):
-                if self.allGreenBlocks[x - 1].occupied:
-                    self.allGreenBlocks[x - 1].authority = False
-                elif not self.allGreenBlocks[x - 1].occupied and self.allGreenBlocks[x - 1].lightState:
-                    self.allGreenBlocks[x - 1].authority = True
-
         
         self.BlockOcc.setText(" ".join(sentBlocks))
         #ADD CODE HERE FOR MAITANCE
@@ -588,6 +541,8 @@ class WaysideSW(QMainWindow):
                 print("Redundancy Check Failed")
                 return
             
+        for block in self.currentBlocks:
+            self.handleLights(block)
             
         self.blockActions()
         self.sendSpecialBlocks.emit(self.currentBlocks)
@@ -616,6 +571,22 @@ class WaysideSW(QMainWindow):
 
         names = [x.ID for x in self.occupiedBlocks]
         self.BlockOcc.setText(" ".join(names))
+
+    def handleLights(self, block):
+        if block.ID == "M76" and block.lineColor == "Green":
+            if block.lightState:
+                self.allGreenBlocks[77].authority = True
+                self.allGreenBlocks[76].authority = True
+                self.allGreenBlocks[75].authority = True
+                self.allGreenBlocks[74].authority = True
+                self.allGreenBlocks[73].authority = True
+            else:
+                self.allGreenBlocks[77].authority = False
+                self.allGreenBlocks[76].authority = False
+                self.allGreenBlocks[75].authority = False
+                self.allGreenBlocks[74].authority = False
+                self.allGreenBlocks[73].authority = False
+
         
 class TestBench(QMainWindow):
 

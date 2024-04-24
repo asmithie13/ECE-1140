@@ -174,7 +174,8 @@ class Line_Dictionary():
         ['I_54', 30, True, 'N/A', 'N/A'],
         ['I_55', 30, True, 'Approaching OVERBROOK', 'N/A'],
         ['I_56', 30, True, 'Welcome to OVERBROOK', 'N/A'],
-        ['I_57', 30, True, 'N/A', '1']
+        ['I_57', 30, True, 'N/A', '1'],
+        ['I_58', 30, True, 'N/A', '1']
     ]
     green_station = ["Glenbury", 
                      "Dormont", 

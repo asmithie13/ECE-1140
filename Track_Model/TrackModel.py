@@ -602,16 +602,16 @@ class TrackModelMain(QMainWindow):
 
 
     def update_block_colors(self):
-        # Reset all blocks to green first
+        #Reset all blocks to green first
         for block_id in self.block_ids_green:
             self.update_block_color(block_id, "green")
 
-        # Update current occupied blocks to orange
+        #Update current occupied blocks to orange
         for block_id in self.occupied_blocks:
             if block_id not in self.occupied_block_failures:
                 self.update_block_color(block_id, "orange")
 
-        # Update failure states with specific colors
+        #Update failure states with specific colors
         for block_id in self.occupied_block_failures:
             failure_type = self.failure_types.get(block_id, 'broken_rail') 
             failure_color = self.failure_colors.get(failure_type, 'grey')  

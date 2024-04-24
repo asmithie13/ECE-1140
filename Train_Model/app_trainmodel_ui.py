@@ -135,7 +135,7 @@ class TrainModel_mainwindow(QMainWindow):
         
         self.set_ccount(self.crew_count)
         self.set_pcount(self.people_count)
-        if total_ms % 60000 == 0:  # Call set_cabin_temp every minute
+        if total_ms % 6000 == 0:  # Call set_cabin_temp every minute
             self.set_cabin_temp(self.cabin_temp)
         
         
@@ -192,15 +192,17 @@ class TrainModel_mainwindow(QMainWindow):
         # If ebrake is enabled
         if self.ebrake_state:
             if self.ebrake.setChecked(True):
-                self.TC.ebrake_sig.emit(1)  # Emit the ebrake signal with value 1
+                self.TC.ebrake_sig.emit(1) # Emit the ebrake signal with value 1
             else:
                 self.ebrake.setChecked(True)  # Set the ebrake button to checked (ON)
             self.ebrake.setEnabled(False)  # Disable the ebrake button
+            
 
         else:
 
             self.ebrake.setEnabled(True)  # Enable the ebrake button
             self.ebrake.setChecked(False)  # Set the ebrake button to unchecked (OFF)
+          
             
   
     def set_length(self, input_txt):
@@ -490,7 +492,7 @@ class TrainCalculations:
         self.grade=grade
         acceleration=0  
 
-        if self.main_window.brake_state==0:
+        if self.main_window.brake_state==0 :
             acceleration = float((self.main_window.force/self.mass)*3.281) #in ft/s^2
             if acceleration>1.6:
                 acceleration=1.64
@@ -519,6 +521,7 @@ class TrainCalculations:
                 self.main_window.a_n=-8.956692913385826 #in ft/s^2
                 self.main_window.velocity = self.main_window.prev_vel + ((train_model_time_sec-self.main_window.prev_time))*(self.main_window.a_n + self.a_n_prev)
                 self.main_window.Acceleration_value_lcd.display("{:.3f}".format(self.main_window.a_n))
+                
                                     
 
             elif self.main_window.brake_state==1:

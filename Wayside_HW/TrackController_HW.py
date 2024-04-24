@@ -35,9 +35,9 @@ class TrackController_HW(QMainWindow):
         #Constant lists for blocks affected based on light color:
         self.LIGHT_A1 = ['A1', 'A2']
         self.LIGHT_C12 = ['C11', 'C12']
-        self.LIGHT_G29 = ['F26', 'F27', 'F28', 'G29']
+        self.LIGHT_G29 = ['G29', 'G30', 'G31']
         self.LIGHT_Z150 = ['Y148', 'Y149', 'Z150']
-        self.ALL_LIGHT = ['A1', 'A2', 'C12', 'D13', 'F26', 'F27', 'F28', 'G29', 'Y148', 'Y149', 'Z150']
+        self.ALL_LIGHT = ['A1', 'A2', 'C12', 'D13', 'G29', 'G30', 'G31', 'Y148', 'Y149', 'Z150']
 
         #Disable manual mode operations, as program begins in automatic operation:
         self.groupBoxManual.setEnabled(False)
@@ -480,12 +480,52 @@ class TrackController_HW(QMainWindow):
         self.setMaintenanceSwitch()
     
     def setMaintenanceSwitch(self): #Function to set maintenance mode switch positions from CTC
+        flagLightOne = None
+        flagLightTwo = None
+
         for blockOne in self.maintenanceSwitches:
             for blockTwo in self.allBlocks:
                 if blockOne.ID == blockTwo.ID:
                     blockTwo.switchState = blockOne.switchState
+                    if self.modeFlag == 0:
+                        if blockTwo.ID == 'D13' and blockTwo.switchState == True:
+                            flagLightOne = True
+                        elif blockTwo.ID == 'D13' and blockTwo.switchState == False:
+                            flagLightOne = False
+                        
+                        if blockTwo.ID == 'F28' and blockTwo.switchState == True:
+                            flagLightTwo = True
+                            
+                        elif blockTwo.ID == 'F28' and blockTwo.switchState == False:
+                            flagLightTwo = False
+    
+        if self.modeFlag == 0:
+            for block in self.allBlocks:
+                if block.ID == 'A1' and flagLightOne == False:
+                    block.lightState = True
+                elif block.ID == 'A1' and flagLightOne == True:
+                    block.lightState = False
+                
+                if block.ID == 'C12' and flagLightOne == False:
+                    block.lightState = False
+                elif block.ID == 'C12' and flagLightOne == True:
+                    block.lightState = True
 
-        if not self.listOccIDs:
+                if block.ID == 'Z150' and flagLightTwo == False:
+                    block.lightState = True
+                elif block.ID == 'Z150' and flagLightTwo == True:
+                    block.lightState = False
+                
+                if block.ID == 'G29' and flagLightTwo == False:
+                    block.lightState = False
+                elif block.ID == 'G29' and flagLightTwo == True:
+                    block.lightState = True
+        
+        if not self.listOccIDs and self.modeFlag == 0:
+            self.updateBooleanAuth()
+            self.sendUpdatedBlocks.emit(self.allBlocks)
+        
+        if self.modeFlag == 1:
             self.sendUpdatedBlocks.emit(self.allBlocks)
         
     def preventCollision(self):

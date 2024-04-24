@@ -539,7 +539,7 @@ class TrackModelMain(QMainWindow):
             
             elif BlockNum == 66:
                 if direction == 'decreasing':
-                    print(self.get_switch_state(52, line_color="Red"))
+                    #print(self.get_switch_state(52, line_color="Red"))
                     if self.get_switch_state(52, line_color="Red") == False:
                         return 52
                     else: 

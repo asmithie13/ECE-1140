@@ -347,7 +347,7 @@ class TrackModelMain(QMainWindow):
             next_block_num = self.get_next_id(block_num, self.currentTrains[trainIndex][3], self.line_ctc)
             if next_block_num == -1:
                 self.delete_train.emit(trainId)
-                self.occupied_blocks.pop("I57")
+                self.occupied_blocks.remove("I57")
                 self.update_occupied_blocks()
             else:
                 self.next_block_id = self.data.get_section_for_block(next_block_num)
@@ -618,6 +618,11 @@ class TrackModelMain(QMainWindow):
                 'authority' : block.authority
             }
 
+        if self.train_ID:
+            if self.occupied_blocks:
+                #print(self.train_ID[1:])
+                self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
+
     def receiveSpecialBlocks_SW_red(self, specialBlock):
         for block in specialBlock:
             block_id = f"{block.blockSection}{block.blockNum}"
@@ -628,6 +633,11 @@ class TrackModelMain(QMainWindow):
                 'switchState': block.switchState,
                 'authority' : block.authority
             }
+
+        if self.train_ID:
+            if self.occupied_blocks:
+                #print(self.train_ID[1:])
+                self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
 
 
     def receiveSpecialBlocks_HW(self, specialBlock):
@@ -640,7 +650,7 @@ class TrackModelMain(QMainWindow):
                 'switchState': block.switchState,
                 'authority' : block.authority
             }
-            
+
         if self.train_ID:
             if self.occupied_blocks:
                 #print(self.train_ID[1:])

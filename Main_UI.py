@@ -113,10 +113,13 @@ class Main_UI(QtWidgets.QMainWindow):
         self.TrackModelWindow.send_beacon.connect(self.currentTrains[-1].receive_beacon_info)
 
         #Ticket sales
-        #self.TrackModelWindow.people_boarding_sig.connect(self.currentTrains[-1].set_pcount)
+        self.TrackModelWindow.people_boarding_sig.connect(self.currentTrains[-1].set_pcount)
 
+        #Boolean auth
+        self.TrackModelWindow.send_bool_auth.connect(self.currentTrains[-1].receive_bool_auth)
+                                                     
         #Polarity
-        #self.TrackModelWindow.send_polarity.connect(self.currentTrains[-1].receive_polarity)
+        self.TrackModelWindow.send_polarity.connect(self.currentTrains[-1].receive_polarity)
         
         #Train Model to Track Model
         # Actual Velocity

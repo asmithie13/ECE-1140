@@ -101,9 +101,9 @@ class NonVital():
         #change index 
         self.block_index += 1
         #green line parse
-        if self.line ==  1 : #green 
+        if self.line ==  0 : #green 
             self.speed_lim.emit(self.LineDictionary.green_get_speed_lim(self.block_index))
-            self.Set_Underground(self.Line_Dictionary.green_get_underground(self.block_index))
+            self.Set_Underground(self.LineDictionary.green_get_underground(self.block_index))
             self.announcement = self.LineDictionary.get_green_station(self.block_index)
             self.doors = self.LineDictionary.get_green_door_side(self.block_index)
             if (self.announcement != 'N/A'):
@@ -117,9 +117,9 @@ class NonVital():
                 self.arrived = False
             
         #red line parse
-        elif self.line == 0 :
+        elif self.line == 1 :
             self.speed_lim.emit(self.LineDictionary.red_get_speed_lim(self.block_index))
-            self.Set_Underground(self.Line_Dictionary.red_get_underground(self.block_index))
+            self.Set_Underground(self.LineDictionary.red_get_underground(self.block_index))
             self.announcement = self.LineDictionary.get_red_station(self.block_index)
             self.doors = self.LineDictionary.get_red_door_side(self.block_index)
             if (self.announcement != 'N/A'):

@@ -210,7 +210,7 @@ class TrackModelMain(QMainWindow):
             self.occupied_blocks.append('K63')
             self.dt.append(0.0)
             self.prev_time.append(0.0)
-            #self.send_beacon.emit(0)
+            self.send_beacon.emit(0)
             self.update_occupied_blocks()
             self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
             self.load_default_track_layout()
@@ -219,7 +219,7 @@ class TrackModelMain(QMainWindow):
             self.occupied_blocks.append('D10')
             self.dt.append(0.0)
             self.prev_time.append(0.0)
-            #self.send_beacon.emit(1)
+            self.send_beacon.emit(1)
             self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
             self.load_default_track_layout()
             self.update_occupied_blocks()
@@ -291,9 +291,6 @@ class TrackModelMain(QMainWindow):
                     self.currentTrains[trainIndex][3] = 'decreasing'
                 elif block_num == 1:
                     self.currentTrains[trainIndex][3] = 'increasing'
-                elif block_num == 63:
-                    self.send_beacon.emit(0)
-
 
         #red line
             if self.line_ctc== "Red":

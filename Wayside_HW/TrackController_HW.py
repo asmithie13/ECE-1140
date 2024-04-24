@@ -496,7 +496,7 @@ class TrackController_HW(QMainWindow):
                     if self.allBlocks[index+2] not in tempSkip:
                         self.allBlocks[index+2].authority = True
             if block.blockSection in biDirection:
-                if block.ID == 'D13':
+                if block.ID == 'D13' or block.ID == 'F22':
                     continue
                 if self.allBlocks[index-1] in self.previousOccupiedBlock:
                     if block.occupied == True:

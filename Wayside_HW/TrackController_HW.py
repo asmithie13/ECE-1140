@@ -500,7 +500,7 @@ class TrackController_HW(QMainWindow):
                             flagLightTwo = True
                             
                         elif blockTwo.ID == 'F28' and blockTwo.switchState == False:
-                            flagLightTwo = True
+                            flagLightTwo = False
     
         if self.modeFlag == 0:
             for block in self.allBlocks:

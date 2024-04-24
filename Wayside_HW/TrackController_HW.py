@@ -272,9 +272,6 @@ class TrackController_HW(QMainWindow):
         self.pushButtonDown.setFont(QFont("Times New Roman", 12))
 
         tempBlockID = self.comboBoxSection.currentText() + self.comboBoxBlock.currentText()
-        for block in self.maintenanceSwitches:
-            if block.ID == tempBlockID:
-                self.frameSwitch.setEnabled(False)
 
         for block in self.allBlocks:
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
@@ -298,6 +295,10 @@ class TrackController_HW(QMainWindow):
                 self.setSwitchRight()
             else:
                 self.setSwitchLeft()
+        
+        for block in self.maintenanceSwitches:
+            if block.ID == tempBlockID:
+                self.frameSwitch.setEnabled(False)
         
         if selectedBlock.CROSSING == False:
             self.frameCrossing.setEnabled(False)
@@ -450,14 +451,32 @@ class TrackController_HW(QMainWindow):
                     block.authority = True
     
     def getMaintenanceSwitch(self, switchPos):
+        tempBlockID = self.comboBoxSection.currentText() + self.comboBoxBlock.currentText()
+
         for block in switchPos:
             if block.maintenance == 1:
                 self.maintenanceSwitches.append(block)
+                if self.modeFlag == 1 and block.ID == tempBlockID:
+                    if block.switchState == False:
+                        self.pushButtonLeft.setStyleSheet("background-color: white")
+                        self.pushButtonLeft.setFont(QFont("Times New Roman", 12))
+                        self.pushButtonRight.setStyleSheet("background-color: #9bc0f0")
+                        self.pushButtonRight.setFont(QFont("Times New Roman", 12))
+                    elif block.switchState == True:
+                        self.pushButtonRight.setStyleSheet("background-color: white")
+                        self.pushButtonRight.setFont(QFont("Times New Roman", 12))
+                        self.pushButtonLeft.setStyleSheet("background-color: #9bc0f0")
+                        self.pushButtonLeft.setFont(QFont("Times New Roman", 12))
+                    self.frameSwitch.setEnabled(False)
             elif block.maintenance == 0:
                 for blockTwo in self.maintenanceSwitches:
                     if block.ID == blockTwo.ID:
                         self.maintenanceSwitches.remove(blockTwo)
-                
+                if self.modeFlag == 1 and block.ID == tempBlockID:
+                    self.frameSwitch.setEnabled(True)
+                    self.pushButtonLeft.setEnabled(True)
+                    self.pushButtonRight.setEnabled(True)
+    
         self.setMaintenanceSwitch()
     
     def setMaintenanceSwitch(self): #Function to set maintenance mode switch positions from CTC
@@ -465,7 +484,10 @@ class TrackController_HW(QMainWindow):
             for blockTwo in self.allBlocks:
                 if blockOne.ID == blockTwo.ID:
                     blockTwo.switchState = blockOne.switchState
-    
+
+        if not self.listOccIDs:
+            self.sendUpdatedBlocks.emit(self.allBlocks)
+        
     def preventCollision(self):
         oneDirectionOne = ['G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] #Block sections where collisions could occur
         oneDirectionTwo = ['A', 'B', 'C'] 

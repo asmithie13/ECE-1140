@@ -144,6 +144,12 @@ class TrackModelMain(QMainWindow):
         self.line_ctc= ""
         self.stop = False
         self.switch_green = ""
+        self.failure_colors = {
+            'broken_rail': 'grey',  # Color for broken rail failures
+            'track_circuit': 'yellow',  # Color for track circuit failures
+            'power_failure': 'tan'  # Color for power failures
+        }
+        self.failure_types = {}  # Maps block IDs to failure types
         
 
         # Load the track model straight from the UI file using uic
@@ -414,9 +420,9 @@ class TrackModelMain(QMainWindow):
                 if direction == 'increasing':
                     return 78
                 elif direction == 'decreasing':
-                    if self.get_switch_state(77,line_color="Green") == False:
+                    if self.get_switch_state(77,line_color="Green") == True:
                         return 101
-                    elif self.get_switch_state(77,line_color="Green") == True:
+                    elif self.get_switch_state(77,line_color="Green") == False:
                         return 76
                     else:
                         return 77
@@ -597,19 +603,23 @@ class TrackModelMain(QMainWindow):
 
     def update_block_colors(self):
         # Reset all blocks to green first
-        for block_id in self.block_ids_green:  # Assuming block_ids_green contains all block IDs
+        for block_id in self.block_ids_green:
             self.update_block_color(block_id, "green")
-        
+
         # Update current occupied blocks to orange
         for block_id in self.occupied_blocks:
-            self.update_block_color(block_id, "orange")
+            if block_id not in self.occupied_block_failures:
+                self.update_block_color(block_id, "orange")
 
-
+        # Update failure states with specific colors
+        for block_id in self.occupied_block_failures:
+            failure_type = self.failure_types.get(block_id, 'broken_rail')  # Default to broken rail if not specified
+            failure_color = self.failure_colors.get(failure_type, 'grey')  # Get specific color
+            self.update_block_color(block_id, failure_color)
 
 
 
     def update_block_color(self, block_id, color):
-        # This method would update the block's color in the UI
         button = self.findChild(QPushButton, block_id)
         if button:
             color_style = {
@@ -628,9 +638,35 @@ class TrackModelMain(QMainWindow):
                         border-color: black;
                         background-color: rgb(50, 205, 50);
                     }
+                """,
+                "grey": """
+                    QPushButton {
+                        border-style: solid;
+                        border-width: 0.5px;
+                        border-color: black;
+                        background-color: grey;
+                    }
+                """,
+                "yellow": """
+                    QPushButton {
+                        border-style: solid;
+                        border-width: 0.5px;
+                        border-color: black;
+                        background-color: yellow;
+                    }
+                """,
+                "tan": """
+                    QPushButton {
+                        border-style: solid;
+                        border-width: 0.5px;
+                        border-color: black;
+                        background-color: tan;
+                    }
                 """
             }
+            # Set the style sheet with the appropriate color
             button.setStyleSheet(color_style[color])
+
 
 
     def move_train_to_block(self, train_id, new_block_id):
@@ -647,6 +683,7 @@ class TrackModelMain(QMainWindow):
 
     def update_occupied_blocks(self):
         occupancies = self.occupied_blocks + self.occupied_block_failures  #Combine the lists of occupied and failed blocks
+        #print(occupancies)
         if self.line_ctc== "Green":
             sections_HW = ["A", "B", "C", "D", "E", "F", "G", "H", "T", "U", "V", "W", "X", "Y", "Z"]
             sections_shared = ["S103", "S104", "T105", "T106", "H34", "H35", "I36", "I37"]
@@ -719,37 +756,36 @@ class TrackModelMain(QMainWindow):
         self.load_track_layout_based_on_selection()
 
         return self.line_select.currentText()
-            
     def set_broken_rail_failure(self):
         self.selected_block = self.block_in_1.currentText()
-        if self.selected_block:
-            button = self.findChild(QPushButton, self.selected_block)
-            #print(self.selected_block)
-            if button:
-                self.occupied_block_failures.append(self.selected_block)
-                self.update_occupied_blocks()
-                button.setStyleSheet("background-color: grey")
-                
+        if self.selected_block in self.occupied_block_failures:
+            self.occupied_block_failures.remove(self.selected_block)
+            del self.failure_types[self.selected_block]  # Remove the failure type tracking
+        else:
+            self.occupied_block_failures.append(self.selected_block)
+            self.failure_types[self.selected_block] = 'broken_rail'  # Track the failure type
+        self.update_block_colors()
 
     def set_track_circuit_failure(self):
         self.selected_block = self.block_in_1.currentText()
-        if self.selected_block:
-            button = self.findChild(QPushButton, self.selected_block)
-            #print(self.selected_block)
-            if button:
-                self.occupied_block_failures.append(self.selected_block)
-                self.update_occupied_blocks()
-                button.setStyleSheet("background-color: yellow")
-    
+        if self.selected_block in self.occupied_block_failures:
+            self.occupied_block_failures.remove(self.selected_block)
+            del self.failure_types[self.selected_block]
+        else:
+            self.occupied_block_failures.append(self.selected_block)
+            self.failure_types[self.selected_block] = 'track_circuit'
+        self.update_block_colors()
+
     def set_power_failure_func(self):
         self.selected_block = self.block_in_1.currentText()
-        if self.selected_block:
-            button = self.findChild(QPushButton, self.selected_block)
-            #print(self.selected_block)
-            if button:
-                self.occupied_block_failures.append(self.selected_block)
-                self.update_occupied_blocks()
-                button.setStyleSheet("background-color: tan")
+        if self.selected_block in self.occupied_block_failures:
+            self.occupied_block_failures.remove(self.selected_block)
+            del self.failure_types[self.selected_block]
+        else:
+            self.occupied_block_failures.append(self.selected_block)
+            self.failure_types[self.selected_block] = 'power_failure'
+        self.update_block_colors()
+
 
     def reset_block_colors(self):
         # Defaull stylesheet of buttons for the Track Layout

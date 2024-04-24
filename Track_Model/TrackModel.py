@@ -597,8 +597,8 @@ class TrackModelMain(QMainWindow):
         self.occupied_blocks = []
         self.prev_occupied_blocks = []
         for train in self.currentTrains:  # Assuming currentTrains holds info about each train
-            self.occupied_blocks.append(train.initial_block)  # Example attribute
-            self.prev_occupied_blocks.append('')  # Initialize with empty strings or None
+            self.occupied_blocks.append(train.initial_block)  
+            self.prev_occupied_blocks.append('') 
 
 
     def update_block_colors(self):
@@ -613,8 +613,8 @@ class TrackModelMain(QMainWindow):
 
         # Update failure states with specific colors
         for block_id in self.occupied_block_failures:
-            failure_type = self.failure_types.get(block_id, 'broken_rail')  # Default to broken rail if not specified
-            failure_color = self.failure_colors.get(failure_type, 'grey')  # Get specific color
+            failure_type = self.failure_types.get(block_id, 'broken_rail') 
+            failure_color = self.failure_colors.get(failure_type, 'grey')  
             self.update_block_color(block_id, failure_color)
 
 
@@ -664,7 +664,7 @@ class TrackModelMain(QMainWindow):
                     }
                 """
             }
-            # Set the style sheet with the appropriate color
+            #set the style sheet with the appropriate color
             button.setStyleSheet(color_style[color])
 
 

@@ -188,11 +188,13 @@ class TrainModel_mainwindow(QMainWindow):
 
     def ebrake_disabled(self, ebrake_state):
         self.ebrake_state = ebrake_state
-    
+        print("ebrake state",self.ebrake_state)
+        self.TC.ebrake_sig.emit(self.ebrake_state)
         # If ebrake is enabled
         if self.ebrake_state:
             if self.ebrake.setChecked(True):
                 self.TC.ebrake_sig.emit(1) # Emit the ebrake signal with value 1
+                print("this statement")
             else:
                 self.ebrake.setChecked(True)  # Set the ebrake button to checked (ON)
             self.ebrake.setEnabled(False)  # Disable the ebrake button

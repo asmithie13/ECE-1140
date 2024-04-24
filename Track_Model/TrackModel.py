@@ -220,7 +220,6 @@ class TrackModelMain(QMainWindow):
             self.occupied_blocks.append('K63')
             self.dt.append(0.0)
             self.prev_time.append(0.0)
-            self.send_beacon.emit(0)
             self.update_occupied_blocks()
             self.default_track_path = "Track_Resources/green_line_block_info.xlsx"
             self.load_default_track_layout()
@@ -290,7 +289,7 @@ class TrackModelMain(QMainWindow):
             #print(trainId, True)
             #emit signal for polarity
             self.send_polarity.emit(trainId, True)
-
+            self.send_beacon.emit(0)
             #Setting train direction after switches
             if self.line_ctc== "Green":
                 if block_num == 76:

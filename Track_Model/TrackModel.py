@@ -420,9 +420,9 @@ class TrackModelMain(QMainWindow):
                 if direction == 'increasing':
                     return 78
                 elif direction == 'decreasing':
-                    if self.get_switch_state(77,line_color="Green") == True:
+                    if self.get_switch_state(77,line_color="Green") == False:
                         return 101
-                    elif self.get_switch_state(77,line_color="Green") == False:
+                    elif self.get_switch_state(77,line_color="Green") == True:
                         return 76
                     else:
                         return 77

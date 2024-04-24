@@ -541,9 +541,11 @@ class WaysideSW(QMainWindow):
                 print("Redundancy Check Failed")
                 return
             
+        #self.handleCollisions()
+            
         for block in self.currentBlocks:
             self.handleLights(block)
-            
+  
         self.blockActions()
         self.sendSpecialBlocks.emit(self.currentBlocks)
         self.sendOccupiedBlocks.emit(self.occupiedBlocks)
@@ -575,21 +577,42 @@ class WaysideSW(QMainWindow):
     def handleLights(self, block):
         if block.ID == "M76" and block.lineColor == "Green":
             if block.lightState:
+                self.allGreenBlocks[75].authority = True
                 self.allGreenBlocks[74].authority = True
                 self.allGreenBlocks[73].authority = True
-                self.allGreenBlocks[72].authority = True
-                self.allGreenBlocks[71].authority = True
-                self.allGreenBlocks[70].authority = True
-                print("Running train")
+
             else:
+                self.allGreenBlocks[75].authority = False
                 self.allGreenBlocks[74].authority = False
                 self.allGreenBlocks[73].authority = False
-                self.allGreenBlocks[72].authority = False
-                self.allGreenBlocks[71].authority = False
-                self.allGreenBlocks[70].authority = False
-                print("Stopping Train")
 
-        
+    def handleCollisions(self):
+        if self.currentBlocks[0].lineColor == "Green":
+            section1 = ["K63"
+                        ,"K64"
+                        ,"K65"
+                        ,"K66"
+                        ,"K67"
+                        ,"K68"
+                        ,"L69"
+                        ,"L70"
+                        ,"L71"
+                        ,"L72"
+                        ,"L73"]
+                    
+            
+            blocks1 = [x for x in self.currentBlocks if x.ID in section1]
+
+            for i in range(section1):
+                count = i + 4
+                if count > len(section1): count = len(section1)
+                for j in range(i + 1,count):
+                    if blocks1[i].occupied:
+                        blocks1[j].authority = False
+                    else:
+                        blocks1[j].authority = True
+
+
 class TestBench(QMainWindow):
 
     #signals

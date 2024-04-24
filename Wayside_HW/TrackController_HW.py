@@ -63,7 +63,7 @@ class TrackController_HW(QMainWindow):
         self.maintenanceSwitches = []
 
         self.closedFlag = 0
-        self.biFlag = False
+        self.biFlag = 0
 
         #Signals (Manual mode-related):
         self.checkBoxManual.clicked.connect(self.manualMode)
@@ -81,8 +81,11 @@ class TrackController_HW(QMainWindow):
         if occupiedBlocks == self.listOccIDs and self.closedFlag == 0:
             return
         
-        if 'F23' in occupiedBlocks:
-            self.biFlag = not self.biFlag
+        if 'F22' in occupiedBlocks:
+            self.biFlag += 1
+        
+        if 'F27' in occupiedBlocks:
+            self.biFlag = 0
 
         self.previousOccupiedBlock = self.occupiedBlocks
         
@@ -497,7 +500,7 @@ class TrackController_HW(QMainWindow):
                             flagLightTwo = True
                             
                         elif blockTwo.ID == 'F28' and blockTwo.switchState == False:
-                            flagLightTwo = False
+                            flagLightTwo = True
     
         if self.modeFlag == 0:
             for block in self.allBlocks:
@@ -564,7 +567,7 @@ class TrackController_HW(QMainWindow):
             if block.blockSection in biDirection:
                 if block.ID == 'D13':
                     continue
-                if block.ID == 'F22' and self.biFlag == True:
+                if block.ID == 'F22' and self.biFlag >= 2:
                     if block.occupied == True:
                         self.allBlocks[index-1].authority = False
                         self.allBlocks[index-2].authority = False

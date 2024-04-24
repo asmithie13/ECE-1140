@@ -140,7 +140,7 @@ class WaysideSW(QMainWindow):
         self.greenWayside2Blocks = [x for x in self.allGreenBlocks if x.blockSection not in wayside1Chars]
         self.currentBlocks = self.greenWayside2Blocks
 
-        for block in self.greenWayside2Blocks: print(block.ID)
+        #for block in self.greenWayside2Blocks: print(block.ID)
 
         self.sendGreenSwitchPos.emit(self.greenWayside2Blocks)
                                      

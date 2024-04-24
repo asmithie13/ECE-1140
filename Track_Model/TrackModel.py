@@ -86,6 +86,16 @@ class TrackModelMain(QMainWindow):
     'W138', 'W139', 'W140', 'W141', 'W142', 'W143', 'X144', 'X145', 'X146', 'Y147',
     'Y148', 'Y149', 'Z150'
     ]
+
+    block_ids_red = [
+    'A1_r', 'A2_r', 'A3_r', 'B4_r', 'B5_r', 'B6_r', 'C7_r', 'C8_r', 'C9_r', 'D10_r', 'D11_r', 'D12_r',
+    'E13_r', 'E14_r', 'E15_r', 'F16_r', 'F17_r', 'F18_r', 'F19_r', 'F20_r', 'G21_r', 'G22_r', 'G23_r',
+    'H24_r', 'H25_r', 'H26_r', 'H27_r', 'H28_r', 'H29_r', 'H30_r', 'H31_r', 'H32_r', 'H33_r', 'H34_r',
+    'H35_r', 'H36_r', 'H37_r', 'H38_r', 'H39_r', 'H40_r', 'H41_r', 'H42_r', 'H43_r', 'H44_r', 'H45_r',
+    'I46_r', 'I47_r', 'I48_r', 'J49_r', 'J50_r', 'J51_r', 'J52_r', 'J53_r', 'J54_r', 'K55_r', 'K56_r',
+    'K57_r', 'L58_r', 'L59_r', 'L60_r', 'M61_r', 'M62_r', 'M63_r', 'N64_r', 'N65_r', 'N66_r', 'O67_r',
+    'P68_r', 'P69_r', 'P70_r', 'Q71_r', 'R72_r', 'S73_r', 'S74_r', 'S75_r', 'T76_r'
+    ]
     
 
     station_lookup = {
@@ -295,7 +305,7 @@ class TrackModelMain(QMainWindow):
         #red line
             if self.line_ctc== "Red":
                 if block_num == 1:
-                    self.currentTrains[trainIndex][3] = 'decreasing'
+                    self.currentTrains[trainIndex][3] = 'increasing'
                 elif block_num == 16:
                     self.currentTrains[trainIndex][3] = 'increasing'
                 elif block_num == 10:
@@ -309,8 +319,7 @@ class TrackModelMain(QMainWindow):
                     self.currentTrains[trainIndex][3] = 'decreasing'
                 elif block_num == 66:
                     self.currentTrains[trainIndex][3] = 'decreasing'
-                elif block_num == 1:
-                    self.currentTrains[trainIndex][3] = 'increasing'
+
                 
             
             
@@ -338,6 +347,8 @@ class TrackModelMain(QMainWindow):
             next_block_num = self.get_next_id(block_num, self.currentTrains[trainIndex][3], self.line_ctc)
             if next_block_num == -1:
                 self.delete_train.emit(trainId)
+                self.occupied_blocks.pop("I57")
+                self.update_occupied_blocks()
             else:
                 self.next_block_id = self.data.get_section_for_block(next_block_num)
 
@@ -469,49 +480,124 @@ class TrackModelMain(QMainWindow):
                         
         #Red Line                                  
         if line == "Red":
-            #Red line train dispatch case        
-            if (BlockNum >= 10) and (BlockNum < 66):
+            #Red line train dispatch case  
+            if (BlockNum >= 10) and (BlockNum < 15):
+                return BlockNum + 1
+         
+            elif (BlockNum == 15):
+                if self.get_switch_state(15, line_color="Red") == True:
+                    return 16
+                
+            elif (BlockNum >= 16) and (BlockNum < 27):
+                return BlockNum + 1
+        
+
+            elif BlockNum == 27:
+                if self.get_switch_state(27, line_color="Red") == True:
+                    return 28
+                else: 
+                    return 28
+                
+            elif (BlockNum >= 28) and (BlockNum < 32):
                 return BlockNum + 1
             
-            elif (BlockNum == 66):
-                return 52
+            elif BlockNum == 32:
+                if self.get_switch_state(32, line_color="Red") == True:
+                    return 33
+                else:
+                    return 32
             
-            elif (BlockNum >= 52) and (BlockNum < 43):
-                return BlockNum - 1
-            
-            elif (BlockNum == 43):
-                return 67
-            
-            elif (BlockNum >=67) and (BlockNum < 71):
+            elif (BlockNum >= 33) and (BlockNum < 38):
                 return BlockNum + 1
             
-            elif (BlockNum == 71):
-                return 38
+            elif BlockNum == 38:
+                if self.get_switch_state(38, line_color="Red") == True:
+                    return 39
+                else:
+                    return 38
+                
+            elif (BlockNum >= 39) and (BlockNum < 43):
+                return BlockNum + 1
             
-            elif (BlockNum >= 38) and (BlockNum < 32):
+            elif BlockNum == 43:
+                if self.get_switch_state(43, line_color="Red") == True:
+                    return 44
+                else:
+                    return 43
+            
+            elif (BlockNum >= 44) and (BlockNum < 52):
+                return BlockNum + 1
+            
+            elif BlockNum == 52:
+                if self.get_switch_state(52, line_color="Red") == True:
+                    return 53
+                else:
+                    return 52
+                
+            elif (BlockNum >= 53) and (BlockNum < 66):
+                return BlockNum + 1
+            
+            elif BlockNum == 66:
+                if direction == 'decreasing':
+                    print(self.get_switch_state(52, line_color="Red"))
+                    if self.get_switch_state(52, line_color="Red") == False:
+                        return 52
+                    else: 
+                        return 66
+                    
+            elif (BlockNum <= 52) and (BlockNum > 43):
                 return BlockNum - 1
             
-            elif (BlockNum == 32):
-                return 72
+            elif BlockNum == 43:
+                if self.get_switch_state(43, line_color="Red") == False:
+                    return 67
+            
+            elif (BlockNum >= 67) and (BlockNum < 71):
+                return BlockNum + 1
+            
+            elif BlockNum == 71:
+                if direction == 'decrease':
+                    if self.get_switch_state(38, line_color="Red") == False:
+                        return 37
+                    else:
+                        return 71
+                    
+            elif (BlockNum <= 37) and (BlockNum > 32):
+                return BlockNum - 1
+            
+            elif BlockNum == 32:
+                if self.get_switch_state(52, line_color="Red") == False:
+                    return 72
             
             elif (BlockNum >= 72) and (BlockNum < 76):
                 return BlockNum + 1
             
-            elif (BlockNum == 76):
-                return 27
+            elif BlockNum == 76:
+                if direction == 'decreasing':
+                    if self.get_switch_state(27, line_color="Red") == False:
+                        return 28
+                    else:
+                        return 76
             
-            elif (BlockNum >= 27) and (BlockNum < 16):
+            elif (BlockNum <= 28) and (BlockNum > 15):
                 return BlockNum - 1
             
-            elif (BlockNum == 15):
-                # if direction == 'increasing':
-                #     if self.get_switch_state(28, line_color="Red") == True:
-                return 1
-            
-            elif (BlockNum >= 1) and (BlockNum <= 9):
+            elif BlockNum == 15:
+                if direction == 'increasing':
+                    if self.get_switch_state(15, line_color="Red") == False:
+                        return 1
+                    else:
+                        return 15
+                    
+            elif (BlockNum >= 1) and (BlockNum < 9):
                 # if self.get_switch_state(15, line_color="Red") == True:
                 return BlockNum + 1
             
+            elif BlockNum == 9:
+                return -1
+            
+
+                    
     def get_and_set_crossing_state(self, block_num):
         block_info = self.blockStates.get(str(block_num))
         if block_info is not None:
@@ -554,6 +640,11 @@ class TrackModelMain(QMainWindow):
                 'switchState': block.switchState,
                 'authority' : block.authority
             }
+            
+        if self.train_ID:
+            if self.occupied_blocks:
+                #print(self.train_ID[1:])
+                self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
 
     def get_send_bool_auth(self, train_id, block_id):
         # Get the block state if it exists
@@ -600,11 +691,16 @@ class TrackModelMain(QMainWindow):
             self.occupied_blocks.append(train.initial_block)  
             self.prev_occupied_blocks.append('') 
 
-
     def update_block_colors(self):
         #Reset all blocks to green first
-        for block_id in self.block_ids_green:
-            self.update_block_color(block_id, "green")
+        if self.line_ctc == 'Green':
+            for block_id in self.block_ids_green:
+                self.update_block_color(block_id, "green")
+        elif self.line_ctc == 'Red':
+            for block_id in self.block_ids_red:
+                block_id_r = block_id[:-2]
+                self.update_block_color(block_id_r, "red")
+
 
         #Update current occupied blocks to orange
         for block_id in self.occupied_blocks:
@@ -622,6 +718,8 @@ class TrackModelMain(QMainWindow):
     def update_block_color(self, block_id, color):
         if self.line_ctc == 'Red':
             block_id += '_r'
+
+        #print(self.line_ctc, block_id)
         
         button = self.findChild(QPushButton, block_id)
         if button:
@@ -650,6 +748,14 @@ class TrackModelMain(QMainWindow):
                         background-color: grey;
                     }
                 """,
+                "red": """
+                    QPushButton {
+                        border-style: solid;
+                        border-width: 2px;
+                        border-color: black;
+                        background-color: rgb(255,0,0)
+                    }
+                """,
                 "yellow": """
                     QPushButton {
                         border-style: solid;
@@ -672,25 +778,26 @@ class TrackModelMain(QMainWindow):
 
 
 
-    def move_train_to_block(self, train_id, new_block_id):
-        # Find the train and update its current block
-        for train in self.currentTrains:
-            if train[0] == train_id:
-                # Optionally, set the previous block to green if needed
-                if self.line_ctc == 'Red':
-                    self.update_block_color(train[-1], "red")
-                    # Update the train's current block
-                    train[-1] = new_block_id
-                    # Set the new block to orange
-                    self.update_block_color(new_block_id, "orange")
-                    break
-                else:
-                    self.update_block_color(train[-1], "green")
-                    # Update the train's current block
-                    train[-1] = new_block_id
-                    # Set the new block to orange
-                    self.update_block_color(new_block_id, "orange")
-                    break
+    # def move_train_to_block(self, train_id, new_block_id):
+    #     # Find the train and update its current block
+    #     for train in self.currentTrains:
+    #         if train[0] == train_id:
+    #             print(self.line_ctc)
+    #             # Optionally, set the previous block to green if needed
+    #             if self.line_ctc == 'Red':
+    #                 self.update_block_color(train[-1], "red")
+    #                 # Update the train's current block
+    #                 train[-1] = new_block_id
+    #                 # Set the new block to orange
+    #                 self.update_block_color(new_block_id, "orange")
+    #                 break
+    #             else:
+    #                 self.update_block_color(train[-1], "green")
+    #                 # Update the train's current block
+    #                 train[-1] = new_block_id
+    #                 # Set the new block to orange
+    #                 self.update_block_color(new_block_id, "orange")
+    #                 break
 
     def update_occupied_blocks(self):
         occupancies = self.occupied_blocks + self.occupied_block_failures  #Combine the lists of occupied and failed blocks
@@ -715,10 +822,7 @@ class TrackModelMain(QMainWindow):
             self.sendBlockOcc_HW.emit(temp_HW)
             self.update_block_colors()
 
-            if self.train_ID:
-                if self.occupied_blocks:
-                    #print(self.train_ID[1:])
-                    self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
+
 
                 #for i in self.currentTrains:
                 #signal.emit([i[0], value])
@@ -731,6 +835,8 @@ class TrackModelMain(QMainWindow):
             self.sendBlockOcc_SW.emit(occupancies)
 
             self.send_polarity.emit(self.train_ID, True)
+
+            self.update_block_colors()
 
            #self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + self.train_ID[1] - 1])
 

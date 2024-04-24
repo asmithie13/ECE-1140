@@ -13,7 +13,7 @@ from CTC.Schedule import *
 from CTC.OccupiedBlocks import *
 from CTC.CTC_Maintenance import *
 from CTC.Throughput import *
-from CTC.TempData import *
+from CTC.CTC_TrackData import *
 #From other folders
 from Track_Resources import *
 
@@ -667,7 +667,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         #if green line blocks are being shown, find corresponding green line block
         if self.currentLine == 'Green':
             for i in self.TrackData.GreenBlocks:
-                if i.blockNum == switchToSet:
+                if i.ID == switchToSet:
                     temp = i
                                         
                     #Set Wayside
@@ -679,7 +679,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         else:   #line selection is red, find corresponding red line block
             for i in self.TrackData.RedBlocks:
-                if i.blockNum == switchToSet:
+                if i.ID == switchToSet:
                     temp = i
 
                     #Set Wayside

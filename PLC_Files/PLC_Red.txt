@@ -1,0 +1,7 @@
+if N O P Q: 
+N77 -> R101
+M76 -> RED
+
+else:
+N77 -> M76
+M76 -> GREEN

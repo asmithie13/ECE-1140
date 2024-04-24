@@ -575,17 +575,19 @@ class WaysideSW(QMainWindow):
     def handleLights(self, block):
         if block.ID == "M76" and block.lineColor == "Green":
             if block.lightState:
-                self.allGreenBlocks[77].authority = True
-                self.allGreenBlocks[76].authority = True
-                self.allGreenBlocks[75].authority = True
                 self.allGreenBlocks[74].authority = True
                 self.allGreenBlocks[73].authority = True
+                self.allGreenBlocks[72].authority = True
+                self.allGreenBlocks[71].authority = True
+                self.allGreenBlocks[70].authority = True
+                print("Running train")
             else:
-                self.allGreenBlocks[77].authority = False
-                self.allGreenBlocks[76].authority = False
-                self.allGreenBlocks[75].authority = False
                 self.allGreenBlocks[74].authority = False
                 self.allGreenBlocks[73].authority = False
+                self.allGreenBlocks[72].authority = False
+                self.allGreenBlocks[71].authority = False
+                self.allGreenBlocks[70].authority = False
+                print("Stopping Train")
 
         
 class TestBench(QMainWindow):

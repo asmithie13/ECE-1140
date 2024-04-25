@@ -621,6 +621,7 @@ class WaysideSW(QMainWindow):
 
         self.handleCollisions()
         self.sendOccupiedBlocks.emit(self.occupiedBlocks)
+        self.sendAllBlocks.emit(self.currentBlocks)
 
     def handleLights(self, block):
         if block.ID == "M76" and block.lineColor == "Green":

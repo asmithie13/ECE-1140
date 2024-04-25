@@ -322,7 +322,7 @@ class CTC_UI(QtWidgets.QMainWindow):
                 self.create_a_train.emit(entry[1], entry[0])
 
                 #Train ID, speed, Authority
-                self.sendDispatchInfo.emit([entry[1], 40, self.trainSchedule.AuthorityInfo[index]])
+                self.sendDispatchInfo.emit([entry[1], 70 , self.trainSchedule.AuthorityInfo[index]])
                 self.trainSchedule.dataSent[index] = 1
                 print(entry[1], "Dispatched")
 

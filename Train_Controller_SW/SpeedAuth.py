@@ -8,7 +8,7 @@ from PyQt5 import QtWidgets
 class Vital_Speed_Auth():
 
     #def __init__(self,ui):
-    def __init__(self,ui,curr_auth_signal, service_brake_sig,ebrake_internal_sig,stop_at_station_sig,NonVital):
+    def __init__(self,ui,curr_auth_signal, service_brake_sig,ebrake_internal_sig,stop_at_station_sig, NonVital):
         self.ui = ui
         self.curr_auth_signal = curr_auth_signal
         self.service_brake_sig = service_brake_sig

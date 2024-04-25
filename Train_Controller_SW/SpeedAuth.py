@@ -136,10 +136,9 @@ class Vital_Speed_Auth():
             elif self.ui.buttonMan.isChecked() :
                 self.ui.vertSliderPow.setEnabled(True)
 
-        elif self.decimal_m_auth < 1 and self.ui.lcdCurSpd == 0 and self.NonVital.arrived == True:
-            ## add timer 
+        elif self.decimal_m_auth < 1 and self.ui.lcdCurSpd == 0:
             self.stop_at_station_sig.emit(1)
-        
+    
         if self.ui.buttonAuto.isChecked():
             self.NonVital.Emit_Doors()
         

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>841</width>
+    <width>827</width>
     <height>749</height>
    </rect>
   </property>
@@ -1980,7 +1980,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>595</width>
+         <width>621</width>
          <height>450</height>
         </rect>
        </property>
@@ -6380,7 +6380,7 @@
           <enum>QFrame::Box</enum>
          </property>
          <property name="text">
-          <string/>
+          <string>False</string>
          </property>
         </widget>
        </item>
@@ -6715,193 +6715,6 @@
          <property name="text">
           <string>Set</string>
          </property>
-        </widget>
-       </item>
-       <item row="0" column="2" rowspan="4">
-        <widget class="QGroupBox" name="groupBox_7">
-         <property name="styleSheet">
-          <string notr="true">QGroupBox {
-    background-color: white;
-}
-</string>
-         </property>
-         <property name="title">
-          <string>Occupancy Color Guide</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <widget class="QPushButton" name="pushButton_1210">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">
-    QPushButton {
-        border-style: solid;
-        border-width: 2px;
-		 background-color: grey;
-    }
-&quot;&quot;&quot;)
-</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_151">
-            <property name="styleSheet">
-             <string notr="true">background-color: white
-</string>
-            </property>
-            <property name="text">
-             <string>Broken Rail</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="pushButton_1211">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">
-    QPushButton {
-        border-style: solid;
-        border-width: 2px;
-		 background-color: yellow;
-    }
-&quot;&quot;&quot;)
-</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="label_152">
-            <property name="styleSheet">
-             <string notr="true">background-color: white
-</string>
-            </property>
-            <property name="text">
-             <string>Track Circuit</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QPushButton" name="pushButton_1212">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">
-    QPushButton {
-        border-style: solid;
-        border-width: 2px;
-		 background-color: tan;
-    }
-&quot;&quot;&quot;)
-</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="label_153">
-            <property name="styleSheet">
-             <string notr="true">background-color: white
-</string>
-            </property>
-            <property name="text">
-             <string>Power</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QPushButton" name="pushButton_1213">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">
-    QPushButton {
-        border-style: solid;
-        border-width: 2px;
-		 background-color: orange;
-    }
-&quot;&quot;&quot;)
-</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLabel" name="label_154">
-            <property name="styleSheet">
-             <string notr="true">background-color: white
-</string>
-            </property>
-            <property name="text">
-             <string>Occupied</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </widget>
        </item>
        <item row="1" column="0">
@@ -7735,150 +7548,6 @@
            <string>Z150</string>
           </property>
          </item>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="6" column="2">
-     <widget class="QGroupBox" name="groupBox_6">
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>122</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QGroupBox {
-    background-color: white;
-}
-</string>
-      </property>
-      <property name="title">
-       <string>Icons Guide</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="2" column="1">
-        <widget class="QLabel" name="label_132">
-         <property name="styleSheet">
-          <string notr="true">background-color: white
-</string>
-         </property>
-         <property name="text">
-          <string>Track Lights</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="pushButton_1208">
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">
-    QPushButton {
-        border-style: solid;
-        border-width: 2px;
-		 background-color: white;
-    }
-&quot;&quot;&quot;)
-</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>crossing.png</normaloff>crossing.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>30</width>
-           <height>30</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QPushButton" name="pushButton_1209">
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">
-    QPushButton {
-        border-style: solid;
-        border-width: 2px;
-		 background-color: rbg(233, 247, 255);
-    }
-&quot;&quot;&quot;)
-</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>light.png</normaloff>light.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>40</width>
-           <height>30</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton_1207">
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">
-    QPushButton {
-        border-style: solid;
-        border-width: 2px;
-		 background-color: white;
-    }
-&quot;&quot;&quot;)
-</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>switch.png</normaloff>switch.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>30</width>
-           <height>30</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="label_130">
-         <property name="styleSheet">
-          <string notr="true">background-color: white
-</string>
-         </property>
-         <property name="text">
-          <string>Railway Switch</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLabel" name="label_131">
-         <property name="styleSheet">
-          <string notr="true">background-color: white
-</string>
-         </property>
-         <property name="text">
-          <string>Railway Crossing</string>
-         </property>
         </widget>
        </item>
       </layout>
@@ -8787,6 +8456,193 @@
       </layout>
      </widget>
     </item>
+    <item row="6" column="2">
+     <widget class="QGroupBox" name="groupBox_7">
+      <property name="styleSheet">
+       <string notr="true">QGroupBox {
+    background-color: white;
+}
+</string>
+      </property>
+      <property name="title">
+       <string>Occupancy Color Guide</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="2" column="0">
+        <widget class="QPushButton" name="pushButton_1212">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+		 background-color: tan;
+    }
+&quot;&quot;&quot;)
+</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="pushButton_1213">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+		 background-color: orange;
+    }
+&quot;&quot;&quot;)
+</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_151">
+         <property name="styleSheet">
+          <string notr="true">background-color: white
+</string>
+         </property>
+         <property name="text">
+          <string>Broken Rail</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="label_152">
+         <property name="styleSheet">
+          <string notr="true">background-color: white
+</string>
+         </property>
+         <property name="text">
+          <string>Track Circuit</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="pushButton_1210">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+		 background-color: grey;
+    }
+&quot;&quot;&quot;)
+</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_153">
+         <property name="styleSheet">
+          <string notr="true">background-color: white
+</string>
+         </property>
+         <property name="text">
+          <string>Power</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="pushButton_1211">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+    QPushButton {
+        border-style: solid;
+        border-width: 2px;
+		 background-color: yellow;
+    }
+&quot;&quot;&quot;)
+</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLabel" name="label_154">
+         <property name="styleSheet">
+          <string notr="true">background-color: white
+</string>
+         </property>
+         <property name="text">
+          <string>Occupied</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -8794,7 +8650,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>841</width>
+     <width>827</width>
      <height>22</height>
     </rect>
    </property>

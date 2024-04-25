@@ -48,6 +48,7 @@ class TrainModel_mainwindow(QMainWindow):
     stop_at_station_sig = qtc.pyqtSignal(bool)
     track_model_acc_velo = qtc.pyqtSignal(str, float)
     people_disemb_sig=qtc.pyqtSignal(int)
+    
 
     def __init__(self,TrainID):
         super().__init__()
@@ -173,10 +174,6 @@ class TrainModel_mainwindow(QMainWindow):
     def receive_bool_auth(self,trainID,bool_auth):
         if trainID == self.TrainID:
             self.TC.curr_bool_auth_sig.emit(bool_auth)
-        
-
-    
-        
         
        
     
@@ -365,6 +362,9 @@ class TrainModel_mainwindow(QMainWindow):
     def acc_vel_to_track_model(self,velocity):
         velocity=self.train_calculations.calculate_acc_velocity
         self.track_model_acc_velo.emit(int(velocity))
+    
+
+
 
     #random generation for people disembarking
     def people_disemb(self, people_count):
@@ -542,7 +542,7 @@ class TrainCalculations:
         self.main_window.prev_vel=self.main_window.velocity
        
       
-        if self.main_window.velocity <= 0.1:
+        if self.main_window.velocity <= 0:
             self.main_window.a_n=0
             self.main_window.velocity=0
             self.main_window.prev_vel=0

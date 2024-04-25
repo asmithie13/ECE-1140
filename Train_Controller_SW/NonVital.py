@@ -50,9 +50,6 @@ class NonVital():
             print("interior lights dimmed")
 
 
-#         self.stationTimer.start()
-#         self.stationTimer.timeout.connect(lambda: self.ui.buttonDoorL.toggle(), self.ui.buttonDoorR.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
-
     def Read_Beacon(self,beacon):
         print("receieved")
         if beacon == 1:
@@ -107,7 +104,7 @@ class NonVital():
         self.ui.SpkrOut.setText("test")
         self.block_index = self.block_index + 1
         #green line parse
-        if self.line ==  0 : #green 
+        if self.line ==  1 : #green ###I AM FLIPPING THESE FOR ALEX
             self.speed_lim.emit(self.LineDictionary.green_get_speed_lim(self.block_index))
             self.Set_Underground(self.LineDictionary.green_get_underground(self.block_index))
             self.announcement = self.LineDictionary.get_green_station(self.block_index)
@@ -125,7 +122,7 @@ class NonVital():
     
             
         #red line parse
-        elif self.line == 1 :
+        elif self.line == 0 :
             self.speed_lim.emit(self.LineDictionary.red_get_speed_lim(self.block_index))
             self.Set_Underground(self.LineDictionary.red_get_underground(self.block_index))
             self.announcement = self.LineDictionary.get_red_station(self.block_index)
@@ -136,7 +133,7 @@ class NonVital():
                 self.arrived = True
                 self.doors = int(self.LineDictionary.get_red_door_side(self.block_index))
                 self.int_light_sig.emit(1)
-                self.ui.CurrStatOut.setText(self.LineDicitonary.red_station[self.station_index])
+                self.ui.CurStatOut.setText(self.LineDictionary.red_station[self.station_index])
             elif len(self.announcement) :
                 self.ui.SpkrOut.setText(self.announcement)
                 self.announcement_sig.emit(self.announcement)

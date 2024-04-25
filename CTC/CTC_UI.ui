@@ -564,7 +564,15 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QTimeEdit" name="ArrivalTimeEdit"/>
+                  <widget class="QTimeEdit" name="ArrivalTimeEdit">
+                   <property name="time">
+                    <time>
+                     <hour>7</hour>
+                     <minute>0</minute>
+                     <second>0</second>
+                    </time>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </item>

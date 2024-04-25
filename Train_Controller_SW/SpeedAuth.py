@@ -64,7 +64,7 @@ class Vital_Speed_Auth():
         
         if(not(self.ui.lcdCurSpd.value == 0)):
             self.decimal_m_auth = self.decimal_m_auth - float(self.rate_metric*self.time)
-            self.ui.lcdAuth.display(round(self.decimal_m_auth* 3.28084))
+            self.ui.lcdAuth.display(float(self.decimal_m_auth* 3.28084))
             # if self.ui.lcdAuth.value() > 0:
 
             #authority in m from ft
@@ -136,10 +136,9 @@ class Vital_Speed_Auth():
             elif self.ui.buttonMan.isChecked() :
                 self.ui.vertSliderPow.setEnabled(True)
 
-        elif self.decimal_m_auth < 1 and self.ui.lcdCurSpd == 0 and self.NonVital.arrived == True:
-            ## add timer 
+        elif self.decimal_m_auth < 1 and self.ui.lcdCurSpd == 0:
             self.stop_at_station_sig.emit(1)
-        
+    
         if self.ui.buttonAuto.isChecked():
             self.NonVital.Emit_Doors()
         
@@ -160,8 +159,12 @@ class Vital_Speed_Auth():
                 self.ui.buttonDoorR.toggle()
 
     def Control_Authority(self,auth):
-        self.decimal_m_auth = auth
-        self.authft = round(auth * 3.28084)
+
+        if self.decimal_m_auth < 0:
+            self.decimal_m_auth = self.decimal_m_auth + auth
+        else :   
+            self.decimal_m_auth = auth
+        self.authft = float(auth * 3.28084)
         self.ui.lcdAuth.display(self.authft)
         if self.decimal_m_auth > 0 :
             self.ui.vertSliderPow.setEnabled(True)

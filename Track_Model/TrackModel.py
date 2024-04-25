@@ -211,8 +211,9 @@ class TrackModelMain(QMainWindow):
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
     def train_stop(self, stop):
-        self.stop = stop
         print("train stopped")
+        self.stop = stop
+        
     
     def get_train_id(self, trainID, line):
         self.line_ctc = line

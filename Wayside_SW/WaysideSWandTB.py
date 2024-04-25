@@ -7,6 +7,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
+from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 from Track_Resources.Block import Block
@@ -539,7 +540,18 @@ class WaysideSW(QMainWindow):
         
         self.BlockOcc.setText(" ".join(set(names)))
         #ADD CODE HERE FOR MAITANCE
-        if self.label_7.text() == "AUTOMATIC" : 
+        if self.label_7.text() == "AUTOMATIC" :
+
+            #Validate user has uploaded a PLC file
+            if self.FileParser.inputPLC is None:
+                error_msg = QMessageBox()
+                error_msg.setWindowTitle("Upload Error")
+                error_msg.setText("Please Upload a PLC file in Wayside SW")
+                error_msg.setIcon(QMessageBox.Critical)
+
+                error_msg.exec_() 
+                return
+
             self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
             check1 = self.currentBlocks.copy #blocks after parsed
             self.FileParser.parsePLC()

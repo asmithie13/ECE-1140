@@ -77,14 +77,14 @@ class Vital_Failure():
 
 
     def Control_Signal_Failure(self,sig_fail):
-            if(sig_fail == True):
+            if sig_fail == True :
                 self.ui.SigFail.setStyleSheet("color: red;\n"
                                             "background-color: rgb(255, 255, 255);")
                 self.ui.vertSliderPow.setValue(0)
-                self.ui.vertSliderBrk.setValue(1)
                 self.ui.vertSliderPow.setDisabled(True)
                 self.ui.vertSliderBrk.setDisabled(True)
-            else:
+                self.Control_Emergency_Brake_Internal(True)
+            elif sig_fail == False: 
                 self.ui.SigFail.setStyleSheet("color: rgb(225, 225, 225);\n"
                                         "background-color: rgb(255, 255, 255);")
                 self.ui.vertSliderPow.setDisabled(False)
@@ -96,10 +96,10 @@ class Vital_Failure():
                 self.ui.PwrFail.setStyleSheet("color: red;\n"
                                             "background-color: rgb(255, 255, 255);")
                 self.ui.vertSliderPow.setValue(0)
-                self.ui.vertSliderBrk.setValue(1)
+                self.Control_Emergency_Brake_Internal(True)
                 self.ui.vertSliderPow.setDisabled(True)
                 self.ui.vertSliderBrk.setDisabled(True)
-            else:
+            elif pwr_fail == False:
                 self.ui.PwrFail.setStyleSheet("color: rgb(225, 225, 225);\n"
                                         "background-color: rgb(255, 255, 255);")
                 self.ui.vertSliderPow.setDisabled(False)
@@ -107,11 +107,16 @@ class Vital_Failure():
 
 
     def Control_Brake_Failure(self,brk_fail):
-            if(brk_fail == True):
+            if brk_fail == True:
                 self.ui.BrkFail.setStyleSheet("color: red;\n"
                                         "background-color: rgb(255, 255, 255);")
-                self.ui.Ebrake.setChecked(True)
+                self.Control_Emergency_Brake_Internal(True)
+                self.ui.vertSliderPow.setValue(0)
+                self.ui.vertSliderPow.setDisabled(True)
+                self.ui.vertSliderBrk.setDisabled(True)
             #DISABLE
-            else:
+            elif brk_fail == False:
                 self.ui.BrkFail.setStyleSheet("color: rgb(225, 225, 225);\n"
                                         "background-color: rgb(255, 255, 255);")
+                self.ui.vertSliderPow.setDisabled(False)
+                self.ui.vertSliderBrk.setDisabled(False)

@@ -110,6 +110,22 @@ Click the Maintenance Mode button to enter Maintenance Mode
 
 ### Wayside Software UI
 
+<img src="./UI_Screenshots/WaysideSW_UI_Screenshot.png">
+
+1. The wayside module begins in automatic operation. This means that a valid PLC file must be uploaded prior to train dispatch.
+2. Select the desired line and wayside.    
+3. After the PLC file is uploaded, the module will respond to block occupancies automatically as the main simulation is run. No input is required from the PLC programmer.
+4. If the user wishes to put the train into manual operation, click the mode button. This will allow block attributes to be toggling the light, crossing, or switch.
+
+**Wayside Software FAQ:**
+- Why are errors being detected in automatic mode?
+    - The PLC file was not valid, or it was never uploaded. Please try uploading an accurate, properly-formatted PLC file.
+- How can I ensure that switch, light, and crossing states are being calculated correctly in automatic mode?
+    - Switch, light, and crossing states are reflected in the Track Model UI. Please refer to this UI for confirmation.
+- Is there protocol in-place for preventing collisions between trains? Does this protocol apply to block closures?
+    - Yes. Per-block authority is calculated every time a new block occupancy is detected. Two trains will never collide, as per this calculation. Closed blocks are interpreted as occupancies by this module, so the same protocol applies.
+
+
 ### Wayside Hardware UI
 
 <img src="./UI_Screenshots/WaysideHW_UI_Screenshot.png">

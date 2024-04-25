@@ -188,13 +188,13 @@ class TrainModel_mainwindow(QMainWindow):
 
     def ebrake_disabled(self, ebrake_state):
         self.ebrake_state = ebrake_state
-        print("ebrake state",self.ebrake_state)
+      
         self.TC.ebrake_sig.emit(self.ebrake_state)
         # If ebrake is enabled
         if self.ebrake_state:
             if self.ebrake.setChecked(True):
                 self.TC.ebrake_sig.emit(1) # Emit the ebrake signal with value 1
-                print("this statement")
+              
             else:
                 self.ebrake.setChecked(True)  # Set the ebrake button to checked (ON)
             self.ebrake.setEnabled(False)  # Disable the ebrake button
@@ -495,7 +495,7 @@ class TrainCalculations:
         self.grade=grade
         acceleration=0  
 
-        if self.main_window.brake_state==0 :
+        if self.main_window.brake_state==0 and self.main_window.ebrake_state==0:
             acceleration = float((self.main_window.force/self.mass)*3.281) #in ft/s^2
             if acceleration>1.6:
                 acceleration=1.64
@@ -527,6 +527,7 @@ class TrainCalculations:
                 if self.main_window.velocity<=0.1:
                     self.main_window.velocity=0
                 
+                
                                     
 
             elif self.main_window.brake_state==1:
@@ -536,12 +537,12 @@ class TrainCalculations:
                 self.main_window.Acceleration_value_lcd.display("{:.3f}".format(self.main_window.a_n))
                 if self.main_window.velocity<=0.1:
                     self.main_window.velocity=0
-
-            
+                
+       
         self.main_window.prev_vel=self.main_window.velocity
        
-
-        if self.main_window.velocity <= 0:
+      
+        if self.main_window.velocity <= 0.1:
             self.main_window.a_n=0
             self.main_window.velocity=0
             self.main_window.prev_vel=0
@@ -550,7 +551,7 @@ class TrainCalculations:
   
         self.main_window.prev_time=train_model_time_sec
 
-
+   
         #ft/sec to mph
         self.velocity_mph=(self.main_window.velocity)/1.467
 

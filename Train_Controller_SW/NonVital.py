@@ -50,9 +50,6 @@ class NonVital():
             print("interior lights dimmed")
 
 
-#         self.stationTimer.start()
-#         self.stationTimer.timeout.connect(lambda: self.ui.buttonDoorL.toggle(), self.ui.buttonDoorR.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
-
     def Read_Beacon(self,beacon):
         print("receieved")
         if beacon == 1:

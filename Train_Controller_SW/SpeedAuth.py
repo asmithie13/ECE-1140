@@ -40,7 +40,8 @@ class Vital_Speed_Auth():
         
     def Control_Speed_Limit(self,spdLim):
         #update speed limit for current block
-        self.ui.lcdSpdLim.display(spdLim)
+        #from KM/HR to MPH
+        self.ui.lcdSpdLim.display(spdLim * 0.6213)
         #self.Speed_Monitor()
         
     def Control_Commanded_Speed(self,cmdSpd):
@@ -80,7 +81,7 @@ class Vital_Speed_Auth():
 
         
             #if self.stopcal == True:
-            self.stoppingdistanceService = (self.V_i**2)/(2*1.2)   
+            self.stoppingdistanceService = (self.V_i**2)/(2*1.2)   + self.ui.lcdCurSpd.value() * .1
             #print("Stopping Distance :",self.stoppingdistanceService)
             #print(self.stoppingdistanceService)
             #print("Dist Service : ", self.stoppingdistanceService)

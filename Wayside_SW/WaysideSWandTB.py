@@ -536,6 +536,10 @@ class WaysideSW(QMainWindow):
                     self.occupiedBlocks.append(block)
 
         names = []
+
+        for block in self.occupiedBlocks[:]:  
+            if not block.occupied:
+                self.occupiedBlocks.remove(block)
         
         flag = False
 

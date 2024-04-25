@@ -243,7 +243,7 @@ class TrackModelMain(QMainWindow):
         self.temp_out.setText(f"{temp_value}°")
 
         # Update the heaters_out label based on the temperature
-        if temp_value <= 32:
+        if temp_value <= 35.06:
             self.heaters_out.setText("ON")
         else:
             self.heaters_out.setText("OFF")

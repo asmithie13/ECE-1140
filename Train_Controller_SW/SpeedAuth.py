@@ -21,7 +21,8 @@ class Vital_Speed_Auth():
         self.stop_at_station_sig = stop_at_station_sig
         self.NonVital = NonVital
         self.bool_auth_enabled = True
-        self.stopflag = False
+
+        self.stopFlag = False
 
     def Control_Current_Speed(self,newSpeed):
         self.ui.lcdCurSpd.display("{:.2f}".format(newSpeed))
@@ -138,13 +139,14 @@ class Vital_Speed_Auth():
             elif self.ui.buttonMan.isChecked() :
                 self.ui.vertSliderPow.setEnabled(True)
 
-        if self.ui.lcdAuth.value() <= 0 and self.ui.lcdCurSpd.value() == 0.0 and not self.stopflag:
-            self.stopflag = True
+
+        if self.ui.lcdAuth.value() <= 0 and self.ui.lcdCurSpd.value() == 0.0 and not self.stopFlag:
+            self.stopFlag = True
             self.stop_at_station_sig.emit(1)
-            print("stopped")
+            
         
-        elif self.ui.lcdAuth.value() > 0 and self.stopflag:
-            self.stopflag = False
+        elif self.ui.lcdAuth.value() > 0 and self.stopFlag:
+            self.stopFlag = False
     
         if self.ui.buttonAuto.isChecked():
             self.NonVital.Emit_Doors()
@@ -166,7 +168,8 @@ class Vital_Speed_Auth():
                 self.ui.buttonDoorR.toggle()
 
     def Control_Authority(self,auth):
-        
+        self.stopFlag = False
+
         if self.decimal_m_auth < 0:
             self.decimal_m_auth = self.decimal_m_auth + auth
         else :   

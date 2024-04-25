@@ -210,9 +210,11 @@ class TrackModelMain(QMainWindow):
         #self.current_line = "Green Line"  # Default line
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
-    def train_stop(self, stop):
-        self.stop = stop
-    
+    # def train_stop(self, stop):
+    #     print("stop")
+    #     self.stop = stop
+    #         if self.stop == True:
+    #         self.generateTickets(block_num)
     def get_train_id(self, trainID, line):
         self.line_ctc = line
         if line == "Green":
@@ -278,9 +280,6 @@ class TrackModelMain(QMainWindow):
         total_dis_from_beg_of_block += speed_of_train_m
         self.currentTrains[trainIndex][2] = total_dis_from_beg_of_block
 
-
-        if self.stop == True:
-            self.generateTickets(block_num)
 
         # if train moves to the next block
         if total_dis_from_beg_of_block >= block_length:
@@ -480,122 +479,48 @@ class TrackModelMain(QMainWindow):
                         
         #Red Line                                  
         if line == "Red":
-            #Red line train dispatch case  
-            if (BlockNum >= 10) and (BlockNum < 15):
-                return BlockNum + 1
-         
-            elif (BlockNum == 15):
-                if self.get_switch_state(15, line_color="Red") == True:
-                    return 16
-                
-            elif (BlockNum >= 16) and (BlockNum < 27):
-                return BlockNum + 1
-        
-
-            elif BlockNum == 27:
-                if self.get_switch_state(27, line_color="Red") == True:
-                    return 28
-                else: 
-                    return 28
-                
-            elif (BlockNum >= 28) and (BlockNum < 32):
+            #Red line train dispatch case        
+            if (BlockNum >= 10) and (BlockNum < 66):
                 return BlockNum + 1
             
-            elif BlockNum == 32:
-                if self.get_switch_state(32, line_color="Red") == True:
-                    return 33
-                else:
-                    return 32
+            elif (BlockNum == 66):
+                return 52
             
-            elif (BlockNum >= 33) and (BlockNum < 38):
-                return BlockNum + 1
-            
-            elif BlockNum == 38:
-                if self.get_switch_state(38, line_color="Red") == True:
-                    return 39
-                else:
-                    return 38
-                
-            elif (BlockNum >= 39) and (BlockNum < 43):
-                return BlockNum + 1
-            
-            elif BlockNum == 43:
-                if self.get_switch_state(43, line_color="Red") == True:
-                    return 44
-                else:
-                    return 43
-            
-            elif (BlockNum >= 44) and (BlockNum < 52):
-                return BlockNum + 1
-            
-            elif BlockNum == 52:
-                if self.get_switch_state(52, line_color="Red") == True:
-                    return 53
-                else:
-                    return 52
-                
-            elif (BlockNum >= 53) and (BlockNum < 66):
-                return BlockNum + 1
-            
-            elif BlockNum == 66:
-                if direction == 'decreasing':
-                    #print(self.get_switch_state(52, line_color="Red"))
-                    if self.get_switch_state(52, line_color="Red") == False:
-                        return 52
-                    else: 
-                        return 66
-                    
-            elif (BlockNum <= 52) and (BlockNum > 43):
+            elif (BlockNum >= 52) and (BlockNum < 43):
                 return BlockNum - 1
             
-            elif BlockNum == 43:
-                if self.get_switch_state(43, line_color="Red") == False:
-                    return 67
+            elif (BlockNum == 43):
+                return 67
             
-            elif (BlockNum >= 67) and (BlockNum < 71):
+            elif (BlockNum >=67) and (BlockNum < 71):
                 return BlockNum + 1
             
-            elif BlockNum == 71:
-                if direction == 'decrease':
-                    if self.get_switch_state(38, line_color="Red") == False:
-                        return 37
-                    else:
-                        return 71
-                    
-            elif (BlockNum <= 37) and (BlockNum > 32):
+            elif (BlockNum == 71):
+                return 38
+            
+            elif (BlockNum >= 38) and (BlockNum < 32):
                 return BlockNum - 1
             
-            elif BlockNum == 32:
-                if self.get_switch_state(52, line_color="Red") == False:
-                    return 72
+            elif (BlockNum == 32):
+                return 72
             
             elif (BlockNum >= 72) and (BlockNum < 76):
                 return BlockNum + 1
             
-            elif BlockNum == 76:
-                if direction == 'decreasing':
-                    if self.get_switch_state(27, line_color="Red") == False:
-                        return 28
-                    else:
-                        return 76
+            elif (BlockNum == 76):
+                return 27
             
-            elif (BlockNum <= 28) and (BlockNum > 15):
+            elif (BlockNum >= 27) and (BlockNum < 16):
                 return BlockNum - 1
             
-            elif BlockNum == 15:
-                if direction == 'increasing':
-                    if self.get_switch_state(15, line_color="Red") == False:
-                        return 1
-                    else:
-                        return 15
-                    
-            elif (BlockNum >= 1) and (BlockNum < 9):
+            elif (BlockNum == 15):
+                # if direction == 'increasing':
+                #     if self.get_switch_state(28, line_color="Red") == True:
+                return 1
+            
+            elif (BlockNum >= 1) and (BlockNum <= 9):
                 # if self.get_switch_state(15, line_color="Red") == True:
                 return BlockNum + 1
-            
-            elif BlockNum == 9:
-                return -1
-            
 
                     
     def get_and_set_crossing_state(self, block_num):
@@ -988,7 +913,7 @@ class TrackModelMain(QMainWindow):
         self.update_heaters_out()
 
         # Determine if we need to adjust block ID for Red Line blocks
-        if self.line_ctc == "Red Line" and block_id.endswith('_r'):
+        if self.line_ctc == "Red Line" or block_id.endswith('_r'):
             # Remove the '_r' suffix for data fetching
             adjusted_block_id = block_id[:-2]
         else:
@@ -1084,17 +1009,28 @@ class TrackModelMain(QMainWindow):
         return block_id in self.station_lookup
 
 
-    def generateTickets(self, block_id):
+    def generateTickets(self, stop):
         self.listStation_green  = [2, 9, 16, 22, 31, 39, 141, 48, 132, 57, 123, 65, 114, 73, 105, 77, 88, 96]
+        #print("hi")
         # if forceNewNumber or block_id not in self.lastGeneratedTickets:
         #     random_number = random.randint(1, 74)
         #     self.lastGeneratedTickets[block_id] = random_number
 
-        #overbroke is hte last station for green line 
-        if block_id in self.listStation_green:
-            self.random_number = random.randint(1, 74)
-            self.people_boarding += random.randint(1,self.random_number)
-            self.people_boarding_sig.emit(self.people_boarding)
+        blocks = self.occupied_blocks[0]
+        block_on = blocks[1:]
+
+        #overbroke is hte last station for green line
+        self.random_number = random.randint(1, 74)
+        self.people_boarding += random.randint(1,self.random_number)
+        self.poff = random.randint(1, self.people_boarding)
+
+        self.people_off = self.people_boarding - self.poff
+        self.people_boarding_sig.emit(self.people_off)
+
+
+        self.ticket_out.setText(str(self.random_number))
+        self.boarding_out.setText(str(self.people_boarding))
+        self.disembarking_out.setText(str(self.people_off))
 
             #self.SendTicketsales.emit(self.random_number)
 

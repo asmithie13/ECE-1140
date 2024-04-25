@@ -180,7 +180,7 @@ class TrainModel_mainwindow(QMainWindow):
     
     def stop_at_station(self,stop_bool):
         self.stop_bool=stop_bool
-        print("stop_soig")
+        #print("stop_soig")
         self.stop_at_station_sig.emit(stop_bool)
         
         
@@ -228,12 +228,13 @@ class TrainModel_mainwindow(QMainWindow):
         self.grade=grade
         self.grade_display.setText(str(grade))
     
-    def people_stats(self, trainID, pcount):
-        if trainID==self.TrainID:
-            self.people_count=pcount
-            self.pcount_display.setText(str(self.people_count))
-            self.total_cap=self.people_count+self.crew_count
+    def people_stats(self, pcount):
+        self.people_count=pcount
+        self.pcount_display.setText(str(self.people_count))
+        self.total_cap=self.people_count+self.crew_count
+        print("Anh stuff")
         
+            
         
 
         

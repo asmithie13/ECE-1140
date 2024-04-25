@@ -13,7 +13,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
 #Enable serial communication:
-serialObject = serial.Serial('COM8', 9600)
+#serialObject = serial.Serial('COM8', 9600)
 
 from Wayside_HW.TrackController_HW_TB import *
 from Wayside_HW.readTrackFile import *
@@ -63,7 +63,6 @@ class TrackController_HW(QMainWindow):
         self.maintenanceSwitches = []
 
         self.closedFlag = 0
-        self.biFlag = 0
 
         #Signals (Manual mode-related):
         self.checkBoxManual.clicked.connect(self.manualMode)
@@ -80,12 +79,6 @@ class TrackController_HW(QMainWindow):
         occupiedBlocks.sort()
         if occupiedBlocks == self.listOccIDs and self.closedFlag == 0:
             return
-        
-        if 'F22' in occupiedBlocks:
-            self.biFlag += 1
-        
-        if 'F27' in occupiedBlocks:
-            self.biFlag = 0
 
         self.previousOccupiedBlock = self.occupiedBlocks
         
@@ -181,7 +174,7 @@ class TrackController_HW(QMainWindow):
         occupiedBlockBytes = occupiedBlockString.encode()
 
         '''BEGIN SERIAL COMMUNICATION'''
-        serialObject.write(occupiedBlockBytes)
+        '''serialObject.write(occupiedBlockBytes)
         #Receiving serial responses from the Raspberry Pi:
         copyBlocks = self.allBlocks
         attributeList = []
@@ -203,7 +196,7 @@ class TrackController_HW(QMainWindow):
                     else:
                         attributeList.append(myAttribute)
                 if breakFlag == 1:
-                    break
+                    break'''
         
         #Parse PLC file and adjust blocks accordingly:
         self.allBlocks = newParse(occupiedBlockSections, self.allBlocks)
@@ -216,7 +209,7 @@ class TrackController_HW(QMainWindow):
             elif block.CROSSING == True:
                 attributeListSoftware.append(str(block.crossingState))
 
-        if attributeList != attributeListSoftware:
+        '''if attributeList != attributeListSoftware:
             self.lineEditHardware.setText("ERRORS DETECTED. STOPPING ALL TRAINS.")
             for block in self.allBlocks:
                 block.authority = False
@@ -226,9 +219,9 @@ class TrackController_HW(QMainWindow):
             self.setMaintenanceSwitch()
             self.updateBooleanAuth()
             self.preventCollision()
-            self.sendUpdatedBlocks.emit(self.allBlocks)
+            self.sendUpdatedBlocks.emit(self.allBlocks)'''
         
-        '''self.setMaintenanceSwitch()
+        self.setMaintenanceSwitch()
         self.updateBooleanAuth() #Uncomment when hardware is not connected
         self.preventCollision() #Function to prevent occupancy collisions
         self.sendUpdatedBlocks.emit(self.allBlocks) #Uncomment when hardware is not connected'''
@@ -565,15 +558,8 @@ class TrackController_HW(QMainWindow):
                     if self.allBlocks[index+2] not in tempSkip:
                         self.allBlocks[index+2].authority = True
             if block.blockSection in biDirection:
-                if block.ID == 'D13':
+                if block.ID == 'D13' or block.ID == 'D16' or block.ID == 'F22':
                     continue
-                if block.ID == 'F22' and self.biFlag >= 2: #Should change
-                    if block.occupied == True:
-                        self.allBlocks[index-1].authority = False
-                        self.allBlocks[index-2].authority = False
-                        tempSkip.append(self.allBlocks[index-1])
-                        tempSkip.append(self.allBlocks[index-2])
-                        continue
 
                 if self.allBlocks[index-1] in self.previousOccupiedBlock:
                     if block.occupied == True:

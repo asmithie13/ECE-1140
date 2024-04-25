@@ -18,6 +18,7 @@ class NonVital():
         self.LineDictionary = Line_Dictionary()
         self.station_index = 0
 
+
         
 
     def Control_Headlights_On(self):
@@ -104,7 +105,7 @@ class NonVital():
     def Block_Changed(self,bool):
         #change index 
         self.ui.SpkrOut.setText("test")
-        self.block_index += 1
+        self.block_index = self.block_index + 1
         #green line parse
         if self.line ==  0 : #green 
             self.speed_lim.emit(self.LineDictionary.green_get_speed_lim(self.block_index))
@@ -114,7 +115,7 @@ class NonVital():
             self.arrived = False
             self.doors = self.LineDictionary.get_green_door_side(self.block_index)
             if len(self.announcement) > 0 and len(self.doors) > 0 :
-                station_index += 1
+                self.station_index += 1
                 self.announcement_sig.emit(self.announcement)
                 self.ui.CurStatOut.setText(self.LineDictionary.green_station[self.station_index])
                 self.arrived = True

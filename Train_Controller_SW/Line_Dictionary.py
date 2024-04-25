@@ -197,22 +197,24 @@ class Line_Dictionary():
                      "South Bank",
                      "Central",
                      "Inglewood",
-                     "Overbrook"]
+                     "Overbrook",
+                     "Yard"]
     
     red_station =  ["Herron",
      "Swissvile",
-     "Penn Station"
-     "Steel Plaza"
-     "First Ave"
-     "Station Square"
-     "South Hills"
-     "Station Square"
-     "First Ave"
-     "Steel Plaza"
-     "Penn Station"
-     "Swissville"
-     "Herron"
-     "Shadyside"]
+     "Penn Station",
+     "Steel Plaza",
+     "First Ave",
+     "Station Square",
+     "South Hills",
+     "Station Square",
+     "First Ave",
+     "Steel Plaza",
+     "Penn Station",
+     "Swissville",
+     "Herron",
+     "Shadyside",
+     "Yard"]
 
     red = [
         ['D_10', 40, False, '', ''],

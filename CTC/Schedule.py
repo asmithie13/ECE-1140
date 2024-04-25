@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import uic
 import csv
-from CTC.TempData import *
+from CTC.CTC_TrackData import *
 
 #Schedule class, holds schedule data and defines methods for editing the schedule
 class Schedule():

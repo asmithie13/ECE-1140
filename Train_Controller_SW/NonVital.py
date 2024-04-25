@@ -104,7 +104,7 @@ class NonVital():
         self.ui.SpkrOut.setText("test")
         self.block_index = self.block_index + 1
         #green line parse
-        if self.line ==  1 : #green ###I AM FLIPPING THESE FOR ALEX
+        if self.line ==  0 : #green ###I AM FLIPPING THESE FOR ALEX
             self.speed_lim.emit(self.LineDictionary.green_get_speed_lim(self.block_index))
             self.Set_Underground(self.LineDictionary.green_get_underground(self.block_index))
             self.announcement = self.LineDictionary.get_green_station(self.block_index)
@@ -122,7 +122,7 @@ class NonVital():
     
             
         #red line parse
-        elif self.line == 0 :
+        elif self.line == 1 :
             self.speed_lim.emit(self.LineDictionary.red_get_speed_lim(self.block_index))
             self.Set_Underground(self.LineDictionary.red_get_underground(self.block_index))
             self.announcement = self.LineDictionary.get_red_station(self.block_index)

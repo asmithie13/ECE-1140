@@ -51,7 +51,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Manual Dispatch Formatting
         self.ArrivalTimeEdit.setDisplayFormat("hh:mm")
-        self.currentTime = "00:00"
+        self.currentTime = "07:00"
 
         #Importing Track Data
         self.TrackData = TempData()

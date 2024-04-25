@@ -54,7 +54,7 @@ class NonVital():
 
 
     def Read_Beacon(self,beacon):
-        print("receieved")
+        #print("receieved")
         if beacon == 1:
             self.line = 1
         elif beacon == 0:

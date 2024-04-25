@@ -47,7 +47,8 @@ class TrainModel_mainwindow(QMainWindow):
     #Track Model Signals
     stop_at_station_sig = qtc.pyqtSignal(bool)
     track_model_acc_velo = qtc.pyqtSignal(str, float)
-    people_disemb_sig=qtc.pyqtSignal(int)
+    get_people_stats=qtc.pyqtSignal(int)
+
     
 
     def __init__(self,TrainID):
@@ -135,7 +136,7 @@ class TrainModel_mainwindow(QMainWindow):
         self.train_calculations.calculate_acc_velocity(self.comm_speed,self.grade,self.mass)
         
         self.set_ccount(self.crew_count)
-        self.set_pcount(self.people_count)
+        #self.set_pcount(self.people_count)
         if total_ms % 6000 == 0:  # Call set_cabin_temp every minute
             self.set_cabin_temp(self.cabin_temp)
         
@@ -180,6 +181,7 @@ class TrainModel_mainwindow(QMainWindow):
     def stop_at_station(self,stop_bool):
         self.stop_bool=stop_bool
         self.stop_at_station_sig.emit(stop_bool)
+        print("stop_soig")
         
         
 
@@ -207,9 +209,10 @@ class TrainModel_mainwindow(QMainWindow):
     def set_length(self, input_txt):
         self.length_of_vehicle_display.setText(input_txt)
 
-    def set_pcount(self, people_count):
-        self.people_count=people_count
-        self.pcount_display.setText(str(self.people_count))
+    def set_pcount(self, trainID, people_count):
+        if trainID == self.TrainID:
+            self.people_count=people_count
+            self.pcount_display.setText(str(self.people_count))
 
     def set_ccount(self, crew_count):
         self.ccount_display.setText(str(self.crew_count))
@@ -223,6 +226,17 @@ class TrainModel_mainwindow(QMainWindow):
     def set_grade(self, grade):
         self.grade=grade
         self.grade_display.setText(str(grade))
+    
+    def people_stats(self, trainID, pcount):
+        if trainID==self.TrainID:
+            self.people_count=pcount
+            self.pcount_display.setText(str(self.people_count))
+        
+        
+
+        
+
+
 
 
 

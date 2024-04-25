@@ -36,10 +36,10 @@ class TrackModelMain(QMainWindow):
     #sendOccupancies = pyqtSignal(list)
 
     #send ticket sales to ctc
-    SendTicketsales = pyqtSignal(int)
+    SendTicketsales = pyqtSignal(str, int)
 
     #send people boarding
-    people_boarding_sig = pyqtSignal(int)
+    people_boarding_sig = pyqtSignal(str, int)
 
     #send train model train id, speed, and authority
     sendSpeedAuth = pyqtSignal(list)
@@ -212,6 +212,7 @@ class TrackModelMain(QMainWindow):
 
     def train_stop(self, stop):
         self.stop = stop
+        print("train stopped")
     
     def get_train_id(self, trainID, line):
         self.line_ctc = line
@@ -279,10 +280,6 @@ class TrackModelMain(QMainWindow):
         total_dis_from_beg_of_block += speed_of_train_m
         self.currentTrains[trainIndex][2] = total_dis_from_beg_of_block
 
-
-        if self.stop == True:
-            self.generateTickets(block_num)
-
         # if train moves to the next block
         if total_dis_from_beg_of_block >= block_length:
 
@@ -290,6 +287,12 @@ class TrackModelMain(QMainWindow):
             #emit signal for polarity
             self.send_polarity.emit(trainId, True)
             self.send_beacon.emit(0)
+
+            
+
+            if self.stop == True:
+                self.generateTickets(trainId, block_num)
+
             #Setting train direction after switches
             if self.line_ctc== "Green":
                 if block_num == 76:
@@ -1083,18 +1086,27 @@ class TrackModelMain(QMainWindow):
         return block_id in self.station_lookup
 
 
-    def generateTickets(self, block_id):
+    def generateTickets(self, train_id, block_id):
         self.listStation_green  = [2, 9, 16, 22, 31, 39, 141, 48, 132, 57, 123, 65, 114, 73, 105, 77, 88, 96]
         # if forceNewNumber or block_id not in self.lastGeneratedTickets:
         #     random_number = random.randint(1, 74)
         #     self.lastGeneratedTickets[block_id] = random_number
 
-        #overbroke is hte last station for green line 
+        #overbroke is the last station for green line 
         if block_id in self.listStation_green:
             self.random_number = random.randint(1, 74)
-            self.people_boarding += random.randint(1,self.random_number)
-            self.people_boarding_sig.emit(self.people_boarding)
+            self.ticket_out.setText(str(self.random_number))
 
+            self.people_boarding += random.randint(1,self.random_number)
+            self.people_off = random.randint(0, self.people_boarding) 
+
+            self.boarding_out.setText(str(self.people_boarding))
+            self.disembarking_out.setText(str(self.people_off))
+
+
+            self.people_boarding_sig.emit(train_id, (self.people_boarding-self.people_off))
+
+        
             #self.SendTicketsales.emit(self.random_number)
 
         # if self.time.split(':')[1] == "00":
@@ -1102,6 +1114,8 @@ class TrackModelMain(QMainWindow):
         #             self.random_number = random.randint(1, 74)
         #             self.SendTicketsales_tm.emit(self.random_number)
             
+    def get_people_dissem(self, people):
+        self.people_off = people
 
     def get_infra_for_block(self, block_num):
         self.station = None  # Set to None initially to clearly see if it gets changed

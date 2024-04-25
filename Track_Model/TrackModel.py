@@ -97,6 +97,15 @@ class TrackModelMain(QMainWindow):
     'P68_r', 'P69_r', 'P70_r', 'Q71_r', 'R72_r', 'S73_r', 'S74_r', 'S75_r', 'T76_r'
     ]
     
+    block_ids_red_2 = [
+        'A1', 'A2', 'A3', 'B4', 'B5', 'B6', 'C7', 'C8', 'C9', 'D10', 'D11', 'D12',
+        'E13', 'E14', 'E15', 'F16', 'F17', 'F18', 'F19', 'F20', 'G21', 'G22', 'G23',
+        'H24', 'H25', 'H26', 'H27', 'H28', 'H29', 'H30', 'H31', 'H32', 'H33', 'H34',
+        'H35', 'H36', 'H37', 'H38', 'H39', 'H40', 'H41', 'H42', 'H43', 'H44', 'H45',
+        'I46', 'I47', 'I48', 'J49', 'J50', 'J51', 'J52', 'J53', 'J54', 'K55', 'K56',
+        'K57', 'L58', 'L59', 'L60', 'M61', 'M62', 'M63', 'N64', 'N65', 'N66', 'O67',
+        'P68', 'P69', 'P70', 'Q71', 'R72', 'S73', 'S74', 'S75', 'T76'
+    ]
 
     station_lookup = {
     "A2": "PIONEER",
@@ -877,14 +886,19 @@ class TrackModelMain(QMainWindow):
     
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box
+        self.block_in_1.clear()
         self.selected_option = self.line_select.currentText()
+
         if self.selected_option == "Green Line":
+            self.block_in_1.addItems(self.block_ids_green)
             self.green_line.show()
             self.red_line.show()
         elif self.selected_option == "Select Line":
+            self.block_in_1.clear()
             self.green_line.hide()
             self.red_line.hide()    
         elif self.selected_option == "Red Line":
+           self.block_in_1.addItems(self.block_ids_red_2)
            self.red_line.show()
            self.green_line.hide()
         # Now call the function to load the track layout based on the new selection

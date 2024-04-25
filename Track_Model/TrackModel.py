@@ -153,6 +153,7 @@ class TrackModelMain(QMainWindow):
         self.people_boarding = 0
         self.line_ctc= ""
         self.stop = False
+        self.train_authority = {}  # Dictionary to store authority status for each train
         self.switch_green = ""
         self.failure_colors = {
             'broken_rail': 'grey',  # Color for broken rail failures
@@ -620,11 +621,14 @@ class TrackModelMain(QMainWindow):
                 'switchState': block.switchState,
                 'authority' : block.authority
             }
+            self.get_send_bool_auth()
 
-        if self.train_ID:
-            if self.occupied_blocks:
-                #print(self.train_ID[1:])
-                self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
+        # if self.train_ID:
+        #     if self.occupied_blocks:
+        #         #print(self.train_ID[1:])
+        #         self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
+
+        
 
     def receiveSpecialBlocks_SW_red(self, specialBlock):
         for block in specialBlock:
@@ -637,10 +641,10 @@ class TrackModelMain(QMainWindow):
                 'authority' : block.authority
             }
 
-        if self.train_ID:
-            if self.occupied_blocks:
-                #print(self.train_ID[1:])
-                self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
+        # if self.train_ID:
+        #     if self.occupied_blocks:
+        #         #print(self.train_ID[1:])
+        #         self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
 
 
     def receiveSpecialBlocks_HW(self, specialBlock):
@@ -654,30 +658,31 @@ class TrackModelMain(QMainWindow):
                 'authority' : block.authority
             }
 
-        if self.train_ID:
-            if self.occupied_blocks:
-                #print(self.train_ID[1:])
-                self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
+        # if self.train_ID:
+        #     if self.occupied_blocks:
+        #         #print(self.train_ID[1:])
+        #         self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
+        self.get_send_bool_auth()
 
-    def get_send_bool_auth(self, train_id, block_id):
-        # Get the block state if it exists
-        block_state = self.blockStates.get(block_id, {})
+    def get_send_bool_auth(self):
+        for train in self.currentTrains:  #currentTrains holds info about each train
+            train_id = train[0]  # Train ID
+            current_block_id = train[-1]  #last element in each train's list is the current block ID
+            print(train_id, current_block_id)
 
-        # Extract the authority value from the block state dictionary
-        authority_value = block_state.get('authority', None)
-        #print(train_id,block_id, authority_value)
-        #print(authority_value)
-        # Check if the authority exists and is explicitly set to a boolean
-        if authority_value == True:
-            #Ensure the value is a boolean (depends on how data is received)
-            is_authorized = bool(authority_value)  # Convert to boolean (assumes non-None means True)
-            
-            #emit the boolean authority
-            self.send_bool_auth.emit(train_id, is_authorized)
+            #retrieve the authority status from blockStates using the current block ID
+            block_state = self.blockStates.get(current_block_id, {})
+            authority_value = block_state.get('authority', 'N/A')
+            print(train_id, authority_value)
+            if authority_value is not None:
+                #iff authority exists and is True, emit True, else emit False
+                self.send_bool_auth.emit(train_id, bool(authority_value))
+            else:
+                # If no authority info is available, assume False as default
+                self.send_bool_auth.emit(train_id, False)
 
-        else:
-            #return false = stop the train!
-            self.send_bool_auth.emit(self.train_ID, False) 
+
+        
 
     def set_clock(self, time):
         self.clock_in.display(time[0:5])

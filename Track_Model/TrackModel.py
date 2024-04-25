@@ -630,7 +630,12 @@ class TrackModelMain(QMainWindow):
                 'switchState': block.switchState,
                 'authority' : block.authority
             }
-            self.get_send_bool_auth()
+
+        block_state = self.blockStates.get('K63', {})
+        authority_value = block_state.get('authority', None)
+        print(authority_value)
+
+        self.get_send_bool_auth()
 
         # if self.train_ID:
         #     if self.occupied_blocks:
@@ -677,17 +682,19 @@ class TrackModelMain(QMainWindow):
         for train in self.currentTrains:  #currentTrains holds info about each train
             train_id = train[0]  # Train ID
             current_block_id = train[-1]  #last element in each train's list is the current block ID
-            print(train_id, current_block_id)
+            #print(train_id, current_block_id)
 
             #retrieve the authority status from blockStates using the current block ID
             block_state = self.blockStates.get(current_block_id, {})
-            authority_value = block_state.get('authority', 'N/A')
-            print(train_id, authority_value)
+            authority_value = block_state.get('authority', None)
+            print(train_id, authority_value, current_block_id)
+
             if authority_value is not None:
                 #iff authority exists and is True, emit True, else emit False
-                self.send_bool_auth.emit(train_id, bool(authority_value))
+                self.send_bool_auth.emit(train_id, authority_value)
             else:
                 # If no authority info is available, assume False as default
+                print("NOOOOOOOOOOOOOOOOOOOO")
                 self.send_bool_auth.emit(train_id, False)
 
 

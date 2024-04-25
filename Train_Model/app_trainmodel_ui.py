@@ -232,6 +232,7 @@ class TrainModel_mainwindow(QMainWindow):
         if trainID==self.TrainID:
             self.people_count=pcount
             self.pcount_display.setText(str(self.people_count))
+            self.total_cap=self.people_count+self.crew_count
         
         
 

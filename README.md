@@ -68,9 +68,10 @@ pip install matplotlib pandas PyQt5 PyQt5_sip pyserial PySide6
 **In Manual Mode:** 
 1. Open the CTC UI
 2. Select Manual Mode
-3. By default, a new train will be dispatched, indicated by the * in front of the Train ID. If you are adding a stop to a train that’s already dispatched, select the intended Train ID from the drop down.
-4. Select the destination and the arrival time. Destinations should be added to the schedule in the order they are in on the route.
-5. Click the “Add Train to Schedule” button. This will calculate the dispatch time and departure station, and add the information to the schedule.
+3. Select a line color
+4. By default, a new train will be dispatched, indicated by the * in front of the Train ID. If you are adding a stop to a train that’s already dispatched, select the intended Train ID from the drop down.
+5. Select the destination and the arrival time. Destinations for a single train should be added to the schedule in the order they are in on the route.
+6. Click the “Add Train to Schedule” button. This will calculate the dispatch time and departure station, and add the information to the schedule.
 
 
 **In Automatic Mode:**

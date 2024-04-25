@@ -10,7 +10,7 @@ class SimulationTime(QObject):
         self.simulation_elapsed = 0
         self.last_update_time = QtCore.QDateTime.currentDateTime()
         self.running = True
-        self.start_time = QtCore.QDateTime(QtCore.QDate(1970, 1, 1), QtCore.QTime(0, 0, 0, 0))
+        self.start_time = QtCore.QDateTime(QtCore.QDate(1970, 1, 1), QtCore.QTime(7, 0, 0, 0))
         self.pause_sim = True
         
 

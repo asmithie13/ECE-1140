@@ -51,7 +51,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Manual Dispatch Formatting
         self.ArrivalTimeEdit.setDisplayFormat("hh:mm")
-        self.currentTime = "00:00"
+        self.currentTime = "07:00"
 
         #Importing Track Data
         self.TrackData = TempData()
@@ -322,7 +322,7 @@ class CTC_UI(QtWidgets.QMainWindow):
                 self.create_a_train.emit(entry[1], entry[0])
 
                 #Train ID, speed, Authority
-                self.sendDispatchInfo.emit([entry[1], 40, self.trainSchedule.AuthorityInfo[index]])
+                self.sendDispatchInfo.emit([entry[1], 70 , self.trainSchedule.AuthorityInfo[index]])
                 self.trainSchedule.dataSent[index] = 1
                 print(entry[1], "Dispatched")
 
@@ -341,7 +341,6 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Validate user has choosen a file
         if file_path == "":
-            #Popup a message if the user enters a block that isn't closed
             error_msg = QMessageBox()
             error_msg.setWindowTitle("Selection Error")
             error_msg.setText("No Schedule File Selected")

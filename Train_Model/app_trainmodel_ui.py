@@ -542,7 +542,7 @@ class TrainCalculations:
         self.main_window.prev_vel=self.main_window.velocity
        
       
-        if self.main_window.velocity <= 0.1:
+        if self.main_window.velocity <= 0:
             self.main_window.a_n=0
             self.main_window.velocity=0
             self.main_window.prev_vel=0

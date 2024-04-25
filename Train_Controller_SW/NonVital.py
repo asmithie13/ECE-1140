@@ -35,8 +35,11 @@ class NonVital():
     def Control_Dist_Next_Station(self,dist):
         self.dist_next_station = dist
 
+    def Control_Temperature(self,newtemp):
+        self.temp_control_sig.emit(newtemp)
+
     def Cabin_Temperature(self,cabinTemp):
-        self.ui.temp.setValue(cabinTemp)
+        self.ui.lcdCurTemp.setValue(cabinTemp)
     
     def Control_interiorLights(self):
         if(self.ui.IntLightSld.value() == 1):

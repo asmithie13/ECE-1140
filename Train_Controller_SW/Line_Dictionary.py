@@ -216,37 +216,154 @@ class Line_Dictionary():
      "Shadyside",
      "Yard"]
 
-    red = [
-        ['D_10', 40, False, '', ''],
+    # red = [
+    #     ['D_10', 40, False, '', ''],
+    #     ['D_11', 40, False, '', ''],
+    #     ['D_12', 40, False, '', ''],
+    #     ['E_13', 40, False, '', ''],
+    #     ['E_14', 40, False, '', ''],
+    #     ['E_15', 40, False, 'Approching HERRON AVE', ''],
+    #     ['F_16', 40, False, 'Welcome to HERRON AVE', '1'],
+    #     ['F_17', 55, False, '', ''],
+    #     ['F_18', 70, False, '', ''],
+    #     ['F_19', 70, False, '', ''],
+    #     ['F_20', 70, False, 'Approching HERRON AVE', ''],
+    #     ['G_21', 55, False, 'Welcome to SWISSVILLE', '1'],
+    #     ['G_22', 55, False, '', ''],
+    #     ['G_23', 55, False, '', ''],
+    #     ['H_24', 70, False, 'Approching PENN STATION', ''],
+    #     ['H_25', 70, True, 'Welcome to PENN STATION', '2'],
+    #     ['H_26', 70, True, '', ''],
+    #     ['H_27', 70, True, '', ''],
+    #     ['H_28', 70, True, '', ''],
+    #     ['H_29', 70, True, '', ''],
+    #     ['H_30', 70, True, '', ''],
+    #     ['H_31', 70, True, '', ''],
+    #     ['H_32', 70, True, '', ''],
+    #     ['H_33', 70, True, '', ''],
+    #     ['H_34', 70, True, 'Approching STEEL PLAZA', ''],
+    #     ['H_35', 70, True, 'Welcome to STEEL PLAZA', '2'],
+    #     ['H_36', 70, True, '', ''],
+    #     ['H_37', 70, True, '', ''],
+    #     ['H_38', 70, True, '', ''],
+    #     ['H_39', 70, True, '', ''],
+    #     ['H_40', 70, True, '', ''],
+    #     ['H_41', 70, True, '', ''],
+    #     ['H_42', 70, True, '', ''],
+    #     ['H_43', 70, True, '', ''],
+    #     ['H_44', 70, True, 'Approching FIRST AVE', ''],
+    #     ['H_45', 70, True, 'Welcome to FIRST AVE', '2'],
+    #     ['I_46', 70, False, '', ''],
+    #     ['I_47', 70, False, 'Approching STATION SQUARE', ''],
+    #     ['I_48', 70, False, 'Welcome to STATION SQUARE', '2'],
+    #     ['J_49', 60, False, '', ''],
+    #     ['J_50', 60, False, '', ''],
+    #     ['J_51', 55, False, '', ''],
+    #     ['J_52', 55, False, '', ''],
+    #     ['J_53', 55, False, '', ''],
+    #     ['J_54', 55, False, '', ''],
+    #     ['K_55', 55, False, '', ''],
+    #     ['K_56', 55, False, '', ''],
+    #     ['K_57', 55, False, '', ''],
+    #     ['L_58', 55, False, '', ''],
+    #     ['L_59', 55, False, 'Approching SOUTH HILLS JUNCTION', ''],
+    #     ['L_60', 55, False, 'Welcome to SOUTH HILLS JUNCTION', '2'],
+    #     ['M_61', 55, False, '', ''],
+    #     ['M_62', 55, False, '', ''],
+    #     ['M_63', 55, False, '', ''],
+    #     ['N_64', 55, False, '', ''],
+    #     ['N_65', 55, False, '', ''],
+    #     ['N_66', 55, False, '', ''],
+    #     ['J_52', 55, False, '', ''],
+    #     ['J_51', 55, False, '', ''],
+    #     ['J_50', 60, False, '', ''],
+    #     ['J_49', 60, False, 'Approching STATION SQUARE', ''],
+    #     ['I_48', 70, False, 'Welcome to STATION SQUARE', '1'],
+    #     ['I_47', 70, False, '', ''],
+    #     ['I_46', 70, False, 'Approching FIRST AVE', ''],
+    #     ['H_45', 70, True, 'Welcome to FIRST AVE', '1'],
+    #     ['H_44', 70, True, '', ''],
+    #     ['H_43', 70, True, '', ''],
+    #     ['O_67', 55, False, '', ''], #segment 1
+    #     ['P_68', 55, False, '', ''],
+    #     ['P_69', 55, True, '', ''],
+    #     ['P_70', 55, True, '', ''],
+    #     ['Q_71', 55, False, '', ''],
+    #     ['H_38', 70, True, '', ''],
+    #     ['H_37', 70, True, '', ''],
+    #     ['H_36', 70, True, 'Approching STEEL PLAZA', ''],
+    #     ['H_35', 70, True, 'Welcome to STEEL PLAZA' , '1'],
+    #     ['H_34', 70, True, '', ''],
+    #     ['H_33', 70, True, '', ''],
+    #     ['H_32', 70, True, '', ''],
+    #     ['R_72', 55, False, '', ''], # segment 2
+    #     ['S_73', 55, False, '', ''],
+    #     ['S_74', 55, True, '', ''],
+    #     ['S_75', 55, True, '', ''],
+    #     ['T_76', 55, False, '', ''],
+
+    #     ['H_27', 70, True, '', ''],
+    #     ['H_26', 70, True, 'Approching PENN STATION', ''],
+    #     ['H_25', 70, True, 'Welcome to PENN STATION', '1'],
+    #     ['H_24', 70, False, '', ''],
+    #     ['G_23', 55, False, '', ''],
+    #     ['G_22', 55, False, 'Approching SWISSVILLE', ''],
+    #     ['G_21', 55, False,'Welcome to SWISSVILLE', '2'],
+    #     ['F_20', 70, False, '', ''],
+    #     ['F_19', 70, False, '', ''],
+    #     ['F_18', 70, False, '', ''],
+    #     ['F_17', 55, False, 'Approching HERRON AVE', ''],
+    #     ['F_16', 40, False, 'Welcome to HERRON AVE', '2'],
+    #     ['A_1', 40, False, '', ''],  #end
+    #     ['A_2', 40, False, '', ''],
+    #     ['A_3', 40, False, '', ''],
+    #     ['B_4', 40, False, '', ''],
+    #     ['B_5', 40, False, '', ''],
+    #     ['B_6', 40, False, 'Approching SHADYSIDE', ''],
+    #     ['C_7', 40, False, 'Welcome to SHADYSIDE', '2'],
+    #     ['C_8', 40, False, '', ''],
+    #     ['C_9', 40, False, '', '']
+    # ]
+
+
+    b1 = [ ['D_10', 40, False, '', ''], #beacon
         ['D_11', 40, False, '', ''],
         ['D_12', 40, False, '', ''],
         ['E_13', 40, False, '', ''],
         ['E_14', 40, False, '', ''],
-        ['E_15', 40, False, 'Approching HERRON AVE', ''],
-        ['F_16', 40, False, 'Welcome to HERRON AVE', '1'],
-        ['F_17', 55, False, '', ''],
+        ['E_15', 40, False, 'Approching HERRON AVE', ''], ]
+    
+    b2 = [ ['F_16', 40, False, 'Welcome to HERRON AVE', '1'],
+        ['F_17', 55, False, '', ''], #beacon
         ['F_18', 70, False, '', ''],
         ['F_19', 70, False, '', ''],
-        ['F_20', 70, False, 'Approching HERRON AVE', ''],
+        ['F_20', 70, False, 'Approching SWISSVILLE', ''],
         ['G_21', 55, False, 'Welcome to SWISSVILLE', '1'],
         ['G_22', 55, False, '', ''],
         ['G_23', 55, False, '', ''],
         ['H_24', 70, False, 'Approching PENN STATION', ''],
         ['H_25', 70, True, 'Welcome to PENN STATION', '2'],
         ['H_26', 70, True, '', ''],
-        ['H_27', 70, True, '', ''],
-        ['H_28', 70, True, '', ''],
+        ['H_27', 70, True, '', '']
+ ]
+    
+    b3 = [ ['H_28', 70, True, '', ''], #beacon3
         ['H_29', 70, True, '', ''],
         ['H_30', 70, True, '', ''],
         ['H_31', 70, True, '', ''],
-        ['H_32', 70, True, '', ''],
+        ['H_32', 70, True, '', '']]
+    
+    b4 = [ 
         ['H_33', 70, True, '', ''],
-        ['H_34', 70, True, 'Approching STEEL PLAZA', ''],
+        ['H_34', 70, True, 'Approching STEEL PLAZA', ''], #beacon
         ['H_35', 70, True, 'Welcome to STEEL PLAZA', '2'],
         ['H_36', 70, True, '', ''],
         ['H_37', 70, True, '', ''],
         ['H_38', 70, True, '', ''],
-        ['H_39', 70, True, '', ''],
+    ]
+
+    
+    b5 = [ ['H_39', 70, True, '', ''], #b5
         ['H_40', 70, True, '', ''],
         ['H_41', 70, True, '', ''],
         ['H_42', 70, True, '', ''],
@@ -259,8 +376,9 @@ class Line_Dictionary():
         ['J_49', 60, False, '', ''],
         ['J_50', 60, False, '', ''],
         ['J_51', 55, False, '', ''],
-        ['J_52', 55, False, '', ''],
-        ['J_53', 55, False, '', ''],
+        ['J_52', 55, False, '', ''],]
+    
+    b6 = [ ['J_53', 55, False, '', ''], #beacon6
         ['J_54', 55, False, '', ''],
         ['K_55', 55, False, '', ''],
         ['K_56', 55, False, '', ''],
@@ -273,36 +391,40 @@ class Line_Dictionary():
         ['M_63', 55, False, '', ''],
         ['N_64', 55, False, '', ''],
         ['N_65', 55, False, '', ''],
-        ['N_66', 55, False, '', ''],
-        ['J_52', 55, False, '', ''],
-        ['J_51', 55, False, '', ''],
+        ['N_66', 55, False, '', ''], ]
+    
+    b7 = [ ['J_52', 55, False, '', ''],
+        ['J_51', 55, False, '', ''], #beacon7
         ['J_50', 60, False, '', ''],
         ['J_49', 60, False, 'Approching STATION SQUARE', ''],
         ['I_48', 70, False, 'Welcome to STATION SQUARE', '1'],
         ['I_47', 70, False, '', ''],
         ['I_46', 70, False, 'Approching FIRST AVE', ''],
         ['H_45', 70, True, 'Welcome to FIRST AVE', '1'],
-        ['H_44', 70, True, '', ''],
-        ['H_43', 70, True, '', ''],
-        ['O_67', 55, False, '', ''], #segment 1
+        ['H_44', 70, True, '', '']
+         ]
+    
+    b8 = [ ['O_67', 55, False, '', ''], #beacon8
         ['P_68', 55, False, '', ''],
         ['P_69', 55, True, '', ''],
         ['P_70', 55, True, '', ''],
-        ['Q_71', 55, False, '', ''],
-        ['H_38', 70, True, '', ''],
+        ['Q_71', 55, False, '', ''], ]
+    
+    b9 = [  ['H_38', 70, True, '', ''], #9
         ['H_37', 70, True, '', ''],
         ['H_36', 70, True, 'Approching STEEL PLAZA', ''],
         ['H_35', 70, True, 'Welcome to STEEL PLAZA' , '1'],
         ['H_34', 70, True, '', ''],
         ['H_33', 70, True, '', ''],
-        ['H_32', 70, True, '', ''],
-        ['R_72', 55, False, '', ''], # segment 2
+        ]
+    
+    b10 = [ ['R_72', 55, False, '', ''], # beacon
         ['S_73', 55, False, '', ''],
         ['S_74', 55, True, '', ''],
         ['S_75', 55, True, '', ''],
-        ['T_76', 55, False, '', ''],
-
-        ['H_27', 70, True, '', ''],
+        ['T_76', 55, False, '', ''] ]
+    
+    b11 = [ ['H_27', 70, True, '', ''], #beacon
         ['H_26', 70, True, 'Approching PENN STATION', ''],
         ['H_25', 70, True, 'Welcome to PENN STATION', '1'],
         ['H_24', 70, False, '', ''],
@@ -313,8 +435,9 @@ class Line_Dictionary():
         ['F_19', 70, False, '', ''],
         ['F_18', 70, False, '', ''],
         ['F_17', 55, False, 'Approching HERRON AVE', ''],
-        ['F_16', 40, False, 'Welcome to HERRON AVE', '2'],
-        ['A_1', 40, False, '', ''],  #end
+        ['F_16', 40, False, 'Welcome to HERRON AVE', '2'] ]
+    
+    b12 = [ ['A_1', 40, False, '', ''],  #end #beacon
         ['A_2', 40, False, '', ''],
         ['A_3', 40, False, '', ''],
         ['B_4', 40, False, '', ''],
@@ -322,7 +445,73 @@ class Line_Dictionary():
         ['B_6', 40, False, 'Approching SHADYSIDE', ''],
         ['C_7', 40, False, 'Welcome to SHADYSIDE', '2'],
         ['C_8', 40, False, '', ''],
-        ['C_9', 40, False, '', '']
+        ['C_9', 40, False, '', ''] ]
+    
+
+    b13 =[  # beacon
+           ['E_15', 40, False, 'Approching HERRON AVE', ''],
+           ['E_14', 40, False, '', ''],
+           ['E_13', 40, False, '', ''],
+           ['D_12', 40, False, '', ''],
+           ['D_11', 40, False, '', ''],
+           ['D_10', 40, False, '', '']
+        ]
+    
+    b14 = [
+            ['T_76', 55, False, '', ''], # beacon
+            ['S_75', 55, True, '', ''],
+            ['S_74', 55, True, '', ''],
+            ['S_73', 55, False, '', ''],
+            ['R_72', 55, False, '', '']
+        ]
+    
+    b15 = [
+            ['Q_71', 55, False, '', ''], # beacon
+            ['P_70', 55, True, '', ''],
+            ['P_69', 55, True, '', ''],
+            ['P_68', 55, False, '', ''],
+            ['O_67', 55, False, '', '']
+        ]
+    
+    b17 = [
+        ['J_52', 55, False, '', ''], # beacon
+        ['N_66', 55, False, '', ''],
+        ['N_65', 55, False, '', ''],
+        ['N_64', 55, False, '', ''],
+        ['M_63', 55, False, '', ''],
+        ['M_62', 55, False, '', ''],
+        ['M_61', 55, False, '', ''],
+        ['L_60', 55, False, 'Welcome to SOUTH HILLS JUNCTION', '2'],
+        ['L_59', 55, False, 'Approching SOUTH HILLS JUNCTION', ''],
+        ['L_58', 55, False, '', ''],
+        ['K_57', 55, False, '', ''],
+        ['K_56', 55, False, '', ''],
+        ['K_55', 55, False, '', ''],
+        ['J_54', 55, False, '', ''],
+        ['J_53', 55, False, '', '']
+    ]
+
+    b18 =[
+    ['J_52', 55, False, '', ''], # beacon
+    ['J_51', 55, False, '', ''],
+    ['J_50', 60, False, '', ''],
+    ['J_49', 60, False, '', ''],
+    ['I_48', 70, False, 'Welcome to STATION SQUARE', '2'],
+    ['I_47', 70, False, 'Approching STATION SQUARE', ''],
+    ['I_46', 70, False, '', ''],
+    ['H_45', 70, True, 'Welcome to FIRST AVE', '2'],
+    ['H_44', 70, True, 'Approching FIRST AVE', ''],
+    ['H_43', 70, True, '', ''],
+    ['H_42', 70, True, '', ''],
+    ['H_41', 70, True, '', ''],
+    ['H_40', 70, True, '', '']
+    ]
+
+    b19 = [  ['H_32', 70, True, '', ''], # beacon
+        ['H_31', 70, True, '', ''],
+        ['H_30', 70, True, '', ''],
+        ['H_29', 70, True, '', ''],
+        ['H_28', 70, True, '', '']
     ]
 
     #def __init__(self):

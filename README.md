@@ -4,7 +4,7 @@ A detailed guide on how to install and run our autonomous train system.
 # MEMBERS:
 | Name | Module |
 | ----------- | ----------- | 
-| Abigail Magistro | CTC |
+| Abby Magistro | CTC |
 | Alexander Smith | SW Track Controller |
 | Lillian Jones | HW Track Controller |
 | Anh Nguyen |  Track Model |
@@ -18,15 +18,22 @@ The following sections discuss the correct usage of our autonomous train system.
 Prerequisites: [Python 3.9 or greater](https://www.python.org/downloads/) 
 
 
-## Installation
+## Installation and Setup
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+1. Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the required packages listed in requirements.txt.
 
 ```bash
-pip install foobar
+pip install -r requirements.txt
 ```
-1. Retrieve system code from our [ECE 1140](https://github.com/asmithie13/ECE-1140/releases) git repository.
-2. Unzip the files in a convenient location
+
+or
+
+```bash
+pip install matplotlib pandas PyQt5 PyQt5_sip pyserial PySide6
+```
+
+2. Retrieve system code from our [ECE 1140](https://github.com/asmithie13/ECE-1140/releases) git repository.
+3. Unzip the files in a convenient location
 
 ### Raspberry Pi Setup
 **Enable Serial Communication**
@@ -34,6 +41,11 @@ pip install foobar
     - White = GPIO 14 (TXD)
     - Green = GPIO 15 (RXD)
     - Black = Ground
+
+<img src="./UI_Screenshots/Raspberry_Pi_Pinout.png">
+
+<img src="./UI_Screenshots/Raspberry_Pi_BoardExample.png">
+
 2. Plug the other end of the adapter into the USB port on the computer.
 3. Follow instructions to install appropriate drivers for the hardware: (https://learn.adafruit.com/adafruits-raspberry-pi-lesson-5-using-a-console-cable/software-installation-windows)
 4. Check “Device Manager” on the machine to determine which COM port corresponds to hardware. Change this accordingly within the code.
@@ -98,9 +110,15 @@ Click the Maintenance Mode button to enter Maintenance Mode
 ### Wayside Software UI
 
 ### Wayside Hardware UI
+
+<img src="./UI_Screenshots/WaysideHW_UI_Screenshot.png">
+
 1. The wayside module begins in automatic operation. This means that a valid PLC file must be uploaded to the Raspberry Pi 4 prior to train dispatch. Do this by completing the following steps:
     1. Follow all previous instructions to establish serial communication and connect remotely to RPi.
     2. Run “piUI.py” file on the Raspberry Pi 4. After doing this, a dialogue box will open, prompting the user to upload a PLC file. Find the desired file within the machine’s directory, select the file, and click “Open”. **Do not close out of the dialogue box after this step.** No more work is required on the Raspberry Pi.
+
+<img src="./UI_Screenshots/WaysideHW_PLCprompt.png">
+    
 2. After the PLC file is uploaded, the module will respond to block occupancies automatically as the main simulation is run. No input is required from the PLC programmer.
 3. If the user wishes to put the train into manual operation, select the corresponding checkbox. This will allow block attributes to be changed by simply selecting the block.
 
@@ -115,6 +133,9 @@ Click the Maintenance Mode button to enter Maintenance Mode
 
 
 ### Track Model 
+
+<img src="./UI_Screenshots/TrackModel_UI_Screenshot.png">
+
 1. Selecting a line in the top middle, Green or Red. A map should appear in the UI.
 2. Select a block via drop down or by clicking on the block directly. Information about the track should show up on the right, including Block Occupancy.
 
@@ -124,6 +145,9 @@ Click the Maintenance Mode button to enter Maintenance Mode
 
 
 ### Train Model UI
+
+<img src="./UI_Screenshots/TrainModel_UI_Screenshot.png">
+
 - The left side indicates all the numbers calculated by using Newton's Laws.
 - The right side displays live train statistics.
 - Murphy’s failures can be sent using the Enable/Disable buttons by simply clicking on them.

@@ -129,20 +129,19 @@ class NonVital():
             self.Set_Underground(self.LineDictionary.red_get_underground(self.block_index))
             self.announcement = self.LineDictionary.get_red_station(self.block_index)
             self.doors = self.LineDictionary.get_red_door_side(self.block_index)
-            if (self.announcement != 'N/A'):
-                if self.announcement[0:6] == "Welcome!" :
-                    self.announcement_sig.emit(self.announcement)
-                    self.ui.SpkrOut.setText(self.announcement)
-                    self.arrived = True
-                    self.doors = int(self.LineDictionary.get_red_door_side(self.block_index))
-                    self.int_light_sig.emit(1)
-                    self.ui.CurrStatOut.setText(self.LineDicitonary.red_station[self.station_index])
-            elif self.announcement [0:10] == "Approaching" :
-                    self.ui.SpkrOut.setText(self.announcement)
-                    self.announcement_sig.emit(self.announcement)
-                    self.arrived = True
-
+            if len(self.announcement) > 0 and len(self.doors):
+                self.announcement_sig.emit(self.announcement)
+                self.ui.SpkrOut.setText(self.announcement)
+                self.arrived = True
+                self.doors = int(self.LineDictionary.get_red_door_side(self.block_index))
+                self.int_light_sig.emit(1)
+                self.ui.CurrStatOut.setText(self.LineDicitonary.red_station[self.station_index])
+            elif len(self.announcement) :
+                self.ui.SpkrOut.setText(self.announcement)
+                self.announcement_sig.emit(self.announcement)
             else :
+                self.int_light_sig.emit(0)
+                self.doors = 0
                 self.arrived = False
                 self.ui.SpkrOut.setText("Heading to Next Station")
 

@@ -345,7 +345,7 @@ class WaysideSW(QMainWindow):
 
             self.currentSwitchBlocksNums = self.redCrossingTriplesIDS
 
-            self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)
+            if self.FileParser.inputPLC is None: self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)
             self.sendAllBlocks.emit(self.allRedBlocks)
 
         if selectedIndex == 1 and self.selectRedLine.isChecked():
@@ -360,7 +360,7 @@ class WaysideSW(QMainWindow):
 
             self.currentSwitchBlocksNums = self.redCrossingTriplesIDS
 
-            self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)
+            if self.FileParser.inputPLC is None: self.FileParser = Parser(None,self.redCrossingTriplesIDS,self.allRedBlocks)
             self.sendAllBlocks.emit(self.allRedBlocks)
 
     def blockActions(self):
@@ -537,7 +537,7 @@ class WaysideSW(QMainWindow):
         names = []
         names = [x.ID for x in self.occupiedBlocks]
         
-        self.BlockOcc.setText(" ".join(names))
+        self.BlockOcc.setText(" ".join(set(names)))
         #ADD CODE HERE FOR MAITANCE
         if self.label_7.text() == "AUTOMATIC" : 
             self.FileParser.parsePLC()  #Update special blocks when automatic mode is set
@@ -607,12 +607,32 @@ class WaysideSW(QMainWindow):
             elif block.lineColor == "Red":
                 if block.maintenance:
                     block.occupied = True
+                    block.maintenance = True
                     self.allRedBlocks[int(block.blockNum) - 1].occupied = True
                     self.occupiedBlocks.append(block)
+
+                    index = 0
+
+                    for i in range(len(self.currentBlocks)):
+                        if block.ID == self.currentBlocks[i].ID:
+                            index = i
+                            break
+
+                    self.currentBlocks[i] = block
                 elif not block.maintenance:
                     block.occupied = False
+                    block.maintenance = False
                     self.allRedBlocks[int(block.blockNum) - 1].occupied = False
                     self.occupiedBlocks.remove(block)
+
+                    index = 0
+
+                    for i in range(len(self.currentBlocks)):
+                        if block.ID == self.currentBlocks[i].ID:
+                            index = i
+                            break
+
+                    self.currentBlocks[i] = block
 
 
 
@@ -634,6 +654,15 @@ class WaysideSW(QMainWindow):
                 self.allGreenBlocks[75].authority = False
                 self.allGreenBlocks[74].authority = False
                 self.allGreenBlocks[73].authority = False
+
+        if block.ID == "E15" and block.lineColor == "Red":
+            if block.lightState:
+                self.allRedBlocks[14].authority = True
+                self.allRedBlocks[13].authority = True
+
+            else:
+                self.allRedBlocks[14].authority = False 
+                self.allRedBlocks[13].authority = False 
 
     def handleCollisions(self):
         if self.currentBlocks[0].lineColor == "Green":

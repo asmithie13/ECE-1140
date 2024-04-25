@@ -550,6 +550,9 @@ class WaysideSW(QMainWindow):
                 print("Redundancy Check Failed")
                 return
             
+        
+        #FIX HERE FIX HERE
+            
         self.handleCollisions()
             
         for block in self.currentBlocks:
@@ -565,21 +568,49 @@ class WaysideSW(QMainWindow):
 
     def blockClosures(self,closedBlocks):
 
-        self.previousOccupiedBlock = self.occupiedBlocks
+        #self.previousOccupiedBlock = self.occupiedBlocks
 
         for block in closedBlocks:
             if block.lineColor == "Green" and block.Wayside == "W2":
                 if block.maintenance:
+                    block.occupied = True
+                    block.maintenance = True
                     self.allGreenBlocks[int(block.blockNum) - 1].occupied = True
                     self.occupiedBlocks.append(block)
+
+                    index = 0
+
+                    for i in range(len(self.currentBlocks)):
+                        if block.ID == self.currentBlocks[i].ID:
+                            index = i
+                            break
+
+                    self.currentBlocks[i] = block
+
+
                 elif not block.maintenance:
+                    block.occupied = False
+                    block.maintenance = False
                     self.allGreenBlocks[int(block.blockNum) - 1].occupied = False
                     self.occupiedBlocks.remove(block)
+
+                    index = 0
+
+                    for i in range(len(self.currentBlocks)):
+                        if block.ID == self.currentBlocks[i].ID:
+                            index = i
+                            break
+
+                    self.currentBlocks[i] = block
+
+
             elif block.lineColor == "Red":
                 if block.maintenance:
+                    block.occupied = True
                     self.allRedBlocks[int(block.blockNum) - 1].occupied = True
                     self.occupiedBlocks.append(block)
                 elif not block.maintenance:
+                    block.occupied = False
                     self.allRedBlocks[int(block.blockNum) - 1].occupied = False
                     self.occupiedBlocks.remove(block)
 
@@ -587,7 +618,9 @@ class WaysideSW(QMainWindow):
 
         names = [x.ID for x in self.occupiedBlocks]
         self.BlockOcc.setText(" ".join(names))
+
         self.handleCollisions()
+        self.sendOccupiedBlocks.emit(self.occupiedBlocks)
 
     def handleLights(self, block):
         if block.ID == "M76" and block.lineColor == "Green":
@@ -608,7 +641,7 @@ class WaysideSW(QMainWindow):
             biDirection = ['N']
 
             lights = [x.ID for x in self.currentBlocks if x.LIGHT]
-
+          
             tempSkip = []
             for index, block in enumerate(self.currentBlocks):
                 if block.blockSection in oneDirectionOne:

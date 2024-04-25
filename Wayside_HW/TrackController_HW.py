@@ -35,9 +35,9 @@ class TrackController_HW(QMainWindow):
         #Constant lists for blocks affected based on light color:
         self.LIGHT_A1 = ['A1', 'A2']
         self.LIGHT_C12 = ['C11', 'C12']
-        self.LIGHT_G29 = ['F26', 'F27', 'F28', 'G29']
+        self.LIGHT_G29 = ['G29', 'G30', 'G31']
         self.LIGHT_Z150 = ['Y148', 'Y149', 'Z150']
-        self.ALL_LIGHT = ['A1', 'A2', 'C12', 'D13', 'F26', 'F27', 'F28', 'G29', 'Y148', 'Y149', 'Z150']
+        self.ALL_LIGHT = ['A1', 'A2', 'C12', 'D13', 'G29', 'G30', 'G31', 'Y148', 'Y149', 'Z150']
 
         #Disable manual mode operations, as program begins in automatic operation:
         self.groupBoxManual.setEnabled(False)
@@ -63,6 +63,7 @@ class TrackController_HW(QMainWindow):
         self.maintenanceSwitches = []
 
         self.closedFlag = 0
+        self.biFlag = 0
 
         #Signals (Manual mode-related):
         self.checkBoxManual.clicked.connect(self.manualMode)
@@ -79,6 +80,12 @@ class TrackController_HW(QMainWindow):
         occupiedBlocks.sort()
         if occupiedBlocks == self.listOccIDs and self.closedFlag == 0:
             return
+        
+        if 'F22' in occupiedBlocks:
+            self.biFlag += 1
+        
+        if 'F27' in occupiedBlocks:
+            self.biFlag = 0
 
         self.previousOccupiedBlock = self.occupiedBlocks
         
@@ -268,9 +275,6 @@ class TrackController_HW(QMainWindow):
         self.pushButtonDown.setFont(QFont("Times New Roman", 12))
 
         tempBlockID = self.comboBoxSection.currentText() + self.comboBoxBlock.currentText()
-        for block in self.maintenanceSwitches:
-            if block.ID == tempBlockID:
-                self.frameSwitch.setEnabled(False)
 
         for block in self.allBlocks:
             if block.ID == self.comboBoxSection.currentText() + self.comboBoxBlock.currentText():
@@ -294,6 +298,10 @@ class TrackController_HW(QMainWindow):
                 self.setSwitchRight()
             else:
                 self.setSwitchLeft()
+        
+        for block in self.maintenanceSwitches:
+            if block.ID == tempBlockID:
+                self.frameSwitch.setEnabled(False)
         
         if selectedBlock.CROSSING == False:
             self.frameCrossing.setEnabled(False)
@@ -446,22 +454,83 @@ class TrackController_HW(QMainWindow):
                     block.authority = True
     
     def getMaintenanceSwitch(self, switchPos):
+        tempBlockID = self.comboBoxSection.currentText() + self.comboBoxBlock.currentText()
+
         for block in switchPos:
             if block.maintenance == 1:
                 self.maintenanceSwitches.append(block)
+                if self.modeFlag == 1 and block.ID == tempBlockID:
+                    if block.switchState == False:
+                        self.pushButtonLeft.setStyleSheet("background-color: white")
+                        self.pushButtonLeft.setFont(QFont("Times New Roman", 12))
+                        self.pushButtonRight.setStyleSheet("background-color: #9bc0f0")
+                        self.pushButtonRight.setFont(QFont("Times New Roman", 12))
+                    elif block.switchState == True:
+                        self.pushButtonRight.setStyleSheet("background-color: white")
+                        self.pushButtonRight.setFont(QFont("Times New Roman", 12))
+                        self.pushButtonLeft.setStyleSheet("background-color: #9bc0f0")
+                        self.pushButtonLeft.setFont(QFont("Times New Roman", 12))
+                    self.frameSwitch.setEnabled(False)
             elif block.maintenance == 0:
                 for blockTwo in self.maintenanceSwitches:
                     if block.ID == blockTwo.ID:
                         self.maintenanceSwitches.remove(blockTwo)
-                
+                if self.modeFlag == 1 and block.ID == tempBlockID:
+                    self.frameSwitch.setEnabled(True)
+                    self.pushButtonLeft.setEnabled(True)
+                    self.pushButtonRight.setEnabled(True)
+    
         self.setMaintenanceSwitch()
     
     def setMaintenanceSwitch(self): #Function to set maintenance mode switch positions from CTC
+        flagLightOne = None
+        flagLightTwo = None
+
         for blockOne in self.maintenanceSwitches:
             for blockTwo in self.allBlocks:
                 if blockOne.ID == blockTwo.ID:
                     blockTwo.switchState = blockOne.switchState
+                    if self.modeFlag == 0:
+                        if blockTwo.ID == 'D13' and blockTwo.switchState == True:
+                            flagLightOne = True
+                        elif blockTwo.ID == 'D13' and blockTwo.switchState == False:
+                            flagLightOne = False
+                        
+                        if blockTwo.ID == 'F28' and blockTwo.switchState == True:
+                            flagLightTwo = True
+                            
+                        elif blockTwo.ID == 'F28' and blockTwo.switchState == False:
+                            flagLightTwo = False
     
+        if self.modeFlag == 0:
+            for block in self.allBlocks:
+                if block.ID == 'A1' and flagLightOne == False:
+                    block.lightState = True
+                elif block.ID == 'A1' and flagLightOne == True:
+                    block.lightState = False
+                
+                if block.ID == 'C12' and flagLightOne == False:
+                    block.lightState = False
+                elif block.ID == 'C12' and flagLightOne == True:
+                    block.lightState = True
+
+                if block.ID == 'Z150' and flagLightTwo == False:
+                    block.lightState = True
+                elif block.ID == 'Z150' and flagLightTwo == True:
+                    block.lightState = False
+                
+                if block.ID == 'G29' and flagLightTwo == False:
+                    block.lightState = False
+                elif block.ID == 'G29' and flagLightTwo == True:
+                    block.lightState = True
+        
+        if not self.listOccIDs and self.modeFlag == 0:
+            self.updateBooleanAuth()
+            self.sendUpdatedBlocks.emit(self.allBlocks)
+        
+        if self.modeFlag == 1:
+            self.sendUpdatedBlocks.emit(self.allBlocks)
+        
     def preventCollision(self):
         oneDirectionOne = ['G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] #Block sections where collisions could occur
         oneDirectionTwo = ['A', 'B', 'C'] 
@@ -498,6 +567,14 @@ class TrackController_HW(QMainWindow):
             if block.blockSection in biDirection:
                 if block.ID == 'D13':
                     continue
+                if block.ID == 'F22' and self.biFlag >= 2:
+                    if block.occupied == True:
+                        self.allBlocks[index-1].authority = False
+                        self.allBlocks[index-2].authority = False
+                        tempSkip.append(self.allBlocks[index-1])
+                        tempSkip.append(self.allBlocks[index-2])
+                        continue
+
                 if self.allBlocks[index-1] in self.previousOccupiedBlock:
                     if block.occupied == True:
                         self.allBlocks[index-1].authority = False

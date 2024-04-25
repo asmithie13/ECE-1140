@@ -77,6 +77,7 @@ if __name__ == "__main__":
     #CTC to Wayside HW
     MainWindow.CTCwindow.sendBlockClosures.connect(MainWindow.WaysideHWwindow.getClosedBlocks)
     MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.WaysideHWwindow.handleSpeedAuthority)
+    MainWindow.CTCwindow.sendSwitchPositions.connect(MainWindow.WaysideHWwindow.getMaintenanceSwitch)
 
     #CTC to MainWindow
     MainWindow.CTCwindow.create_a_train.connect(MainWindow.create_new_train)
@@ -142,7 +143,7 @@ if __name__ == "__main__":
     # Start the thread
     sim_thread.start()
     sim_time.pause(True)
-    update_time_slot("00:00:00.000")
+    update_time_slot("07:00:00.000")
 
     # UI connections
     MainWindow.SpeedSlider.valueChanged.connect(lambda : sim_time.set_sim_speed(MainWindow.SpeedSlider.value()))

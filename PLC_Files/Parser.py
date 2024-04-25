@@ -1,7 +1,8 @@
 import sys
 import os
+import re
 
-# Using Block Class as a seperate file
+#Using Block Class as a seperate file
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(project_root)
 
@@ -14,28 +15,38 @@ class Parser():
         self.outPuttedBlocks = outPuttedBlocks
 
     def parsePLC(self):
-        if self.inputPLC is None : return
-        lines = self.inputPLC.split('\n')
-        switchLogic, curLightLogic, leftLightLogic, rightLightLogic = lines[0], lines[3], lines[6], lines[9]
+        #fileObject = open(self.inputPLC, "r")
+        #PLCfile = self.inputPLC.read()
+        allLines = self.inputPLC.split('\n')
 
-        CrossingTripleBlocks = [
-            [block for row in self.CrossingTriplesIDS for element in row
-             for block in self.outPuttedBlocks if str(element) == str(block.ID[1:])][i:i + 3]
-            for i in range(0, len(self.CrossingTriplesIDS) * 3, 3)
-        ]
-
+        occupiedBlockSections = []
         for block in self.outPuttedBlocks:
-            if block.CROSSING:
-                setattr(block, str(lines[13]), not block.occupied)
-            
+            if block.blockSection not in occupiedBlockSections and block.occupied:
+                occupiedBlockSections.append(block.blockSection)
+        occupiedBlockSections.sort()
+        
+        for line in allLines:
+            tempLine = line.split(" ")
+            if tempLine[0] == 'IF' and tempLine[1] != 'ANY':
+                logicFlag = 0
+                for section in tempLine:
+                    if section in occupiedBlockSections:
+                        logicFlag = 1
+                        break
+            elif tempLine[0] == 'IF' and tempLine[1] == 'ANY':
+                logicFlag = 1
 
-        for data in CrossingTripleBlocks:
-            if len(data) == 0: continue
-            SwitchOcc = data[0].occupied
-            SwitchLeftOcc = data[1].occupied
-            SwitchRightOcc = data[2].occupied
-               
-            data[0].switchState = eval(switchLogic)
-            data[0].lightState = eval(curLightLogic)
-            data[1].lightState = eval(leftLightLogic)
-            data[2].lightState = eval(rightLightLogic)
+            elif tempLine[0] == 'SWITCH' or tempLine[0] == 'LIGHT' or tempLine[0] == 'CROSSING':
+                if logicFlag == 1:
+                    for block in self.outPuttedBlocks:
+                        if block.ID == tempLine[1]:
+                            if tempLine[0] == 'SWITCH':
+                                block.switchState = int(tempLine[2])
+                            elif tempLine[0] == 'LIGHT':
+                                block.lightState = int(tempLine[2])
+                            elif tempLine[0] == 'CROSSING':
+                                block.crossingState = int(tempLine[2])
+                            break
+
+            elif tempLine[0] == "ELSE":
+                logicFlag = not logicFlag

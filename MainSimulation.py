@@ -77,6 +77,7 @@ if __name__ == "__main__":
     #CTC to Wayside HW
     MainWindow.CTCwindow.sendBlockClosures.connect(MainWindow.WaysideHWwindow.getClosedBlocks)
     MainWindow.CTCwindow.sendDispatchInfo.connect(MainWindow.WaysideHWwindow.handleSpeedAuthority)
+    MainWindow.CTCwindow.sendSwitchPositions.connect(MainWindow.WaysideHWwindow.getMaintenanceSwitch)
 
     #CTC to MainWindow
     MainWindow.CTCwindow.create_a_train.connect(MainWindow.create_new_train)

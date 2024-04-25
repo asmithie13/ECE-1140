@@ -344,7 +344,6 @@ class Ui_MainWindow(object):
         self.CurStatOut.setObjectName("CurStatOut")
         self.gridLayout_4.addWidget(self.CurStatOut, 1, 1, 1, 1)
         self.SpkrOut = QtWidgets.QLabel(self.SpeakerOutputBox)
-        self.SpkrOut.setText("")
         self.SpkrOut.setObjectName("SpkrOut")
         self.gridLayout_4.addWidget(self.SpkrOut, 3, 1, 1, 1)
         self.gridLayout_2.addWidget(self.SpeakerOutputBox, 1, 3, 1, 1)

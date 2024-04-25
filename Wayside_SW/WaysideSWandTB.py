@@ -97,44 +97,6 @@ class WaysideSW(QMainWindow):
         self.allGreenBlocks = readTrackFile("Wayside_SW/Green_Line.csv",self.greenCrossingTriplesIDS)
         self.specialGreenBlocksW2 = []
 
-        #beacon stuff
-        with open('greenBeacon.txt', 'w') as file:
-            beac1 = [[]]
-            beacblock1 = [x for x in self.allGreenBlocks if int(x.blockNum) >= 63 and int(x.blockNum) <= 100]
-            for block in beacblock1:
-                info = [block.ID, block.blockLength]
-                beac1.append(info)
-            file.write("beac1: " + str(beac1) + "\n")
-
-            beac2 = [[]]
-            beacblock2 = [x for x in self.allGreenBlocks if x.blockSection == "N"]
-            for block in beacblock2:
-                info = [block.ID, block.blockLength]
-                beac2.append(info)
-            file.write("beac2: " + str(beac2) + "\n")
-
-            beac3 = [[]]
-            beacblock3 = [x for x in self.allGreenBlocks if int(x.blockNum) >= 101 and int(x.blockNum) <= 150]
-            for block in beacblock3:
-                info = [block.ID, block.blockLength]
-                beac3.append(info)
-            file.write("beac3: " + str(beac3) + "\n")
-
-            beac4 = [[]]
-            beacblock4 = [x for x in self.allGreenBlocks if int(x.blockNum) >= 12 and int(x.blockNum) <= 27]
-            for block in beacblock4:
-                info = [block.ID, block.blockLength]
-                beac4.append(info)
-            file.write("beac4: " + str(beac4) + "\n")
-
-            beac5 = [[]]
-            beacblock5 = [x for x in self.allGreenBlocks if int(x.blockNum) >= 12 and int(x.blockNum) <= 57]
-            for block in beacblock5:
-                info = [block.ID, block.blockLength]
-                beac5.append(info)
-            file.write("beac5: " + str(beac5) + "\n")
-
-
         #SW in charge of W1, HW in charge of W2
 
         wayside1Chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ]

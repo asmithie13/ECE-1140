@@ -35,8 +35,11 @@ class NonVital():
     def Control_Dist_Next_Station(self,dist):
         self.dist_next_station = dist
 
+    def Control_Temperature(self,newtemp):
+        self.temp_control_sig.emit(newtemp)
+
     def Cabin_Temperature(self,cabinTemp):
-        self.ui.temp.setValue(cabinTemp)
+        self.ui.lcdCurTemp.display(cabinTemp)
     
     def Control_interiorLights(self):
         if(self.ui.IntLightSld.value() == 1):
@@ -54,9 +57,7 @@ class NonVital():
         print("receieved")
         if beacon == 1:
             self.line = 1
-            self.ui.CurStatOut.setText(self.LineDictionary.green_station[0])
         elif beacon == 0:
-            self.ui.CurStatOut.setText(self.LineDictionary.red_station[0])
             self.line = 0
         else:
             print("Error: Invalid Beacon")     
@@ -102,7 +103,10 @@ class NonVital():
     def Block_Changed(self,bool):
         #change index 
         self.ui.SpkrOut.setText("test")
-        self.block_index = self.block_index + 1
+        if self.block_index == len(self.LineDictionary.green):
+            self.block_index = 0
+        else :
+            self.block_index = self.block_index + 1
         #green line parse
         if self.line ==  0 : #green ###I AM FLIPPING THESE FOR ALEX
             self.speed_lim.emit(self.LineDictionary.green_get_speed_lim(self.block_index))
@@ -122,7 +126,11 @@ class NonVital():
     
             
         #red line parse
-        elif self.line == 1 :
+        elif self.line == 0 :
+            if self.block_index == len(self.LineDictionary.red):
+                self.block_index = 0
+        else :
+            self.block_index = self.block_index + 1
             self.speed_lim.emit(self.LineDictionary.red_get_speed_lim(self.block_index))
             self.Set_Underground(self.LineDictionary.red_get_underground(self.block_index))
             self.announcement = self.LineDictionary.get_red_station(self.block_index)

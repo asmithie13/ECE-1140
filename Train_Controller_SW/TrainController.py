@@ -103,6 +103,7 @@ class TrainController(QMainWindow):
         self.ui.buttonHDoff.clicked.connect(lambda : self.NonVital.Control_Headlights_Off())
         self.ui.buttonHDon.clicked.connect(lambda : self.NonVital.Control_Headlights_On())
         self.ui.lineEditAnn.textChanged['QString'].connect(self.ui.SpkrOut.setText)  # type: ignore
+        self.ui.temp.valueChanged.connect(self.NonVital.Control_Temperature)
 
         self.ui.inputKp.valueChanged.connect(lambda : self.Vital_Power.Control_Kp())
         self.ui.inputKi.valueChanged.connect(lambda : self.Vital_Power.Control_Ki())

@@ -8,7 +8,7 @@ from PyQt5 import QtWidgets
 class Vital_Speed_Auth():
 
     #def __init__(self,ui):
-    def __init__(self,ui,curr_auth_signal, service_brake_sig,ebrake_internal_sig,stop_at_station_sig,NonVital):
+    def __init__(self,ui,curr_auth_signal, service_brake_sig,ebrake_internal_sig,stop_at_station_sig, NonVital):
         self.ui = ui
         self.curr_auth_signal = curr_auth_signal
         self.service_brake_sig = service_brake_sig
@@ -21,6 +21,7 @@ class Vital_Speed_Auth():
         self.stop_at_station_sig = stop_at_station_sig
         self.NonVital = NonVital
         self.bool_auth_enabled = True
+
         self.stopFlag = False
 
     def Control_Current_Speed(self,newSpeed):
@@ -41,7 +42,8 @@ class Vital_Speed_Auth():
         
     def Control_Speed_Limit(self,spdLim):
         #update speed limit for current block
-        self.ui.lcdSpdLim.display(spdLim)
+        #from KM/HR to MPH
+        self.ui.lcdSpdLim.display(spdLim * 0.6213)
         #self.Speed_Monitor()
         
     def Control_Commanded_Speed(self,cmdSpd):
@@ -63,7 +65,7 @@ class Vital_Speed_Auth():
         speed_limit = float(self.ui.lcdSpdLim.value())
         cmd_speed = self.ui.lcdCmdSpd.value()
         
-        if(not(self.ui.lcdCurSpd.value == 0)):
+        if(not(self.ui.lcdCurSpd.value == 0.0)):
             self.decimal_m_auth = self.decimal_m_auth - float(self.rate_metric*self.time)
             self.ui.lcdAuth.display(float(self.decimal_m_auth* 3.28084))
             # if self.ui.lcdAuth.value() > 0:
@@ -81,7 +83,7 @@ class Vital_Speed_Auth():
 
         
             #if self.stopcal == True:
-            self.stoppingdistanceService = (self.V_i**2)/(2*1.2)   
+            self.stoppingdistanceService = (self.V_i**2)/(2*1.2)   + self.ui.lcdCurSpd.value() * .1
             #print("Stopping Distance :",self.stoppingdistanceService)
             #print(self.stoppingdistanceService)
             #print("Dist Service : ", self.stoppingdistanceService)
@@ -137,9 +139,14 @@ class Vital_Speed_Auth():
             elif self.ui.buttonMan.isChecked() :
                 self.ui.vertSliderPow.setEnabled(True)
 
-        elif self.ui.lcdAuth.value() <= 0 and self.ui.lcdCurSpd.value == 0.0 and not self.stopFlag:
+
+        if self.ui.lcdAuth.value() <= 0 and self.ui.lcdCurSpd.value() == 0.0 and not self.stopFlag:
             self.stopFlag = True
             self.stop_at_station_sig.emit(1)
+            
+        
+        elif self.ui.lcdAuth.value() > 0 and self.stopFlag:
+            self.stopFlag = False
     
         if self.ui.buttonAuto.isChecked():
             self.NonVital.Emit_Doors()
@@ -162,6 +169,7 @@ class Vital_Speed_Auth():
 
     def Control_Authority(self,auth):
         self.stopFlag = False
+
         if self.decimal_m_auth < 0:
             self.decimal_m_auth = self.decimal_m_auth + auth
         else :   

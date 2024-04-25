@@ -301,7 +301,6 @@ class Line_Dictionary():
         ['S_74', 55, True, '', ''],
         ['S_75', 55, True, '', ''],
         ['T_76', 55, False, '', ''],
-
         ['H_27', 70, True, '', ''],
         ['H_26', 70, True, 'Approching PENN STATION', ''],
         ['H_25', 70, True, 'Welcome to PENN STATION', '1'],
@@ -331,7 +330,7 @@ class Line_Dictionary():
         ['D_12', 40, False, '', ''],
         ['E_13', 40, False, '', ''],
         ['E_14', 40, False, '', ''],
-        ['E_15', 40, False, 'Approching HERRON AVE', ''], ]
+        ['E_15', 40, False, 'Approching HERRON AVE', ''] ]
     
     b2 = [ ['F_16', 40, False, 'Welcome to HERRON AVE', '1'],
         ['F_17', 55, False, '', ''], #beacon
@@ -345,13 +344,14 @@ class Line_Dictionary():
         ['H_25', 70, True, 'Welcome to PENN STATION', '2'],
         ['H_26', 70, True, '', ''],
         ['H_27', 70, True, '', '']
- ]
+        ]
     
     b3 = [ ['H_28', 70, True, '', ''], #beacon3
         ['H_29', 70, True, '', ''],
         ['H_30', 70, True, '', ''],
         ['H_31', 70, True, '', ''],
-        ['H_32', 70, True, '', '']]
+        ['H_32', 70, True, '', '']
+        ]
     
     b4 = [ 
         ['H_33', 70, True, '', ''],
@@ -359,8 +359,8 @@ class Line_Dictionary():
         ['H_35', 70, True, 'Welcome to STEEL PLAZA', '2'],
         ['H_36', 70, True, '', ''],
         ['H_37', 70, True, '', ''],
-        ['H_38', 70, True, '', ''],
-    ]
+        ['H_38', 70, True, '', '']
+        ]
 
     
     b5 = [ ['H_39', 70, True, '', ''], #b5

@@ -156,6 +156,9 @@ Click the Maintenance Mode button to enter Maintenance Mode
 
 
 ### Train Controller Software/Hardware  UI 
+
+<img src="./UI_Screenshots/TrainController_UI_Screenshot.png">
+
 #### Moving the Train
     Once the departure time set by the CTC is hit by the global clock, the Train Controller UI will automatically open. 
     

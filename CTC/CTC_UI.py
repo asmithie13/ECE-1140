@@ -341,7 +341,6 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Validate user has choosen a file
         if file_path == "":
-            #Popup a message if the user enters a block that isn't closed
             error_msg = QMessageBox()
             error_msg.setWindowTitle("Selection Error")
             error_msg.setText("No Schedule File Selected")

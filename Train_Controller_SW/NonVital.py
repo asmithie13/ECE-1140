@@ -16,7 +16,10 @@ class NonVital():
         #inherited signalsd
         self.doors = 0
         self.LineDictionary = Line_Dictionary()
+        self.station_index = 0
 
+
+        
 
     def Control_Headlights_On(self):
             self.ui.buttonHDoff.toggle()
@@ -36,7 +39,6 @@ class NonVital():
         self.ui.temp.setValue(cabinTemp)
     
     def Control_interiorLights(self):
-
         if(self.ui.IntLightSld.value() == 1):
             self.int_light_sig.emit(1)
             print("interior lights on")
@@ -52,9 +54,12 @@ class NonVital():
 #         self.stationTimer.timeout.connect(lambda: self.ui.buttonDoorL.toggle(), self.ui.buttonDoorR.toggle(), self.ui.IntLightSld.setValue(0), self.ui.announcement_sig.emit("Next stop is " + self.ui.lineEditAnn.text()))
 
     def Read_Beacon(self,beacon):
+        print("receieved")
         if beacon == 1:
             self.line = 1
+            self.ui.CurStatOut.setText(self.LineDictionary.green_station[0])
         elif beacon == 0:
+            self.ui.CurStatOut.setText(self.LineDictionary.red_station[0])
             self.line = 0
         else:
             print("Error: Invalid Beacon")     
@@ -99,22 +104,25 @@ class NonVital():
 
     def Block_Changed(self,bool):
         #change index 
-        self.block_index += 1
+        self.ui.SpkrOut.setText("test")
+        self.block_index = self.block_index + 1
         #green line parse
         if self.line ==  0 : #green 
             self.speed_lim.emit(self.LineDictionary.green_get_speed_lim(self.block_index))
             self.Set_Underground(self.LineDictionary.green_get_underground(self.block_index))
             self.announcement = self.LineDictionary.get_green_station(self.block_index)
+            self.ui.SpkrOut.setText(self.announcement)
+            self.arrived = False
             self.doors = self.LineDictionary.get_green_door_side(self.block_index)
-            if (self.announcement != 'N/A'):
-                if self.announcement[0:6] == "Welcome" :
-                    self.announcement_sig.emit(self.announcement)
-                    self.arrived = True
-            elif self.announcement [0:10] == "Approaching" :
-                    self.announcement_sig.emit(self.announcement)
-                    self.arrived = False
-            else :
-                self.arrived = False
+            if len(self.announcement) > 0 and len(self.doors) > 0 :
+                self.station_index += 1
+                self.announcement_sig.emit(self.announcement)
+                self.ui.CurStatOut.setText(self.LineDictionary.green_station[self.station_index])
+                self.arrived = True
+            elif len(self.announcement) > 0:
+                self.announcement_sig.emit(self.announcement)
+               
+    
             
         #red line parse
         elif self.line == 1 :
@@ -122,16 +130,21 @@ class NonVital():
             self.Set_Underground(self.LineDictionary.red_get_underground(self.block_index))
             self.announcement = self.LineDictionary.get_red_station(self.block_index)
             self.doors = self.LineDictionary.get_red_door_side(self.block_index)
-            if (self.announcement != 'N/A'):
-                if self.announcement[0:6] == "Welcome" :
-                    self.announcement_sig.emit(self.announcement)
-                    self.arrived = True
-                    self.doors = int(self.LineDictionary.get_red_door_side(self.block_index))
-            elif self.announcement [0:10] == "Approaching" :
-                    self.announcement_sig.emit(self.announcement)
-                    self.arrived = True
+            if len(self.announcement) > 0 and len(self.doors):
+                self.announcement_sig.emit(self.announcement)
+                self.ui.SpkrOut.setText(self.announcement)
+                self.arrived = True
+                self.doors = int(self.LineDictionary.get_red_door_side(self.block_index))
+                self.int_light_sig.emit(1)
+                self.ui.CurrStatOut.setText(self.LineDicitonary.red_station[self.station_index])
+            elif len(self.announcement) :
+                self.ui.SpkrOut.setText(self.announcement)
+                self.announcement_sig.emit(self.announcement)
             else :
+                self.int_light_sig.emit(0)
+                self.doors = 0
                 self.arrived = False
+                self.ui.SpkrOut.setText("Heading to Next Station")
 
             
 

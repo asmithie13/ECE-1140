@@ -13,7 +13,7 @@ from CTC.Schedule import *
 from CTC.OccupiedBlocks import *
 from CTC.CTC_Maintenance import *
 from CTC.Throughput import *
-from CTC.TempData import *
+from CTC.CTC_TrackData import *
 #From other folders
 from Track_Resources import *
 
@@ -51,7 +51,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         #Manual Dispatch Formatting
         self.ArrivalTimeEdit.setDisplayFormat("hh:mm")
-        self.currentTime = "00:00"
+        self.currentTime = "07:00"
 
         #Importing Track Data
         self.TrackData = TempData()
@@ -322,14 +322,14 @@ class CTC_UI(QtWidgets.QMainWindow):
                 self.create_a_train.emit(entry[1], entry[0])
 
                 #Train ID, speed, Authority
-                self.sendDispatchInfo.emit([entry[1], 40, self.trainSchedule.AuthorityInfo[index]])
+                self.sendDispatchInfo.emit([entry[1], 70 , self.trainSchedule.AuthorityInfo[index]])
                 self.trainSchedule.dataSent[index] = 1
                 print(entry[1], "Dispatched")
 
             
             #Send a new dispatch info if train already exists
             elif (time == entry[5]) and (self.trainSchedule.dataSent[index] == 0):
-                self.sendDispatchInfo.emit([entry[1], 40, self.trainSchedule.AuthorityInfo[index]])
+                self.sendDispatchInfo.emit([entry[1], 70, self.trainSchedule.AuthorityInfo[index]])
                 self.trainSchedule.dataSent[index] = 1
                 print(entry[1], "Dispatched to new station")
 
@@ -476,11 +476,45 @@ class CTC_UI(QtWidgets.QMainWindow):
         for i in range(len(self.occupiedBlocks.currentTrains)):
             self.occupiedBlocks.newTrains.append([])
 
+        flags = [0, 0, 0, 0, 0, 0]
+        doubleBlocks = ['S103', 'S104', 'T105', 'T106', 'I36', 'I37']
+
         #Adding TrainID, Block ID, and line color to an array
         for block in arr:
             #Getting train ID
             TrainID = self.occupiedBlocks.matchOccupanciesToTrains(block[0], block[1])
-            self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+            if block[1] == 'Green':
+                if block[0] == 'S103' and flags[0] == 0:
+                    flags[0] = 1
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+                elif block[0]== 'S104' and flags[1] == 0:
+                    flags[1] = 1
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+                
+                elif block[0]== 'T105' and flags[2] == 0:
+                    flags[2] = 1
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+                elif block[0]== 'T106' and flags[3] == 0:
+                    flags[3] = 1
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+                elif block[0]== 'I36' and flags[4] == 0:
+                    flags[4] = 1
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+                elif block[0]== 'I37' and flags[5] == 0:
+                    flags[5] = 1
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+                elif not (block[0] in doubleBlocks): 
+                    self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+            else:
+                self.occupiedBlocks.BlockDataNew.append([TrainID, block[0], block[1]])
+
+
 
             #If it's a train, add to updated train list
             if TrainID != 'X':
@@ -633,7 +667,7 @@ class CTC_UI(QtWidgets.QMainWindow):
         #if green line blocks are being shown, find corresponding green line block
         if self.currentLine == 'Green':
             for i in self.TrackData.GreenBlocks:
-                if i.blockNum == switchToSet:
+                if i.ID == switchToSet:
                     temp = i
                                         
                     #Set Wayside
@@ -645,7 +679,7 @@ class CTC_UI(QtWidgets.QMainWindow):
 
         else:   #line selection is red, find corresponding red line block
             for i in self.TrackData.RedBlocks:
-                if i.blockNum == switchToSet:
+                if i.ID == switchToSet:
                     temp = i
 
                     #Set Wayside

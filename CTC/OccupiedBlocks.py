@@ -48,7 +48,7 @@ class OccupiedBlocks():
         if line == 'Green':
             #A-C blocks, train can only come from its previous blocks, but they are in reverse number order
             if (BlockNum >= 1) and (BlockNum <= 12):
-                ID = self.searchPreviousBlock(BlockNum)
+                ID = self.searchPreviousBlockR(BlockNum)
                 if ID != -1:
                     return ("T" + str(ID+1))
 
@@ -57,6 +57,8 @@ class OccupiedBlocks():
                 for i in range(len(self.currentTrains)):
                     for j in self.currentTrains[i]:
                         if int(j[1:]) == 1:
+                            return ("T" + str(i+1))
+                        if int(j[1:]) == 12:
                             return ("T" + str(i+1))
                         if int(j[1:]) == 14:
                             return ("T" + str(i+1))

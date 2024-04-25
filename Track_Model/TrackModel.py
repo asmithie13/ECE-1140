@@ -36,10 +36,10 @@ class TrackModelMain(QMainWindow):
     #sendOccupancies = pyqtSignal(list)
 
     #send ticket sales to ctc
-    SendTicketsales = pyqtSignal(str, int)
+    SendTicketsales = pyqtSignal(int)
 
     #send people boarding
-    people_boarding_sig = pyqtSignal(str, int)
+    people_boarding_sig = pyqtSignal(int)
 
     #send train model train id, speed, and authority
     sendSpeedAuth = pyqtSignal(list)
@@ -97,15 +97,6 @@ class TrackModelMain(QMainWindow):
     'P68_r', 'P69_r', 'P70_r', 'Q71_r', 'R72_r', 'S73_r', 'S74_r', 'S75_r', 'T76_r'
     ]
     
-    block_ids_red_2 = [
-        'A1', 'A2', 'A3', 'B4', 'B5', 'B6', 'C7', 'C8', 'C9', 'D10', 'D11', 'D12',
-        'E13', 'E14', 'E15', 'F16', 'F17', 'F18', 'F19', 'F20', 'G21', 'G22', 'G23',
-        'H24', 'H25', 'H26', 'H27', 'H28', 'H29', 'H30', 'H31', 'H32', 'H33', 'H34',
-        'H35', 'H36', 'H37', 'H38', 'H39', 'H40', 'H41', 'H42', 'H43', 'H44', 'H45',
-        'I46', 'I47', 'I48', 'J49', 'J50', 'J51', 'J52', 'J53', 'J54', 'K55', 'K56',
-        'K57', 'L58', 'L59', 'L60', 'M61', 'M62', 'M63', 'N64', 'N65', 'N66', 'O67',
-        'P68', 'P69', 'P70', 'Q71', 'R72', 'S73', 'S74', 'S75', 'T76'
-    ]
 
     station_lookup = {
     "A2": "PIONEER",
@@ -162,7 +153,6 @@ class TrackModelMain(QMainWindow):
         self.people_boarding = 0
         self.line_ctc= ""
         self.stop = False
-        self.train_authority = {}  # Dictionary to store authority status for each train
         self.switch_green = ""
         self.failure_colors = {
             'broken_rail': 'grey',  # Color for broken rail failures
@@ -221,9 +211,7 @@ class TrackModelMain(QMainWindow):
         self.line_select.currentIndexChanged.connect(self.on_line_select_changed)
 
     def train_stop(self, stop):
-        print("train stopped")
         self.stop = stop
-        
     
     def get_train_id(self, trainID, line):
         self.line_ctc = line
@@ -240,7 +228,6 @@ class TrackModelMain(QMainWindow):
             self.occupied_blocks.append('D10')
             self.dt.append(0.0)
             self.prev_time.append(0.0)
-            self.send_beacon.emit(1)
             self.default_track_path = "Track_Resources/red_line_block_info.xlsx"
             self.load_default_track_layout()
             self.update_occupied_blocks()
@@ -254,7 +241,7 @@ class TrackModelMain(QMainWindow):
         self.temp_out.setText(f"{temp_value}°")
 
         # Update the heaters_out label based on the temperature
-        if temp_value <= 35.06:
+        if temp_value <= 32:
             self.heaters_out.setText("ON")
         else:
             self.heaters_out.setText("OFF")
@@ -291,21 +278,20 @@ class TrackModelMain(QMainWindow):
         total_dis_from_beg_of_block += speed_of_train_m
         self.currentTrains[trainIndex][2] = total_dis_from_beg_of_block
 
+
+        if self.stop == True:
+            self.generateTickets(block_num)
+
         # if train moves to the next block
         if total_dis_from_beg_of_block >= block_length:
 
             #print(trainId, True)
             #emit signal for polarity
             self.send_polarity.emit(trainId, True)
-            self.send_beacon.emit(0)
-
             
-
-            if self.stop == True:
-                self.generateTickets(trainId, block_num)
-
             #Setting train direction after switches
             if self.line_ctc== "Green":
+                self.send_beacon.emit(1)
                 if block_num == 76:
                     self.currentTrains[trainIndex][3] = 'increasing'
                 elif block_num == 100:
@@ -317,6 +303,7 @@ class TrackModelMain(QMainWindow):
 
         #red line
             if self.line_ctc== "Red":
+                self.send_beacon.emit(0)
                 if block_num == 1:
                     self.currentTrains[trainIndex][3] = 'increasing'
                 elif block_num == 16:
@@ -631,18 +618,10 @@ class TrackModelMain(QMainWindow):
                 'authority' : block.authority
             }
 
-        block_state = self.blockStates.get('K63', {})
-        authority_value = block_state.get('authority', None)
-        print(authority_value)
-
-        self.get_send_bool_auth()
-
-        # if self.train_ID:
-        #     if self.occupied_blocks:
-        #         #print(self.train_ID[1:])
-        #         self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
-
-        
+        if self.train_ID:
+            if self.occupied_blocks:
+                #print(self.train_ID[1:])
+                self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
 
     def receiveSpecialBlocks_SW_red(self, specialBlock):
         for block in specialBlock:
@@ -655,10 +634,10 @@ class TrackModelMain(QMainWindow):
                 'authority' : block.authority
             }
 
-        # if self.train_ID:
-        #     if self.occupied_blocks:
-        #         #print(self.train_ID[1:])
-        #         self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
+        if self.train_ID:
+            if self.occupied_blocks:
+                #print(self.train_ID[1:])
+                self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
 
 
     def receiveSpecialBlocks_HW(self, specialBlock):
@@ -672,33 +651,30 @@ class TrackModelMain(QMainWindow):
                 'authority' : block.authority
             }
 
-        # if self.train_ID:
-        #     if self.occupied_blocks:
-        #         #print(self.train_ID[1:])
-        #         self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
-        self.get_send_bool_auth()
+        if self.train_ID:
+            if self.occupied_blocks:
+                #print(self.train_ID[1:])
+                self.get_send_bool_auth(self.train_ID, self.occupied_blocks[0 + int(self.train_ID[1:]) - 1])
 
-    def get_send_bool_auth(self):
-        for train in self.currentTrains:  #currentTrains holds info about each train
-            train_id = train[0]  # Train ID
-            current_block_id = train[-1]  #last element in each train's list is the current block ID
-            #print(train_id, current_block_id)
+    def get_send_bool_auth(self, train_id, block_id):
+        # Get the block state if it exists
+        block_state = self.blockStates.get(block_id, {})
 
-            #retrieve the authority status from blockStates using the current block ID
-            block_state = self.blockStates.get(current_block_id, {})
-            authority_value = block_state.get('authority', None)
-            print(train_id, authority_value, current_block_id)
+        # Extract the authority value from the block state dictionary
+        authority_value = block_state.get('authority', None)
+        #print(train_id,block_id, authority_value)
+        #print(authority_value)
+        # Check if the authority exists and is explicitly set to a boolean
+        if authority_value == True:
+            #Ensure the value is a boolean (depends on how data is received)
+            is_authorized = bool(authority_value)  # Convert to boolean (assumes non-None means True)
+            
+            #emit the boolean authority
+            self.send_bool_auth.emit(train_id, is_authorized)
 
-            if authority_value is not None:
-                #iff authority exists and is True, emit True, else emit False
-                self.send_bool_auth.emit(train_id, authority_value)
-            else:
-                # If no authority info is available, assume False as default
-                print("NOOOOOOOOOOOOOOOOOOOO")
-                self.send_bool_auth.emit(train_id, False)
-
-
-        
+        else:
+            #return false = stop the train!
+            self.send_bool_auth.emit(self.train_ID, False) 
 
     def set_clock(self, time):
         self.clock_in.display(time[0:5])
@@ -893,19 +869,14 @@ class TrackModelMain(QMainWindow):
     
     def on_line_select_changed(self):
         # Check the selected option and show the corresponding group box
-        self.block_in_1.clear()
         self.selected_option = self.line_select.currentText()
-
         if self.selected_option == "Green Line":
-            self.block_in_1.addItems(self.block_ids_green)
             self.green_line.show()
             self.red_line.show()
         elif self.selected_option == "Select Line":
-            self.block_in_1.clear()
             self.green_line.hide()
             self.red_line.hide()    
         elif self.selected_option == "Red Line":
-           self.block_in_1.addItems(self.block_ids_red_2)
            self.red_line.show()
            self.green_line.hide()
         # Now call the function to load the track layout based on the new selection
@@ -1113,27 +1084,18 @@ class TrackModelMain(QMainWindow):
         return block_id in self.station_lookup
 
 
-    def generateTickets(self, train_id, block_id):
+    def generateTickets(self, block_id):
         self.listStation_green  = [2, 9, 16, 22, 31, 39, 141, 48, 132, 57, 123, 65, 114, 73, 105, 77, 88, 96]
         # if forceNewNumber or block_id not in self.lastGeneratedTickets:
         #     random_number = random.randint(1, 74)
         #     self.lastGeneratedTickets[block_id] = random_number
 
-        #overbroke is the last station for green line 
+        #overbroke is hte last station for green line 
         if block_id in self.listStation_green:
             self.random_number = random.randint(1, 74)
-            self.ticket_out.setText(str(self.random_number))
-
             self.people_boarding += random.randint(1,self.random_number)
-            self.people_off = random.randint(0, self.people_boarding) 
+            self.people_boarding_sig.emit(self.people_boarding)
 
-            self.boarding_out.setText(str(self.people_boarding))
-            self.disembarking_out.setText(str(self.people_off))
-
-
-            self.people_boarding_sig.emit(train_id, (self.people_boarding-self.people_off))
-
-        
             #self.SendTicketsales.emit(self.random_number)
 
         # if self.time.split(':')[1] == "00":
@@ -1141,8 +1103,6 @@ class TrackModelMain(QMainWindow):
         #             self.random_number = random.randint(1, 74)
         #             self.SendTicketsales_tm.emit(self.random_number)
             
-    def get_people_dissem(self, people):
-        self.people_off = people
 
     def get_infra_for_block(self, block_num):
         self.station = None  # Set to None initially to clearly see if it gets changed

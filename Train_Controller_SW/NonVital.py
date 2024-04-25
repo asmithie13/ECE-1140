@@ -126,7 +126,7 @@ class NonVital():
     
             
         #red line parse
-        elif self.line == 0 :
+        elif self.line == 1 :
             if self.block_index == len(self.LineDictionary.red):
                 self.block_index = 0
         else :

@@ -365,7 +365,7 @@ class Ui_MainWindow(object):
         self.lcdAuth = QtWidgets.QLCDNumber(self.groupBox_9)
         self.lcdAuth.setFrameShape(QtWidgets.QFrame.Box)
         self.lcdAuth.setObjectName("lcdAuth")
-        self.lcdAuth.setDigitCount(5)
+        self.lcdAuth.setDigitCount(7)
         self.verticalLayout_4.addWidget(self.lcdAuth)
         self.gridLayout_2.addWidget(self.groupBox_9, 2, 3, 1, 1)
         self.Mode_Box = QtWidgets.QGroupBox(self.centralwidget)

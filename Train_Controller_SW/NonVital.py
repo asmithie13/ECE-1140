@@ -39,7 +39,7 @@ class NonVital():
         self.temp_control_sig.emit(newtemp)
 
     def Cabin_Temperature(self,cabinTemp):
-        self.ui.lcdCurTemp.setValue(cabinTemp)
+        self.ui.lcdCurTemp.display(cabinTemp)
     
     def Control_interiorLights(self):
         if(self.ui.IntLightSld.value() == 1):

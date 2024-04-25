@@ -479,48 +479,123 @@ class TrackModelMain(QMainWindow):
                         
         #Red Line                                  
         if line == "Red":
-            #Red line train dispatch case        
-            if (BlockNum >= 10) and (BlockNum < 66):
+            #Red line train dispatch case  
+            if (BlockNum >= 10) and (BlockNum < 15):
+                return BlockNum + 1
+         
+            elif (BlockNum == 15):
+                if self.get_switch_state(15, line_color="Red") == True:
+                    return 16
+                
+            elif (BlockNum >= 16) and (BlockNum < 27):
+                return BlockNum + 1
+        
+
+            elif BlockNum == 27:
+                if self.get_switch_state(27, line_color="Red") == True:
+                    return 28
+                else: 
+                    return 28
+                
+            elif (BlockNum >= 28) and (BlockNum < 32):
                 return BlockNum + 1
             
-            elif (BlockNum == 66):
-                return 52
+            elif BlockNum == 32:
+                if self.get_switch_state(32, line_color="Red") == True:
+                    return 33
+                else:
+                    return 32
             
-            elif (BlockNum >= 52) and (BlockNum < 43):
-                return BlockNum - 1
-            
-            elif (BlockNum == 43):
-                return 67
-            
-            elif (BlockNum >=67) and (BlockNum < 71):
+            elif (BlockNum >= 33) and (BlockNum < 38):
                 return BlockNum + 1
             
-            elif (BlockNum == 71):
-                return 38
+            elif BlockNum == 38:
+                if self.get_switch_state(38, line_color="Red") == True:
+                    return 39
+                else:
+                    return 38
+                
+            elif (BlockNum >= 39) and (BlockNum < 43):
+                return BlockNum + 1
             
-            elif (BlockNum >= 38) and (BlockNum < 32):
+            elif BlockNum == 43:
+                if self.get_switch_state(43, line_color="Red") == True:
+                    return 44
+                else:
+                    return 43
+            
+            elif (BlockNum >= 44) and (BlockNum < 52):
+                return BlockNum + 1
+            
+            elif BlockNum == 52:
+                print(self.get_switch_state(52, line_color="Red"))
+                if self.get_switch_state(52, line_color="Red") == True:
+                    return 53
+                else:
+                    return 52
+                
+            elif (BlockNum >= 53) and (BlockNum < 66):
+                return BlockNum + 1
+            
+            elif BlockNum == 66:
+                if direction == 'decreasing':
+                    #print(self.get_switch_state(52, line_color="Red"))
+                    if self.get_switch_state(52, line_color="Red") == False:
+                        return 52
+                    else: 
+                        return 66
+                    
+            elif (BlockNum <= 52) and (BlockNum > 43):
                 return BlockNum - 1
             
-            elif (BlockNum == 32):
-                return 72
+            elif BlockNum == 43:
+                if self.get_switch_state(43, line_color="Red") == False:
+                    return 67
+            
+            elif (BlockNum >= 67) and (BlockNum < 71):
+                return BlockNum + 1
+            
+            elif BlockNum == 71:
+                if direction == 'decrease':
+                    if self.get_switch_state(38, line_color="Red") == False:
+                        return 37
+                    else:
+                        return 71
+                    
+            elif (BlockNum <= 37) and (BlockNum > 32):
+                return BlockNum - 1
+            
+            elif BlockNum == 32:
+                if self.get_switch_state(52, line_color="Red") == False:
+                    return 72
             
             elif (BlockNum >= 72) and (BlockNum < 76):
                 return BlockNum + 1
             
-            elif (BlockNum == 76):
-                return 27
+            elif BlockNum == 76:
+                if direction == 'decreasing':
+                    if self.get_switch_state(27, line_color="Red") == False:
+                        return 28
+                    else:
+                        return 76
             
-            elif (BlockNum >= 27) and (BlockNum < 16):
+            elif (BlockNum <= 28) and (BlockNum > 15):
                 return BlockNum - 1
             
-            elif (BlockNum == 15):
-                # if direction == 'increasing':
-                #     if self.get_switch_state(28, line_color="Red") == True:
-                return 1
-            
-            elif (BlockNum >= 1) and (BlockNum <= 9):
+            elif BlockNum == 15:
+                if direction == 'increasing':
+                    if self.get_switch_state(15, line_color="Red") == False:
+                        return 1
+                    else:
+                        return 15
+                    
+            elif (BlockNum >= 1) and (BlockNum < 9):
                 # if self.get_switch_state(15, line_color="Red") == True:
                 return BlockNum + 1
+            
+            elif BlockNum == 9:
+                return -1
+            
 
                     
     def get_and_set_crossing_state(self, block_num):

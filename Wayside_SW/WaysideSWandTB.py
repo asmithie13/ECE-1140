@@ -536,9 +536,19 @@ class WaysideSW(QMainWindow):
                     self.occupiedBlocks.append(block)
 
         names = []
-        names = [x.ID for x in self.occupiedBlocks]
         
-        self.BlockOcc.setText(" ".join(set(names)))
+        flag = False
+
+        for block in self.occupiedBlocks:
+            if block.maintenance:
+                flag = True
+                break
+
+        names = [x.ID for x in self.occupiedBlocks]
+        if flag: self.BlockOcc.setText(" ".join(names))
+        else: self.BlockOcc.setText(" ".join(sentBlocks))
+
+
         #ADD CODE HERE FOR MAITANCE
         if self.label_7.text() == "AUTOMATIC" :
 
@@ -647,10 +657,16 @@ class WaysideSW(QMainWindow):
                     self.currentBlocks[i] = block
 
 
+        flag = False
+
+        for block in self.occupiedBlocks:
+            if block.maintenance:
+                flag = True
+                break
 
         names = [x.ID for x in self.occupiedBlocks]
-        self.BlockOcc.setText(" ".join(names))
-
+        if flag: self.BlockOcc.setText(" ".join(names))
+      
         self.handleCollisions()
         self.sendOccupiedBlocks.emit(self.occupiedBlocks)
         self.sendAllBlocks.emit(self.currentBlocks)
@@ -766,7 +782,93 @@ class WaysideSW(QMainWindow):
                                 self.currentBlocks[index-2].authority = True
                         
             
-        
+        elif self.currentBlocks[0].lineColor == "Red":
+            oneDirectionOne = ['A','B','C','D','E','J','K','L','M','N'] #Block sections where collisions could occur
+            oneDirectionTwo = [] 
+            biDirection = ['G','F','H','I']
+
+            lights = [x.ID for x in self.currentBlocks if x.LIGHT]
+          
+            tempSkip = []
+            for index, block in enumerate(self.currentBlocks):
+                if block.blockSection in oneDirectionOne:
+                    if block.occupied == True:
+                        self.currentBlocks[index-1].authority = False
+                        self.currentBlocks[index-2].authority = False
+                        tempSkip.append(self.currentBlocks[index-1])
+                        tempSkip.append(self.currentBlocks[index-2])
+                    elif block.occupied == False and block.ID not in lights:
+                        if block not in tempSkip:
+                            block.authority = True
+                        if self.currentBlocks[index-1] not in tempSkip:
+                            self.currentBlocks[index-1].authority = True
+                        if self.currentBlocks[index-2] not in tempSkip:
+                            self.currentBlocks[index-2].authority = True
+                if block.blockSection in oneDirectionTwo:
+                    if block.occupied == True:
+                        self.currentBlocks[index+1].authority = False
+                        self.currentBlocks[index+2].authority = False
+                        tempSkip.append(self.currentBlocks[index+1])
+                        tempSkip.append(self.currentBlocks[index+2])
+                    elif block.occupied == False and block.ID not in lights:
+                        if block not in tempSkip:
+                            block.authority = True
+                        if self.currentBlocks[index+1] not in tempSkip:
+                            self.currentBlocks[index+1].authority = True
+                        if self.currentBlocks[index+2] not in tempSkip:
+                            self.currentBlocks[index+2].authority = True
+                if block.blockSection in biDirection:
+                    if block.ID == 'D13' or block.ID == 'F22':
+                        continue
+                    if self.currentBlocks[index-1] in self.previousOccupiedBlock:
+                        if block.occupied == True:
+                            self.currentBlocks[index-1].authority = False
+                            self.currentBlocks[index-2].authority = False
+                            tempSkip.append(self.currentBlocks[index-1])
+                            tempSkip.append(self.currentBlocks[index-2])
+                        elif block.occupied == False and block.ID not in lights:
+                            if block not in tempSkip:
+                                block.authority = True
+                            if self.currentBlocks[index-1] not in tempSkip:
+                                self.currentBlocks[index-1].authority = True
+                            if self.currentBlocks[index-2] not in tempSkip:
+                                self.currentBlocks[index-2].authority = True
+                    elif self.currentBlocks[index+1] in self.previousOccupiedBlock:
+                        if block.occupied == True:
+                            self.currentBlocks[index+1].authority = False
+                            self.currentBlocks[index+2].authority = False
+                            tempSkip.append(self.currentBlocks[index+1])
+                            tempSkip.append(self.currentBlocks[index+2])
+                        elif block.occupied == False and block.ID not in lights:
+                            if block not in tempSkip:
+                                block.authority = True
+                            if self.currentBlocks[index+1] not in tempSkip:
+                                self.currentBlocks[index+1].authority = True
+                            if self.currentBlocks[index+2] not in tempSkip:
+                                self.currentBlocks[index+2].authority = True
+                    #The following condition indicates a track failure, since an occupancy is randomly generated...
+                    #Close blocks on either side as response:
+                    elif self.currentBlocks[index-1] not in self.previousOccupiedBlock and self.currentBlocks[index+1] not in self.previousOccupiedBlock:
+                        if block.occupied == True:
+                            self.currentBlocks[index+1].authority = False
+                            self.currentBlocks[index+2].authority = False
+                            tempSkip.append(self.currentBlocks[index+1])
+                            tempSkip.append(self.currentBlocks[index+2])
+                            self.currentBlocks[index-1].authority = False
+                            self.currentBlocks[index-2].authority = False
+                            tempSkip.append(self.currentBlocks[index-1])
+                            tempSkip.append(self.currentBlocks[index-2])
+                        elif block.occupied == False and block.ID not in lights:
+                            if block not in tempSkip:
+                                block.authority = True
+                            if self.currentBlocks[index+1] not in tempSkip:
+                                self.currentBlocks[index+1].authority = True
+                            if self.currentBlocks[index+2] not in tempSkip:
+                                self.currentBlocks[index+2].authority = True
+                            if self.currentBlocks[index-1] not in tempSkip:
+                                self.currentBlocks[index-1].authority = True
+                            if self.currentBlocks[index-2] not in tempSkip:
+                                self.currentBlocks[index-2].authority = True
 
 
 class TestBench(QMainWindow):

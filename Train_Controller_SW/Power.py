@@ -24,7 +24,6 @@ class Vital_Power():
         self.prevTime = 0
 
         self.curr_power_sig = curr_power_sig
-        #self.ser = serial.Serial('COM5', 57600)  # Replace 'COM6' with your actual port name
 
     def Control_Ki(self):
             self.ui.lcdKi.display(self.ui.inputKi.value())
@@ -37,7 +36,7 @@ class Vital_Power():
     def Set_Clock(self, time):
          self.local_clock = time
     
-    """
+    
     def calculate_power(self):
         self.time = self.local_clock
         self.dt = (self.time - self.prevTime)/1000
@@ -84,8 +83,7 @@ class Vital_Power():
         self.ui.lcdAcel.display(self.power)
         self.curr_power_sig.emit(int(self.power))
 
-    """
-
+    """ uncomment for hw train, only 1 can run we planned - to make the HW train be second
     def calculate_power(self):
         self.ser = serial.Serial('COM6', 115200)  # Replace 'COM6' with your actual port name
         if self.ui.Ebrake.isChecked():
@@ -131,6 +129,7 @@ class Vital_Power():
             self.ui.lcdBrk.display(self.ui.vertSliderBrk.value())
             self.ui.lcdAcel.display(self.power)
             self.curr_power_sig.emit(int(self.power))
+            """
     
 
     def Control_Accelleration(self):

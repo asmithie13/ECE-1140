@@ -1,5 +1,4 @@
 # OJ AND THE COWBOY HATS: Autonmous Train System
-A detailed guide on how to install and run our autonomous train system.
 
 # MEMBERS:
 | Name | Module |
@@ -12,11 +11,27 @@ A detailed guide on how to install and run our autonomous train system.
 | Lauren Gilfillan | SW Train Controller |
 | Chad Collina | HW Train Controller |
 
+# Project Description
+Challenge : Design and Implement a new Centralized Traffic Control (CTC) Center and Signaling System forLight Rail Transit system. The physical structure will bedesigned and built over the next 2 years. 
+Out for bid is the control center, communications to and from the territory as well as the train and track controllers.
+Our team must develop a fully operational demonstration of the cotrol center, communications, train and track control system with simulator for the transit system
+
+# Documentation 
+Along with creating software for the porject, we also had to create standard IEEE Documentation for the project. We created the following documents....
+IEEE 1016 SDD
+IEEE 830 SRS
+IEEE 829 Software and System Testing Documentation
+Individual Module Wireframes
+Individual Module Class Diagrams 
+Use Case Diagrams
+Architecture Diagrams
+Sequence Diagrams
+
+# How to Deploy Train Control System Simulation
 
 ## Usage
 The following sections discuss the correct usage of our autonomous train system.
 Prerequisites: [Python 3.9 or greater](https://www.python.org/downloads/) 
-
 
 ## Installation and Setup
 

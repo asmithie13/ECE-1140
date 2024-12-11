@@ -1,4 +1,4 @@
-# OJ AND THE COWBOY HATS: Autonmous Train System
+# OJ AND THE COWBOY HATS: Autonomous Train System
 
 # MEMBERS:
 | Name | Module |
@@ -12,7 +12,7 @@
 | Chad Collina | HW Train Controller |
 
 # Project Description
-Challenge : Design and Implement a new Centralized Traffic Control (CTC) Center and Signaling System forLight Rail Transit system. The physical structure will bedesigned and built over the next 2 years. 
+Challenge : Design and Implement a new Centralized Traffic Control (CTC) Center and Signaling System for Light Rail Transit system. The physical structure will bedesigned and built over the next 2 years. 
 Out for bid is the control center, communications to and from the territory as well as the train and track controllers.
 Our team must develop a fully operational demonstration of the cotrol center, communications, train and track control system with simulator for the transit system
 
